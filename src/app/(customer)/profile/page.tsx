@@ -1,4 +1,4 @@
-import Container from "@/app/components/ui/Container";
+import Container from "@/app/components/shared/Container";
 
 export default function ProfilePage() {
   return (

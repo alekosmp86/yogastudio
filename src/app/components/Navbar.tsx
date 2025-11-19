@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import Container from "./ui/Container";
+import Container from "./shared/Container";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { NavBarItems } from "../static/navbar-links";
-import NavItem from "./ui/NavItem";
-import MobileNavItem from "./ui/MobileNavItem";
+import { NavBarItems } from "../static/NavBarItems";
+import NavItem from "./shared/NavItem";
+import MobileNavItem from "./shared/MobileNavItem";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {

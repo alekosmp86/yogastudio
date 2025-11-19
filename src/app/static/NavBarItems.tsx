@@ -1,5 +1,5 @@
 import { Home, Calendar, BookmarkCheck, User } from "lucide-react";
-import { NavBarLink } from "../types/navbar-link";
+import { NavBarLink } from "../types/NavBarLink";
 
 export const NavBarItems: NavBarLink[] = [
   { id: 1, label: "Inicio", url: "/", icon: Home },
