@@ -1,6 +1,6 @@
-import ClassCard from "@/components/customer/classes/ClassCard";
 import Container from "@/components/shared/Container";
 import { GymClassesData } from "static/GymClassesData";
+import ClassCard from "./_components/ClassCard";
 
 export default function ClassesPage() {
   return (
