@@ -1,6 +1,6 @@
 import Container from "@/components/shared/Container";
-import { GymClassesData } from "static/GymClassesData";
 import ClassCard from "./_components/ClassCard";
+import { GymClassesData } from "./_mock-data/GymClassesData";
 
 export default function ClassesPage() {
   return (
