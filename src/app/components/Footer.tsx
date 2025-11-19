@@ -1,10 +1,7 @@
 "use client";
 
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
-import {
-  Instagram,
-  MessageCircle,
-} from "lucide-react";
+import { Instagram, MessageCircle } from "lucide-react";
 
 export default function Footer() {
   const iconClasses = "h-5 w-5 text-gray-600 hover:text-blue-600 transition";
@@ -12,7 +9,6 @@ export default function Footer() {
   return (
     <footer className="border-t bg-white mt-10">
       <div className="mx-auto max-w-4xl px-4 py-8 flex flex-col items-center gap-4">
-
         {/* Copyright */}
         <p className="text-sm text-gray-500">
           © {new Date().getFullYear()} Yoga Studio — All rights reserved
@@ -46,9 +42,15 @@ export default function Footer() {
 
         {/* Links */}
         <div className="flex gap-6 text-sm text-gray-600">
-          <a href="/about" className="hover:text-blue-600">About</a>
-          <a href="/contact" className="hover:text-blue-600">Contact</a>
-          <a href="/terms" className="hover:text-blue-600">Terms & Privacy</a>
+          <a href="/about" className="hover:text-blue-600">
+            About
+          </a>
+          <a href="/contact" className="hover:text-blue-600">
+            Contact
+          </a>
+          <a href="/terms" className="hover:text-blue-600">
+            Terms & Privacy
+          </a>
         </div>
       </div>
     </footer>

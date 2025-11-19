@@ -1,7 +1,7 @@
+import QuickActionCard from "@/components/customer/home-page/QuickActionCard";
+import Testimonials from "@/components/customer/home-page/Testimonials";
+import Container from "@/components/shared/Container";
 import { BookOpenCheck, Calendar, User2 } from "lucide-react";
-import QuickActionCard from "../components/customer/home-page/QuickActionCard";
-import Container from "../components/shared/Container";
-import Testimonials from "../components/customer/home-page/Testimonials";
 
 export default function CustomerHomePage() {
   return (
@@ -30,11 +30,7 @@ export default function CustomerHomePage() {
           href="/reservations"
         />
 
-        <QuickActionCard
-          icon={User2}
-          label="My Profile"
-          href="/profile"
-        />
+        <QuickActionCard icon={User2} label="My Profile" href="/profile" />
       </section>
 
       {/* Next Class Placeholder */}

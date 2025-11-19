@@ -1,4 +1,4 @@
-import Container from "@/app/components/shared/Container";
+import Container from "@/components/shared/Container";
 
 export default function ReservationsPage() {
   return (

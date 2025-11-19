@@ -1,6 +1,5 @@
 "use client";
 
-import { Quote } from "lucide-react";
 import TestimonialCard from "./TestimonialCard";
 
 export default function Testimonials() {
