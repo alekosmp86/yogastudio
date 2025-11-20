@@ -1,4 +1,4 @@
-import ClassCard from "./_components/ClassCard";
+import ClassCard from "@/components/classes/ClassCard";
 import { GymClassesData } from "./_mock-data/GymClassesData";
 
 export default function ClassesPage() {

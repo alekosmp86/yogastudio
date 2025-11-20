@@ -1,4 +1,4 @@
-import { GymClass } from "@/types/GymClass";
+import { GymClass } from "../../../../types/GymClass";
 
 export const GymClassesData: GymClass[] = [
   {

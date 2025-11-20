@@ -1,11 +1,5 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import CustomerHomePage from "./(customer)/page";
-
-export default function Home() {
-  return (
-    <>
-      <CustomerHomePage />
-    </>
-  );
+export default async function Home() {
+  redirect("/customer/home");
 }

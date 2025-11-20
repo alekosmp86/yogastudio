@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { NavBarItems } from "../static/NavBarItems";
 import MobileNavItem from "./shared/MobileNavItem";
 import { usePathname } from "next/navigation";
 import NavItem from "./shared/NavItem";
 import Container from "./shared/Container";
+import { NavBarItems } from "static/NavBarItems";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
