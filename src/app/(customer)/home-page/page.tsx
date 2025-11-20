@@ -1,11 +1,10 @@
-import Container from "@/components/shared/Container";
 import QuickActionCard from "./_components/QuickActionCard";
 import { BookOpenCheck, Calendar, User2 } from "lucide-react";
 import Testimonials from "./_components/Testimonials";
 
 export default function CustomerHomePage() {
   return (
-    <Container className="py-6 space-y-8">
+    <div className="py-6 space-y-8">
       {/* Welcome Section */}
       <section className="text-center">
         <h1 className="text-2xl font-bold text-gray-800">
@@ -44,6 +43,6 @@ export default function CustomerHomePage() {
       </section>
 
       <Testimonials />
-    </Container>
+    </div>
   );
 }
