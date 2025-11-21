@@ -13,22 +13,19 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-72">
-        <Input label="Email" name="email" type="email" placeholder="Email" />
+    <div className="flex flex-col items-center justify-center min-h-screen bg-[url('/yoga.jpg')] bg-cover">
+      <div className="bg-gray-800 p-4 rounded-lg shadow-lg">
+        <label className="flex flex-col items-center text-white pb-2">
+          Yoga Studio
+        </label>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-72">
+          <Input name="email" type="email" placeholder="Email" />
 
-        <Input
-          label="Password"
-          name="password"
-          type="password"
-          placeholder="Password"
-          className="p-2 border"
-        />
-
-        <Button type="submit" className="p-2 bg-blue-500 text-white">
-          Log In
-        </Button>
-      </form>
+          <Button type="submit" className="p-2 bg-blue-500 text-white">
+            Log In
+          </Button>
+        </form>
+      </div>
     </div>
   );
 }
