@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
-  /*
   const token = await getToken({
     req,
     secret: process.env.NEXTAUTH_SECRET,
@@ -33,7 +32,7 @@ export async function middleware(req: NextRequest) {
     loginUrl.searchParams.set("from", pathname);
     return NextResponse.redirect(loginUrl);
   }
-*/
+
   // Logged in -> allow
   return NextResponse.next();
 }
