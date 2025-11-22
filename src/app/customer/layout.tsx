@@ -3,7 +3,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/shared/Container";
-import { withLayoutAuth } from "@/lib/withAuth";
+import { withLayoutAuth } from "@/lib/withLayoutAuth";
 import { Roles } from "@/enums/Roles";
 
 function CustomerLayout({ children }: { children: React.ReactNode }) {
