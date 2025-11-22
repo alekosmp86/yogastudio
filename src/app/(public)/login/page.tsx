@@ -1,91 +1,79 @@
 "use client";
-import Button from "@/components/shared/Button";
-import Input from "@/components/shared/Input";
-import { AuthMessages } from "enums/AuthMessages";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
-type Message = {
-  type: "success" | "error";
-  text: string;
-};
+import { useState } from "react";
+import Input from "@/components/shared/Input";
+import Button from "@/components/shared/Button";
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [message, setMessage] = useState<Message>({
-    type: "success",
-    text: "",
-  });
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "sent" | "error">("idle");
+  const [message, setMessage] = useState("");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
+    setStatus("loading");
+    setMessage("");
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_BACKEND}/auth/login-link`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email }),
-        }
-      );
-      await handleAuthResponses(response);
-    } catch (error) {
-      console.error("Login failed:", error);
+      const res = await fetch(`/api/auth/request-link?email=${email}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setStatus("error");
+        setMessage(data.message || "Unable to process request");
+        return;
+      }
+
+      // Email sent
+      setStatus("sent");
+      setMessage("A login link has been sent to your email.");
+
+    } catch (err) {
+      setStatus("error");
+      setMessage("Something went wrong. Try again later.");
     }
   }
 
-  const handleAuthResponses = async (response: Response) => {
-    if (!response.ok) {
-      throw new Error("Failed to request magic link");
-    }
-
-    const data = await response.json();
-    switch (data.status) {
-      case AuthMessages.USER_NOT_FOUND:
-        router.push("/register");
-        break;
-      case AuthMessages.USER_NOT_APPROVED:
-        setMessage({ type: "error", text: "User pending approval" });
-        break;
-      case AuthMessages.EMAIL_SENT:
-        setMessage({
-          type: "success",
-          text: "Email sent. Please check your inbox.",
-        });
-        break;
-      default:
-        setMessage({ type: "error", text: "Failed to request magic link" });
-        break;
-    }
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-[url('/yoga.jpg')] bg-cover">
-      <div className='bg-gray-800 p-4 rounded-lg shadow-lg'>
-        <label className='flex flex-col items-center text-white pb-2'>
-          Yoga Studio
-        </label>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-4 w-72'>
-          <Input name='email' type='email' placeholder='Email' />
+    <div className="flex flex-col items-center justify-center min-h-screen p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 w-80 bg-white p-6 rounded-lg shadow"
+      >
+        <h1 className="text-xl font-semibold text-center">Log in</h1>
 
-          <Button type='submit' className='p-2 bg-blue-500 text-white'>
-            Log In
-          </Button>
-        </form>
+        <Input
+          label="Email"
+          name="email"
+          type="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+        <Button
+          type="submit"
+          disabled={status === "loading"}
+          className="p-2 bg-blue-500 text-white"
+        >
+          {status === "loading" ? "Sending..." : "Send Magic Link"}
+        </Button>
+
         {message && (
           <p
-            className={`pt-3 ${
-              message.type === "error" ? "text-red-500" : "text-green-500"
+            className={`text-sm text-center ${
+              status === "error" ? "text-red-500" : "text-green-600"
             }`}
           >
-            {message.text}
+            {message}
           </p>
         )}
-      </div>
+      </form>
     </div>
   );
 }
