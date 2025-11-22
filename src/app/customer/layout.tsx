@@ -1,17 +1,17 @@
+"use client";
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/shared/Container";
+import { withLayoutAuth } from "@/lib/withAuth";
+import { Roles } from "@/enums/Roles";
 
-export default function CustomerLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function CustomerLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Navbar />
 
-      <main className="flex-1">
+      <main className='flex-1'>
         <Container>{children}</Container>
       </main>
 
@@ -19,3 +19,5 @@ export default function CustomerLayout({
     </>
   );
 }
+
+export default withLayoutAuth(CustomerLayout, Roles.CLIENT);
