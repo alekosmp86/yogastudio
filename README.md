@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+flowchart TD
+%% Define swimlanes
+subgraph Browser["🧑‍💻 Browser (User)"]
+A1[User enters email\nand clicks Login]
+A2[Clicks magic link\nfrom email]
+A3[Redirected to /auth/verify\nwith ?token=...]
+A4[Homepage loads\n(Protected App)]
+end
 
-## Getting Started
+    subgraph Frontend["🌐 Next.js Frontend"]
+        F1[GET /api/auth/request-link?email]
+        F2[Redirect user to\n/magic-link-sent page]
+        F3[POST /api/auth/token-validation\nwith {token}]
+        F4[Backend sets httpOnly cookie\nFrontend stores no token]
+        F5[Call /api/auth/me\n(load user & role)]
+        F6[Redirect based on role:\nCLIENT → /customer/home\nOWNER → /owner/dashboard]
+    end
 
-First, run the development server:
+    subgraph Backend["🛠️ Express Backend"]
+        B1[Validate email\nCheck if user exists]
+        B2[Create magic token\nStore in DB with expiry]
+        B3[Send magic link email]
+        B4[Validate magic token]
+        B5[Create JWT session token\n(exp 15 min)]
+        B6[res.cookie('session', jwtToken)]
+        B7[Validate JWT from cookie\n(Session check)]
+        B8[Return user data]
+    end
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+    %% Arrows between lanes
+    A1 --> F1
+    F1 --> B1
+    B1 --> B2
+    B2 --> B3
+    B3 --> F2
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    A2 --> A3
+    A3 --> F3
+    F3 --> B4
+    B4 --> B5
+    B5 --> B6
+    B6 --> F4
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    A4 --> F5
+    F5 --> B7
+    B7 --> B8
+    B8 --> F6
