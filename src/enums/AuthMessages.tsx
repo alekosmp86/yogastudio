@@ -1,0 +1,5 @@
+export enum AuthMessages {
+  USER_NOT_FOUND = "USER_NOT_FOUND",
+  USER_NOT_APPROVED = "USER_NOT_APPROVED",
+  EMAIL_SENT = "EMAIL_SENT",
+}
