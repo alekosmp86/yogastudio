@@ -25,12 +25,5 @@ export async function validateToken(
     return;
   }
 
-  const data = await response.json();
-
-  // Store session (choose your system)
-  localStorage.setItem("token", data.token);
-  localStorage.setItem("user", JSON.stringify(data.user));
-  localStorage.setItem("expiresAt", data.expiresAt);
-
   callbackFn(ExecutionStatus.COMPLETED);
 }

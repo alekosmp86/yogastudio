@@ -15,41 +15,28 @@ export function withLayoutAuth<T extends object>(
     const [isAllowed, setIsAllowed] = useState(false);
 
     useEffect(() => {
-      // grab token
-      const token = localStorage.getItem("token");
+      async function check() {
+        const res = await fetch("/api/auth/me", {
+          method: "GET",
+          credentials: "include"
+        });
 
-      // grab and parse user
-      const rawUser = localStorage.getItem("user");
-      let user = null;
+        if (!res.ok) {
+          router.replace("/login");
+          return;
+        }
 
-      const expiresAt = localStorage.getItem("expiresAt");
+        const data = await res.json();
 
-      try {
-        user = rawUser ? JSON.parse(rawUser) : null;
-      } catch {
-        user = null;
+        if (data.user.role !== role) {
+          router.replace("/login");
+          return;
+        }
+
+        setIsAllowed(true);
       }
 
-      // Not logged in
-      if (!token || !user) {
-        router.replace("/login");
-        return;
-      }
-
-      // Token expired
-      if (expiresAt && new Date(expiresAt) < new Date()) {
-        router.replace("/login");
-        return;
-      }
-
-      // Wrong role → redirect
-      if (user.role !== role) {
-        router.replace("/login");
-        return;
-      }
-
-      // Allowed to continue
-      setIsAllowed(true);
+      check();
     }, [router]);
 
     if (!isAllowed) {
