@@ -4,34 +4,92 @@ import Button from "@/components/shared/Button";
 import Container from "@/components/shared/Container";
 import Input from "@/components/shared/Input";
 import { useState } from "react";
+import { http } from "@/lib/http";
+import { useRouter } from "next/navigation";
 
 export default function CreateClassPage() {
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  const handleCreateClass = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const fd = new FormData(e.currentTarget);
+    const raw = Object.fromEntries(fd.entries());
+
+    const payload = {
+      title: raw.title as string,
+      instructor: raw.instructor as string,
+      description: raw.description as string,
+      capacity: Number(raw.capacity),
+    };
+
+    try {
+      await http.post("/api/owner/classes/create", payload);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <Container>
-      <h1 className="text-2xl font-bold text-[#1A4D6D] mb-6">
+    <Container className='bg-brand-500 p-6 rounded-xl'>
+      <h1 className='text-2xl font-bold text-brand-500 mb-6'>
         Create a New Class
       </h1>
 
-      <div className="flex flex-col gap-6">
-        <Input label="Class Title" placeholder="e.g. Power Yoga" />
+      <form onSubmit={handleCreateClass} className='flex flex-col gap-6'>
+        <Input
+          name='title'
+          label='Class Title'
+          placeholder='e.g. Power Yoga'
+          required
+        />
 
-        <Input label="Instructor Name" placeholder="e.g. Samantha Lee" />
+        <Input
+          name='instructor'
+          label='Instructor Name'
+          placeholder='e.g. Samantha Lee'
+          required
+        />
 
-        <Input label="Description" placeholder="e.g. A dynamic flow that combines strength, flexibility, and balance." />
+        <Input
+          name='description'
+          label='Description'
+          placeholder='e.g. Strength, flexibility, balance flow...'
+        />
 
-        <Input label="Capacity" placeholder="e.g. 20" />
-      </div>
+        <Input
+          name='capacity'
+          label='Capacity'
+          placeholder='e.g. 20'
+          type='number'
+          required
+        />
 
-      <div className="flex gap-4">
-        <Button disabled={loading} className="mt-8 w-full py-3 rounded-xl font-semibold text-white hover:bg-[#1A4D6D] transition disabled:opacity-50 disabled:cursor-not-allowed">
-          {loading ? "Creating..." : "Create Class"}
-        </Button>
-        <Button variant="secondary" className="mt-8 w-full py-3 rounded-xl font-semibold text-white hover:bg-[#1A4D6D] transition disabled:opacity-50 disabled:cursor-not-allowed">
-          Cancel
-        </Button>
-      </div>
+        <div className='flex flex-row justify-end'>
+          <div className='flex justify-end gap-2 w-80'>
+            <Button
+              variant='secondary'
+              className='mt-4 w-full py-3 rounded-xl font-semibold transition'
+              type='button'
+              onClick={() => router.back()}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant='primary'
+              disabled={loading}
+              className='mt-4 w-full py-3 rounded-xl font-semibold transition'
+              type='submit'
+            >
+              {loading ? "Creating..." : "Create Class"}
+            </Button>
+          </div>
+        </div>
+      </form>
     </Container>
   );
 }
