@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { http } from "@/lib/http";
 import { ApiType } from "@/enums/ApiTypes";
+import { CreateClassResponse } from "@/types/classes/CreateClassResponse";
 import { GymClass } from "@/types/classes/GymClass";
 
 export async function GET() {
-  const response = await http.get("/owner/classes", ApiType.BACKEND);
+  const response = await http.get<GymClass[]>("/owner/classes", ApiType.BACKEND);
   return NextResponse.json(response);
 }
 
@@ -12,7 +13,7 @@ export async function POST(request: Request) {
   const body = await request.json();
 
   try {
-    const response: GymClass = await http.post(`/owner/classes`, ApiType.BACKEND, body);
+    const response = await http.post<CreateClassResponse>(`/owner/classes`, ApiType.BACKEND, body);
     
     if (!response) {
       throw new Error("Failed to create class");
@@ -27,3 +28,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

@@ -1,4 +1,7 @@
+import { RequestStatus } from "@/enums/RequestStatus";
+
+
 export interface CreateClassResponse {
-  message: string;
+  message: RequestStatus;
   id: number;
 }
