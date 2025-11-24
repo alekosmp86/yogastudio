@@ -14,7 +14,7 @@ export default function OwnerDashboard() {
         <DashboardCard
           title="Create Class"
           description="Add a new class template."
-          href="/owner/classes/create"
+          href="/owner/classes"
           icon={<PlusCircle size={40} />}
         />
 

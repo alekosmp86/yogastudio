@@ -1,0 +1,166 @@
+"use client";
+
+import Button from "@/components/shared/Button";
+import { http } from "@/lib/http";
+import { GymClass } from "@/types/GymClass";
+import { GymClassBase } from "@/types/GymClassBase";
+import { Pencil, Trash } from "lucide-react";
+import { useEffect, useState } from "react";
+
+export default function ClassTable() {
+  const [classes, setClasses] = useState<GymClassBase[]>([]);
+  const [adding, setAdding] = useState(false);
+  const [form, setForm] = useState({
+    title: "",
+    instructor: "",
+    description: "",
+    capacity: 0,
+  });
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      const data: GymClassBase[] = await http.get("/api/owner/classes");      
+      setClasses(data);
+    };
+    fetchClasses();
+  }, []);
+
+  const handleAddRow = () => {
+    setAdding(true);
+  };
+
+  const handleSave = () => {
+    const newClass: GymClassBase = {
+      title: form.title,
+      instructor: form.instructor,
+      description: form.description,
+      capacity: Number(form.capacity),
+    };
+
+    http.post("/api/owner/classes/create", newClass);
+
+    setClasses([...classes, newClass]);
+    setForm({ title: "", instructor: "", description: "", capacity: 0 });
+    setAdding(false);
+  };
+
+  return (
+    <div className="bg-brand-700 rounded-xl p-6 shadow-xl border border-brand-700">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-semibold text-brand-400">Your Classes</h2>
+        <Button
+          variant="primary"
+          onClick={handleAddRow}
+          disabled={adding}
+        >
+          Add Class
+        </Button>
+      </div>
+
+      {/* Responsive wrapper */}
+      <div className="overflow-x-auto rounded-sm border border-brand-600">
+        <table className="w-full text-center text-brand-200">
+          <thead className="bg-brand-800 text-brand-400 sticky top-0 z-10">
+            <tr>
+              <th className="px-4 py-3">Title</th>
+              <th className="px-4 py-3">Instructor</th>
+              <th className="px-4 py-3">Description</th>
+              <th className="px-4 py-3">Capacity</th>
+              <th className="px-4 py-3 text-center">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {/* Existing classes */}
+            {classes.map((c, index) => (
+              <tr
+                key={index}
+                className="bg-brand-600 border-b border-brand-300"
+              >
+                <td className="px-4 py-3">{c.title}</td>
+                <td className="px-4 py-3">{c.instructor}</td>
+                <td className="px-4 py-3">{c.description}</td>
+                <td className="px-4 py-3">{c.capacity}</td>
+                <td className="flex items-center justify-center gap-2 px-2 py-3">
+                  <Button size="sm" Icon={Pencil}>
+                    Edit
+                  </Button>
+                  <Button size="sm" Icon={Trash}>
+                    Delete
+                  </Button>
+                </td>
+              </tr>
+            ))}
+
+            {/* New row when adding */}
+            {adding && (
+              <tr className="bg-brand-800/60 border-t border-brand-600">
+                <td className="px-4 py-3">
+                  <input
+                    className="w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none"
+                    value={form.title}
+                    onChange={(e) =>
+                      setForm({ ...form, title: e.target.value })
+                    }
+                    placeholder="Class title"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <input
+                    className="w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none"
+                    value={form.instructor}
+                    onChange={(e) =>
+                      setForm({ ...form, instructor: e.target.value })
+                    }
+                    placeholder="Instructor"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <input
+                    className="w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none"
+                    value={form.description}
+                    onChange={(e) =>
+                      setForm({ ...form, description: e.target.value })
+                    }
+                    placeholder="Description"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <input
+                    type="number"
+                    className="w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none"
+                    value={form.capacity}
+                    onChange={(e) =>
+                      setForm({ ...form, capacity: Number(e.target.value) })
+                    }
+                    placeholder="20"
+                  />
+                </td>
+                <td className="px-4 py-3 flex justify-end gap-2">
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => {
+                      setForm({ title: "", instructor: "", description: "", capacity: 0 });
+                      setAdding(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button size="sm" variant="primary" onClick={handleSave}>
+                    Save
+                  </Button>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Mobile view hint */}
+      <p className="mt-3 text-xs text-brand-500 block sm:hidden">
+        Scroll → to view the full table
+      </p>
+    </div>
+  );
+}

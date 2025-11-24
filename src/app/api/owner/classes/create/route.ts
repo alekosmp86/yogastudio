@@ -3,7 +3,6 @@ import { NextResponse } from "next/server";
 const BACKEND_URL = process.env.NEXT_PUBLIC_URL_BACKEND;
 
 export async function POST(request: Request) {
-  console.log("Received POST request", request.body);
   const body = await request.json();
 
   try {

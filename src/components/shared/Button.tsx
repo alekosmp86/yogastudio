@@ -9,7 +9,7 @@ type Size = "sm" | "md" | "lg";
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: Variant;
   size?: Size;
-  Icon?: React.ComponentType<{ className?: string }>; // optional icon component
+  Icon?: React.ComponentType<{ className?: string }>;
 };
 
 /**
