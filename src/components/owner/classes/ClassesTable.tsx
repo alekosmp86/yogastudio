@@ -2,16 +2,18 @@
 
 import Button from "@/components/shared/Button";
 import { ApiType } from "@/enums/ApiTypes";
+import { RequestStatus } from "@/enums/RequestStatus";
 import { http } from "@/lib/http";
-import { GymClass } from "@/types/GymClass";
-import { GymClassBase } from "@/types/GymClassBase";
+import { CreateClassResponse } from "@/types/classes/CreateClassResponse";
+import { GymClass } from "@/types/classes/GymClass";
+import { GymClassBase } from "@/types/classes/GymClassBase";
 import { Pencil, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function ClassTable() {
-  const [classes, setClasses] = useState<GymClassBase[]>([]);
+  const [classes, setClasses] = useState<GymClass[]>([]);
   const [adding, setAdding] = useState(false);
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<GymClassBase>({
     title: "",
     instructor: "",
     description: "",
@@ -26,11 +28,7 @@ export default function ClassTable() {
     fetchClasses();
   }, []);
 
-  const handleAddRow = () => {
-    setAdding(true);
-  };
-
-  const handleSave = () => {
+  const handleSave = async () => {
     const newClass: GymClassBase = {
       title: form.title,
       instructor: form.instructor,
@@ -38,9 +36,14 @@ export default function ClassTable() {
       capacity: Number(form.capacity),
     };
 
-    http.post("/owner/classes/create", ApiType.FRONTEND, newClass);
-
-    setClasses([...classes, newClass]);
+    /** @todo: handle success and error */
+    const {message, id}: CreateClassResponse = await http.post("/owner/classes", ApiType.FRONTEND, newClass);
+    if(message === RequestStatus.CREATE_ERROR){
+      //show toast message
+      return;
+    }
+    
+    setClasses([...classes, {id, ...newClass}]);
     setForm({ title: "", instructor: "", description: "", capacity: 0 });
     setAdding(false);
   };
@@ -51,7 +54,7 @@ export default function ClassTable() {
         <h2 className="text-xl font-semibold text-brand-400">Your Classes</h2>
         <Button
           variant="primary"
-          onClick={handleAddRow}
+          onClick={() => setAdding(true)}
           disabled={adding}
         >
           Add Class
