@@ -2,10 +2,10 @@
 
 import React from "react";
 import { Sun, Flame, Sparkles, Dumbbell } from "lucide-react";
-import { GymClass } from "../../types/GymClass";
-import { Card, CardContent } from "../shared/Card";
-import { Progress } from "../shared/Progress";
-import Button from "../shared/Button";
+import { Progress } from "@/components/shared/Progress";
+import Button from "@/components/shared/Button";
+import { GymClass } from "@/types/GymClass";
+import { Card, CardContent } from "@/components/shared/Card";
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   sun: Sun,
