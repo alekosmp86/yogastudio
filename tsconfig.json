@@ -22,6 +22,7 @@
       "@/*": ["./src/*"],
       "@/api/*": ["src/app/api/*"],
       "@/components/*": ["components/*"],
+      "@/hooks/*": ["hooks/*"],
       "@/lib/*": ["lib/*"],
       "@/enums/*": ["enums/*"],
       "@/types/*": ["types/*"]

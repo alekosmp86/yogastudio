@@ -1,40 +1,32 @@
 "use client";
 
-import { useEffect } from "react";
+import { Roles } from "@/enums/Roles";
+import { useSession } from "@/hooks/useSession";
 import { useRouter } from "next/navigation";
-import { User } from "@/types/User";
+import { useEffect } from "react";
 
 export default function HomePage() {
+  const { session, loading } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    // Grab data safely
-    const token = localStorage.getItem("token");
-    const rawUser = localStorage.getItem("user");
+    if (loading) return;
 
-    let user: User | null = null;
-    try {
-      user = rawUser ? JSON.parse(rawUser) : null;
-    } catch {
-      user = null;
-    }
-
-    // Redirect logic
-    if (!token || !user) {
+    if (!session) {
       router.replace("/login");
       return;
     }
 
-    if (user.role === "CLIENT") {
+    if (session.user.role === Roles.CLIENT) {
       router.replace("/customer/home");
       return;
     }
 
-    if (user.role === "OWNER") {
+    if (session.user.role === Roles.OWNER) {
       router.replace("/owner/dashboard");
       return;
     }
-  }, [router]);
+  }, [loading, session, router]);
 
   return <p className="text-white">Loading...</p>;
 }
