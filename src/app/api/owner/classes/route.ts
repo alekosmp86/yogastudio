@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
-
-const BACKEND_URL = process.env.NEXT_PUBLIC_URL_BACKEND;
+import { http } from "@/lib/http";
+import { ApiType } from "@/enums/ApiTypes";
 
 export async function GET() {
-  const response = await fetch(`${BACKEND_URL}/owner/classes`);
-  const data = await response.json();
-  return NextResponse.json(data);
+  const response = await http.get("/owner/classes", ApiType.BACKEND);
+  return NextResponse.json(response);
 }

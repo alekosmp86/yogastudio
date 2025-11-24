@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/shared/Button";
+import { ApiType } from "@/enums/ApiTypes";
 import { http } from "@/lib/http";
 import { GymClass } from "@/types/GymClass";
 import { GymClassBase } from "@/types/GymClassBase";
@@ -19,7 +20,7 @@ export default function ClassTable() {
 
   useEffect(() => {
     const fetchClasses = async () => {
-      const data: GymClassBase[] = await http.get("/api/owner/classes");      
+      const data: GymClass[] = await http.get("/owner/classes", ApiType.FRONTEND);      
       setClasses(data);
     };
     fetchClasses();
@@ -37,7 +38,7 @@ export default function ClassTable() {
       capacity: Number(form.capacity),
     };
 
-    http.post("/api/owner/classes/create", newClass);
+    http.post("/owner/classes/create", ApiType.FRONTEND, newClass);
 
     setClasses([...classes, newClass]);
     setForm({ title: "", instructor: "", description: "", capacity: 0 });

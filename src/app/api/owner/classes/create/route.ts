@@ -1,24 +1,19 @@
+import { ApiType } from "@/enums/ApiTypes";
+import { http } from "@/lib/http";
+import { GymClass } from "@/types/GymClass";
 import { NextResponse } from "next/server";
-
-const BACKEND_URL = process.env.NEXT_PUBLIC_URL_BACKEND;
 
 export async function POST(request: Request) {
   const body = await request.json();
 
   try {
-    const response = await fetch(`${BACKEND_URL}/owner/class`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
+    const response: GymClass = await http.post(`/owner/class`, ApiType.BACKEND, body);
+    
+    if (!response) {
       throw new Error("Failed to create class");
     }
 
-    return NextResponse.json(await response.json());
+    return NextResponse.json(response);
   } catch (error) {
     console.error("Error creating class:", error);
     return NextResponse.json(
