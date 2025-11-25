@@ -1,25 +1,19 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Button from "@/components/shared/Button";
+import EditableRow from "./EditableRow";
 import { ApiType } from "@/enums/ApiTypes";
-import { RequestStatus } from "@/enums/RequestStatus";
 import { http } from "@/lib/http";
-import { CreateClassResponse } from "@/types/classes/CreateClassResponse";
 import { GymClass } from "@/types/classes/GymClass";
 import { GymClassBase } from "@/types/classes/GymClassBase";
-import { useEffect, useState } from "react";
-import EditableRow from "./EditableRow";
+import { CreateClassResponse } from "@/types/classes/CreateClassResponse";
+import { RequestStatus } from "@/enums/RequestStatus";
+import { RequestResponse } from "@/types/RequestResponse";
 
 export default function ClassTable() {
   const [classes, setClasses] = useState<GymClass[]>([]);
   const [adding, setAdding] = useState(false);
-  const [form, setForm] = useState<GymClass>({
-    id: 0,
-    title: "",
-    instructor: "",
-    description: "",
-    capacity: 0,
-  });
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -32,55 +26,51 @@ export default function ClassTable() {
     fetchClasses();
   }, []);
 
-  const handleSaveNew = async (gymClass: GymClass) => {
-    const newClass: GymClassBase = {
-      title: gymClass.title,
-      instructor: gymClass.instructor,
-      description: gymClass.description,
-      capacity: Number(gymClass.capacity),
-    };
-
-    /** @todo: handle success and error */
-    const { message, id }: CreateClassResponse = await http.post(
+  // --- CREATE ---
+  const handleSaveNew = async (gymClass: GymClassBase) => {
+    const { message, id }: CreateClassResponse = await http.post<CreateClassResponse>(
       "/owner/classes",
-      ApiType.FRONTEND,
-      newClass
-    );
-    if (message === RequestStatus.CREATE_ERROR) {
-      //show toast message
-      return;
-    }
-
-    setClasses([...classes, { id, ...newClass }]);
-    setForm({ id: 0, title: "", instructor: "", description: "", capacity: 0 });
-    setAdding(false);
-  };
-
-  const handleDelete = async (id: number) => {
-    const response = await http.delete(
-      `/owner/classes/${id}`,
-      ApiType.FRONTEND
-    );
-    if (response) {
-      setClasses(classes.filter((c) => c.id !== id));
-    }
-  };
-
-  const handleUpdate = async (id: number, gymClass: GymClass) => {
-    const response = await http.put(
-      `/owner/classes/${id}`,
       ApiType.FRONTEND,
       gymClass
     );
-    if (response) {
-      setClasses(classes.map((c) => (c.id === id ? gymClass : c)));
-    }
+
+    if (message === RequestStatus.CREATE_ERROR) return; // @todo toast
+
+    console.log(id);
+    setClasses((prev) => [...prev, { id, ...gymClass }]);
+    setAdding(false);
   };
 
-  const handleCancel = () => {
+  // --- UPDATE ---
+  const handleUpdate = async (id: number, updated: GymClassBase) => {
+    console.log(id);
+    const response = await http.put<RequestResponse>(
+      `/owner/classes/${id}`,
+      ApiType.FRONTEND,
+      updated
+    );
+
+    if (response.message === RequestStatus.UPDATE_ERROR) return; // @todo toast
+
+    setClasses((prev) =>
+      prev.map((c) => (c.id === id ? { id, ...updated } : c))
+    );
+  };
+
+  // --- DELETE ---
+  const handleDelete = async (id: number) => {
+    const response = await http.delete<RequestResponse>(
+      `/owner/classes/${id}`,
+      ApiType.FRONTEND
+    );
+    if (response.message === RequestStatus.DELETE_ERROR) return; // @todo toast
+
+    setClasses((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  // --- CANCEL ADD ROW ---
+  const handleCancelAdd = () => {
     setAdding(false);
-    setForm({ id: 0, title: "", instructor: "", description: "", capacity: 0 });
-    setClasses((prevClasses) => [...prevClasses.filter((c) => c.id)]);
   };
 
   return (
@@ -116,33 +106,38 @@ export default function ClassTable() {
                 </td>
               </tr>
             )}
+
             {classes.map((c) => (
-                <EditableRow
-                  key={c.id}
-                  gymClass={c}
-                  adding={adding}
-                  handleSaveNew={(gymClass) => handleSaveNew(gymClass)}
-                  handleCancel={handleCancel}
-                  handleUpdate={(id, gymClass) => handleUpdate(id, gymClass)}
-                  handleDelete={() => handleDelete(c.id)}
-                />
-              ))
-            }
+              <EditableRow
+                key={c.id}
+                gymClass={c}
+                onSaveNew={(gymClass) => handleSaveNew(gymClass)}
+                onUpdate={(id, updated) => handleUpdate(id, updated)}
+                onDelete={(id) => handleDelete(id)}
+                onCancel={() => {}}
+              />
+            ))}
+
             {adding && (
               <EditableRow
-                gymClass={form}
-                adding={adding}
-                handleSaveNew={(gymClass) => handleSaveNew(gymClass)}
-                handleCancel={handleCancel}
-                handleUpdate={(id, gymClass) => handleUpdate(id, gymClass)}
-                handleDelete={() => handleDelete(form.id)}
+                gymClass={{
+                  id: 0,
+                  title: "",
+                  instructor: "",
+                  description: "",
+                  capacity: 0,
+                }}
+                adding
+                onSaveNew={(gymClass) => handleSaveNew(gymClass)}
+                onUpdate={(id, updated) => handleUpdate(id, updated)}
+                onDelete={(id) => handleDelete(id)}
+                onCancel={handleCancelAdd}
               />
             )}
           </tbody>
         </table>
       </div>
 
-      {/* Mobile view hint */}
       {classes.length > 0 && (
         <p className='mt-3 text-xs text-brand-500 block sm:hidden'>
           Scroll → to view the full table
@@ -151,3 +146,4 @@ export default function ClassTable() {
     </div>
   );
 }
+

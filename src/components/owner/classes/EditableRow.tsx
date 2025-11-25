@@ -1,103 +1,104 @@
 import Button from "@/components/shared/Button";
 import { GymClass } from "@/types/classes/GymClass";
-import { Pencil, Trash } from "lucide-react";
+import { Check, Pencil, Trash, X } from "lucide-react";
 import { useState } from "react";
 
-export default function EditableRow({gymClass, adding, handleSaveNew, handleUpdate, handleCancel, handleDelete}: EditableRowProps) {
+type EditableRowProps = {
+  gymClass: GymClass;
+  adding?: boolean;
+  onSaveNew: (gymClass: GymClass) => void;
+  onUpdate: (id: GymClass["id"], gymClass: GymClass) => void;
+  onCancel: () => void;
+  onDelete: (id: GymClass["id"]) => void;
+};
+
+export default function EditableRow({
+  gymClass,
+  adding = false,
+  onSaveNew,
+  onUpdate,
+  onCancel,
+  onDelete,
+}: EditableRowProps) {
   const [isEditing, setIsEditing] = useState(adding);
   const [form, setForm] = useState(gymClass);
 
-  const handleSaveEdit = () => {
-    if(adding) {
-      handleSaveNew(form);
+  const isUnchanged =
+    form.title === gymClass.title &&
+    form.instructor === gymClass.instructor &&
+    form.description === gymClass.description &&
+    form.capacity === gymClass.capacity;
+
+  const handleChange = (field: keyof GymClass, value: string) => {
+    console.log(field, value);
+    setForm((prev) => ({
+      ...prev,
+      [field]: field === "capacity" ? Number(value) || 0 : value,
+    }));
+  };
+
+  const save = () => {
+    if (adding) {
+      onSaveNew(form);
     } else {
-      handleUpdate(gymClass.id, form);
+      onUpdate(gymClass.id, form);
     }
     setIsEditing(false);
   };
 
-  const cancelAction = () => {
+  const cancel = () => {
     setIsEditing(false);
     setForm(gymClass);
-    handleCancel();
+    onCancel();
   };
 
+  const fields: { key: keyof GymClass; placeholder: string }[] = [
+    { key: "title", placeholder: "Class title" },
+    { key: "instructor", placeholder: "Instructor" },
+    { key: "description", placeholder: "Description" },
+    { key: "capacity", placeholder: "Capacity" },
+  ];
+
   return (
-      <tr
-        key={gymClass.id}
-        className='bg-brand-600 border-b border-brand-300'
-      >
-        <td className='px-4 py-3'>
-        {isEditing ? <input
-                    className='w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none'
-                    value={form.title}
-                    onChange={(e) =>
-                      setForm({ ...form, title: e.target.value })
-                    }
-                    placeholder='Class title'
-                  /> : gymClass.title}
-        </td>
-        <td className='px-4 py-3'>
-        {isEditing ? <input
-                    className='w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none'
-                    value={form.instructor}
-                    onChange={(e) =>
-                      setForm({ ...form, instructor: e.target.value })
-                    }
-                    placeholder='Class instructor'
-                  /> : gymClass.instructor}</td>
-        <td className='px-4 py-3'>
-        {isEditing ? <input
-                    className='w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none'
-                    value={form.description}
-                    onChange={(e) =>
-                      setForm({ ...form, description: e.target.value })
-                    }
-                    placeholder='Class description'
-                  /> : gymClass.description}</td>
-        <td className='px-4 py-3'>
-        {isEditing ? <input
-                    className='w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none'
-                    value={form.capacity}
-                    onChange={(e) =>
-                      setForm({ ...form, capacity: isNaN(Number(e.target.value)) ? 0 : Number(e.target.value) })
-                    }
-                    placeholder='Class capacity'
-                  /> : gymClass.capacity}</td>
-        <td className='flex items-center justify-center gap-2 px-2 py-3'>
+    <tr className="bg-brand-600 border-b border-brand-300">
+      {fields.map(({ key, placeholder }) => (
+        <td key={key} className="px-4 py-3">
           {isEditing ? (
-            <>
-              <Button size='sm' Icon={Pencil} onClick={handleSaveEdit}>
-                Save
-              </Button>
-              <Button size='sm' Icon={Pencil} onClick={cancelAction}>
-                Cancel
-              </Button>
-            </>
+            <input
+              className="w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none"
+              value={form[key] as string | number}
+              onChange={(e) => handleChange(key, e.target.value)}
+              placeholder={placeholder}
+            />
           ) : (
-            <>
-              <Button size='sm' Icon={Pencil} onClick={() => setIsEditing(true)}>
-                Edit
-              </Button>
-              <Button
-                size='sm'
-                Icon={Trash}
-                onClick={() => handleDelete(gymClass.id)}
-              >
-                Delete
-              </Button>
-            </>
+            (gymClass as any)[key]
           )}
         </td>
-      </tr>
-  )
-}
+      ))}
 
-type EditableRowProps = {
-  gymClass: GymClass;
-  adding: boolean;
-  handleSaveNew: (gymClass: GymClass) => void;
-  handleCancel: () => void;
-  handleUpdate: (id: number, gymClass: GymClass) => void;
-  handleDelete: (id: number) => void;
+      <td className="flex items-center justify-center gap-2 px-2 py-3">
+        {isEditing ? (
+          <>
+            <Button size="sm" Icon={Check} onClick={save} disabled={isUnchanged}>
+              Save
+            </Button>
+
+            <Button size="sm" Icon={X} onClick={cancel}>
+              Cancel
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button size="sm" Icon={Pencil} onClick={() => setIsEditing(true)}>
+              Edit
+            </Button>
+
+            <Button size="sm" Icon={Trash} onClick={() => onDelete(gymClass.id)}>
+              Delete
+            </Button>
+          </>
+        )}
+      </td>
+    </tr>
+  );
 }

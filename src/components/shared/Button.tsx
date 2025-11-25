@@ -32,11 +32,11 @@ export default function Button({
 
   const variants: Record<Variant, string> = {
     primary:
-      "bg-brand-500 text-brand-600 hover:bg-brand-200 active:bg-brand-200",
+      "bg-brand-500 text-brand-600 active:bg-brand-200",
     secondary:
-      "bg-brand-400 text-brand-600 hover:bg-brand-200 active:bg-brand-200",
+      "bg-brand-400 text-brand-600 active:bg-brand-200",
     ghost:
-      "bg-transparent text-brand-600 hover:bg-brand-200/30 active:bg-brand-200/40",
+      "bg-transparent text-brand-600 active:bg-brand-200/40",
   };
 
   const sizes: Record<Size, string> = {
