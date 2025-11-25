@@ -15,7 +15,7 @@ export async function DELETE(
   } catch (error) {
     console.error("Error deleting class:", error);
     return NextResponse.json(
-      { error: "Failed to delete class" },
+      { message: RequestStatus.DELETE_ERROR },
       { status: 500 }
     );
   }
@@ -34,7 +34,7 @@ export async function PUT(
   } catch (error) {
     console.error("Error updating class:", error);
     return NextResponse.json(
-      { error: "Failed to update class" },
+      { message: RequestStatus.UPDATE_ERROR },
       { status: 500 }
     );
   }

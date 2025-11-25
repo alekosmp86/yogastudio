@@ -11,10 +11,12 @@ import { CreateClassResponse } from "@/types/classes/CreateClassResponse";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { RequestResponse } from "@/types/RequestResponse";
 import TableHeader from "./TableHeader";
+import { useToast } from "@/components/shared/Toast";
 
 export default function ClassTable() {
   const [classes, setClasses] = useState<GymClass[]>([]);
   const [adding, setAdding] = useState(false);
+  const { showToast } = useToast();
 
   useEffect(() => {
     const fetchClasses = async () => {
@@ -35,10 +37,14 @@ export default function ClassTable() {
       gymClass
     );
 
-    if (message === RequestStatus.CREATE_ERROR) return; // @todo toast
+    if (message === RequestStatus.CREATE_ERROR) {
+      showToast("Error creating class", "error");
+      return; 
+    }
 
     setClasses((prev) => [...prev, { ...gymClass, id }]);
     setAdding(false);
+    showToast("Class created successfully", "success");
   };
 
   // --- UPDATE ---
@@ -49,11 +55,15 @@ export default function ClassTable() {
       updated
     );
 
-    if (response.message === RequestStatus.UPDATE_ERROR) return; // @todo toast
+    if (response.message === RequestStatus.UPDATE_ERROR) {
+      showToast("Error updating class", "error");
+      return;
+    }
 
     setClasses((prev) =>
       prev.map((c) => (c.id === id ? { id, ...updated } : c))
     );
+    showToast("Class updated successfully", "success");
   };
 
   // --- DELETE ---
@@ -62,9 +72,13 @@ export default function ClassTable() {
       `/owner/classes/${id}`,
       ApiType.FRONTEND
     );
-    if (response.message === RequestStatus.DELETE_ERROR) return; // @todo toast
+    if (response.message === RequestStatus.DELETE_ERROR) {
+      showToast("Error deleting class", "error");
+      return;
+    }
 
     setClasses((prev) => prev.filter((c) => c.id !== id));
+    showToast("Class deleted successfully", "success");
   };
 
   // --- CANCEL ADD ROW ---

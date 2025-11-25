@@ -1,0 +1,91 @@
+"use client";
+
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useCallback,
+} from "react";
+import { CheckCircle, AlertTriangle, Info, XCircle, X } from "lucide-react";
+import clsx from "clsx";
+
+export type ToastType = "success" | "error" | "warning" | "info";
+
+export type Toast = {
+  id: number;
+  message: string;
+  type: ToastType;
+};
+
+type ToastContextType = {
+  showToast: (message: string, type?: ToastType) => void;
+};
+
+const ToastContext = createContext<ToastContextType | undefined>(undefined);
+
+export function ToastProvider({ children }: { children: ReactNode }) {
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  const showToast = useCallback((message: string, type: ToastType = "info") => {
+    const id = Date.now();
+    setToasts((prev) => [...prev, { id, message, type }]);
+
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 4000);
+  }, []);
+
+  const removeToast = (id: number) =>
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+
+  const iconFor = (type: ToastType) => {
+    switch (type) {
+      case "success":
+        return <CheckCircle className="w-5 h-5 text-brand-200" />;
+      case "error":
+        return <XCircle className="w-5 h-5 text-red-300" />;
+      case "warning":
+        return <AlertTriangle className="w-5 h-5 text-yellow-300" />;
+      default:
+        return <Info className="w-5 h-5 text-brand-200" />;
+    }
+  };
+
+  return (
+    <ToastContext.Provider value={{ showToast }}>
+      {children}
+
+      <div className="fixed top-4 right-4 z-50 space-y-3">
+        {toasts.map((toast) => (
+          <div
+            key={toast.id}
+            onClick={() => removeToast(toast.id)}
+            className={clsx(
+              "flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border cursor-pointer animate-toast-in hover:brightness-110 transition",
+              {
+                "bg-green-700 border-green-500 text-green-100":
+                  toast.type === "success",
+                "bg-red-700 border-red-500 text-red-100": toast.type === "error",
+                "bg-yellow-700 border-yellow-500 text-yellow-100":
+                  toast.type === "warning",
+                "bg-brand-700 border-brand-500 text-brand-100":
+                  toast.type === "info",
+              }
+            )}
+          >
+            {iconFor(toast.type)}
+            <span>{toast.message}</span>
+            <X className="w-4 h-4 opacity-70" />
+          </div>
+        ))}
+      </div>
+    </ToastContext.Provider>
+  );
+}
+
+export function useToast() {
+  const ctx = useContext(ToastContext);
+  if (!ctx) throw new Error("useToast must be used inside ToastProvider");
+  return ctx;
+}
