@@ -7,15 +7,14 @@ import { http } from "@/lib/http";
 import { CreateClassResponse } from "@/types/classes/CreateClassResponse";
 import { GymClass } from "@/types/classes/GymClass";
 import { GymClassBase } from "@/types/classes/GymClassBase";
-import { Pencil, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
 import EditableRow from "./EditableRow";
 
 export default function ClassTable() {
   const [classes, setClasses] = useState<GymClass[]>([]);
   const [adding, setAdding] = useState(false);
-  const [editing, setEditing] = useState(false);
-  const [form, setForm] = useState<GymClassBase>({
+  const [form, setForm] = useState<GymClass>({
+    id: 0,
     title: "",
     instructor: "",
     description: "",
@@ -33,12 +32,12 @@ export default function ClassTable() {
     fetchClasses();
   }, []);
 
-  const handleSave = async () => {
+  const handleSaveNew = async (gymClass: GymClass) => {
     const newClass: GymClassBase = {
-      title: form.title,
-      instructor: form.instructor,
-      description: form.description,
-      capacity: Number(form.capacity),
+      title: gymClass.title,
+      instructor: gymClass.instructor,
+      description: gymClass.description,
+      capacity: Number(gymClass.capacity),
     };
 
     /** @todo: handle success and error */
@@ -53,7 +52,7 @@ export default function ClassTable() {
     }
 
     setClasses([...classes, { id, ...newClass }]);
-    setForm({ title: "", instructor: "", description: "", capacity: 0 });
+    setForm({ id: 0, title: "", instructor: "", description: "", capacity: 0 });
     setAdding(false);
   };
 
@@ -80,8 +79,8 @@ export default function ClassTable() {
 
   const handleCancel = () => {
     setAdding(false);
-    setEditing(false);
-    setForm({ title: "", instructor: "", description: "", capacity: 0 });
+    setForm({ id: 0, title: "", instructor: "", description: "", capacity: 0 });
+    setClasses((prevClasses) => [...prevClasses.filter((c) => c.id)]);
   };
 
   return (
@@ -110,22 +109,35 @@ export default function ClassTable() {
           </thead>
 
           <tbody>
-            {classes.length > 0
-              ? classes.map((c) => (
-                  <EditableRow
-                    key={c.id}
-                    gymClass={c}
-                    handleUpdate={(id, gymClass) => handleUpdate(id, gymClass)}
-                    handleDelete={() => handleDelete(c.id)}
-                  />
-                ))
-              : !adding && (
-                  <tr>
-                    <td colSpan={5} className='text-center py-4'>
-                      No classes found
-                    </td>
-                  </tr>
-                )}
+            {classes.length === 0 && !adding && (
+              <tr>
+                <td colSpan={5} className='text-center py-4'>
+                  No classes found
+                </td>
+              </tr>
+            )}
+            {classes.map((c) => (
+                <EditableRow
+                  key={c.id}
+                  gymClass={c}
+                  adding={adding}
+                  handleSaveNew={(gymClass) => handleSaveNew(gymClass)}
+                  handleCancel={handleCancel}
+                  handleUpdate={(id, gymClass) => handleUpdate(id, gymClass)}
+                  handleDelete={() => handleDelete(c.id)}
+                />
+              ))
+            }
+            {adding && (
+              <EditableRow
+                gymClass={form}
+                adding={adding}
+                handleSaveNew={(gymClass) => handleSaveNew(gymClass)}
+                handleCancel={handleCancel}
+                handleUpdate={(id, gymClass) => handleUpdate(id, gymClass)}
+                handleDelete={() => handleDelete(form.id)}
+              />
+            )}
           </tbody>
         </table>
       </div>
