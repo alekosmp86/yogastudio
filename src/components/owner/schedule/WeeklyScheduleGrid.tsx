@@ -109,11 +109,7 @@ export default function WeeklyScheduleGrid() {
                     key={`${weekday}-${hour}`}
                     onClick={(e) => openSelector(weekday, hour, e)}
                     className={`border border-brand-600 cursor-pointer px-1 py-4 sm:px-2 sm:py-3 text-xs sm:text-sm transition rounded-sm
-                      ${
-                        cls
-                          ? "bg-brand-500 text-brand-900 hover:bg-brand-400"
-                          : "hover:bg-brand-800"
-                      }
+                      ${cls ? "bg-brand-500 text-brand-900 hover:bg-brand-400" : "hover:bg-brand-800"}
                     `}
                   >
                     {cls ? cls.title : ""}

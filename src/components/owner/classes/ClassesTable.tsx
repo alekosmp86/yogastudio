@@ -13,23 +13,42 @@ import { RequestResponse } from "@/types/RequestResponse";
 import TableHeader from "./TableHeader";
 import { useToast } from "@/components/shared/Toast";
 import { useClasses } from "@/lib/contexts/ClassesContext";
+import { GetAllClassesResponse } from "@/types/classes/GetAllClassesResponse";
 
 export default function ClassTable() {
-  const {classes, addClass, updateClass, removeClass} = useClasses();
+  const { classes, addClass, addClasses, updateClass, removeClass } =
+    useClasses();
   const [adding, setAdding] = useState(false);
   const { showToast } = useToast();
 
+  useEffect(() => {
+    const getAllClasses = async () => {
+      const res = await http.get<GetAllClassesResponse>(
+        "/owner/classes",
+        ApiType.FRONTEND
+      );
+      if (res.message === RequestStatus.GET_ERROR) {
+        showToast("Error fetching classes", "error");
+        return;
+      }
+      addClasses(res.data);
+    };
+
+    getAllClasses();
+  }, [addClasses, showToast]);
+
   // --- CREATE ---
   const handleSaveNew = async (gymClass: GymClassBase) => {
-    const { message, id }: CreateClassResponse = await http.post<CreateClassResponse>(
-      "/owner/classes",
-      ApiType.FRONTEND,
-      gymClass
-    );
+    const { message, id }: CreateClassResponse =
+      await http.post<CreateClassResponse>(
+        "/owner/classes",
+        ApiType.FRONTEND,
+        gymClass
+      );
 
     if (message === RequestStatus.CREATE_ERROR) {
       showToast("Error creating class", "error");
-      return; 
+      return;
     }
 
     addClass({ ...gymClass, id });
@@ -148,4 +167,3 @@ export default function ClassTable() {
     </div>
   );
 }
-

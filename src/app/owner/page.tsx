@@ -2,25 +2,8 @@
 
 import DashboardCard from "@/components/owner/dashboard/DashboardCard";
 import { Calendar, Users, PlusCircle } from "lucide-react";
-import { useEffect } from "react";
-import { http } from "@/lib/http";
-import { ApiType } from "@/enums/ApiTypes";
-import { GymClass } from "@/types/classes/GymClass";
-import { useClasses } from "@/lib/contexts/ClassesContext";
 
 export default function OwnerDashboard() {
-  const { addClasses } = useClasses();
-  useEffect(() => {
-    const fetchClasses = async () => {
-      const data: GymClass[] = await http.get(
-        "/owner/classes",
-        ApiType.FRONTEND
-      );
-      addClasses(data);
-    };
-    fetchClasses();
-  }, [addClasses]);
-  
   return (
     <>
       <p className='text-[#2A7A9D] mb-10'>
