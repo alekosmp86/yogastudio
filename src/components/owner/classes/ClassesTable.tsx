@@ -12,22 +12,12 @@ import { RequestStatus } from "@/enums/RequestStatus";
 import { RequestResponse } from "@/types/RequestResponse";
 import TableHeader from "./TableHeader";
 import { useToast } from "@/components/shared/Toast";
+import { useClasses } from "@/lib/contexts/ClassesContext";
 
 export default function ClassTable() {
-  const [classes, setClasses] = useState<GymClass[]>([]);
+  const {classes, addClass, updateClass, removeClass} = useClasses();
   const [adding, setAdding] = useState(false);
   const { showToast } = useToast();
-
-  useEffect(() => {
-    const fetchClasses = async () => {
-      const data: GymClass[] = await http.get(
-        "/owner/classes",
-        ApiType.FRONTEND
-      );
-      setClasses(data);
-    };
-    fetchClasses();
-  }, []);
 
   // --- CREATE ---
   const handleSaveNew = async (gymClass: GymClassBase) => {
@@ -42,7 +32,7 @@ export default function ClassTable() {
       return; 
     }
 
-    setClasses((prev) => [...prev, { ...gymClass, id }]);
+    addClass({ ...gymClass, id });
     setAdding(false);
     showToast("Class created successfully", "success");
   };
@@ -60,9 +50,7 @@ export default function ClassTable() {
       return;
     }
 
-    setClasses((prev) =>
-      prev.map((c) => (c.id === id ? { id, ...updated } : c))
-    );
+    updateClass({ id, ...updated });
     showToast("Class updated successfully", "success");
   };
 
@@ -77,7 +65,7 @@ export default function ClassTable() {
       return;
     }
 
-    setClasses((prev) => prev.filter((c) => c.id !== id));
+    removeClass(id);
     showToast("Class deleted successfully", "success");
   };
 

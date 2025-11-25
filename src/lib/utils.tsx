@@ -27,3 +27,10 @@ export async function validateToken(
 
   callbackFn(ExecutionStatus.COMPLETED);
 }
+
+export const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+export const HOURS = Array.from({ length: 15 }, (_, i) => {
+  const hour = i + 7; // 07 → 21
+  return `${String(hour).padStart(2, "0")}:00`;
+});
