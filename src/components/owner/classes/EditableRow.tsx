@@ -71,7 +71,7 @@ export default function EditableRow({
               placeholder={placeholder}
             />
           ) : (
-            (gymClass as any)[key]
+            gymClass[key]
           )}
         </td>
       ))}

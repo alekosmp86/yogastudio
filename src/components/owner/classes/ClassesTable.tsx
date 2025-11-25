@@ -36,14 +36,12 @@ export default function ClassTable() {
 
     if (message === RequestStatus.CREATE_ERROR) return; // @todo toast
 
-    console.log(id);
-    setClasses((prev) => [...prev, { id, ...gymClass }]);
+    setClasses((prev) => [...prev, { ...gymClass, id }]);
     setAdding(false);
   };
 
   // --- UPDATE ---
   const handleUpdate = async (id: number, updated: GymClassBase) => {
-    console.log(id);
     const response = await http.put<RequestResponse>(
       `/owner/classes/${id}`,
       ApiType.FRONTEND,
