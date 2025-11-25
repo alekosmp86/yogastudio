@@ -1,5 +1,5 @@
 // app/layout.tsx
-
+import { ToastProvider } from "@/components/shared/Toast";
 import "./globals.css";
 
 export default function RootLayout({
@@ -8,8 +8,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen flex flex-col">{children}</body>
-    </html>
+    <ToastProvider>
+      <html lang='en'>
+        <body className='min-h-screen flex flex-col'>{children}</body>
+      </html>
+    </ToastProvider>
   );
 }
