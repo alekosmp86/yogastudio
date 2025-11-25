@@ -10,7 +10,7 @@ export async function GET(req: Request) {
       cookie: req.headers.get("cookie") || "",
     },
   });
-
+  
   if (!res.ok) {
     return NextResponse.json({ authenticated: false }, { status: 401 });
   }

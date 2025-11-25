@@ -7,13 +7,11 @@ import { ApiType } from "@/enums/ApiTypes";
 import { http } from "@/lib/http";
 import { GymClass } from "@/types/classes/GymClass";
 import { GymClassBase } from "@/types/classes/GymClassBase";
-import { CreateClassResponse } from "@/types/classes/CreateClassResponse";
 import { RequestStatus } from "@/enums/RequestStatus";
-import { RequestResponse } from "@/types/RequestResponse";
 import TableHeader from "./TableHeader";
 import { useToast } from "@/components/shared/Toast";
 import { useClasses } from "@/lib/contexts/ClassesContext";
-import { GetAllClassesResponse } from "@/types/classes/GetAllClassesResponse";
+import { ApiResponse } from "@/types/requests/ApiResponse";
 
 export default function ClassTable() {
   const { classes, addClass, addClasses, updateClass, removeClass } =
@@ -23,15 +21,15 @@ export default function ClassTable() {
 
   useEffect(() => {
     const getAllClasses = async () => {
-      const res = await http.get<GetAllClassesResponse>(
+      const { message, data }: ApiResponse<GymClass[]> = await http.get<ApiResponse<GymClass[]>>(
         "/owner/classes",
         ApiType.FRONTEND
       );
-      if (res.message === RequestStatus.GET_ERROR) {
+      if (message === RequestStatus.GET_ERROR) {
         showToast("Error fetching classes", "error");
         return;
       }
-      addClasses(res.data);
+      addClasses(data!);
     };
 
     getAllClasses();
@@ -39,8 +37,8 @@ export default function ClassTable() {
 
   // --- CREATE ---
   const handleSaveNew = async (gymClass: GymClassBase) => {
-    const { message, id }: CreateClassResponse =
-      await http.post<CreateClassResponse>(
+    const { message, data }: ApiResponse<number> =
+      await http.post<ApiResponse<number>>(
         "/owner/classes",
         ApiType.FRONTEND,
         gymClass
@@ -51,20 +49,20 @@ export default function ClassTable() {
       return;
     }
 
-    addClass({ ...gymClass, id });
+    addClass({ ...gymClass, id: data! });
     setAdding(false);
     showToast("Class created successfully", "success");
   };
 
   // --- UPDATE ---
   const handleUpdate = async (id: number, updated: GymClassBase) => {
-    const response = await http.put<RequestResponse>(
+    const { message }: ApiResponse<RequestStatus> = await http.put<ApiResponse<RequestStatus>>(
       `/owner/classes/${id}`,
       ApiType.FRONTEND,
       updated
     );
 
-    if (response.message === RequestStatus.UPDATE_ERROR) {
+    if (message === RequestStatus.UPDATE_ERROR) {
       showToast("Error updating class", "error");
       return;
     }
@@ -75,11 +73,11 @@ export default function ClassTable() {
 
   // --- DELETE ---
   const handleDelete = async (id: number) => {
-    const response = await http.delete<RequestResponse>(
+    const { message }: ApiResponse<RequestStatus> = await http.delete<ApiResponse<RequestStatus>>(
       `/owner/classes/${id}`,
       ApiType.FRONTEND
     );
-    if (response.message === RequestStatus.DELETE_ERROR) {
+    if (message === RequestStatus.DELETE_ERROR) {
       showToast("Error deleting class", "error");
       return;
     }

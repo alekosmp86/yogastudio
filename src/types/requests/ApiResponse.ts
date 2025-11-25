@@ -1,6 +1,6 @@
 import { RequestStatus } from "@/enums/RequestStatus";
 
-export interface CreateClassResponse {
+export interface ApiResponse<T> {
   message: RequestStatus;
-  id: number;
+  data?: T;
 }

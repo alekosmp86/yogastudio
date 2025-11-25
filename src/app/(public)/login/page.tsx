@@ -3,6 +3,10 @@
 import { useState } from "react";
 import Input from "@/components/shared/Input";
 import Button from "@/components/shared/Button";
+import { http } from "@/lib/http";
+import { ApiType } from "@/enums/ApiTypes";
+import { ApiResponse } from "@/types/requests/ApiResponse";
+import { RequestStatus } from "@/enums/RequestStatus";
 
 enum Status {
   IDLE = "idle",
@@ -22,17 +26,14 @@ export default function LoginPage() {
     setMessage("");
 
     try {
-      const res = await fetch(`/api/auth/request-link?email=${email}`);
+      const {message} = await http.get<ApiResponse<string>>(`/auth/request-link?email=${email}`, ApiType.FRONTEND);
 
-      const data = await res.json();
-
-      if (!res.ok) {
+      if (message !== RequestStatus.REQUEST_LINK_SENT) {
         setStatus(Status.ERROR);
-        setMessage(data.message || "Unable to process request");
+        setMessage("Unable to process request");
         return;
       }
 
-      // Email sent
       setStatus(Status.SENT);
       setMessage("A login link has been sent to your email.");
     } catch (err) {
@@ -42,12 +43,14 @@ export default function LoginPage() {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen p-6'>
+    <div className='flex flex-col items-center justify-center min-h-screen p-6 bg-[#0f151b] text-[#d6d6da]'>
       <form
         onSubmit={handleSubmit}
-        className='flex flex-col gap-4 w-80 bg-white p-6 rounded-lg shadow'
+        className='flex flex-col gap-4 w-full max-w-xs bg-[#23283f] p-6 rounded-lg shadow-xl border border-[#434447]'
       >
-        <h1 className='text-xl font-semibold text-center'>Log in</h1>
+        <h1 className='text-xl font-semibold text-center text-[#d6d6da]'>
+          Log in
+        </h1>
 
         <Input
           label='Email'
@@ -62,7 +65,7 @@ export default function LoginPage() {
         <Button
           type='submit'
           disabled={status === Status.LOADING}
-          className='p-2 bg-blue-500 text-white'
+          className='p-2 rounded-md bg-[#6d6766] text-[#d6d6da] hover:bg-[#9e9a9f] disabled:opacity-50 transition'
         >
           {status === Status.LOADING ? "Sending..." : "Get link"}
         </Button>
@@ -70,7 +73,7 @@ export default function LoginPage() {
         {message && (
           <p
             className={`text-sm text-center ${
-              status === Status.ERROR ? "text-red-500" : "text-green-600"
+              status === Status.ERROR ? "text-red-400" : "text-green-400"
             }`}
           >
             {message}

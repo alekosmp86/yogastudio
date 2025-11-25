@@ -2,6 +2,7 @@ import { http } from "@/lib/http";
 import { ApiType } from "@/enums/ApiTypes";
 import { NextResponse } from "next/server";
 import { RequestStatus } from "@/enums/RequestStatus";
+import { ApiResponse } from "@/types/requests/ApiResponse";
 
 export async function DELETE(
   req: Request,
@@ -10,7 +11,7 @@ export async function DELETE(
   const { id } = await params;
 
   try {
-    const response = await http.delete<RequestStatus>(`/owner/classes/${id}`, ApiType.BACKEND);
+    const response = await http.delete<ApiResponse<RequestStatus>>(`/owner/classes/${id}`, ApiType.BACKEND);
     return NextResponse.json(response);
   } catch (error) {
     console.error("Error deleting class:", error);
@@ -29,7 +30,7 @@ export async function PUT(
   const body = await req.json();
 
   try {
-    const response = await http.put<RequestStatus>(`/owner/classes/${id}`, ApiType.BACKEND, body);
+    const response = await http.put<ApiResponse<RequestStatus>>(`/owner/classes/${id}`, ApiType.BACKEND, body);
     return NextResponse.json(response);
   } catch (error) {
     console.error("Error updating class:", error);
