@@ -23,7 +23,7 @@ export async function POST(req: Request) {
   const response = NextResponse.redirect(
     user.role === Roles.CLIENT
       ? "/customer/home"
-      : "/owner/dashboard"
+      : "/owner"
   );
 
   response.cookies.set({

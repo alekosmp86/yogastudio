@@ -23,7 +23,7 @@ export default function HomePage() {
     }
 
     if (session.user.role === Roles.OWNER) {
-      router.replace("/owner/dashboard");
+      router.replace("/owner");
       return;
     }
   }, [loading, session, router]);

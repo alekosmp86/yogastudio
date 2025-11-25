@@ -1,0 +1,33 @@
+"use client";
+
+import Link from "next/link";
+import { ReactNode } from "react";
+
+export default function DashboardCard({
+  title,
+  description,
+  href,
+  icon,
+}: {
+  title: string;
+  description: string;
+  href: string;
+  icon: ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group rounded-xl p-6 shadow-md bg-[#B3D7E0] hover:bg-[#7FB3C1] transition-all cursor-pointer border border-[#4A9BBE]"
+    >
+      <div className="flex items-center gap-4">
+        <div className="text-[#1A4D6D] group-hover:scale-110 transition-transform">
+          {icon}
+        </div>
+        <div>
+          <h3 className="text-xl font-semibold text-[#1A4D6D]">{title}</h3>
+          <p className="text-sm text-[#2A7A9D]">{description}</p>
+        </div>
+      </div>
+    </Link>
+  );
+}

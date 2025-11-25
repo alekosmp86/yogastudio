@@ -1,5 +1,5 @@
-import QuickActionCard from "@/components/homepage/QuickActionCard";
-import Testimonials from "@/components/homepage/Testimonials";
+import QuickActionCard from "@/components/customer/homepage/QuickActionCard";
+import Testimonials from "@/components/customer/homepage/Testimonials";
 import { BookOpenCheck, Calendar, User2 } from "lucide-react";
 
 export default function CustomerHomePage() {

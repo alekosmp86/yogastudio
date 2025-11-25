@@ -123,7 +123,7 @@ Backend:
 Result:
 
 - `/customer/home` for CLIENT
-- `/owner/dashboard` for OWNER
+- `/owner` for OWNER
 - `/login` if invalid
 
 ---
