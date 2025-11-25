@@ -9,10 +9,12 @@ import { GymClass } from "@/types/classes/GymClass";
 import { GymClassBase } from "@/types/classes/GymClassBase";
 import { Pencil, Trash } from "lucide-react";
 import { useEffect, useState } from "react";
+import EditableRow from "./EditableRow";
 
 export default function ClassTable() {
   const [classes, setClasses] = useState<GymClass[]>([]);
   const [adding, setAdding] = useState(false);
+  const [editing, setEditing] = useState(false);
   const [form, setForm] = useState<GymClassBase>({
     title: "",
     instructor: "",
@@ -65,6 +67,23 @@ export default function ClassTable() {
     }
   };
 
+  const handleUpdate = async (id: number, gymClass: GymClass) => {
+    const response = await http.put(
+      `/owner/classes/${id}`,
+      ApiType.FRONTEND,
+      gymClass
+    );
+    if (response) {
+      setClasses(classes.map((c) => (c.id === id ? gymClass : c)));
+    }
+  };
+
+  const handleCancel = () => {
+    setAdding(false);
+    setEditing(false);
+    setForm({ title: "", instructor: "", description: "", capacity: 0 });
+  };
+
   return (
     <div className='bg-brand-700 rounded-xl p-6 shadow-xl border border-brand-700'>
       <div className='flex items-center justify-between mb-4'>
@@ -93,27 +112,12 @@ export default function ClassTable() {
           <tbody>
             {classes.length > 0
               ? classes.map((c) => (
-                  <tr
+                  <EditableRow
                     key={c.id}
-                    className='bg-brand-600 border-b border-brand-300'
-                  >
-                    <td className='px-4 py-3'>{c.title}</td>
-                    <td className='px-4 py-3'>{c.instructor}</td>
-                    <td className='px-4 py-3'>{c.description}</td>
-                    <td className='px-4 py-3'>{c.capacity}</td>
-                    <td className='flex items-center justify-center gap-2 px-2 py-3'>
-                      <Button size='sm' Icon={Pencil}>
-                        Edit
-                      </Button>
-                      <Button
-                        size='sm'
-                        Icon={Trash}
-                        onClick={() => handleDelete(c.id)}
-                      >
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
+                    gymClass={c}
+                    handleUpdate={(id, gymClass) => handleUpdate(id, gymClass)}
+                    handleDelete={() => handleDelete(c.id)}
+                  />
                 ))
               : !adding && (
                   <tr>
@@ -122,73 +126,6 @@ export default function ClassTable() {
                     </td>
                   </tr>
                 )}
-
-            {/* New row when adding */}
-            {adding && (
-              <tr className='bg-brand-800/60 border-t border-brand-600'>
-                <td className='px-4 py-3'>
-                  <input
-                    className='w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none'
-                    value={form.title}
-                    onChange={(e) =>
-                      setForm({ ...form, title: e.target.value })
-                    }
-                    placeholder='Class title'
-                  />
-                </td>
-                <td className='px-4 py-3'>
-                  <input
-                    className='w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none'
-                    value={form.instructor}
-                    onChange={(e) =>
-                      setForm({ ...form, instructor: e.target.value })
-                    }
-                    placeholder='Instructor'
-                  />
-                </td>
-                <td className='px-4 py-3'>
-                  <input
-                    className='w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none'
-                    value={form.description}
-                    onChange={(e) =>
-                      setForm({ ...form, description: e.target.value })
-                    }
-                    placeholder='Description'
-                  />
-                </td>
-                <td className='px-4 py-3'>
-                  <input
-                    type='number'
-                    className='w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none'
-                    value={form.capacity}
-                    onChange={(e) =>
-                      setForm({ ...form, capacity: Number(e.target.value) })
-                    }
-                    placeholder='20'
-                  />
-                </td>
-                <td className='px-4 py-3 flex justify-end gap-2'>
-                  <Button
-                    size='sm'
-                    variant='secondary'
-                    onClick={() => {
-                      setForm({
-                        title: "",
-                        instructor: "",
-                        description: "",
-                        capacity: 0,
-                      });
-                      setAdding(false);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button size='sm' variant='primary' onClick={handleSave}>
-                    Save
-                  </Button>
-                </td>
-              </tr>
-            )}
           </tbody>
         </table>
       </div>
