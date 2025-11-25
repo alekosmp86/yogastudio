@@ -20,3 +20,22 @@ export async function DELETE(
     );
   }
 }
+
+export async function PUT(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = await params;
+  const body = await req.json();
+
+  try {
+    const response = await http.put<RequestStatus>(`/owner/classes/${id}`, ApiType.BACKEND, body);
+    return NextResponse.json(response);
+  } catch (error) {
+    console.error("Error updating class:", error);
+    return NextResponse.json(
+      { error: "Failed to update class" },
+      { status: 500 }
+    );
+  }
+}
