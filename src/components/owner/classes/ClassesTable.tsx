@@ -10,6 +10,7 @@ import { GymClassBase } from "@/types/classes/GymClassBase";
 import { CreateClassResponse } from "@/types/classes/CreateClassResponse";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { RequestResponse } from "@/types/RequestResponse";
+import TableHeader from "./TableHeader";
 
 export default function ClassTable() {
   const [classes, setClasses] = useState<GymClass[]>([]);
@@ -71,6 +72,13 @@ export default function ClassTable() {
     setAdding(false);
   };
 
+  const fields: { key: keyof GymClass; placeholder: string }[] = [
+    { key: "title", placeholder: "Class title" },
+    { key: "instructor", placeholder: "Instructor" },
+    { key: "description", placeholder: "Description" },
+    { key: "capacity", placeholder: "Capacity" },
+  ];
+
   return (
     <div className='bg-brand-700 rounded-xl p-6 shadow-xl border border-brand-700'>
       <div className='flex items-center justify-between mb-4'>
@@ -86,15 +94,7 @@ export default function ClassTable() {
 
       <div className='overflow-x-auto rounded-sm border border-brand-600'>
         <table className='w-full text-center text-brand-200'>
-          <thead className='bg-brand-800 text-brand-400 sticky top-0 z-10'>
-            <tr>
-              <th className='px-4 py-3'>Title</th>
-              <th className='px-4 py-3'>Instructor</th>
-              <th className='px-4 py-3'>Description</th>
-              <th className='px-4 py-3'>Capacity</th>
-              <th className='px-4 py-3 text-center'>Actions</th>
-            </tr>
-          </thead>
+          <TableHeader fields={fields} />
 
           <tbody>
             {classes.length === 0 && !adding && (
@@ -108,6 +108,7 @@ export default function ClassTable() {
             {classes.map((c) => (
               <EditableRow
                 key={c.id}
+                fields={fields}
                 gymClass={c}
                 onSaveNew={(gymClass) => handleSaveNew(gymClass)}
                 onUpdate={(id, updated) => handleUpdate(id, updated)}
@@ -126,6 +127,7 @@ export default function ClassTable() {
                   capacity: 0,
                 }}
                 adding
+                fields={fields}
                 onSaveNew={(gymClass) => handleSaveNew(gymClass)}
                 onUpdate={(id, updated) => handleUpdate(id, updated)}
                 onDelete={(id) => handleDelete(id)}

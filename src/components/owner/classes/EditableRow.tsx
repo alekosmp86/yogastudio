@@ -6,6 +6,7 @@ import { useState } from "react";
 type EditableRowProps = {
   gymClass: GymClass;
   adding?: boolean;
+  fields: { key: keyof GymClass; placeholder: string }[];
   onSaveNew: (gymClass: GymClass) => void;
   onUpdate: (id: GymClass["id"], gymClass: GymClass) => void;
   onCancel: () => void;
@@ -14,6 +15,7 @@ type EditableRowProps = {
 
 export default function EditableRow({
   gymClass,
+  fields,
   adding = false,
   onSaveNew,
   onUpdate,
@@ -51,13 +53,6 @@ export default function EditableRow({
     setForm(gymClass);
     onCancel();
   };
-
-  const fields: { key: keyof GymClass; placeholder: string }[] = [
-    { key: "title", placeholder: "Class title" },
-    { key: "instructor", placeholder: "Instructor" },
-    { key: "description", placeholder: "Description" },
-    { key: "capacity", placeholder: "Capacity" },
-  ];
 
   return (
     <tr className="bg-brand-600 border-b border-brand-300">
