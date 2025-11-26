@@ -32,7 +32,6 @@ export default function EditableRow({
     form.capacity === gymClass.capacity;
 
   const handleChange = (field: keyof GymClass, value: string) => {
-    console.log(field, value);
     setForm((prev) => ({
       ...prev,
       [field]: field === "capacity" ? Number(value) || 0 : value,

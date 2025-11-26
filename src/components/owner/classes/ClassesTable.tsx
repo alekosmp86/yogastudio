@@ -25,7 +25,7 @@ export default function ClassTable() {
       ApiResponse<number>
     >("/owner/classes", ApiType.FRONTEND, gymClass);
 
-    if (message === RequestStatus.CREATE_ERROR) {
+    if (message === RequestStatus.ERROR) {
       showToast("Error creating class", ToastType.ERROR);
       return;
     }
@@ -41,7 +41,7 @@ export default function ClassTable() {
       ApiResponse<RequestStatus>
     >(`/owner/classes/${id}`, ApiType.FRONTEND, updated);
 
-    if (message === RequestStatus.UPDATE_ERROR) {
+    if (message === RequestStatus.ERROR) {
       showToast("Error updating class", ToastType.ERROR);
       return;
     }
@@ -55,7 +55,7 @@ export default function ClassTable() {
     const { message }: ApiResponse<RequestStatus> = await http.delete<
       ApiResponse<RequestStatus>
     >(`/owner/classes/${id}`, ApiType.FRONTEND);
-    if (message === RequestStatus.DELETE_ERROR) {
+    if (message === RequestStatus.ERROR) {
       showToast("Error deleting class", ToastType.ERROR);
       return;
     }

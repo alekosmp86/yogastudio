@@ -15,7 +15,7 @@ export async function GET() {
   } catch (error) {
     console.error("Error fetching classes:", error);
     return NextResponse.json(
-      { message: RequestStatus.GET_ERROR },
+      { message: RequestStatus.ERROR },
       { status: 500 }
     );
   }
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
       body
     );
 
-    if (message !== RequestStatus.CREATE_SUCCESS) {
+    if (message !== RequestStatus.SUCCESS) {
       return NextResponse.json({ message }, { status: 500 });
     }
 
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error creating class:", error);
     return NextResponse.json(
-      { message: RequestStatus.CREATE_ERROR },
+      { message: RequestStatus.ERROR },
       { status: 500 }
     );
   }

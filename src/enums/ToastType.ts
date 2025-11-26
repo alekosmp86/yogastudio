@@ -1,6 +1,6 @@
 export enum ToastType {
-    SUCCESS,
-    ERROR,
-    WARNING,
-    INFO
+    SUCCESS = "SUCCESS",
+    ERROR = "ERROR",
+    WARNING = "WARNING",
+    INFO = "INFO"
 }

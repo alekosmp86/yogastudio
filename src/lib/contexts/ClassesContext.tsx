@@ -14,6 +14,7 @@ import { http } from "../http";
 import { ApiType } from "@/enums/ApiTypes";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { useToast } from "@/lib/contexts/ToastContext";
+import { ToastType } from "@/enums/ToastType";
 
 interface ClassesContextValue {
   classes: GymClass[];
@@ -73,14 +74,14 @@ export function ClassesProvider({
 
         if (!mounted) return;
 
-        if (message === RequestStatus.GET_ERROR) {
-          showToast("Error fetching classes", "error");
+        if (message === RequestStatus.ERROR) {
+          showToast("Error fetching classes", ToastType.ERROR);
           return;
         }
 
         addClasses(data ?? []);
       } catch {
-        showToast("Error fetching classes", "error");
+        showToast("Error fetching classes", ToastType.ERROR);
       }
     };
 

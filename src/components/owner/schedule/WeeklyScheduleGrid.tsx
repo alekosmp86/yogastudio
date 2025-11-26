@@ -14,6 +14,8 @@ import { ApiType } from "@/enums/ApiTypes";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
+import { ScheduledClass } from "@/types/schedule/ScheduledClass";
+import { ApiResponse } from "@/types/requests/ApiResponse";
 
 export default function WeeklyScheduleGrid() {
   // grid columns: 70px for hour column, then 1fr per weekday (keeps flexible)
@@ -39,12 +41,12 @@ export default function WeeklyScheduleGrid() {
 
   const handleClassClick = async (c: GymClass) => {
     /* @todo persist into db */
-    const message = await http.post("/owner/schedule", ApiType.FRONTEND, {
+    const {message, data} = await http.post<ApiResponse<ScheduledClass>>("/owner/schedule", ApiType.FRONTEND, {
       weekday: dayTime?.weekday,
       hour: dayTime?.hour,
       classId: c.id,
     });
-    if (message === RequestStatus.CREATE_SUCCESS) {
+    if (message === RequestStatus.SUCCESS) {
       showToast("Class added to schedule successfully", ToastType.SUCCESS);
     } else {
       showToast("Error adding class to schedule", ToastType.ERROR);
