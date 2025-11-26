@@ -6,7 +6,7 @@ import MobileNavItem from "./shared/MobileNavItem";
 import { usePathname } from "next/navigation";
 import NavItem from "./shared/NavItem";
 import Container from "./shared/Container";
-import { NavBarItems } from "static/NavBarItems";
+import { NavBarItems } from "static/StaticMockData";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);

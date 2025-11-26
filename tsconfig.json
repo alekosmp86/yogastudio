@@ -25,7 +25,8 @@
       "@/hooks/*": ["hooks/*"],
       "@/lib/*": ["lib/*"],
       "@/enums/*": ["enums/*"],
-      "@/types/*": ["types/*"]
+      "@/types/*": ["types/*"],
+      "@/static/*": ["static/*"],
     },
     "baseUrl": "src/"
   },
