@@ -1,7 +1,19 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useCallback,
+} from "react";
 import { GymClass } from "@/types/classes/GymClass";
+import { ApiResponse } from "@/types/requests/ApiResponse";
+import { http } from "../http";
+import { ApiType } from "@/enums/ApiTypes";
+import { RequestStatus } from "@/enums/RequestStatus";
+import { useToast } from "@/components/shared/Toast";
 
 interface ClassesContextValue {
   classes: GymClass[];
@@ -12,26 +24,84 @@ interface ClassesContextValue {
   removeClass: (id: number) => void;
 }
 
-const ClassesContext = createContext<ClassesContextValue | undefined>(undefined);
+const ClassesContext = createContext<ClassesContextValue | undefined>(
+  undefined
+);
 
-export function ClassesProvider({ children, initialClasses = [] }: {
+export function ClassesProvider({
+  children,
+  initialClasses = [],
+}: {
   children: ReactNode;
   initialClasses?: GymClass[];
 }) {
+  const { showToast } = useToast();
   const [classes, setClasses] = useState<GymClass[]>(initialClasses);
 
-  const addClass = (cls: GymClass) => setClasses(prev => [...prev, cls]);
+  const addClass = useCallback(
+    (cls: GymClass) => setClasses((prev) => [...prev, cls]),
+    []
+  );
 
-  const addClasses = (cls: GymClass[]) => setClasses(cls);
+  const addClasses = useCallback(
+    (cls: GymClass[]) => setClasses((prev) => (prev.length === 0 ? cls : prev)),
+    []
+  );
 
-  const updateClass = (updated: GymClass) =>
-    setClasses(prev => prev.map(c => c.id === updated.id ? updated : c));
+  const updateClass = useCallback(
+    (updated: GymClass) =>
+      setClasses((prev) =>
+        prev.map((c) => (c.id === updated.id ? updated : c))
+      ),
+    []
+  );
 
-  const removeClass = (id: number) =>
-    setClasses(prev => prev.filter(c => c.id !== id));
+  const removeClass = useCallback(
+    (id: number) => setClasses((prev) => prev.filter((c) => c.id !== id)),
+    []
+  );
+
+  // fetch once when provider mounts
+  useEffect(() => {
+    let mounted = true;
+
+    const fetchClasses = async () => {
+      try {
+        const { message, data }: ApiResponse<GymClass[]> = await http.get<
+          ApiResponse<GymClass[]>
+        >("/owner/classes", ApiType.FRONTEND);
+
+        if (!mounted) return;
+
+        if (message === RequestStatus.GET_ERROR) {
+          showToast("Error fetching classes", "error");
+          return;
+        }
+
+        addClasses(data ?? []);
+      } catch {
+        showToast("Error fetching classes", "error");
+      }
+    };
+
+    fetchClasses();
+
+    return () => {
+      mounted = false;
+    };
+  }, [addClasses, showToast]);
 
   return (
-    <ClassesContext.Provider value={{ classes, setClasses, addClass, addClasses, updateClass, removeClass }}>
+    <ClassesContext.Provider
+      value={{
+        classes,
+        setClasses,
+        addClass,
+        addClasses,
+        updateClass,
+        removeClass,
+      }}
+    >
       {children}
     </ClassesContext.Provider>
   );

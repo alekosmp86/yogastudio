@@ -14,26 +14,9 @@ import { useClasses } from "@/lib/contexts/ClassesContext";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 
 export default function ClassTable() {
-  const { classes, addClass, addClasses, updateClass, removeClass } =
-    useClasses();
+  const { classes, addClass, updateClass, removeClass } = useClasses();
   const [adding, setAdding] = useState(false);
   const { showToast } = useToast();
-
-  useEffect(() => {
-    const getAllClasses = async () => {
-      const { message, data }: ApiResponse<GymClass[]> = await http.get<ApiResponse<GymClass[]>>(
-        "/owner/classes",
-        ApiType.FRONTEND
-      );
-      if (message === RequestStatus.GET_ERROR) {
-        showToast("Error fetching classes", "error");
-        return;
-      }
-      addClasses(data!);
-    };
-
-    getAllClasses();
-  }, [addClasses, showToast]);
 
   // --- CREATE ---
   const handleSaveNew = async (gymClass: GymClassBase) => {
