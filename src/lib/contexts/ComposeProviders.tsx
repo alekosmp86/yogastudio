@@ -1,4 +1,4 @@
-import { ToastProvider } from "@/components/shared/Toast";
+import { ToastProvider } from "@/lib/contexts/ToastContext";
 import { ReactNode } from "react";
 import { ClassesProvider } from "./ClassesContext";
 
@@ -12,7 +12,4 @@ function composeProviders(
     );
 }
 
-export const AppProviders = composeProviders(
-  ToastProvider,
-  ClassesProvider
-);
+export const AppProviders = composeProviders(ToastProvider, ClassesProvider);

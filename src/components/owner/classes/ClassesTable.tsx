@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "@/components/shared/Button";
 import EditableRow from "./EditableRow";
 import { ApiType } from "@/enums/ApiTypes";
@@ -9,9 +9,10 @@ import { GymClass } from "@/types/classes/GymClass";
 import { GymClassBase } from "@/types/classes/GymClassBase";
 import { RequestStatus } from "@/enums/RequestStatus";
 import TableHeader from "./TableHeader";
-import { useToast } from "@/components/shared/Toast";
+import { useToast } from "@/lib/contexts/ToastContext";
 import { useClasses } from "@/lib/contexts/ClassesContext";
 import { ApiResponse } from "@/types/requests/ApiResponse";
+import { ToastType } from "@/enums/ToastType";
 
 export default function ClassTable() {
   const { classes, addClass, updateClass, removeClass } = useClasses();
@@ -20,53 +21,47 @@ export default function ClassTable() {
 
   // --- CREATE ---
   const handleSaveNew = async (gymClass: GymClassBase) => {
-    const { message, data }: ApiResponse<number> =
-      await http.post<ApiResponse<number>>(
-        "/owner/classes",
-        ApiType.FRONTEND,
-        gymClass
-      );
+    const { message, data }: ApiResponse<number> = await http.post<
+      ApiResponse<number>
+    >("/owner/classes", ApiType.FRONTEND, gymClass);
 
     if (message === RequestStatus.CREATE_ERROR) {
-      showToast("Error creating class", "error");
+      showToast("Error creating class", ToastType.ERROR);
       return;
     }
 
     addClass({ ...gymClass, id: data! });
     setAdding(false);
-    showToast("Class created successfully", "success");
+    showToast("Class created successfully", ToastType.SUCCESS);
   };
 
   // --- UPDATE ---
   const handleUpdate = async (id: number, updated: GymClassBase) => {
-    const { message }: ApiResponse<RequestStatus> = await http.put<ApiResponse<RequestStatus>>(
-      `/owner/classes/${id}`,
-      ApiType.FRONTEND,
-      updated
-    );
+    const { message }: ApiResponse<RequestStatus> = await http.put<
+      ApiResponse<RequestStatus>
+    >(`/owner/classes/${id}`, ApiType.FRONTEND, updated);
 
     if (message === RequestStatus.UPDATE_ERROR) {
-      showToast("Error updating class", "error");
+      showToast("Error updating class", ToastType.ERROR);
       return;
     }
 
     updateClass({ id, ...updated });
-    showToast("Class updated successfully", "success");
+    showToast("Class updated successfully", ToastType.SUCCESS);
   };
 
   // --- DELETE ---
   const handleDelete = async (id: number) => {
-    const { message }: ApiResponse<RequestStatus> = await http.delete<ApiResponse<RequestStatus>>(
-      `/owner/classes/${id}`,
-      ApiType.FRONTEND
-    );
+    const { message }: ApiResponse<RequestStatus> = await http.delete<
+      ApiResponse<RequestStatus>
+    >(`/owner/classes/${id}`, ApiType.FRONTEND);
     if (message === RequestStatus.DELETE_ERROR) {
-      showToast("Error deleting class", "error");
+      showToast("Error deleting class", ToastType.ERROR);
       return;
     }
 
     removeClass(id);
-    showToast("Class deleted successfully", "success");
+    showToast("Class deleted successfully", ToastType.SUCCESS);
   };
 
   // --- CANCEL ADD ROW ---

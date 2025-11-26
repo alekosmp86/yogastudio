@@ -13,7 +13,7 @@ import { ApiResponse } from "@/types/requests/ApiResponse";
 import { http } from "../http";
 import { ApiType } from "@/enums/ApiTypes";
 import { RequestStatus } from "@/enums/RequestStatus";
-import { useToast } from "@/components/shared/Toast";
+import { useToast } from "@/lib/contexts/ToastContext";
 
 interface ClassesContextValue {
   classes: GymClass[];

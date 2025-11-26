@@ -1,9 +1,24 @@
 "use client";
 
-export function DayCell() {
+type DayCellProps = {
+  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+};
+
+export function DayCell({ onClick }: DayCellProps) {
   return (
-    <div className='border border-brand-600 px-2 py-4 sm:px-3 sm:py-3 text-xs sm:text-sm rounded-sm hover:bg-brand-800 transition'>
-      {/* empty for now; later render class badge or click area */}
-    </div>
+    <div
+      className='
+        border border-surface-border
+        bg-surface-card
+        text-textcolor-primary
+        px-2 py-4 sm:px-3 sm:py-3
+        text-xs sm:text-sm
+        rounded-sm
+        hover:bg-primary-soft
+        transition
+        cursor-pointer
+      '
+      onClick={onClick}
+    />
   );
 }

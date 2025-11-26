@@ -4,45 +4,116 @@ import { HOURS, WEEKDAYS } from "@/static/StaticMockData";
 import { ScheduleHeader } from "./ScheduleHeader";
 import { HourCell } from "./HourCell";
 import { DayCell } from "./DayCell";
-import React from "react";
+import React, { useState } from "react";
+import { ClassSelectorModal } from "./ClassSelectorModal";
+import { useClasses } from "@/lib/contexts/ClassesContext";
+import { Card, CardContent } from "@/components/shared/Card";
+import { GymClass } from "@/types/classes/GymClass";
+import { http } from "@/lib/http";
+import { ApiType } from "@/enums/ApiTypes";
+import { RequestStatus } from "@/enums/RequestStatus";
+import { useToast } from "@/lib/contexts/ToastContext";
+import { ToastType } from "@/enums/ToastType";
 
 export default function WeeklyScheduleGrid() {
   // grid columns: 70px for hour column, then 1fr per weekday (keeps flexible)
   const gridCols = `70px repeat(${WEEKDAYS.length}, minmax(140px, 1fr))`;
+  const { classes } = useClasses();
+  const [dayTime, setDayTime] = useState<{ weekday: number; hour: string } | null>(null);
+  const {showToast} = useToast();
+
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleCellClick = () => {
+    setModalOpen(true);
+  };
+
+  const showClassSelectorModal = (
+    e: React.MouseEvent<HTMLDivElement>,
+    weekday: number,
+    hour: string
+  ) => {
+    setDayTime({ weekday, hour });
+    handleCellClick();
+  };
+
+  const handleClassClick = async (c: GymClass) => {
+    /* @todo persist into db */
+    const message = await http.post("/owner/schedule", ApiType.FRONTEND, {
+      weekday: dayTime?.weekday,
+      hour: dayTime?.hour,
+      classId: c.id,
+    });
+    if (message === RequestStatus.CREATE_SUCCESS) {
+      showToast("Class added to schedule successfully", ToastType.SUCCESS);
+    } else {
+      showToast("Error adding class to schedule", ToastType.ERROR);
+    }
+    setModalOpen(false);
+    setDayTime(null);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setDayTime(null);
+  };
 
   return (
-    <div className="p-4 sm:p-6 bg-brand-700 rounded-xl shadow-xl border border-brand-600 text-brand-200">
-      <h2 className="text-lg sm:text-xl font-semibold text-brand-400 mb-4">
-        Weekly Schedule
-      </h2>
+    <>
+      <ClassSelectorModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        title='Select a Class'
+      >
+        {classes.map((c) => (
+          <Card
+            key={c.id}
+            onClick={() => handleClassClick(c)}
+            className='cursor-pointer transition hover:bg-accent-mint'
+          >
+            <CardContent className='py-3 px-4'>
+              <div className='text-base text-textcolor-primary font-semibold'>{c.title}</div>
+              <div className='text-xs mt- text-textcolor-secondary'>{c.instructor}</div>
+            </CardContent>
+          </Card>
+        ))}
+      </ClassSelectorModal>
+      <div className='p-4 sm:p-6 bg-surface-section rounded-xl shadow-xl border border-surface-border text-surface-text'>
+        <h2 className='text-lg sm:text-xl font-semibold text-surface-text mb-4'>
+          Weekly Schedule
+        </h2>
 
-      <div className="relative overflow-x-auto rounded-md border border-brand-600 shadow-inner">
-        <div
-          className="grid min-w-max"
-          style={{
-            gridTemplateColumns: gridCols,
-          }}
-        >
-          {/* Header row */}
-          <ScheduleHeader />
+        <div className='relative overflow-x-auto rounded-md border border-surface-border shadow-inner'>
+          <div
+            className='grid min-w-max'
+            style={{
+              gridTemplateColumns: gridCols,
+            }}
+          >
+            {/* Header row */}
+            <ScheduleHeader />
 
-          {/* rows: each hour is a row with first the hour cell, then weekday cells */}
-          {HOURS.map((hour) => (
-            // We intentionally render a sequence of grid items per hour:
-            // first the HourCell (sticky left), then WEEKDAYS.length DayCell items.
-            <React.Fragment key={hour}>
-              <HourCell hour={hour} />
-              {WEEKDAYS.map((d) => (
-                <DayCell key={`${d.label}-${hour}`} />
-              ))}
-            </React.Fragment>
-          ))}
+            {/* rows: each hour is a row with first the hour cell, then weekday cells */}
+            {HOURS.map((hour) => (
+              // We intentionally render a sequence of grid items per hour:
+              // first the HourCell (sticky left), then WEEKDAYS.length DayCell items.
+              <React.Fragment key={hour}>
+                <HourCell hour={hour} />
+                {WEEKDAYS.map((d, index) => (
+                  <DayCell
+                    key={`${d.label}-${hour}`}
+                    onClick={(e) => showClassSelectorModal(e, index, hour)}
+                  />
+                ))}
+              </React.Fragment>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <p className="mt-3 text-xs text-brand-500 block sm:hidden text-center">
-        👉 Swipe horizontally to view full week
-      </p>
-    </div>
+        <p className='mt-3 text-xs text-textcolor-primary block sm:hidden text-center'>
+          👉 Swipe horizontally to view full week
+        </p>
+      </div>
+    </>
   );
 }
