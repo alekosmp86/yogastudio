@@ -54,12 +54,12 @@ export default function EditableRow({
   };
 
   return (
-    <tr className="bg-brand-600 border-b border-brand-300">
+    <tr className="bg-surface-divider border-b border-brand-300">
       {fields.map(({ key, placeholder }) => (
-        <td key={key} className="px-4 py-3">
+        <td key={key} className="px-4 py-3 text-textcolor-primary">
           {isEditing ? (
             <input
-              className="w-full bg-brand-700 text-brand-100 px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none"
+              className="w-full px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none"
               value={form[key] as string | number}
               onChange={(e) => handleChange(key, e.target.value)}
               placeholder={placeholder}
@@ -73,21 +73,21 @@ export default function EditableRow({
       <td className="flex items-center justify-center gap-2 px-2 py-3">
         {isEditing ? (
           <>
-            <Button size="sm" Icon={Check} onClick={save} disabled={isUnchanged}>
+            <Button size="sm" variant="primary" Icon={Check} onClick={save} disabled={isUnchanged}>
               Save
             </Button>
 
-            <Button size="sm" Icon={X} onClick={cancel}>
+            <Button size="sm" variant="secondary" Icon={X} onClick={cancel}>
               Cancel
             </Button>
           </>
         ) : (
           <>
-            <Button size="sm" Icon={Pencil} onClick={() => setIsEditing(true)}>
+            <Button size="sm" variant="primary" Icon={Pencil} onClick={() => setIsEditing(true)}>
               Edit
             </Button>
 
-            <Button size="sm" Icon={Trash} onClick={() => onDelete(gymClass.id)}>
+            <Button size="sm" variant="secondary" Icon={Trash} onClick={() => onDelete(gymClass.id)}>
               Delete
             </Button>
           </>

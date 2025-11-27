@@ -23,14 +23,14 @@ module.exports = {
       colors: {
         // Brand Core
         primary: {
-          DEFAULT: "#2A84A6",
+          DEFAULT: "#6096B4",
           hover: "#236C88",
-          soft: "#E3F3F8",
+          soft: "#93BFCF",
         },
         secondary: {
-          DEFAULT: "#F2A13A",
-          hover: "#D78525",
-          soft: "#FFF4E6",
+          DEFAULT: "#A08963",
+          hover: "#C9B194",
+          soft: "#C9B194",
         },
 
         // Wellness Accents
@@ -42,19 +42,19 @@ module.exports = {
 
         // Semantic UI
         success: {
-          DEFAULT: "#3B9B72",
-          soft: "#E7F6EF",
-          text: "#1F5A41",
+          DEFAULT: "#609966",
+          soft: "#9DC08B",
+          text: "#EDF1D6",
         },
         warning: {
-          DEFAULT: "#D98E04",
-          soft: "#FFF7E1",
-          text: "#5C4200",
+          DEFAULT: "#E5890A",
+          soft: "#F7D08A",
+          text: "#FAFAFA",
         },
         error: {
-          DEFAULT: "#C44545",
-          soft: "#F9E9E9",
-          text: "#6A1F1F",
+          DEFAULT: "#6A1F1F",
+          soft: "#C68484",
+          text: "#EEEEEE",
         },
 
         // Typography
@@ -67,12 +67,12 @@ module.exports = {
 
         // UI Surfaces (Light Mode)
         surface: {
-          app: "#EEF2F4",
-          section: "#F6F8FA",
-          card: "#FFFFFF",
-          input: "#FAFBFC",
-          navbar: "#FFFFFF",
-          border: "#C9CED6",
+          app: "#001524",
+          section: "#313647",
+          card: "#435663",
+          input: "#889EAF",
+          navbar: "#506D84",
+          border: "#B2C9AD",
           divider: "#DDE1E6",
         },
 

@@ -4,7 +4,7 @@ import { HOURS, WEEKDAYS } from "@/static/StaticMockData";
 import { ScheduleHeader } from "./ScheduleHeader";
 import { HourCell } from "./HourCell";
 import { DayCell } from "./DayCell";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ClassSelectorModal } from "./ClassSelectorModal";
 import { useClasses } from "@/lib/contexts/ClassesContext";
 import { Card, CardContent } from "@/components/shared/Card";
@@ -23,8 +23,11 @@ export default function WeeklyScheduleGrid() {
   const { classes } = useClasses();
   const [dayTime, setDayTime] = useState<{ weekday: number; hour: string } | null>(null);
   const {showToast} = useToast();
-
   const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    
+  }, []);
 
   const handleCellClick = () => {
     setModalOpen(true);
@@ -40,7 +43,6 @@ export default function WeeklyScheduleGrid() {
   };
 
   const handleClassClick = async (c: GymClass) => {
-    /* @todo persist into db */
     const {message, data} = await http.post<ApiResponse<ScheduledClass>>("/owner/schedule", ApiType.FRONTEND, {
       weekday: dayTime?.weekday,
       hour: dayTime?.hour,
@@ -71,7 +73,7 @@ export default function WeeklyScheduleGrid() {
           <Card
             key={c.id}
             onClick={() => handleClassClick(c)}
-            className='cursor-pointer transition hover:bg-accent-mint'
+            className='cursor-pointer transition hover:bg-secondary-soft'
           >
             <CardContent className='py-3 px-4'>
               <div className='text-base text-textcolor-primary font-semibold'>{c.title}</div>
@@ -80,7 +82,8 @@ export default function WeeklyScheduleGrid() {
           </Card>
         ))}
       </ClassSelectorModal>
-      <div className='p-4 sm:p-6 bg-surface-section rounded-xl shadow-xl border border-surface-border text-surface-text'>
+
+      <div className='p-4 sm:p-6 bg-surface-card rounded-xl shadow-xl border border-surface-border text-surface-text'>
         <h2 className='text-lg sm:text-xl font-semibold text-surface-text mb-4'>
           Weekly Schedule
         </h2>

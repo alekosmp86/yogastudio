@@ -43,7 +43,7 @@ export function ClassSelectorModal({
     >
       <div
         className='
-          bg-surface-card
+          bg-surface-app
           text-textcolor-primary
           rounded-xl
           shadow-elevated
@@ -55,7 +55,7 @@ export function ClassSelectorModal({
         onClick={(e) => e.stopPropagation()}
       >
         {title && (
-          <h2 className='text-lg font-semibold text-textcolor-primary px-6 pt-5 pb-3'>
+          <h2 className='text-lg font-semibold text-textcolor-ondark px-6 pt-5 pb-3'>
             {title}
           </h2>
         )}
@@ -73,7 +73,7 @@ export function ClassSelectorModal({
           {children}
         </div>
 
-        <div className='px-6 py-4 border-t border-surface-divider mt-2'>
+        <div className='px-6 py-4 mt-2'>
           <button
             className='
               bg-primary

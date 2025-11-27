@@ -4,8 +4,8 @@ import React from "react";
 import { Sun, Flame, Sparkles, Dumbbell } from "lucide-react";
 import { Progress } from "@/components/shared/Progress";
 import Button from "@/components/shared/Button";
-import { GymClass } from "@/types/GymClass";
 import { Card, CardContent } from "@/components/shared/Card";
+import { GymClassBase } from "@/types/classes/GymClassBase";
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   sun: Sun,
@@ -14,7 +14,7 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   default: Dumbbell,
 };
 
-export default function ClassCard({ gymClass }: { gymClass: GymClass }) {
+export default function ClassCard({ gymClass }: { gymClass: GymClassBase }) {
   const Icon = ICON_MAP[gymClass.icon] || ICON_MAP.default;
 
   const percentage = (gymClass.reserved / gymClass.capacity) * 100;

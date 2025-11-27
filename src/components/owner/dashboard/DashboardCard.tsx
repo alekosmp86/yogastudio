@@ -17,15 +17,15 @@ export default function DashboardCard({
   return (
     <Link
       href={href}
-      className="group rounded-xl p-6 shadow-md bg-[#B3D7E0] hover:bg-[#7FB3C1] transition-all cursor-pointer border border-[#4A9BBE]"
+      className="group rounded-xl p-6 shadow-md bg-primary hover:bg-secondary transition-all cursor-pointer border border-primary"
     >
       <div className="flex items-center gap-4">
-        <div className="text-[#1A4D6D] group-hover:scale-110 transition-transform">
+        <div className="text-textcolor-ondark group-hover:scale-110 transition-transform">
           {icon}
         </div>
         <div>
-          <h3 className="text-xl font-semibold text-[#1A4D6D]">{title}</h3>
-          <p className="text-sm text-[#2A7A9D]">{description}</p>
+          <h3 className="text-xl font-semibold text-textcolor-ondark">{title}</h3>
+          <p className="text-sm text-textcolor-ondark">{description}</p>
         </div>
       </div>
     </Link>

@@ -77,7 +77,7 @@ export default function ClassTable() {
   ];
 
   return (
-    <div className='bg-brand-700 rounded-xl p-6 shadow-xl border border-brand-700'>
+    <div className='bg-surface-card rounded-xl p-6 shadow-xl border border-brand-700'>
       <div className='flex items-center justify-between mb-4'>
         <h2 className='text-xl font-semibold text-brand-400'>Your Classes</h2>
         <Button
@@ -89,7 +89,7 @@ export default function ClassTable() {
         </Button>
       </div>
 
-      <div className='overflow-x-auto rounded-sm border border-brand-600'>
+      <div className='bg-secondary-soft overflow-x-auto rounded-sm border border-brand-600'>
         <table className='w-full text-center text-brand-200'>
           <TableHeader fields={fields} />
 
