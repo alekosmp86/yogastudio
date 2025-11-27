@@ -1,10 +1,10 @@
 "use client";
 
+import React, { useState } from "react";
 import { HOURS, WEEKDAYS } from "@/static/StaticMockData";
 import { ScheduleHeader } from "./ScheduleHeader";
 import { HourCell } from "./HourCell";
 import { DayCell } from "./DayCell";
-import React, { useState } from "react";
 import { ClassSelectorModal } from "./ClassSelectorModal";
 import { useClasses } from "@/lib/contexts/ClassesContext";
 import { Card, CardContent } from "@/components/shared/Card";
@@ -23,89 +23,57 @@ export default function WeeklyScheduleGrid() {
   const gridCols = `70px repeat(${WEEKDAYS.length}, minmax(140px, 1fr))`;
   const { classes } = useClasses();
   const { scheduledClasses, setScheduledClasses } = useScheduledClasses();
-  const [dayTime, setDayTime] = useState<{
-    weekday: number;
-    hour: string;
-  }>({ weekday: 0, hour: "" });
+  const [dayTime, setDayTime] = useState<{ weekday: number; hour: string }>({ weekday: 0, hour: "" });
   const [modalOpen, setModalOpen] = useState(false);
   const { showToast } = useToast();
 
-  const showClassSelectorModal = (
-    weekday: number,
-    hour: string
-  ) => {
+  const showClassSelectorModal = (weekday: number, hour: string) => {
     setDayTime({ weekday, hour });
     setModalOpen(true);
   };
 
   const handleClassClick = async (c: GymClass) => {
     const classInSchedule = findClassInSchedule(dayTime.weekday, dayTime.hour);
-    const payload = {
-      weekday: dayTime.weekday,
-      hour: dayTime.hour,
-      classId: c.id,
-    };
+    const payload = { weekday: dayTime.weekday, hour: dayTime.hour, classId: c.id };
 
     const request = classInSchedule
-      ? http.put<ApiResponse<ScheduledClass>>(
-          `/owner/schedule/${classInSchedule.id}`,
-          ApiType.FRONTEND,
-          payload
-        )
-      : http.post<ApiResponse<ScheduledClass>>(
-          "/owner/schedule",
-          ApiType.FRONTEND,
-          { ...payload, classId: c.id }
-        );
+      ? http.put<ApiResponse<ScheduledClass>>(`/owner/schedule/${classInSchedule.id}`, ApiType.FRONTEND, payload)
+      : http.post<ApiResponse<ScheduledClass>>("/owner/schedule", ApiType.FRONTEND, payload);
 
     const { message, data } = await request;
 
     if (message === RequestStatus.SUCCESS) {
       showToast("Class added to schedule successfully", ToastType.SUCCESS);
       setScheduledClasses(
-        classInSchedule
-          ? scheduledClasses.map((s) => {
+        classInSchedule ? scheduledClasses.map((s) => {
               return s.classId === classInSchedule.id &&
                 s.weekday === data!.weekday &&
                 s.hour === data!.hour
                 ? data! : s;
-            })
-          : [...scheduledClasses, data!]
+            }) : [...scheduledClasses, data!]
       );
     } else {
       showToast("Error adding class to schedule", ToastType.ERROR);
     }
 
-    setModalOpen(false);
-    setDayTime({ weekday: 0, hour: "" });
+    handleCloseModal();
   };
 
   const findClassInSchedule = (weekday: number, hour: string) => {
     return classes.find(
-      (c) =>
-        c.id ===
-        scheduledClasses.find(
-          (scheduledClass) =>
-            scheduledClass.weekday === weekday && scheduledClass.hour === hour
-        )?.classId
+      (c) => c.id === scheduledClasses.find((scheduledClass) => scheduledClass.weekday === weekday && scheduledClass.hour === hour)?.classId
     );
   };
 
   const findScheduledClass = (weekday: number, hour: string) => {
-    return scheduledClasses.find(
-      (scheduledClass) =>
-        scheduledClass.weekday === weekday && scheduledClass.hour === hour
-    );
+    return scheduledClasses.find((scheduledClass) => scheduledClass.weekday === weekday && scheduledClass.hour === hour);
   };
 
   const handleRemoveClass = async () => {
     const scheduledClass = findScheduledClass(dayTime.weekday, dayTime.hour);
     if (!scheduledClass) return;
     
-    const request = http.delete<ApiResponse<RequestStatus>>(
-      `/owner/schedule/${scheduledClass.id}`,
-      ApiType.FRONTEND
-    );
+    const request = http.delete<ApiResponse<RequestStatus>>(`/owner/schedule/${scheduledClass.id}`, ApiType.FRONTEND);
 
     const { message } = await request;
 
@@ -118,8 +86,7 @@ export default function WeeklyScheduleGrid() {
       showToast("Error removing class from schedule", ToastType.ERROR);
     }
 
-    setModalOpen(false);
-    setDayTime({ weekday: 0, hour: "" });
+    handleCloseModal();
   };
 
   const handleCloseModal = () => {
