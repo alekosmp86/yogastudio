@@ -23,3 +23,21 @@ export async function PUT(
     );
   }
 }
+
+export async function DELETE(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const { id } = await params;
+
+  try {
+    const response = await http.delete<ApiResponse<RequestStatus>>(`/owner/schedule/${id}`, ApiType.BACKEND);
+    return NextResponse.json(response);
+  } catch (error) {
+    console.error("Error deleting scheduled class:", error);
+    return NextResponse.json(
+      { message: RequestStatus.ERROR },
+      { status: 500 }
+    );
+  }
+}

@@ -4,7 +4,7 @@ import { GymClass } from "@/types/classes/GymClass";
 
 type DayCellProps = {
   data: GymClass | undefined;
-  onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
+  onClick: () => void;
 };
 
 export function DayCell({ data, onClick }: DayCellProps) {

@@ -30,17 +30,12 @@ export default function WeeklyScheduleGrid() {
   const [modalOpen, setModalOpen] = useState(false);
   const { showToast } = useToast();
 
-  const handleCellClick = () => {
-    setModalOpen(true);
-  };
-
   const showClassSelectorModal = (
-    e: React.MouseEvent<HTMLDivElement>,
     weekday: number,
     hour: string
   ) => {
     setDayTime({ weekday, hour });
-    handleCellClick();
+    setModalOpen(true);
   };
 
   const handleClassClick = async (c: GymClass) => {
@@ -96,6 +91,37 @@ export default function WeeklyScheduleGrid() {
     );
   };
 
+  const findScheduledClass = (weekday: number, hour: string) => {
+    return scheduledClasses.find(
+      (scheduledClass) =>
+        scheduledClass.weekday === weekday && scheduledClass.hour === hour
+    );
+  };
+
+  const handleRemoveClass = async () => {
+    const scheduledClass = findScheduledClass(dayTime.weekday, dayTime.hour);
+    if (!scheduledClass) return;
+    
+    const request = http.delete<ApiResponse<RequestStatus>>(
+      `/owner/schedule/${scheduledClass.id}`,
+      ApiType.FRONTEND
+    );
+
+    const { message } = await request;
+
+    if (message === RequestStatus.SUCCESS) {
+      showToast("Class removed from schedule successfully", ToastType.SUCCESS);
+      setScheduledClasses(
+        scheduledClasses.filter((s) => s.id !== scheduledClass.id)
+      );
+    } else {
+      showToast("Error removing class from schedule", ToastType.ERROR);
+    }
+
+    setModalOpen(false);
+    setDayTime({ weekday: 0, hour: "" });
+  };
+
   const handleCloseModal = () => {
     setModalOpen(false);
     setDayTime({ weekday: 0, hour: "" });
@@ -106,6 +132,7 @@ export default function WeeklyScheduleGrid() {
       <ClassSelectorModal
         open={modalOpen}
         onClose={handleCloseModal}
+        onRemove={handleRemoveClass}
         title='Select a Class'
       >
         {classes.map((c) => (
@@ -151,7 +178,7 @@ export default function WeeklyScheduleGrid() {
                   <DayCell
                     key={`${d.label}-${hour}`}
                     data={findClassInSchedule(index, hour)}
-                    onClick={(e) => showClassSelectorModal(e, index, hour)}
+                    onClick={() => showClassSelectorModal(index, hour)}
                   />
                 ))}
               </React.Fragment>
