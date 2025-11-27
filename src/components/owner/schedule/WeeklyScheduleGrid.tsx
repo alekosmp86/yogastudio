@@ -4,7 +4,7 @@ import { HOURS, WEEKDAYS } from "@/static/StaticMockData";
 import { ScheduleHeader } from "./ScheduleHeader";
 import { HourCell } from "./HourCell";
 import { DayCell } from "./DayCell";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { ClassSelectorModal } from "./ClassSelectorModal";
 import { useClasses } from "@/lib/contexts/ClassesContext";
 import { Card, CardContent } from "@/components/shared/Card";
@@ -22,11 +22,11 @@ export default function WeeklyScheduleGrid() {
   // grid columns: 70px for hour column, then 1fr per weekday (keeps flexible)
   const gridCols = `70px repeat(${WEEKDAYS.length}, minmax(140px, 1fr))`;
   const { classes } = useClasses();
-  const {scheduledClasses, setScheduledClasses} = useScheduledClasses();
+  const { scheduledClasses, setScheduledClasses } = useScheduledClasses();
   const [dayTime, setDayTime] = useState<{
     weekday: number;
     hour: string;
-  } | null>(null);
+  }>({ weekday: 0, hour: "" });
   const [modalOpen, setModalOpen] = useState(false);
   const { showToast } = useToast();
 
@@ -44,23 +44,45 @@ export default function WeeklyScheduleGrid() {
   };
 
   const handleClassClick = async (c: GymClass) => {
-    const { message, data } = await http.post<ApiResponse<ScheduledClass>>(
-      "/owner/schedule",
-      ApiType.FRONTEND,
-      {
-        weekday: dayTime?.weekday,
-        hour: dayTime?.hour,
-        classId: c.id,
-      }
-    );
+    const classInSchedule = findClassInSchedule(dayTime.weekday, dayTime.hour);
+    const payload = {
+      weekday: dayTime.weekday,
+      hour: dayTime.hour,
+      classId: c.id,
+    };
+
+    const request = classInSchedule
+      ? http.put<ApiResponse<ScheduledClass>>(
+          `/owner/schedule/${classInSchedule.id}`,
+          ApiType.FRONTEND,
+          payload
+        )
+      : http.post<ApiResponse<ScheduledClass>>(
+          "/owner/schedule",
+          ApiType.FRONTEND,
+          { ...payload, classId: c.id }
+        );
+
+    const { message, data } = await request;
+
     if (message === RequestStatus.SUCCESS) {
       showToast("Class added to schedule successfully", ToastType.SUCCESS);
-      setScheduledClasses([...scheduledClasses, data!]);
+      setScheduledClasses(
+        classInSchedule
+          ? scheduledClasses.map((s) => {
+              return s.classId === classInSchedule.id &&
+                s.weekday === data!.weekday &&
+                s.hour === data!.hour
+                ? data! : s;
+            })
+          : [...scheduledClasses, data!]
+      );
     } else {
       showToast("Error adding class to schedule", ToastType.ERROR);
     }
+
     setModalOpen(false);
-    setDayTime(null);
+    setDayTime({ weekday: 0, hour: "" });
   };
 
   const findClassInSchedule = (weekday: number, hour: string) => {
@@ -76,7 +98,7 @@ export default function WeeklyScheduleGrid() {
 
   const handleCloseModal = () => {
     setModalOpen(false);
-    setDayTime(null);
+    setDayTime({ weekday: 0, hour: "" });
   };
 
   return (

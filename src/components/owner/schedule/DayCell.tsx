@@ -23,7 +23,14 @@ export function DayCell({ data, onClick }: DayCellProps) {
       '
       onClick={onClick}
     >
-      {data ? data.title : ""}
+      {data ? (
+        <div className='flex flex-col'>
+          <span className="font-semibold text-textcolor-primary">{data.title}</span>
+          <span className="text-xs text-textcolor-primary">{data.instructor}</span>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
