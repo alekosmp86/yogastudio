@@ -1,6 +1,6 @@
 export interface ScheduledClass {
     id: number;
-    classId: string;
+    classId: number;
     weekday: number;
     hour: string;
 }

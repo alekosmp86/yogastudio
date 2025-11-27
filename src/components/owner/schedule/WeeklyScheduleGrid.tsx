@@ -16,18 +16,19 @@ import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
 import { ScheduledClass } from "@/types/schedule/ScheduledClass";
 import { ApiResponse } from "@/types/requests/ApiResponse";
+import { useScheduledClasses } from "@/lib/contexts/ScheduledClassesContext";
 
 export default function WeeklyScheduleGrid() {
   // grid columns: 70px for hour column, then 1fr per weekday (keeps flexible)
   const gridCols = `70px repeat(${WEEKDAYS.length}, minmax(140px, 1fr))`;
   const { classes } = useClasses();
-  const [dayTime, setDayTime] = useState<{ weekday: number; hour: string } | null>(null);
-  const {showToast} = useToast();
+  const {scheduledClasses, setScheduledClasses} = useScheduledClasses();
+  const [dayTime, setDayTime] = useState<{
+    weekday: number;
+    hour: string;
+  } | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-
-  useEffect(() => {
-    
-  }, []);
+  const { showToast } = useToast();
 
   const handleCellClick = () => {
     setModalOpen(true);
@@ -43,18 +44,34 @@ export default function WeeklyScheduleGrid() {
   };
 
   const handleClassClick = async (c: GymClass) => {
-    const {message, data} = await http.post<ApiResponse<ScheduledClass>>("/owner/schedule", ApiType.FRONTEND, {
-      weekday: dayTime?.weekday,
-      hour: dayTime?.hour,
-      classId: c.id,
-    });
+    const { message, data } = await http.post<ApiResponse<ScheduledClass>>(
+      "/owner/schedule",
+      ApiType.FRONTEND,
+      {
+        weekday: dayTime?.weekday,
+        hour: dayTime?.hour,
+        classId: c.id,
+      }
+    );
     if (message === RequestStatus.SUCCESS) {
       showToast("Class added to schedule successfully", ToastType.SUCCESS);
+      setScheduledClasses([...scheduledClasses, data!]);
     } else {
       showToast("Error adding class to schedule", ToastType.ERROR);
     }
     setModalOpen(false);
     setDayTime(null);
+  };
+
+  const findClassInSchedule = (weekday: number, hour: string) => {
+    return classes.find(
+      (c) =>
+        c.id ===
+        scheduledClasses.find(
+          (scheduledClass) =>
+            scheduledClass.weekday === weekday && scheduledClass.hour === hour
+        )?.classId
+    );
   };
 
   const handleCloseModal = () => {
@@ -76,8 +93,12 @@ export default function WeeklyScheduleGrid() {
             className='cursor-pointer transition hover:bg-secondary-soft'
           >
             <CardContent className='py-3 px-4'>
-              <div className='text-base text-textcolor-primary font-semibold'>{c.title}</div>
-              <div className='text-xs mt- text-textcolor-secondary'>{c.instructor}</div>
+              <div className='text-base text-textcolor-primary font-semibold'>
+                {c.title}
+              </div>
+              <div className='text-xs mt- text-textcolor-secondary'>
+                {c.instructor}
+              </div>
             </CardContent>
           </Card>
         ))}
@@ -107,6 +128,7 @@ export default function WeeklyScheduleGrid() {
                 {WEEKDAYS.map((d, index) => (
                   <DayCell
                     key={`${d.label}-${hour}`}
+                    data={findClassInSchedule(index, hour)}
                     onClick={(e) => showClassSelectorModal(e, index, hour)}
                   />
                 ))}

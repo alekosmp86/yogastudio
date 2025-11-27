@@ -1,10 +1,13 @@
 "use client";
 
+import { GymClass } from "@/types/classes/GymClass";
+
 type DayCellProps = {
+  data: GymClass | undefined;
   onClick: (e: React.MouseEvent<HTMLDivElement>) => void;
 };
 
-export function DayCell({ onClick }: DayCellProps) {
+export function DayCell({ data, onClick }: DayCellProps) {
   return (
     <div
       className='
@@ -19,6 +22,8 @@ export function DayCell({ onClick }: DayCellProps) {
         cursor-pointer
       '
       onClick={onClick}
-    />
+    >
+      {data ? data.title : ""}
+    </div>
   );
 }

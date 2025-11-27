@@ -5,6 +5,16 @@ import { NextResponse } from "next/server";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { ScheduledClass } from "@/types/schedule/ScheduledClass";
 
+export async function GET() {
+  const {message, data} = await http.get<ApiResponse<ScheduledClass[]>>("/owner/schedule", ApiType.BACKEND);
+
+  if (message !== RequestStatus.SUCCESS) {
+    return NextResponse.json({ message }, { status: 500 });
+  }
+
+  return NextResponse.json({ message, data });
+}
+
 export async function POST(request: Request) {
   const body = await request.json();
   try {
@@ -13,8 +23,6 @@ export async function POST(request: Request) {
       ApiType.BACKEND,
       body
     );
-
-    console.log(message, data);
     
     if (message !== RequestStatus.SUCCESS) {
       return NextResponse.json({ message }, { status: 500 });
