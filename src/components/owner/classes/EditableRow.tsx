@@ -54,12 +54,12 @@ export default function EditableRow({
   };
 
   return (
-    <tr className="bg-surface-divider border-b border-brand-300">
+    <tr className="bg-theme-inputbg border-b border-brand-300">
       {fields.map(({ key, placeholder }) => (
-        <td key={key} className="px-4 py-3 text-textcolor-primary">
+        <td key={key} className="px-4 py-3 text-theme-secondarytextcolor">
           {isEditing ? (
             <input
-              className="w-full px-3 py-2 rounded-md focus:ring-2 focus:ring-brand-400 outline-none"
+              className="w-full px-3 py-2 rounded-md focus:ring-1 focus:ring-brand-600 outline outline-brand-600"
               value={form[key] as string | number}
               onChange={(e) => handleChange(key, e.target.value)}
               placeholder={placeholder}
@@ -73,22 +73,22 @@ export default function EditableRow({
       <td className="flex items-center justify-center gap-2 px-2 py-3">
         {isEditing ? (
           <>
-            <Button size="sm" variant="primary" Icon={Check} onClick={save} disabled={isUnchanged}>
+            <Button size="md" variant="primary" Icon={Check} onClick={save} disabled={isUnchanged}>
               Save
             </Button>
 
-            <Button size="sm" variant="secondary" Icon={X} onClick={cancel}>
+            <Button size="md" variant="negative" Icon={X} onClick={cancel}>
               Cancel
             </Button>
           </>
         ) : (
           <>
-            <Button size="sm" variant="primary" Icon={Pencil} onClick={() => setIsEditing(true)}>
+            <Button size="md" variant="primary" Icon={Pencil} onClick={() => setIsEditing(true)}>
               Edit
             </Button>
 
             {onDelete && (
-              <Button size="sm" className="bg-red-600 hover:bg-red-600/80" Icon={Trash} onClick={() => onDelete(gymClass.id)}>
+              <Button size="md" variant="negative" Icon={Trash} onClick={() => onDelete(gymClass.id)}>
                 Delete
               </Button>
             )}

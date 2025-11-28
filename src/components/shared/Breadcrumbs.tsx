@@ -11,7 +11,7 @@ export default function Breadcrumbs() {
   });
 
   return (
-    <nav className='mb-6 text-sm text-brand-400'>
+    <nav className='mb-6 text-md text-brand-400'>
       <ol className='flex flex-wrap items-center gap-2'>
         {links.map((item, index) => (
           <li key={item.href} className='flex items-center gap-2'>

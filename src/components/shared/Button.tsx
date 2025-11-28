@@ -31,19 +31,18 @@ export default function Button({
     "inline-flex items-center justify-center font-medium rounded-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-300";
 
   const variants: Record<Variant, string> = {
-    primary:
-      "bg-primary text-brand-600 hover:bg-primary-hover active:bg-primary-hover",
+    primary: "bg-primary-600 text-brand-600 hover:bg-primary active:bg-primary",
     secondary:
-      "bg-secondary text-brand-600 hover:bg-secondary-hover active:bg-secondary-hover",
+      "bg-secondary-600 text-brand-600 hover:bg-secondary active:bg-secondary",
     negative:
-      "bg-negative text-brand-600 hover:bg-negative-hover active:bg-negative-hover",
+      "bg-danger-600 text-brand-600 hover:bg-danger active:bg-danger",
     ghost:
       "bg-transparent text-brand-600 hover:bg-transparent active:bg-transparent",
   };
 
   const sizes: Record<Size, string> = {
     sm: "px-3 py-1.5 text-sm",
-    md: "px-4 py-2 text-sm",
+    md: "px-4 py-2 text-md",
     lg: "px-5 py-3 text-base",
   };
 

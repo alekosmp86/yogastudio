@@ -13,6 +13,7 @@ import { useToast } from "@/lib/contexts/ToastContext";
 import { useClasses } from "@/lib/contexts/ClassesContext";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { ToastType } from "@/enums/ToastType";
+import { Plus } from "lucide-react";
 
 export default function ClassTable() {
   const { classes, addClass, updateClass, removeClass } = useClasses();
@@ -71,19 +72,20 @@ export default function ClassTable() {
   ];
 
   return (
-    <div className='bg-surface-card rounded-xl p-6 shadow-xl border border-brand-700'>
+    <div className='bg-theme-bodybg rounded-sm p-6 shadow-xl border border-brand-700'>
       <div className='flex items-center justify-between mb-4'>
-        <h2 className='text-xl font-semibold text-brand-400'>Your Classes</h2>
+        <h2 className='text-xl font-semibold text-primary-800'>Your Classes</h2>
         <Button
           variant='primary'
           onClick={() => setAdding(true)}
+          Icon={Plus}
           disabled={adding}
         >
           Add Class
         </Button>
       </div>
 
-      <div className='bg-secondary-soft overflow-x-auto rounded-sm border border-brand-600'>
+      <div className='bg-theme-bodybg overflow-x-auto rounded-sm border border-theme-bodycolor'>
         <table className='w-full text-center text-brand-200'>
           <TableHeader fields={fields} />
 
