@@ -1,4 +1,5 @@
 import Button from "@/components/shared/Button";
+import { Trash, X } from "lucide-react";
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 
@@ -7,10 +8,11 @@ interface ModalProps {
   onClose: () => void;
   onRemove: () => void;
   title?: string;
+  emptyCell: boolean;
   children: React.ReactNode;
 }
 
-export function ClassSelectorModal({open, onClose, onRemove, title, children}: ModalProps) {
+export function ClassSelectorModal({open, onClose, onRemove, title, children, emptyCell}: ModalProps) {
   useEffect(() => {
     function handleKey(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
@@ -49,12 +51,16 @@ export function ClassSelectorModal({open, onClose, onRemove, title, children}: M
         <div className='px-6 py-4 mt-2 flex flex-row gap-2'>
           <Button variant="primary"
             className="w-full text-textcolor-ondark"
+            Icon={X}
             onClick={onClose}
           >Close</Button>
-          <Button variant="negative"
+          {!emptyCell && (
+            <Button variant="negative"
             className="w-full text-textcolor-ondark"
+            Icon={Trash}
             onClick={onRemove}
           >Remove class</Button>
+          )}
         </div>
       </div>
     </div>,

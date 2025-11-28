@@ -1,4 +1,5 @@
 import Button from "@/components/shared/Button";
+import { Check, X } from "lucide-react";
 
 type UserActionsProps = {
   id: number;
@@ -13,10 +14,18 @@ export default function UserActions({id, onApprove, onReject, mobile = false}: U
 
   return (
     <div className="flex gap-2">
-      <Button size="sm" variant="primary" className={`${base} ${full}`} onClick={() => onApprove(id)}>
+      <Button size="sm" 
+        variant="primary" 
+        Icon={Check}
+        className={`${base} ${full}`} 
+        onClick={() => onApprove(id)}>
         Approve
       </Button>
-      <Button size="sm" variant="negative" className={`${base} ${full}`} onClick={() => onReject(id)}>
+      <Button size="sm" 
+        variant="negative" 
+        Icon={X}
+        className={`${base} ${full}`} 
+        onClick={() => onReject(id)}>
         Reject
       </Button>
     </div>

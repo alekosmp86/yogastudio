@@ -26,6 +26,9 @@ export default function WeeklyScheduleGrid() {
   const [dayTime, setDayTime] = useState<{ weekday: number; hour: string }>({ weekday: 0, hour: "" });
   const [modalOpen, setModalOpen] = useState(false);
   const { showToast } = useToast();
+  
+  const scheduledClass = scheduledClasses.find((scheduledClass) => scheduledClass.weekday === dayTime.weekday && scheduledClass.hour === dayTime.hour);
+  const classInSchedule = classes.find((c) => c.id === scheduledClass?.classId);
 
   const showClassSelectorModal = (weekday: number, hour: string) => {
     setDayTime({ weekday, hour });
@@ -33,7 +36,6 @@ export default function WeeklyScheduleGrid() {
   };
 
   const handleClassClick = async (c: GymClass) => {
-    const classInSchedule = findClassInSchedule(dayTime.weekday, dayTime.hour);
     const payload = { weekday: dayTime.weekday, hour: dayTime.hour, classId: c.id };
 
     const request = classInSchedule
@@ -65,14 +67,9 @@ export default function WeeklyScheduleGrid() {
     );
   };
 
-  const findScheduledClass = (weekday: number, hour: string) => {
-    return scheduledClasses.find((scheduledClass) => scheduledClass.weekday === weekday && scheduledClass.hour === hour);
-  };
-
   const handleRemoveClass = async () => {
-    const scheduledClass = findScheduledClass(dayTime.weekday, dayTime.hour);
     if (!scheduledClass) return;
-    
+
     const request = http.delete<ApiResponse<RequestStatus>>(`/owner/schedule/${scheduledClass.id}`, ApiType.FRONTEND);
 
     const { message } = await request;
@@ -98,6 +95,7 @@ export default function WeeklyScheduleGrid() {
     <>
       <ClassSelectorModal
         open={modalOpen}
+        emptyCell={!scheduledClass}
         onClose={handleCloseModal}
         onRemove={handleRemoveClass}
         title='Select a Class'
