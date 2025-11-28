@@ -26,9 +26,9 @@ export default function OwnerDashboard() {
         />
 
         <DashboardCard
-          title='Customers'
-          description='View and manage your customer list.'
-          href='/owner/customers'
+          title='Users'
+          description='View and manage your users list.'
+          href='/owner/users'
           icon={<Users size={40} />}
         />
       </div>

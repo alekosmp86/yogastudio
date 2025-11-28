@@ -3,7 +3,7 @@
 import React from "react";
 import cx from "clsx";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "negative" | "ghost";
 type Size = "sm" | "md" | "lg";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -32,9 +32,11 @@ export default function Button({
 
   const variants: Record<Variant, string> = {
     primary:
-      "bg-primary text-brand-600 hover:bg-primary-soft active:bg-primary-soft",
+      "bg-primary text-brand-600 hover:bg-primary-hover active:bg-primary-hover",
     secondary:
-      "bg-secondary text-brand-600 hover:bg-secondary-soft active:bg-secondary-soft",
+      "bg-secondary text-brand-600 hover:bg-secondary-hover active:bg-secondary-hover",
+    negative:
+      "bg-negative text-brand-600 hover:bg-negative-hover active:bg-negative-hover",
     ghost:
       "bg-transparent text-brand-600 hover:bg-transparent active:bg-transparent",
   };

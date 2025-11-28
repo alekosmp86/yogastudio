@@ -1,7 +1,11 @@
+import { Roles } from "@/enums/Roles";
+
 export type User = {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-    phone: string;
+    id: number,
+    name: string,
+    email: string,
+    role: Roles,
+    approved: boolean,
+    emailVerified: boolean,
+    phone?: string | null
 };

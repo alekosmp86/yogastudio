@@ -23,14 +23,19 @@ module.exports = {
       colors: {
         // Brand Core
         primary: {
-          DEFAULT: "#6096B4",
-          hover: "#236C88",
+          DEFAULT: "#236C88",
+          hover: "#6096B4",
           soft: "#93BFCF",
         },
         secondary: {
           DEFAULT: "#A08963",
           hover: "#C9B194",
           soft: "#C9B194",
+        },
+        negative: {
+          DEFAULT: "#ce0303",
+          hover: "#c54141",
+          soft: "#c54141",
         },
 
         // Wellness Accents

@@ -87,7 +87,7 @@ export default function EditableRow({
               Edit
             </Button>
 
-            <Button size="sm" variant="secondary" Icon={Trash} onClick={() => onDelete(gymClass.id)}>
+            <Button size="sm" className="bg-red-600 hover:bg-red-600/80" Icon={Trash} onClick={() => onDelete(gymClass.id)}>
               Delete
             </Button>
           </>
