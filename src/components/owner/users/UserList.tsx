@@ -1,5 +1,6 @@
 import { ApiType } from "@/enums/ApiTypes";
 import { RequestStatus } from "@/enums/RequestStatus";
+import { OwnerActions } from "@/enums/OwnerActions";
 import { http } from "@/lib/http";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { User } from "@/types/User";
@@ -21,12 +22,11 @@ export default function UserList() {
     getAllUsers();
   }, []);
 
-  const handleApprove = (id: number) => {
-    console.log("Approve", id);
-  };
+  const handleAction = async (id: number, action: OwnerActions) => {
+    const { message, data } = await http.put<ApiResponse<User>>(`/owner/users/${id}/${action}`, ApiType.FRONTEND);
+    if (message !== RequestStatus.SUCCESS) return;
 
-  const handleReject = (id: number) => {
-    console.log("Reject", id);
+    setUsers((prevUsers) => prevUsers.map((user) => user.id === id ? data! : user));
   };
 
   return (
@@ -36,15 +36,13 @@ export default function UserList() {
       {/* Desktop */}
       <UserTable
         users={users}
-        onApprove={handleApprove}
-        onReject={handleReject}
+        onAction={handleAction}
       />
 
       {/* Mobile */}
       <UserCardList
         users={users}
-        onApprove={handleApprove}
-        onReject={handleReject}
+        onAction={handleAction}
       />
     </div>
   );

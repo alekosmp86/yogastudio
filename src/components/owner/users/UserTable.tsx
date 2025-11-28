@@ -1,17 +1,18 @@
 import { User } from "@/types/User";
 import UserRow from "./UserRow";
+import { OwnerActions } from "@/enums/OwnerActions";
 
 type UserTableProps = {
   users: User[];
-  onApprove: (id: number) => void;
-  onReject: (id: number) => void;
+  onAction: (id: number, action: OwnerActions) => void;
 };
 
-export default function UserTable({ users, onApprove, onReject }: UserTableProps) {
+export default function UserTable({ users, onAction }: UserTableProps) {
   const fields: { key: keyof User; placeholder: string }[] = [
     { key: "name", placeholder: "Name" },
     { key: "email", placeholder: "Email" },
     { key: "phone", placeholder: "Phone" },
+    { key: "approved", placeholder: "Approved" },
   ];
 
   return (
@@ -32,8 +33,7 @@ export default function UserTable({ users, onApprove, onReject }: UserTableProps
               key={user.id}
               user={user}
               fields={fields}
-              onApprove={onApprove}
-              onReject={onReject}
+              onAction={onAction}
             />
           ))}
         </tbody>

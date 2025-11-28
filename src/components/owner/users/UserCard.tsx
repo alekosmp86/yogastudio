@@ -1,13 +1,13 @@
 import { User } from "@/types/User";
 import UserActions from "./UserActions";
+import { OwnerActions } from "@/enums/OwnerActions";
 
 type UserCardProps = {
   user: User;
-  onApprove: (id: number) => void;
-  onReject: (id: number) => void;
+  onAction: (id: number, action: OwnerActions) => void;
 };
 
-export default function UserCard({ user, onApprove, onReject }: UserCardProps) {
+export default function UserCard({ user, onAction }: UserCardProps) {
   return (
     <div className="bg-surface-divider border border-brand-300 rounded-xl p-4 shadow-sm">
       <div className="text-base text-textcolor-primary font-semibold">{user.name}</div>
@@ -17,8 +17,8 @@ export default function UserCard({ user, onApprove, onReject }: UserCardProps) {
       <div className="flex justify-between mt-2">
         <UserActions
           id={user.id}
-          onApprove={onApprove}
-          onReject={onReject}
+          approved={user.approved}
+          onAction={onAction}
           mobile
         />
       </div>
