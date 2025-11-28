@@ -29,6 +29,7 @@ export function ScheduledClassesProvider({
           "/owner/schedule",
           ApiType.FRONTEND
         );
+        
         if (message === RequestStatus.SUCCESS) {
           setScheduledClasses(data || []);
         }

@@ -8,9 +8,9 @@ type EditableRowProps = {
   adding?: boolean;
   fields: { key: keyof GymClass; placeholder: string }[];
   onSaveNew: (gymClass: GymClass) => void;
-  onUpdate: (id: GymClass["id"], gymClass: GymClass) => void;
+  onUpdate: (id: number, gymClass: GymClass) => void;
   onCancel: () => void;
-  onDelete: (id: GymClass["id"]) => void;
+  onDelete?: (id: number) => void;
 };
 
 export default function EditableRow({
@@ -87,9 +87,11 @@ export default function EditableRow({
               Edit
             </Button>
 
-            <Button size="sm" className="bg-red-600 hover:bg-red-600/80" Icon={Trash} onClick={() => onDelete(gymClass.id)}>
-              Delete
-            </Button>
+            {onDelete && (
+              <Button size="sm" className="bg-red-600 hover:bg-red-600/80" Icon={Trash} onClick={() => onDelete(gymClass.id)}>
+                Delete
+              </Button>
+            )}
           </>
         )}
       </td>

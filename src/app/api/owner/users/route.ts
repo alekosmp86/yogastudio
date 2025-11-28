@@ -7,7 +7,6 @@ import { User } from "@/types/User";
 
 export async function GET() {
   const {message, data} = await http.get<ApiResponse<User[]>>("/owner/users", ApiType.BACKEND);
-  console.log(message, data);
 
   if (message !== RequestStatus.SUCCESS) {
     return NextResponse.json({ message }, { status: 500 });

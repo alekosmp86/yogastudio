@@ -68,9 +68,7 @@ export function ClassesProvider({
 
     const fetchClasses = async () => {
       try {
-        const { message, data }: ApiResponse<GymClass[]> = await http.get<
-          ApiResponse<GymClass[]>
-        >("/owner/classes", ApiType.FRONTEND);
+        const { message, data }: ApiResponse<GymClass[]> = await http.get<ApiResponse<GymClass[]>>("/owner/classes", ApiType.FRONTEND);
 
         if (!mounted) return;
 
@@ -86,7 +84,6 @@ export function ClassesProvider({
     };
 
     fetchClasses();
-
     return () => {
       mounted = false;
     };

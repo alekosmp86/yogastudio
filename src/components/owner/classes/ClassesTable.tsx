@@ -21,25 +21,21 @@ export default function ClassTable() {
 
   // --- CREATE ---
   const handleSaveNew = async (gymClass: GymClassBase) => {
-    const { message, data }: ApiResponse<number> = await http.post<
-      ApiResponse<number>
-    >("/owner/classes", ApiType.FRONTEND, gymClass);
+    const { message, data }: ApiResponse<GymClass> = await http.post<ApiResponse<GymClass>>("/owner/classes", ApiType.FRONTEND, gymClass);
 
     if (message === RequestStatus.ERROR) {
       showToast("Error creating class", ToastType.ERROR);
       return;
     }
 
-    addClass({ ...gymClass, id: data! });
+    addClass(data!);
     setAdding(false);
     showToast("Class created successfully", ToastType.SUCCESS);
   };
 
   // --- UPDATE ---
   const handleUpdate = async (id: number, updated: GymClassBase) => {
-    const { message }: ApiResponse<RequestStatus> = await http.put<
-      ApiResponse<RequestStatus>
-    >(`/owner/classes/${id}`, ApiType.FRONTEND, updated);
+    const { message }: ApiResponse<RequestStatus> = await http.put<ApiResponse<RequestStatus>>(`/owner/classes/${id}`, ApiType.FRONTEND, updated);
 
     if (message === RequestStatus.ERROR) {
       showToast("Error updating class", ToastType.ERROR);
@@ -52,15 +48,13 @@ export default function ClassTable() {
 
   // --- DELETE ---
   const handleDelete = async (id: number) => {
-    const { message }: ApiResponse<RequestStatus> = await http.delete<
-      ApiResponse<RequestStatus>
-    >(`/owner/classes/${id}`, ApiType.FRONTEND);
+    const { message, data } = await http.delete<ApiResponse<number>>(`/owner/classes/${id}`, ApiType.FRONTEND);
     if (message === RequestStatus.ERROR) {
       showToast("Error deleting class", ToastType.ERROR);
       return;
     }
 
-    removeClass(id);
+    removeClass(data!);
     showToast("Class deleted successfully", ToastType.SUCCESS);
   };
 
@@ -127,7 +121,6 @@ export default function ClassTable() {
                 fields={fields}
                 onSaveNew={(gymClass) => handleSaveNew(gymClass)}
                 onUpdate={(id, updated) => handleUpdate(id, updated)}
-                onDelete={(id) => handleDelete(id)}
                 onCancel={handleCancelAdd}
               />
             )}
