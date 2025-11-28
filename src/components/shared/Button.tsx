@@ -54,7 +54,7 @@ export default function Button({
       {Icon && (
         <Icon
           className={cx(
-            "mr-2 shrink-0",
+            `${children ? "mr-2" : ""} shrink-0`,
             size === "sm" ? "h-4 w-4" : size === "md" ? "h-5 w-5" : "h-6 w-6"
           )}
         />
