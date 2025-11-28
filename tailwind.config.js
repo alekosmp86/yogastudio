@@ -79,6 +79,7 @@ module.exports = {
           navbar: "#506D84",
           border: "#B2C9AD",
           divider: "#DDE1E6",
+          white: "#FFFFFF",
         },
 
         // Dark Mode (optional)

@@ -1,3 +1,4 @@
+import Button from "@/components/shared/Button";
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 
@@ -46,14 +47,14 @@ export function ClassSelectorModal({open, onClose, onRemove, title, children}: M
         </div>
 
         <div className='px-6 py-4 mt-2 flex flex-row gap-2'>
-          <button
-            className='bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-hover transition w-full'
+          <Button variant="primary"
+            className="w-full text-textcolor-ondark"
             onClick={onClose}
-          >Close</button>
-          <button
-            className='bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition w-full'
+          >Close</Button>
+          <Button variant="negative"
+            className="w-full text-textcolor-ondark"
             onClick={onRemove}
-          >Remove class</button>
+          >Remove class</Button>
         </div>
       </div>
     </div>,
