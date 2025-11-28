@@ -9,7 +9,7 @@ type ClassesCardProps = {
   adding: boolean;
   onSaveNew: (gymClass: GymClass) => void;
   onUpdate: (id: number, updated: GymClass) => void;
-  onDelete: (id: number) => void;
+  onDelete?: (id: number) => void;
   onCancel: () => void;
 };
 

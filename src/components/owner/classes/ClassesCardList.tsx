@@ -26,6 +26,23 @@ export default function ClassesCardList({classes, adding, fields, handleSaveNew,
                     onDelete={handleDelete}
                 />
             ))}
+
+            {adding && (
+                <ClassesCard
+                    gymClass={{
+                        id: 0,
+                        title: "",
+                        instructor: "",
+                        description: "",
+                        capacity: 0,
+                    }}
+                    adding
+                    fields={fields}
+                    onSaveNew={handleSaveNew}
+                    onUpdate={handleUpdate}
+                    onCancel={handleCancelAdd}
+                />
+            )}
         </div>
     )
 }
