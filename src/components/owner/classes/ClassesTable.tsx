@@ -36,18 +36,6 @@ export default function ClassesTable({
             </tr>
           )}
 
-          {classes.map((c) => (
-            <EditableRow
-              key={c.id}
-              fields={fields}
-              gymClass={c}
-              onSaveNew={(gymClass) => handleSaveNew(gymClass)}
-              onUpdate={(id, updated) => handleUpdate(id, updated)}
-              onDelete={(id) => handleDelete(id)}
-              onCancel={() => {}}
-            />
-          ))}
-
           {adding && (
             <EditableRow
               gymClass={{
@@ -64,6 +52,18 @@ export default function ClassesTable({
               onCancel={handleCancelAdd}
             />
           )}
+
+          {classes.map((c) => (
+            <EditableRow
+              key={c.id}
+              fields={fields}
+              gymClass={c}
+              onSaveNew={(gymClass) => handleSaveNew(gymClass)}
+              onUpdate={(id, updated) => handleUpdate(id, updated)}
+              onDelete={(id) => handleDelete(id)}
+              onCancel={() => {}}
+            />
+          ))}
         </tbody>
       </table>
     </div>
