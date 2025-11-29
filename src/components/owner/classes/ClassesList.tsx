@@ -1,7 +1,6 @@
 "use client";
 
-import { useState } from "react";
-import Button from "@/components/shared/Button";
+import { useMemo, useState } from "react";
 import { ApiType } from "@/enums/ApiTypes";
 import { http } from "@/lib/http";
 import { GymClass } from "@/types/classes/GymClass";
@@ -11,11 +10,19 @@ import { useToast } from "@/lib/contexts/ToastContext";
 import { useClasses } from "@/lib/contexts/ClassesContext";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { ToastType } from "@/enums/ToastType";
-import { Plus } from "lucide-react";
 import ClassesTable from "./ClassesTable";
 import ClassesCardList from "./ClassesCardList";
+import TableToolbar from "@/components/shared/TableToolbar";
+import { Plus } from "lucide-react";
+import { Toolbar } from "@/types/Toolbar";
 
-const fields: { key: keyof GymClass; required: boolean; placeholder: string, style?: string, mobileLabel?: string }[] = [
+const fields: {
+  key: keyof GymClass;
+  required: boolean;
+  placeholder: string;
+  style?: string;
+  mobileLabel?: string;
+}[] = [
   { key: "title", required: true, placeholder: "Class title", style: "font-semibold" },
   { key: "instructor", required: true, placeholder: "Instructor" },
   { key: "description", required: false, placeholder: "Description", style: "mt-2" },
@@ -25,7 +32,28 @@ const fields: { key: keyof GymClass; required: boolean; placeholder: string, sty
 export default function ClassesList() {
   const { classes, addClass, updateClass, removeClass } = useClasses();
   const [adding, setAdding] = useState(false);
+  const [search, setSearch] = useState("");
   const { showToast } = useToast();
+
+  const toolbar = useMemo<Toolbar>(
+    () => ({
+      items: [{
+        icon: Plus,
+        onClick: () => setAdding(true),
+      }],
+      searchInput: {
+        active: true,
+        placeholder: "Search classes...",
+        value: search,
+        onChange: setSearch,
+      },
+    }),
+    [search, setSearch]
+  );
+
+  const filteredClasses = classes.filter((c) =>
+    c.title.toLowerCase().includes(search.toLowerCase())
+  );
 
   // --- CREATE ---
   const handleSaveNew = async (gymClass: GymClassBase) => {
@@ -73,38 +101,41 @@ export default function ClassesList() {
 
   return (
     <div className='w-full mt-4'>
-      <div className='flex items-center justify-between mb-4'>
-        <h2 className='text-xl font-semibold text-theme-inputbg'>Your Classes</h2>
-        <Button
-          variant='primary'
-          onClick={() => setAdding(true)}
-          Icon={Plus}
-          disabled={adding}
-        >
-          Add Class
-        </Button>
-      </div>
+      <h2 className='text-xl font-semibold text-theme-inputbg mb-4'>
+        Your Classes
+      </h2>
 
-      <div className='bg-theme-bodybg overflow-x-auto rounded-sm'>
-        <ClassesTable
-          classes={classes}
-          fields={fields}
-          adding={adding}
-          handleSaveNew={handleSaveNew}
-          handleUpdate={handleUpdate}
-          handleDelete={handleDelete}
-          handleCancelAdd={handleCancelAdd}
+      {/* TABLE BOX (toolbar + table inside) */}
+      <div className='bg-theme-bodybg rounded-sm border border-theme-bodycolor overflow-hidden shadow'>
+        {/* TOOLBAR sitting as the table header */}
+        <TableToolbar
+          toolbar={toolbar}
+          search={search}
+          setSearch={setSearch}
         />
 
-        <ClassesCardList
-          classes={classes}
-          fields={fields}
-          adding={adding}
-          handleSaveNew={handleSaveNew}
-          handleUpdate={handleUpdate}
-          handleCancelAdd={handleCancelAdd}
-          handleDelete={handleDelete}
-        />
+        {/* TABLE (desktop) + CARDS (mobile) */}
+        <div className='overflow-x-auto max-h-[500px] overflow-y-auto'>
+          <ClassesTable
+            classes={filteredClasses}
+            fields={fields}
+            adding={adding}
+            handleSaveNew={handleSaveNew}
+            handleUpdate={handleUpdate}
+            handleDelete={handleDelete}
+            handleCancelAdd={handleCancelAdd}
+          />
+
+          <ClassesCardList
+            classes={filteredClasses}
+            fields={fields}
+            adding={adding}
+            handleSaveNew={handleSaveNew}
+            handleUpdate={handleUpdate}
+            handleCancelAdd={handleCancelAdd}
+            handleDelete={handleDelete}
+          />
+        </div>
       </div>
     </div>
   );

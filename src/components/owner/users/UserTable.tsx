@@ -19,7 +19,7 @@ export default function UserTable({ users, onAction }: UserTableProps) {
       {users.length > 0 ? (
         <div className='hidden md:block overflow-hidden rounded-sm border border-primary-900 shadow-sm'>
           <table className='w-full text-center text-brand-200'>
-            <thead className='bg-theme-headings text-brand-400 sticky top-0 z-10'>
+            <thead className='bg-theme-headings/80 text-brand-400 sticky top-0 z-10'>
               <tr>
                 {fields.map(({ key, placeholder }) => (
                   <th key={key} className='px-4 py-3'>{placeholder}</th>
