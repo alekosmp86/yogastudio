@@ -13,20 +13,7 @@ type ClassesCardListProps = {
 
 export default function ClassesCardList({classes, adding, fields, handleSaveNew, handleUpdate, handleCancelAdd, handleDelete}: ClassesCardListProps) {
     return (
-        <div className="md:hidden flex flex-col gap-4 shadow-sm">
-            {classes.map((c) => (
-                <ClassesCard
-                    key={c.id}
-                    gymClass={c}
-                    adding={adding}
-                    fields={fields}
-                    onSaveNew={handleSaveNew}
-                    onUpdate={handleUpdate}
-                    onCancel={handleCancelAdd}
-                    onDelete={handleDelete}
-                />
-            ))}
-
+        <div className="md:hidden bg-primary flex flex-col gap-4 shadow-sm">
             {adding && (
                 <ClassesCard
                     gymClass={{
@@ -43,6 +30,19 @@ export default function ClassesCardList({classes, adding, fields, handleSaveNew,
                     onCancel={handleCancelAdd}
                 />
             )}
+            
+            {classes.map((c) => (
+                <ClassesCard
+                    key={c.id}
+                    gymClass={c}
+                    adding={adding}
+                    fields={fields}
+                    onSaveNew={handleSaveNew}
+                    onUpdate={handleUpdate}
+                    onCancel={handleCancelAdd}
+                    onDelete={handleDelete}
+                />
+            ))}
         </div>
     )
 }

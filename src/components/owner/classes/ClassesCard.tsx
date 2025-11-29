@@ -54,7 +54,7 @@ export default function ClassesCard({
   };
 
   return (
-    <div className='bg-theme-bg-1 border border-primary-500 rounded-xl p-2 shadow-xl'>
+    <div className='bg-theme-bg-4 border border-primary-500 rounded-md p-2 shadow-md'>
       {fields.map(({ key, placeholder, style, mobileLabel }) => (
         <div
           key={key}

@@ -59,7 +59,7 @@ export function ClassSelectorModal({open, onClose, onRemove, title, children, em
             className="w-full text-theme-inputbg"
             Icon={Trash}
             onClick={onRemove}
-          >Remove class</Button>
+          >Remove</Button>
           )}
         </div>
       </div>

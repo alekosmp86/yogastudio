@@ -186,6 +186,7 @@ module.exports = {
         'theme-bg-1':'linear-gradient(-135deg, #1de9b6 0%, #1dc4e9 100%)',
         'theme-bg-2':'linear-gradient(-135deg, #899fd4 0%, #a389d4 100%)',
         'theme-bg-3':'linear-gradient(207.92deg, #0398f2 11.42%, #38b9e7 106.55%)',
+        'theme-bg-4':'linear-gradient(207.92deg, #ddddddff 10%, #65a6f0ff 100%)',
         'checkbox-bg': `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e")`,
         'radio-bg': `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23ffffff'/%3e%3c/svg%3e")`,
         'select-bg': `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%231d2630' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e")`,

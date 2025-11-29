@@ -74,7 +74,7 @@ export default function ClassesList() {
   return (
     <div className='w-full mt-4'>
       <div className='flex items-center justify-between mb-4'>
-        <h2 className='text-xl font-semibold text-primary-800'>Your Classes</h2>
+        <h2 className='text-xl font-semibold text-theme-inputbg'>Your Classes</h2>
         <Button
           variant='primary'
           onClick={() => setAdding(true)}
