@@ -10,23 +10,22 @@ type DayCellProps = {
 export function DayCell({ data, onClick }: DayCellProps) {
   return (
     <div
-      className='
-        border border-surface-card
-        bg-surface-white
-        text-textcolor-primary
+      className={`
+        ${data ? "bg-info-400" : "bg-theme-cardbg"}
+        border border-theme-border        
         px-2 py-4 sm:px-3 sm:py-3
-        text-xs sm:text-sm
+        text-md sm:text-sm
         rounded-sm
-        hover:bg-primary-soft
+        hover:bg-info-600
         transition
         cursor-pointer
-      '
+      `}
       onClick={onClick}
     >
       {data ? (
         <div className='flex flex-col'>
-          <span className="font-semibold text-textcolor-primary">{data.title}</span>
-          <span className="text-xs text-textcolor-primary">{data.instructor}</span>
+          <span className="font-semibold text-primary-900">{data.title}</span>
+          <span className="text-xs text-secondary-700">{data.instructor}</span>
         </div>
       ) : (
         ""

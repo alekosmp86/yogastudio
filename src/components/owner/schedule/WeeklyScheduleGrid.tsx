@@ -118,12 +118,12 @@ export default function WeeklyScheduleGrid() {
         ))}
       </ClassSelectorModal>
 
-      <div className='p-4 sm:p-6 bg-surface-card rounded-xl shadow-xl border border-surface-border text-surface-text'>
-        <h2 className='text-lg sm:text-xl font-semibold text-surface-text mb-4'>
+      <div className='p-4 sm:p-6 bg-theme-cardbg rounded-sm shadow-xl text-primary-800'>
+        <h2 className='text-lg sm:text-xl font-semibold text-primary-800 mb-4'>
           Weekly Schedule
         </h2>
 
-        <div className='relative overflow-x-auto rounded-md border border-surface-border shadow-inner'>
+        <div className='relative overflow-x-auto rounded-md border border-primary-900 shadow-inner'>
           <div
             className='grid min-w-max'
             style={{
