@@ -31,7 +31,7 @@ export default function UserList() {
 
   return (
     <div className="w-full ">
-      <h2 className="text-xl font-semibold mt-4 mb-4">Pending Users</h2>
+      <h2 className="text-xl font-semibold text-theme-inputbg mt-4 mb-4">Users</h2>
 
       {/* Desktop */}
       <UserTable
