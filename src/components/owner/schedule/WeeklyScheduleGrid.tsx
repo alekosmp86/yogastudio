@@ -118,7 +118,7 @@ export default function WeeklyScheduleGrid() {
         ))}
       </ClassSelectorModal>
 
-      <div className='p-4 sm:p-6 bg-theme-cardbg rounded-sm shadow-xl text-primary-800'>
+      <div className='w-full mt-4'>
         <h2 className='text-lg sm:text-xl font-semibold text-primary-800 mb-4'>
           Weekly Schedule
         </h2>

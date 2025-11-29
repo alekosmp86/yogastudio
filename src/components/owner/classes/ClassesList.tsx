@@ -72,7 +72,7 @@ export default function ClassesList() {
   };
 
   return (
-    <div className='bg-theme-bodybg rounded-sm p-6 shadow-xl border border-brand-700'>
+    <div className='w-full mt-4'>
       <div className='flex items-center justify-between mb-4'>
         <h2 className='text-xl font-semibold text-primary-800'>Your Classes</h2>
         <Button

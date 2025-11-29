@@ -30,8 +30,8 @@ export default function UserList() {
   };
 
   return (
-    <div className="w-full">
-      <h2 className="text-xl font-semibold mb-4">Pending Users</h2>
+    <div className="w-full ">
+      <h2 className="text-xl font-semibold mt-4 mb-4">Pending Users</h2>
 
       {/* Desktop */}
       <UserTable
