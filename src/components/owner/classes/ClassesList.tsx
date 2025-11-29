@@ -15,6 +15,13 @@ import { Plus } from "lucide-react";
 import ClassesTable from "./ClassesTable";
 import ClassesCardList from "./ClassesCardList";
 
+const fields: { key: keyof GymClass; required: boolean; placeholder: string, style?: string, mobileLabel?: string }[] = [
+  { key: "title", required: true, placeholder: "Class title", style: "font-semibold" },
+  { key: "instructor", required: true, placeholder: "Instructor" },
+  { key: "description", required: false, placeholder: "Description", style: "mt-2" },
+  { key: "capacity", required: true, placeholder: "Capacity", mobileLabel: "Capacity" },
+];
+
 export default function ClassesList() {
   const { classes, addClass, updateClass, removeClass } = useClasses();
   const [adding, setAdding] = useState(false);
@@ -63,13 +70,6 @@ export default function ClassesList() {
   const handleCancelAdd = () => {
     setAdding(false);
   };
-
-  const fields: { key: keyof GymClass; placeholder: string, style?: string, mobileLabel?: string }[] = [
-    { key: "title", placeholder: "Class title", style: "font-semibold" },
-    { key: "instructor", placeholder: "Instructor" },
-    { key: "description", placeholder: "Description", style: "mt-2" },
-    { key: "capacity", placeholder: "Capacity", mobileLabel: "Capacity" },
-  ];
 
   return (
     <div className='bg-theme-bodybg rounded-sm p-6 shadow-xl border border-brand-700'>
