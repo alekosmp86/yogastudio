@@ -46,28 +46,33 @@ export default function LoginPage() {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen p-6 bg-surface-app text-brand-200'>
+    <div className='flex flex-col items-center justify-center min-h-screen p-6 bg-theme-bg-3 text-brand-200'>
       <form
         onSubmit={handleSubmit}
-        className='flex flex-col gap-4 w-full max-w-xs bg-surface-section p-6 rounded-lg shadow-xl border border-brand-600'
+        className='flex flex-col gap-4 w-full max-w-xs bg-theme-cardbg p-6 rounded-lg shadow-xl border border-brand-600'
       >
-        <h1 className='text-xl font-semibold text-center text-brand-200'>
+        <h1 className='text-xl font-semibold text-center text-primary-800'>
           Log in
         </h1>
 
-        <Input
-          label='Email'
-          name='email'
-          type='email'
-          placeholder='you@example.com'
-          ref={emailInput}
-          required
-        />
+        <div className='flex flex-col'>
+          <label htmlFor='email' className='text-primary-800'>
+            Email
+          </label>
+          <Input
+            name='email'
+            type='email'
+            placeholder='you@example.com'
+            className='text-primary-800'
+            ref={emailInput}
+            required
+          />
+        </div>
 
         <Button
           type='submit'
           disabled={status === Status.LOADING}
-          variant="primary"
+          variant='primary'
         >
           {status === Status.LOADING ? "Sending..." : "Get link"}
         </Button>
@@ -75,7 +80,7 @@ export default function LoginPage() {
         {messageUI && (
           <p
             className={`text-sm text-center ${
-              status === Status.ERROR ? "text-red-400" : "text-green-400"
+              status === Status.ERROR ? "text-danger-600" : "text-primary-700"
             }`}
           >
             {messageUI}
