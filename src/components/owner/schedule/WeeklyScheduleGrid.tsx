@@ -104,13 +104,13 @@ export default function WeeklyScheduleGrid() {
           <Card
             key={c.id}
             onClick={() => handleClassClick(c)}
-            className='cursor-pointer transition hover:bg-secondary-soft'
+            className='cursor-pointer transition bg-theme-cardbg hover:bg-primary-300'
           >
             <CardContent className='py-3 px-4'>
-              <div className='text-base text-textcolor-primary font-semibold'>
+              <div className='text-base text-primary-800 font-semibold'>
                 {c.title}
               </div>
-              <div className='text-xs mt- text-textcolor-secondary'>
+              <div className='text-xs mt- text-primary-800'>
                 {c.instructor}
               </div>
             </CardContent>
