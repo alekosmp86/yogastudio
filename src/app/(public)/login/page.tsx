@@ -22,7 +22,7 @@ const messages: Record<Status, string> = {
   [Status.SENT]: "A login link has been sent to your email.",
   [Status.IDLE]: "",
   [Status.LOADING]: "Requesting link...",
-  [Status.USER_NOT_APPROVED]: "User not approved. Please contact the admin.",
+  [Status.USER_NOT_APPROVED]: "User pending approval. Please contact the admin.",
 };
 
 export default function LoginPage() {
@@ -46,13 +46,13 @@ export default function LoginPage() {
           setStatus(Status.USER_NOT_APPROVED);
           break;
         case RequestStatus.USER_NOT_FOUND:
-          router.push("/register");
+          router.push(`/register?email=${encodeURIComponent(emailInput.current?.value || "")}`);
           break;
         default:
           setStatus(Status.ERROR);
           break;
       }
-    } catch (err) {
+    } catch {
       setStatus(Status.ERROR);
     }
   }
