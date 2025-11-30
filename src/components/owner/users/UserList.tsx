@@ -9,10 +9,13 @@ import UserTable from "./UserTable";
 import UserCardList from "./UserCardList";
 import TableToolbar from "@/components/shared/TableToolbar";
 import { Toolbar } from "@/types/Toolbar";
+import { useToast } from "@/lib/contexts/ToastContext";
+import { ToastType } from "@/enums/ToastType";
 
 export default function UserList() {
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
+  const { showToast, hideToast } = useToast();
 
   const filteredUsers = users.filter(
     (user) =>
@@ -48,15 +51,36 @@ export default function UserList() {
   }, []);
 
   const handleAction = async (id: number, action: OwnerActions) => {
-    const { message, data } = await http.put<ApiResponse<User>>(
-      `/owner/users/${id}/${action}`,
-      ApiType.FRONTEND
-    );
-    if (message !== RequestStatus.SUCCESS) return;
+    const toastId = showToast({
+      message: "Updating user...",
+      type: ToastType.WARNING,
+    });
 
-    setUsers((prevUsers) =>
-      prevUsers.map((user) => (user.id === id ? data! : user))
-    );
+    try {
+      const { message, data } = await http.put<ApiResponse<User>>(`/owner/users/${id}/${action}`, ApiType.FRONTEND);
+      if (message !== RequestStatus.SUCCESS) {
+        showToast({
+          message: "Failed to update user",
+          type: ToastType.ERROR,
+        });
+        return;
+      }
+
+      setUsers((prevUsers) =>
+        prevUsers.map((user) => (user.id === id ? data! : user))
+      );
+      showToast({
+        message: "User updated successfully",
+        type: ToastType.SUCCESS,
+      });
+    } catch {
+      showToast({
+        message: "Failed to update user",
+        type: ToastType.ERROR,
+      });
+    } finally {
+      hideToast(toastId);
+    }
   };
 
   return (
