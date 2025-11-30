@@ -10,18 +10,18 @@ type UserRowProps = {
 
 export default function UserRow({ user, fields, onAction }: UserRowProps) {
   return (
-    <tr className='bg-theme-inputbg border-b border-theme-inputbg'>
+    <tr className='bg-theme-inputbg border-b border-brand-300'>
       {fields.map(({ key }) => (
         <td key={key} className='px-4 py-3 text-primary-900'>
-          {typeof user[key as keyof User] === "boolean"
-            ? user[key as keyof User]
-              ? "Yes"
-              : "No"
-            : user[key as keyof User]}
+          {typeof user[key] === "boolean" ? user[key] ? "Yes" : "No" : user[key]}
         </td>
       ))}
       <td className='px-4 py-3 gap-2 flex justify-center'>
-        <UserActions id={user.id} onAction={onAction} approved={user.approved}/>
+        <UserActions
+          id={user.id}
+          onAction={onAction}
+          approved={user.approved}
+        />
       </td>
     </tr>
   );

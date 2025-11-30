@@ -66,7 +66,7 @@ export default function UserList() {
       </h2>
 
       {/* TABLE BOX (toolbar + table inside) */}
-      <div className='bg-theme-bodybg rounded-sm border border-theme-bodycolor overflow-hidden shadow'>
+      <div className='bg-transparent rounded-sm overflow-hidden shadow'>
         {/* TOOLBAR sitting as the table header */}
         <TableToolbar toolbar={toolbar} search={search} setSearch={setSearch} />
 
