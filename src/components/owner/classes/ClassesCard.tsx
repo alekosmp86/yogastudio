@@ -7,6 +7,7 @@ type ClassesCardProps = {
   gymClass: GymClass;
   fields: { key: keyof GymClass; placeholder: string; style?: string; mobileLabel?: string }[];
   adding: boolean;
+  busy: boolean;
   onSaveNew: (gymClass: GymClass) => void;
   onUpdate: (id: number, updated: GymClass) => void;
   onDelete?: (id: number) => void;
@@ -17,6 +18,7 @@ export default function ClassesCard({
   gymClass,
   fields,
   adding,
+  busy,
   onSaveNew,
   onUpdate,
   onDelete,
@@ -86,29 +88,34 @@ export default function ClassesCard({
         <div className='flex items-center justify-end gap-2'>
           <Button
             size='md'
-            variant='primary'
+            variant={isUnchanged ? "secondary" : "primary"}
+            className={isUnchanged ? "disabled:cursor-not-allowed disabled:pointer-events-none" : ""}
             Icon={Check}
             onClick={save}
             disabled={isUnchanged}
           />
 
-          <Button size='md' variant='negative' Icon={X} onClick={cancel} />
+          <Button size='md' variant={busy ? "secondary" : "negative"} Icon={X} onClick={cancel} />
         </div>
       ) : (
         <div className='flex items-center justify-end gap-2'>
           <Button
             size='md'
-            variant='primary'
+            variant={busy ? "secondary" : "primary"}
+            className={busy ? "disabled:cursor-not-allowed disabled:pointer-events-none" : ""}
             Icon={Pencil}
             onClick={() => setIsEditing(true)}
+            disabled={busy}
           />
 
           {onDelete && (
             <Button
               size='md'
-              variant='negative'
+              variant={busy ? "secondary" : "negative"}
+              className={busy ? "disabled:cursor-not-allowed disabled:pointer-events-none" : ""}
               Icon={Trash}
               onClick={() => onDelete(gymClass.id)}
+              disabled={busy}
             />
           )}
         </div>

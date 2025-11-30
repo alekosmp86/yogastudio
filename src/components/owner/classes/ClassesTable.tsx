@@ -7,6 +7,7 @@ type ClassesTableProps = {
   classes: GymClass[];
   fields: { key: keyof GymClass; placeholder: string }[];
   adding: boolean;
+  busy: boolean;
   handleSaveNew: (gymClass: GymClassBase) => void;
   handleUpdate: (id: number, updated: GymClass) => void;
   handleDelete: (id: number) => void;
@@ -17,6 +18,7 @@ export default function ClassesTable({
   classes,
   fields,
   adding,
+  busy,
   handleSaveNew,
   handleUpdate,
   handleDelete,
@@ -46,6 +48,7 @@ export default function ClassesTable({
                 capacity: 0,
               }}
               adding
+              busy={busy}
               fields={fields}
               onSaveNew={(gymClass) => handleSaveNew(gymClass)}
               onUpdate={(id, updated) => handleUpdate(id, updated)}
@@ -56,6 +59,7 @@ export default function ClassesTable({
           {classes.map((c) => (
             <EditableRow
               key={c.id}
+              busy={busy}
               fields={fields}
               gymClass={c}
               onSaveNew={(gymClass) => handleSaveNew(gymClass)}

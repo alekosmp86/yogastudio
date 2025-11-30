@@ -43,6 +43,7 @@ export default function ClassesList() {
   const { classes, addClass, updateClass, removeClass } = useClasses();
   const [adding, setAdding] = useState(false);
   const [search, setSearch] = useState("");
+  const [busy, setBusy] = useState(false);
   const { showToast, hideToast } = useToast();
 
   const toolbar = useMemo<Toolbar>(
@@ -93,6 +94,7 @@ export default function ClassesList() {
   const handleSaveNew = async (gymClass: GymClassBase) => {
     const toastId = showWarningToast("Creating class...");
     try {
+      setBusy(true);
       const { message, data }: ApiResponse<GymClass> = await http.post<ApiResponse<GymClass>>("/owner/classes", ApiType.FRONTEND, gymClass);
       if (message === RequestStatus.ERROR) {
         showErrorToast("Error creating class");
@@ -106,6 +108,7 @@ export default function ClassesList() {
       showErrorToast("Error creating class");
     } finally {
       hideToast(toastId);
+      setBusy(false);
     }
   };
 
@@ -113,6 +116,7 @@ export default function ClassesList() {
   const handleUpdate = async (id: number, updated: GymClassBase) => {
     const toastId = showWarningToast("Updating class...");
     try {
+      setBusy(true);
       const { message }: ApiResponse<RequestStatus> = await http.put<ApiResponse<RequestStatus>>(`/owner/classes/${id}`, ApiType.FRONTEND, updated);
 
       if (message === RequestStatus.ERROR) {
@@ -126,6 +130,7 @@ export default function ClassesList() {
       showErrorToast("Error updating class");
     } finally {
       hideToast(toastId);
+      setBusy(false);
     }
   };
 
@@ -133,6 +138,7 @@ export default function ClassesList() {
   const handleDelete = async (id: number) => {
     const toastId = showWarningToast("Deleting class...");
     try {
+      setBusy(true);
       const { message, data } = await http.delete<ApiResponse<number>>(`/owner/classes/${id}`, ApiType.FRONTEND);
       if (message === RequestStatus.ERROR) {
         showErrorToast("Error deleting class");
@@ -145,6 +151,7 @@ export default function ClassesList() {
       showErrorToast("Error deleting class");
     } finally {
       hideToast(toastId);
+      setBusy(false);
     }
   };
 
@@ -170,6 +177,7 @@ export default function ClassesList() {
             classes={filteredClasses}
             fields={fields}
             adding={adding}
+            busy={busy}
             handleSaveNew={handleSaveNew}
             handleUpdate={handleUpdate}
             handleDelete={handleDelete}
@@ -180,6 +188,7 @@ export default function ClassesList() {
             classes={filteredClasses}
             fields={fields}
             adding={adding}
+            busy={busy}
             handleSaveNew={handleSaveNew}
             handleUpdate={handleUpdate}
             handleCancelAdd={handleCancelAdd}

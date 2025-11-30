@@ -4,6 +4,7 @@ import ClassesCard from "./ClassesCard";
 type ClassesCardListProps = {
     classes: GymClass[];
     adding: boolean;
+    busy: boolean;
     fields: { key: keyof GymClass; placeholder: string }[];
     handleSaveNew: (gymClass: GymClass) => void;
     handleUpdate: (id: number, updated: GymClass) => void;
@@ -11,7 +12,7 @@ type ClassesCardListProps = {
     handleDelete: (id: number) => void;
 }
 
-export default function ClassesCardList({classes, adding, fields, handleSaveNew, handleUpdate, handleCancelAdd, handleDelete}: ClassesCardListProps) {
+export default function ClassesCardList({classes, adding, busy, fields, handleSaveNew, handleUpdate, handleCancelAdd, handleDelete}: ClassesCardListProps) {
     return (
         <div className="md:hidden bg-primary flex flex-col gap-4 shadow-sm">
             {adding && (
@@ -24,6 +25,7 @@ export default function ClassesCardList({classes, adding, fields, handleSaveNew,
                         capacity: 0,
                     }}
                     adding
+                    busy={busy}
                     fields={fields}
                     onSaveNew={handleSaveNew}
                     onUpdate={handleUpdate}
@@ -36,6 +38,7 @@ export default function ClassesCardList({classes, adding, fields, handleSaveNew,
                     key={c.id}
                     gymClass={c}
                     adding={adding}
+                    busy={busy}
                     fields={fields}
                     onSaveNew={handleSaveNew}
                     onUpdate={handleUpdate}
