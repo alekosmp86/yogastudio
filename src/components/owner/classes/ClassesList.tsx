@@ -15,15 +15,10 @@ import ClassesCardList from "./ClassesCardList";
 import TableToolbar from "@/components/shared/TableToolbar";
 import { Plus } from "lucide-react";
 import { Toolbar } from "@/types/Toolbar";
+import { TableField } from "@/types/TableField";
 
-const fields: {
-  key: keyof GymClass;
-  required: boolean;
-  placeholder: string;
-  style?: string;
-  mobileLabel?: string;
-}[] = [
-  { key: "title", required: true, placeholder: "Class title", style: "font-semibold" },
+const fields: TableField<GymClass>[] = [
+  { key: "title", required: true, placeholder: "Title", style: "font-semibold" },
   { key: "instructor", required: true, placeholder: "Instructor" },
   { key: "description", required: false, placeholder: "Description", style: "mt-2" },
   { key: "capacity", required: true, placeholder: "Capacity", mobileLabel: "Capacity" },

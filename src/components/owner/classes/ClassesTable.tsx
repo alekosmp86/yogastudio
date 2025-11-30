@@ -1,7 +1,7 @@
-import TableHeader from "./TableHeader";
 import { GymClass } from "@/types/classes/GymClass";
 import { GymClassBase } from "@/types/classes/GymClassBase";
 import EditableRow from "./EditableRow";
+import TableHeader from "@/components/shared/TableHeader";
 
 type ClassesTableProps = {
   classes: GymClass[];

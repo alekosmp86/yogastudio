@@ -1,11 +1,11 @@
-import { GymClass } from "@/types/classes/GymClass";
+import { TableField } from "@/types/TableField";
 
-export default function TableHeader({ fields }: { fields: { key: keyof GymClass; placeholder: string }[] }) {
+export default function TableHeader<T>({ fields }: { fields: TableField<T>[] }) {
     return (
         <thead className='bg-theme-headings/80 text-brand-400 sticky top-0 z-10'>
             <tr>
                 {fields.map(({ key, placeholder }) => (
-                    <th key={key} className='px-4 py-3'>{placeholder}</th>
+                    <th key={String(key)} className='px-4 py-3'>{placeholder}</th>
                 ))}
                 <th className='px-4 py-3 text-center'>Actions</th>
             </tr>
