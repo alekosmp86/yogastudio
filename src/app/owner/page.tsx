@@ -12,21 +12,21 @@ export default function OwnerDashboard() {
 
       <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
         <DashboardCard
-          title='Create Class'
-          description='Add a new class template.'
+          title='Manage classes'
+          description='Add, edit, or delete classes.'
           href='/owner/classes'
           icon={<PlusCircle size={40} />}
         />
 
         <DashboardCard
-          title='Weekly Schedule'
+          title='Manage schedule'
           description='Manage recurring weekly classes.'
           href='/owner/schedule'
           icon={<Calendar size={40} />}
         />
 
         <DashboardCard
-          title='Users'
+          title='Manage users'
           description='View and manage your users list.'
           href='/owner/users'
           icon={<Users size={40} />}
