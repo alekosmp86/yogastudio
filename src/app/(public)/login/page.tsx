@@ -7,12 +7,14 @@ import { http } from "@/lib/http";
 import { ApiType } from "@/enums/ApiTypes";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { RequestStatus } from "@/enums/RequestStatus";
+import { useRouter } from "next/navigation";
 
 enum Status {
   IDLE = "idle",
   LOADING = "loading",
   SENT = "sent",
   ERROR = "error",
+  USER_NOT_APPROVED = "user_not_approved",
 }
 
 const messages: Record<Status, string> = {
@@ -20,12 +22,14 @@ const messages: Record<Status, string> = {
   [Status.SENT]: "A login link has been sent to your email.",
   [Status.IDLE]: "",
   [Status.LOADING]: "Requesting link...",
+  [Status.USER_NOT_APPROVED]: "User not approved. Please contact the admin.",
 };
 
 export default function LoginPage() {
   const emailInput = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<Status>(Status.IDLE);
   const messageUI = messages[status];
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -34,12 +38,20 @@ export default function LoginPage() {
     try {
       const {message} = await http.get<ApiResponse<string>>(`/auth/request-link?email=${emailInput.current?.value}`, ApiType.FRONTEND);
 
-      if (message !== RequestStatus.REQUEST_LINK_SENT) {
-        setStatus(Status.ERROR);
-        return;
+      switch (message) {
+        case RequestStatus.REQUEST_LINK_SENT:
+          setStatus(Status.SENT);
+          break;
+        case RequestStatus.USER_NOT_APPROVED:
+          setStatus(Status.USER_NOT_APPROVED);
+          break;
+        case RequestStatus.USER_NOT_FOUND:
+          router.push("/register");
+          break;
+        default:
+          setStatus(Status.ERROR);
+          break;
       }
-
-      setStatus(Status.SENT);
     } catch (err) {
       setStatus(Status.ERROR);
     }
@@ -80,7 +92,7 @@ export default function LoginPage() {
         {messageUI && (
           <p
             className={`text-sm text-center ${
-              status === Status.ERROR ? "text-danger-600" : "text-primary-700"
+              (status === Status.ERROR || status === Status.USER_NOT_APPROVED) ? "text-danger-600" : "text-primary-700"
             }`}
           >
             {messageUI}
