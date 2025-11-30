@@ -7,11 +7,11 @@ export default function Breadcrumbs() {
 
   const links = segments.map((seg, i) => {
     const href = "/" + segments.slice(0, i + 1).join("/");
-    return { name: seg.replace(/-/g, " "), href };
+    return { name: seg.replace(/-/g, " ").replace('owner', 'home'), href };
   });
 
   return (
-    <nav className='mb-6 text-md text-brand-400'>
+    <nav className='mb-2 text-md text-brand-400'>
       <ol className='flex flex-wrap items-center gap-2'>
         {links.map((item, index) => (
           <li key={item.href} className='flex items-center gap-2'>
@@ -19,7 +19,7 @@ export default function Breadcrumbs() {
 
             <Link
               href={item.href}
-              className='capitalize hover:text-brand-300 transition'
+              className='capitalize hover:text-brand-300 transition underline'
             >
               {item.name}
             </Link>
