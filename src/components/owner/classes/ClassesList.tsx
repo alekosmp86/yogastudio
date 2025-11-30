@@ -18,24 +18,41 @@ import { Toolbar } from "@/types/Toolbar";
 import { TableField } from "@/types/TableField";
 
 const fields: TableField<GymClass>[] = [
-  { key: "title", required: true, placeholder: "Title", style: "font-semibold" },
+  {
+    key: "title",
+    required: true,
+    placeholder: "Title",
+    style: "font-semibold",
+  },
   { key: "instructor", required: true, placeholder: "Instructor" },
-  { key: "description", required: false, placeholder: "Description", style: "mt-2" },
-  { key: "capacity", required: true, placeholder: "Capacity", mobileLabel: "Capacity" },
+  {
+    key: "description",
+    required: false,
+    placeholder: "Description",
+    style: "mt-2",
+  },
+  {
+    key: "capacity",
+    required: true,
+    placeholder: "Capacity",
+    mobileLabel: "Capacity",
+  },
 ];
 
 export default function ClassesList() {
   const { classes, addClass, updateClass, removeClass } = useClasses();
   const [adding, setAdding] = useState(false);
   const [search, setSearch] = useState("");
-  const { showToast } = useToast();
+  const { showToast, hideToast } = useToast();
 
   const toolbar = useMemo<Toolbar>(
     () => ({
-      items: [{
-        icon: Plus,
-        onClick: () => setAdding(true),
-      }],
+      items: [
+        {
+          icon: Plus,
+          onClick: () => setAdding(true),
+        },
+      ],
       searchInput: {
         active: true,
         placeholder: "Search classes...",
@@ -50,43 +67,85 @@ export default function ClassesList() {
     c.title.toLowerCase().includes(search.toLowerCase())
   );
 
+  const showSuccessToast = (message: string) => {
+    showToast({
+      type: ToastType.SUCCESS,
+      message,
+    });
+  };
+
+  const showErrorToast = (message: string) => {
+    showToast({
+      type: ToastType.ERROR,
+      message,
+    });
+  };
+
+  const showWarningToast = (message: string) => {
+    return showToast({
+      type: ToastType.WARNING,
+      message,
+      persistent: true,
+    });
+  };
+
   // --- CREATE ---
   const handleSaveNew = async (gymClass: GymClassBase) => {
-    const { message, data }: ApiResponse<GymClass> = await http.post<ApiResponse<GymClass>>("/owner/classes", ApiType.FRONTEND, gymClass);
+    const toastId = showWarningToast("Creating class...");
+    try {
+      const { message, data }: ApiResponse<GymClass> = await http.post<ApiResponse<GymClass>>("/owner/classes", ApiType.FRONTEND, gymClass);
+      if (message === RequestStatus.ERROR) {
+        showErrorToast("Error creating class");
+        return;
+      }
 
-    if (message === RequestStatus.ERROR) {
-      showToast("Error creating class", ToastType.ERROR);
-      return;
+      addClass(data!);
+      setAdding(false);
+      showSuccessToast("Class created successfully");
+    } catch {
+      showErrorToast("Error creating class");
+    } finally {
+      hideToast(toastId);
     }
-
-    addClass(data!);
-    setAdding(false);
-    showToast("Class created successfully", ToastType.SUCCESS);
   };
 
   // --- UPDATE ---
   const handleUpdate = async (id: number, updated: GymClassBase) => {
-    const { message }: ApiResponse<RequestStatus> = await http.put<ApiResponse<RequestStatus>>(`/owner/classes/${id}`, ApiType.FRONTEND, updated);
+    const toastId = showWarningToast("Updating class...");
+    try {
+      const { message }: ApiResponse<RequestStatus> = await http.put<ApiResponse<RequestStatus>>(`/owner/classes/${id}`, ApiType.FRONTEND, updated);
 
-    if (message === RequestStatus.ERROR) {
-      showToast("Error updating class", ToastType.ERROR);
-      return;
+      if (message === RequestStatus.ERROR) {
+        showErrorToast("Error updating class");
+        return;
+      }
+
+      updateClass({ id, ...updated });
+      showSuccessToast("Class updated successfully");
+    } catch {
+      showErrorToast("Error updating class");
+    } finally {
+      hideToast(toastId);
     }
-
-    updateClass({ id, ...updated });
-    showToast("Class updated successfully", ToastType.SUCCESS);
   };
 
   // --- DELETE ---
   const handleDelete = async (id: number) => {
-    const { message, data } = await http.delete<ApiResponse<number>>(`/owner/classes/${id}`, ApiType.FRONTEND);
-    if (message === RequestStatus.ERROR) {
-      showToast("Error deleting class", ToastType.ERROR);
-      return;
-    }
+    const toastId = showWarningToast("Deleting class...");
+    try {
+      const { message, data } = await http.delete<ApiResponse<number>>(`/owner/classes/${id}`, ApiType.FRONTEND);
+      if (message === RequestStatus.ERROR) {
+        showErrorToast("Error deleting class");
+        return;
+      }
 
-    removeClass(data!);
-    showToast("Class deleted successfully", ToastType.SUCCESS);
+      removeClass(data!);
+      showSuccessToast("Class deleted successfully");
+    } catch {
+      showErrorToast("Error deleting class");
+    } finally {
+      hideToast(toastId);
+    }
   };
 
   // --- CANCEL ADD ROW ---
@@ -103,11 +162,7 @@ export default function ClassesList() {
       {/* TABLE BOX (toolbar + table inside) */}
       <div className='bg-theme-bodybg rounded-sm border border-theme-bodycolor overflow-hidden shadow'>
         {/* TOOLBAR sitting as the table header */}
-        <TableToolbar
-          toolbar={toolbar}
-          search={search}
-          setSearch={setSearch}
-        />
+        <TableToolbar toolbar={toolbar} search={search} setSearch={setSearch} />
 
         {/* TABLE (desktop) + CARDS (mobile) */}
         <div className='overflow-x-auto max-h-[500px] overflow-y-auto'>
