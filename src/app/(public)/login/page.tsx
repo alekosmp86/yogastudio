@@ -52,7 +52,10 @@ export default function LoginPage() {
           setStatus(Status.ERROR);
           break;
       }
-    } catch {
+
+      console.log("Link status", message);
+    } catch (error) {
+      console.error("Error requesting link", error);
       setStatus(Status.ERROR);
     }
   }
