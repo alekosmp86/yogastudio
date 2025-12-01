@@ -11,7 +11,7 @@ export default function Breadcrumbs() {
   });
 
   return (
-    <nav className='mb-2 text-md text-brand-400'>
+    <nav className='flex items-center text-md text-brand-400'>
       <ol className='flex flex-wrap items-center gap-2'>
         {links.map((item, index) => (
           <li key={item.href} className='flex items-center gap-2'>
@@ -19,7 +19,7 @@ export default function Breadcrumbs() {
 
             <Link
               href={item.href}
-              className='capitalize hover:text-brand-300 transition underline'
+              className='capitalize hover:scale-110 transition underline'
             >
               {item.name}
             </Link>

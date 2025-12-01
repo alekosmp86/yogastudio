@@ -46,7 +46,7 @@ export function useSession(requiredRole?: Roles) {
 
         setSession(data);
         setLoading(false);
-      } catch (e) {
+      } catch {
         router.replace("/login");
       }
     }
