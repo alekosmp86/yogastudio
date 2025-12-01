@@ -4,9 +4,13 @@ import { NextResponse } from "next/server";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 
+type RequestParams = {
+  params: Promise<{ id: string }>;
+};
+
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: RequestParams
 ) {
   const { id } = await params;
 
@@ -24,7 +28,7 @@ export async function DELETE(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: RequestParams
 ) {
   const { id } = await params;
   const body = await req.json();

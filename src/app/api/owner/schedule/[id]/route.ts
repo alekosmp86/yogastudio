@@ -5,9 +5,13 @@ import { NextResponse } from "next/server";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { ScheduledClass } from "@/types/schedule/ScheduledClass";
 
+type RequestParams = {
+  params: Promise<{ id: string }>;
+};
+
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: RequestParams
 ) {
   const { id } = await params;
   const body = await req.json();
@@ -26,7 +30,7 @@ export async function PUT(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: RequestParams
 ) {
   const { id } = await params;
 

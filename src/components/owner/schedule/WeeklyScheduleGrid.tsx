@@ -45,7 +45,10 @@ export default function WeeklyScheduleGrid() {
     const { message, data } = await request;
 
     if (message === RequestStatus.SUCCESS) {
-      showToast("Class added to schedule successfully", ToastType.SUCCESS);
+      showToast({
+        message: "Class added to schedule successfully",
+        type: ToastType.SUCCESS,
+      });
       setScheduledClasses(
         classInSchedule ? scheduledClasses.map((s) => {
               return s.classId === classInSchedule.id &&
@@ -55,7 +58,10 @@ export default function WeeklyScheduleGrid() {
             }) : [...scheduledClasses, data!]
       );
     } else {
-      showToast("Error adding class to schedule", ToastType.ERROR);
+      showToast({
+        message: "Error adding class to schedule",
+        type: ToastType.ERROR,
+      });
     }
 
     handleCloseModal();
@@ -75,12 +81,18 @@ export default function WeeklyScheduleGrid() {
     const { message } = await request;
 
     if (message === RequestStatus.SUCCESS) {
-      showToast("Class removed from schedule successfully", ToastType.SUCCESS);
+      showToast({
+        message: "Class removed from schedule successfully",
+        type: ToastType.SUCCESS,
+      });
       setScheduledClasses(
         scheduledClasses.filter((s) => s.id !== scheduledClass.id)
       );
     } else {
-      showToast("Error removing class from schedule", ToastType.ERROR);
+      showToast({
+        message: "Error removing class from schedule",
+        type: ToastType.ERROR,
+      });
     }
 
     handleCloseModal();

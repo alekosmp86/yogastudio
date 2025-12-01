@@ -73,13 +73,19 @@ export function ClassesProvider({
         if (!mounted) return;
 
         if (message === RequestStatus.ERROR) {
-          showToast("Error fetching classes", ToastType.ERROR);
+          showToast({
+            message: "Error fetching classes",
+            type: ToastType.ERROR,
+          });
           return;
         }
 
         addClasses(data ?? []);
       } catch {
-        showToast("Error fetching classes", ToastType.ERROR);
+        showToast({
+          message: "Error fetching classes",
+          type: ToastType.ERROR,
+        });
       }
     };
 
