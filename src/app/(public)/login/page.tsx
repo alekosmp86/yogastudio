@@ -36,7 +36,7 @@ export default function LoginPage() {
     setStatus(Status.LOADING);
 
     try {
-      const {message} = await http.get<ApiResponse<string>>(`/auth/request-link?email=${emailInput.current?.value}`, ApiType.FRONTEND);
+      const {message} = await http.get<ApiResponse<string>>(`/auth/magic-link?email=${emailInput.current?.value}`, ApiType.FRONTEND);
 
       switch (message) {
         case RequestStatus.REQUEST_LINK_SENT:
