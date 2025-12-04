@@ -39,7 +39,7 @@ export default function LoginPage() {
       const {message} = await http.get<ApiResponse<string>>(`/auth/magic-link?email=${emailInput.current?.value}`, ApiType.FRONTEND);
 
       switch (message) {
-        case RequestStatus.REQUEST_LINK_SENT:
+        case RequestStatus.EMAIL_SENT:
           setStatus(Status.SENT);
           break;
         case RequestStatus.USER_NOT_APPROVED:

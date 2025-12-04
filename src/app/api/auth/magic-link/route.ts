@@ -30,5 +30,5 @@ export async function GET(req: Request) {
     );
   }
 
-  return NextResponse.json({ message: RequestStatus.SUCCESS });
+  return NextResponse.json({ message: RequestStatus.EMAIL_SENT });
 }
