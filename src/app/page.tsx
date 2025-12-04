@@ -4,7 +4,7 @@ import { Roles } from "@/enums/Roles";
 
 export default async function HomePage() {
   const session = await readSession();
-  console.log(`Session: ${session}`);
+  console.log(`Session: ${session?.role}`);
 
   if (!session) redirect("/login");
 

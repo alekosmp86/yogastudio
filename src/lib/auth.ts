@@ -6,7 +6,6 @@ export async function readSession(): Promise<SessionUser | null> {
   try {
     const cookieStore = await cookies();
     const sessionCookie = cookieStore.get("session");
-    console.log(`Session cookie: ${sessionCookie}`);
 
     if (!sessionCookie) return null;
 
