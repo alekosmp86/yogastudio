@@ -8,6 +8,7 @@ import { ApiType } from "@/enums/ApiTypes";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { useRouter } from "next/navigation";
+import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 
 enum Status {
   IDLE = "idle",
@@ -24,6 +25,8 @@ const messages: Record<Status, string> = {
   [Status.LOADING]: "Requesting link...",
   [Status.USER_NOT_APPROVED]: "User pending approval. Please contact the admin.",
 };
+
+const logger = new ConsoleLogger("LoginPage");
 
 export default function LoginPage() {
   const emailInput = useRef<HTMLInputElement>(null);
@@ -53,9 +56,9 @@ export default function LoginPage() {
           break;
       }
 
-      console.log("Link status", message);
+      logger.log("Link status", message);
     } catch (error) {
-      console.error("Error requesting link", error);
+      logger.error("Error requesting link", error);
       setStatus(Status.ERROR);
     }
   }

@@ -4,17 +4,18 @@ import crypto from "crypto";
 import { MagicLinkService } from "../MagicLinkService";
 import { LoggerService } from "app/api/logger/LoggerService";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { UserService } from "app/api/users/(services)/UserService";
 
 export class MagicLinkServiceImpl implements MagicLinkService {
   private readonly logger: LoggerService;
 
-  constructor(private readonly prisma: PrismaClient) {
+  constructor(private readonly prisma: PrismaClient, private readonly userService: UserService) {
     this.logger = new ConsoleLogger(this.constructor.name);
   }
 
   async generateMagicLink(email: string): Promise<string> {
     this.logger.log("Generating magic link for", email);
-    const user = await this.prisma.user.findUnique({ where: { email } });
+    const user = await this.userService.findUniqueByFields({ email });
 
     if (!user) {
       // If no user, just inform the frontend
