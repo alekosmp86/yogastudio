@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { classesService } from "app/api";
+import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+
+const logger =  new ConsoleLogger('ClassesController');
 
 type RequestParams = {
   params: Promise<{ id: string }>;
@@ -16,7 +19,7 @@ export async function DELETE(
     const deletedId = await classesService.deleteClass(Number(id));
     return NextResponse.json({ message: RequestStatus.SUCCESS, data: deletedId });
   } catch (error) {
-    console.error("Error deleting class:", error);
+    logger.error("Error deleting class:", error);
     return NextResponse.json(
       { message: RequestStatus.ERROR },
       { status: 500 }
@@ -35,7 +38,7 @@ export async function PUT(
     await classesService.updateClass({ ...body, id: Number(id) });
     return NextResponse.json({ message: RequestStatus.SUCCESS });
   } catch (error) {
-    console.error("Error updating class:", error);
+    logger.error("Error updating class:", error);
     return NextResponse.json(
       { message: RequestStatus.ERROR },
       { status: 500 }

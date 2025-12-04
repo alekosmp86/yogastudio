@@ -1,36 +1,32 @@
-import { http } from "@/lib/http";
-import { ApiType } from "@/enums/ApiTypes";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
-import { ApiResponse } from "@/types/requests/ApiResponse";
-import { ScheduledClass } from "@/types/schedule/ScheduledClass";
+import { scheduleService } from "app/api";
+import { ScheduledClassDto } from "./(dto)/ScheduledClassDto";
+import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+
+const logger =  new ConsoleLogger('ScheduleController');
 
 export async function GET() {
-  const {message, data} = await http.get<ApiResponse<ScheduledClass[]>>("/owner/schedule", ApiType.BACKEND);
-
-  if (message !== RequestStatus.SUCCESS) {
-    return NextResponse.json({ message }, { status: 500 });
+  try {
+    const schedule = await scheduleService.getScheduledClasses();
+    return NextResponse.json({ message: RequestStatus.SUCCESS, data: schedule.map(ScheduledClassDto.fromWeeklySchedule) });
+  } catch (error) {
+    logger.error("Error getting schedule:", error);
+    return NextResponse.json(
+      { message: RequestStatus.ERROR },
+      { status: 500 }
+    );
   }
-
-  return NextResponse.json({ message, data });
 }
 
 export async function POST(request: Request) {
   const body = await request.json();
   try {
-    const {message, data} = await http.post<ApiResponse<ScheduledClass>>(
-      `/owner/schedule`,
-      ApiType.BACKEND,
-      body
-    );
-    
-    if (message !== RequestStatus.SUCCESS) {
-      return NextResponse.json({ message }, { status: 500 });
-    }
-
-    return NextResponse.json({ message, data });
+    const scheduledClassDto: Omit<ScheduledClassDto, "id"> = body;
+    const newScheduledClass = await scheduleService.createScheduledClass(scheduledClassDto);
+    return NextResponse.json({ message: RequestStatus.SUCCESS, data: ScheduledClassDto.fromWeeklySchedule(newScheduledClass) });
   } catch (error) {
-    console.error("Error creating class:", error);
+    logger.error("Error adding class to schedule:", error);
     return NextResponse.json(
       { message: RequestStatus.ERROR },
       { status: 500 }
