@@ -54,13 +54,13 @@ export async function middleware(req: NextRequest) {
     console.log("Decoded: ", payload);
 
     // Optional: protect owner-only pages
-    if (pathname.startsWith("/owner") && payload.user.role !== Roles.OWNER) {
+    if (pathname.startsWith("/owner") && payload.role !== Roles.OWNER) {
       console.log("Owner-only page accessed by non-owner");
       return NextResponse.redirect(new URL("/", req.url));
     }
 
     // Optional: protect customer-only pages
-    if (pathname.startsWith("/customer") && payload.user.role !== Roles.CLIENT) {
+    if (pathname.startsWith("/customer") && payload.role !== Roles.CLIENT) {
       console.log("Customer-only page accessed by non-customer");
       return NextResponse.redirect(new URL("/", req.url));
     }
