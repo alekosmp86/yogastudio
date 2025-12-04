@@ -1,7 +1,8 @@
 import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
-import { magicLinkService, mailService } from "..";
+import { magicLinkService } from "..";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { mailService } from "app/api";
 
 const logger = new ConsoleLogger("MagicLinkRoute");
 

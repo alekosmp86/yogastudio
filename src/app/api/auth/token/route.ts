@@ -3,7 +3,7 @@ import { magicLinkService } from "..";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { userService } from "app/api";
-import jwt from "jsonwebtoken";
+import { SignJWT } from "jose";
 import { UserDto } from "app/api/users/(dto)/UserDto";
 
 const logger = new ConsoleLogger("TokenRoute");
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     const user = await getUserWithToken(token);
 
     const res = NextResponse.json({ message: RequestStatus.SUCCESS });
-    createSession(res, UserDto.fromUser(user)); // <--- cookie set here
+    await createSession(res, UserDto.fromUser(user)); // <--- cookie set here
 
     logger.log("Response headers:", res.headers);
     return res;
@@ -46,13 +46,16 @@ async function getUserWithToken(token: string) {
   return user;
 }
 
-function createSession(res: NextResponse, userDto: UserDto) {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error("JWT_SECRET missing");
+async function createSession(res: NextResponse, userDto: UserDto) {
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+  const token = await new SignJWT({ user: userDto })
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("60m")
+    .sign(secret);
 
-  const sessionToken = jwt.sign({ user: userDto }, secret, { expiresIn: "60m" });
+  logger.log("Token created:", token);
 
-  res.cookies.set("session", sessionToken, {
+  res.cookies.set("session", token, {
     httpOnly: true,
     secure: false, // only for development
     sameSite: "lax",
