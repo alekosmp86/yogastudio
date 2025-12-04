@@ -1,21 +1,21 @@
-import { PrismaClient } from "@prisma/client";
+import { MagicLink, PrismaClient } from "@prisma/client";
 import { RequestStatus } from "@/enums/RequestStatus";
 import crypto from "crypto";
 import { MagicLinkService } from "../MagicLinkService";
 import { LoggerService } from "app/api/logger/LoggerService";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
-import { UserService } from "app/api/users/(services)/UserService";
+import { UserLinkService } from "app/api/user-link/(services)/UserLinkService";
 
 export class MagicLinkServiceImpl implements MagicLinkService {
   private readonly logger: LoggerService;
 
-  constructor(private readonly prisma: PrismaClient, private readonly userService: UserService) {
+  constructor(private readonly prisma: PrismaClient, private readonly userLinkService: UserLinkService) {
     this.logger = new ConsoleLogger(this.constructor.name);
   }
 
   async generateMagicLink(email: string): Promise<string> {
     this.logger.log("Generating magic link for", email);
-    const user = await this.userService.findUniqueByFields({ email });
+    const user = await this.userLinkService.findUserByEmail(email);
 
     if (!user) {
       // If no user, just inform the frontend
@@ -42,5 +42,9 @@ export class MagicLinkServiceImpl implements MagicLinkService {
     });
 
     return `${process.env.NEXT_PUBLIC_APP_URL}/auth/verify?token=${token}`;
+  }
+
+  async findLinkByToken(token: string): Promise<MagicLink | null> {
+    return this.prisma.magicLink.findUnique({ where: { token } });
   }
 }
