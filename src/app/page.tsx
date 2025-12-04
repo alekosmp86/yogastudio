@@ -1,32 +1,18 @@
-"use client";
+import { redirect } from "next/navigation";
+import { readSession } from "@/lib/auth";
 
-import { Roles } from "@/enums/Roles";
-import { useSession } from "@/hooks/useSession";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+export default async function HomePage() {
+  const session = await readSession();
 
-export default function HomePage() {
-  const { session, loading } = useSession();
-  const router = useRouter();
+  if (!session) redirect("/login");
 
-  useEffect(() => {
-    if (loading) return;
+  if (session.role === "CLIENT") {
+    redirect("/customer/home");
+  }
 
-    if (!session) {
-      router.replace("/login");
-      return;
-    }
+  if (session.role === "OWNER") {
+    redirect("/owner");
+  }
 
-    if (session.user.role === Roles.CLIENT) {
-      router.replace("/customer/home");
-      return;
-    }
-
-    if (session.user.role === Roles.OWNER) {
-      router.replace("/owner");
-      return;
-    }
-  }, [loading, session, router]);
-
-  return <p className="text-white">Loading...</p>;
+  return <p>Loading...</p>;
 }

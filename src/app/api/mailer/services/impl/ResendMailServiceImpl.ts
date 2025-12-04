@@ -1,11 +1,13 @@
+import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { MailService } from "../MailService";
 import { Resend } from "resend";
 
 export class ResendMailServiceImpl implements MailService {
+  private readonly logger = new ConsoleLogger(this.constructor.name);
   async sendMail(email: string, subject: string, body: string): Promise<void> {
     const resend = new Resend(process.env.NEXT_PUBLIC_RESEND_API_KEY);
 
-    console.log("Sending email to", email);
+    this.logger.log("Sending email to", email);
     try {
       await resend.emails.send({
         to: email,
@@ -14,7 +16,7 @@ export class ResendMailServiceImpl implements MailService {
         html: body,
       });
     } catch (error) {
-      console.error(error);
+      this.logger.error(error as string);
     }
   }
 }

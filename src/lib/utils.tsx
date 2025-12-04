@@ -20,8 +20,6 @@ export async function validateToken(
     }
   );
 
-  console.log("Response:", response);
-
   if (!response.ok) {
     callbackFn(ExecutionStatus.FAILED);
     return;

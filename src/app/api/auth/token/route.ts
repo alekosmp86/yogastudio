@@ -4,6 +4,7 @@ import { RequestStatus } from "@/enums/RequestStatus";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { userService } from "app/api";
 import jwt from "jsonwebtoken";
+import { UserDto } from "app/api/users/(dto)/UserDto";
 
 const logger = new ConsoleLogger("TokenRoute");
 
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
     const user = await getUserWithToken(token);
 
     const res = NextResponse.json({ message: RequestStatus.SUCCESS });
-    createSession(res, user.id); // <--- cookie set here
+    createSession(res, UserDto.fromUser(user)); // <--- cookie set here
 
     logger.log("Response headers:", res.headers);
     return res;
@@ -45,11 +46,11 @@ async function getUserWithToken(token: string) {
   return user;
 }
 
-function createSession(res: NextResponse, userId: number) {
+function createSession(res: NextResponse, userDto: UserDto) {
   const secret = process.env.JWT_SECRET;
   if (!secret) throw new Error("JWT_SECRET missing");
 
-  const sessionToken = jwt.sign({ userId }, secret, { expiresIn: "60m" });
+  const sessionToken = jwt.sign({ user: userDto }, secret, { expiresIn: "60m" });
 
   res.cookies.set("session", sessionToken, {
     httpOnly: true,

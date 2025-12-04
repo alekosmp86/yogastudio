@@ -1,7 +1,5 @@
 "use client";
 
-import { Roles } from "@/enums/Roles";
-import { withRole } from "@/lib/withRole";
 import Breadcrumbs from "@/components/shared/Breadcrumbs";
 import { AppProviders } from "@/lib/contexts/ComposeProviders";
 import ToastContainer from "@/components/shared/ToastContainer";
@@ -44,4 +42,4 @@ function OwnerLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default withRole(OwnerLayout, Roles.OWNER);
+export default OwnerLayout;
