@@ -24,31 +24,34 @@ model User {
 model MagicLink {
   id        Int      @id @default(autoincrement())
   token     String   @unique
-  user      User     @relation(fields: [userId], references: [id])
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
+
   expiresAt DateTime
   used      Boolean  @default(false)
   createdAt DateTime @default(now())
 }
 
 model ClassTemplate {
-  id         Int      @id @default(autoincrement())
-  title      String
+  id          Int              @id @default(autoincrement())
+  title       String
   description String?
-  instructor String
-  capacity   Int
+  instructor  String
+  capacity    Int
 
-  schedule   WeeklySchedule[]
+  schedule    WeeklySchedule[]
 }
 
 model WeeklySchedule {
   id            Int            @id @default(autoincrement())
-  template      ClassTemplate  @relation(fields: [templateId], references: [id])
+
+  template      ClassTemplate  @relation(fields: [templateId], references: [id], onDelete: Cascade)
   templateId    Int
 
-  weekday       Int      // 0–6
-  startTime     String   // "09:00"
-  isActive      Boolean  @default(true)
+  weekday       Int
+  startTime     String
+  isActive      Boolean        @default(true)
 
   @@unique([templateId, weekday, startTime])
 }
