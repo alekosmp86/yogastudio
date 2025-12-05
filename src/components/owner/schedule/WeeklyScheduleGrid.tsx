@@ -36,6 +36,8 @@ export default function WeeklyScheduleGrid() {
   };
 
   const handleClassClick = async (c: GymClass) => {
+    handleCloseModal();
+
     const payload = { weekday: dayTime.weekday, hour: dayTime.hour, classId: c.id };
 
     const request = classInSchedule
@@ -63,8 +65,6 @@ export default function WeeklyScheduleGrid() {
         type: ToastType.ERROR,
       });
     }
-
-    handleCloseModal();
   };
 
   const findClassInSchedule = (weekday: number, hour: string) => {

@@ -1,8 +1,9 @@
-import { http } from "@/lib/http";
-import { ApiResponse } from "@/types/requests/ApiResponse";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
-import { ApiType } from "@/enums/ApiTypes";
+import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { userMapper, userService } from "app/api";
+
+const logger = new ConsoleLogger('User Controller');
 
 type RequestParams = {
   params: Promise<{ id: string, action: string }>;
@@ -15,10 +16,13 @@ export async function PUT(
   const { id, action } = await params;
 
   try {
-    const response = await http.put<ApiResponse<RequestStatus>>(`/owner/users/${id}/${action}`, ApiType.BACKEND);
-    return NextResponse.json(response);
+    const updatedUser = await userService.executeAction(Number(id), action);
+    if (!updatedUser) {
+      return NextResponse.json({ message: RequestStatus.ERROR }, { status: 404 });
+    }
+    return NextResponse.json({ message: RequestStatus.SUCCESS, data: userMapper.toUser(updatedUser) });
   } catch (error) {
-    console.error("Error updating user:", error);
+    logger.error(error as string);
     return NextResponse.json(
       { message: RequestStatus.ERROR },
       { status: 500 }

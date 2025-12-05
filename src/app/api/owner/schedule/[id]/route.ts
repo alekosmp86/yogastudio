@@ -1,9 +1,9 @@
-import { http } from "@/lib/http";
-import { ApiType } from "@/enums/ApiTypes";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
-import { ApiResponse } from "@/types/requests/ApiResponse";
-import { ScheduledClass } from "@/types/schedule/ScheduledClass";
+import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { scheduleMapper, scheduleService } from "app/api";
+
+const logger =  new ConsoleLogger('ScheduleController');
 
 type RequestParams = {
   params: Promise<{ id: string }>;
@@ -17,10 +17,10 @@ export async function PUT(
   const body = await req.json();
 
   try {
-    const response = await http.put<ApiResponse<ScheduledClass>>(`/owner/schedule/${id}`, ApiType.BACKEND, body);
-    return NextResponse.json(response);
+    const updatedSchedule = await scheduleService.updateScheduledClass(body, Number(id));
+    return NextResponse.json({ message: RequestStatus.SUCCESS, data: scheduleMapper.toScheduledClass(updatedSchedule) });
   } catch (error) {
-    console.error("Error updating schedule:", error);
+    logger.error("Error updating schedule:", error);
     return NextResponse.json(
       { message: RequestStatus.ERROR },
       { status: 500 }
@@ -35,10 +35,10 @@ export async function DELETE(
   const { id } = await params;
 
   try {
-    const response = await http.delete<ApiResponse<RequestStatus>>(`/owner/schedule/${id}`, ApiType.BACKEND);
-    return NextResponse.json(response);
+    const deletedId = await scheduleService.deleteScheduledClass(Number(id));
+    return NextResponse.json({ message: RequestStatus.SUCCESS, data: deletedId });
   } catch (error) {
-    console.error("Error deleting scheduled class:", error);
+    logger.error("Error deleting scheduled class:", error);
     return NextResponse.json(
       { message: RequestStatus.ERROR },
       { status: 500 }
