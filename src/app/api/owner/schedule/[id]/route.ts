@@ -1,8 +1,7 @@
 import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
-import { scheduleService } from "app/api";
-import { ScheduledClassDto } from "../(dto)/ScheduledClassDto";
+import { scheduleMapper, scheduleService } from "app/api";
 
 const logger =  new ConsoleLogger('ScheduleController');
 
@@ -19,7 +18,7 @@ export async function PUT(
 
   try {
     const updatedSchedule = await scheduleService.updateScheduledClass(body, Number(id));
-    return NextResponse.json({ message: RequestStatus.SUCCESS, data: ScheduledClassDto.fromWeeklySchedule(updatedSchedule) });
+    return NextResponse.json({ message: RequestStatus.SUCCESS, data: scheduleMapper.toScheduledClass(updatedSchedule) });
   } catch (error) {
     logger.error("Error updating schedule:", error);
     return NextResponse.json(

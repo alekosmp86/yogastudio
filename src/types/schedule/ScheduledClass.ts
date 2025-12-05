@@ -1,4 +1,4 @@
-export interface ScheduledClass {
+export type ScheduledClass = {
     id: number;
     classId: number;
     weekday: number;

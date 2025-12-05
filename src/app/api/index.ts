@@ -5,6 +5,7 @@ import { ResendMailServiceImpl } from "./mailer/services/impl/ResendMailServiceI
 import { ClassesServiceImpl } from "./owner/classes/(services)/impl/ClassesServiceImpl";
 import { ScheduleServiceImpl } from "./owner/schedule/(services)/impl/ScheduleServiceImpl";
 import { ClassesMapperImpl } from "./owner/classes/(mappers)/impl/ClassesMapperImpl";
+import { ScheduleMapperImpl } from "./owner/schedule/(mappers)/impl/ScheduleMapperImpl";
 
 const prisma = new PrismaClient();
 
@@ -15,3 +16,4 @@ export const classesService = new ClassesServiceImpl(prisma);
 export const scheduleService = new ScheduleServiceImpl(prisma);
 
 export const classesMapper = new ClassesMapperImpl();
+export const scheduleMapper = new ScheduleMapperImpl();
