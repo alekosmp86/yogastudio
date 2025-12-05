@@ -1,3 +1,4 @@
+import { GymClass } from "@/types/classes/GymClass";
 import { ClassesService } from "../ClassesService";
 import { ClassTemplate, PrismaClient } from "@prisma/client";
 
@@ -8,7 +9,7 @@ export class ClassesServiceImpl implements ClassesService {
         return this.prisma.classTemplate.findMany();
     }
 
-    async createClass(template: Omit<ClassTemplate, "id">): Promise<ClassTemplate> {
+    async createClass(template: Omit<GymClass, "id">): Promise<ClassTemplate> {
         return this.prisma.classTemplate.create({ data: template });
     }
 
