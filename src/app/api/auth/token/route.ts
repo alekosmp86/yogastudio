@@ -50,7 +50,7 @@ async function createSession(res: NextResponse, user: User) {
   const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
   const token = await new SignJWT({ user })
     .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("60m")
+    .setExpirationTime("45m")
     .sign(secret);
 
   logger.log("Token created:", token);
@@ -60,6 +60,6 @@ async function createSession(res: NextResponse, user: User) {
     secure: true, // only for development
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60,
+    maxAge: 45 * 60,
   });
 }
