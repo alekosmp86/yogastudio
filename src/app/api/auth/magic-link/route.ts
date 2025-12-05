@@ -26,7 +26,7 @@ export async function GET(req: Request) {
     logger.log("Magic link generated");
     const emailBody = `
         <p>Hello,</p>
-        <p>Click <a href="${magicLink}">here</a> to access your account:</p>
+        <p>Click <a href="${magicLink}">${magicLink}</a> to access your account:</p>
         <p>This link expires in 15 minutes.</p>
       `;
     logger.log("Sending email...");
