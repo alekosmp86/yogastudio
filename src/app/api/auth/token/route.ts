@@ -57,7 +57,7 @@ async function createSession(res: NextResponse, user: User) {
 
   res.cookies.set("session", token, {
     httpOnly: true,
-    secure: false, // only for development
+    secure: true, // only for development
     sameSite: "lax",
     path: "/",
     maxAge: 60 * 60,

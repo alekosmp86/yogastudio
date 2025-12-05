@@ -6,7 +6,7 @@ export async function POST() {
   response.cookies.set("session", "", {
     httpOnly: true,
     secure: true,
-    sameSite: "none",
+    sameSite: "lax",
     path: "/",      
     expires: new Date(0), 
   });
