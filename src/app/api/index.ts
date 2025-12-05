@@ -6,6 +6,7 @@ import { ClassesServiceImpl } from "./owner/classes/(services)/impl/ClassesServi
 import { ScheduleServiceImpl } from "./owner/schedule/(services)/impl/ScheduleServiceImpl";
 import { ClassesMapperImpl } from "./owner/classes/(mappers)/impl/ClassesMapperImpl";
 import { ScheduleMapperImpl } from "./owner/schedule/(mappers)/impl/ScheduleMapperImpl";
+import { UserMapperImpl } from "./owner/users/(mappers)/impl/UserMapperImpl";
 
 const prisma = new PrismaClient();
 
@@ -17,3 +18,4 @@ export const scheduleService = new ScheduleServiceImpl(prisma);
 
 export const classesMapper = new ClassesMapperImpl();
 export const scheduleMapper = new ScheduleMapperImpl();
+export const userMapper = new UserMapperImpl();

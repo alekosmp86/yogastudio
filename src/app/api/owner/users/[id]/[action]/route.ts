@@ -1,8 +1,7 @@
 import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
-import { userService } from "app/api";
-import { UserDto } from "app/api/users/(dto)/UserDto";
+import { userMapper, userService } from "app/api";
 
 const logger = new ConsoleLogger('User Controller');
 
@@ -21,7 +20,7 @@ export async function PUT(
     if (!updatedUser) {
       return NextResponse.json({ message: RequestStatus.ERROR }, { status: 404 });
     }
-    return NextResponse.json({ message: RequestStatus.SUCCESS, data: UserDto.fromUser(updatedUser) });
+    return NextResponse.json({ message: RequestStatus.SUCCESS, data: userMapper.toUser(updatedUser) });
   } catch (error) {
     logger.error(error as string);
     return NextResponse.json(

@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { magicLinkService } from "..";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
-import { userService } from "app/api";
+import { userMapper, userService } from "app/api";
 import { SignJWT } from "jose";
-import { UserDto } from "app/api/users/(dto)/UserDto";
+import { User } from "@/types/User";
 
 const logger = new ConsoleLogger("TokenRoute");
 
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     const user = await getUserWithToken(token);
 
     const res = NextResponse.json({ message: RequestStatus.SUCCESS });
-    await createSession(res, UserDto.fromUser(user)); // <--- cookie set here
+    await createSession(res, userMapper.toUser(user)); // <--- cookie set here
 
     logger.log("Response headers:", res.headers);
     return res;
@@ -46,9 +46,9 @@ async function getUserWithToken(token: string) {
   return user;
 }
 
-async function createSession(res: NextResponse, userDto: UserDto) {
+async function createSession(res: NextResponse, user: User) {
   const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
-  const token = await new SignJWT({ user: userDto })
+  const token = await new SignJWT({ user })
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime("60m")
     .sign(secret);
