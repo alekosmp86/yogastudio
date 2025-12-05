@@ -8,6 +8,7 @@ export async function validateToken(
   token: string,
   callbackFn: (status: ExecutionStatus) => void
 ) {
+  console.log(`Validating token: ${token}. Fetching from: ${process.env.NEXT_PRIVATE_APP_URL}/api/auth/token`);
   const response = await fetch(
     `${process.env.NEXT_PRIVATE_APP_URL}/api/auth/token`,
     {
@@ -19,6 +20,8 @@ export async function validateToken(
       credentials: "include", // if using cookies
     }
   );
+
+  console.log(`Validation response: ${response}`);
 
   if (!response.ok) {
     callbackFn(ExecutionStatus.FAILED);
