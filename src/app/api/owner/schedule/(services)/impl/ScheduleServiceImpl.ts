@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { ScheduleService } from "../ScheduleService";
 import { WeeklySchedule } from "@prisma/client";
-import { ScheduledClassDto } from "../../(dto)/ScheduledClassDto";
+import { ScheduledClass } from "@/types/schedule/ScheduledClass";
 
 export class ScheduleServiceImpl implements ScheduleService {
   constructor(private readonly prisma: PrismaClient) {}
@@ -10,7 +10,7 @@ export class ScheduleServiceImpl implements ScheduleService {
     return await this.prisma.weeklySchedule.findMany();
   }
 
-  async createScheduledClass(scheduledClass: Omit<ScheduledClassDto, "id">): Promise<WeeklySchedule> {
+  async createScheduledClass(scheduledClass: Omit<ScheduledClass, "id">): Promise<WeeklySchedule> {
     return await this.prisma.weeklySchedule.create({
       data: {
         templateId: scheduledClass.classId,
@@ -20,7 +20,7 @@ export class ScheduleServiceImpl implements ScheduleService {
     });
   }
 
-  async updateScheduledClass(scheduledClass: ScheduledClassDto, id: number): Promise<WeeklySchedule> {
+  async updateScheduledClass(scheduledClass: ScheduledClass, id: number): Promise<WeeklySchedule> {
     console.log("Updating schedule:", JSON.stringify(scheduledClass));
     return await this.prisma.weeklySchedule.update({
       where: {
