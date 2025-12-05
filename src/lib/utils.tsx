@@ -9,7 +9,7 @@ export async function validateToken(
   callbackFn: (status: ExecutionStatus) => void
 ) {
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/token`,
+    `${process.env.NEXT_PRIVATE_APP_URL}/api/auth/token`,
     {
       method: "POST",
       headers: {

@@ -3,8 +3,6 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Container from "@/components/shared/Container";
-import { withRole } from "@/lib/withRole";
-import { Roles } from "@/enums/Roles";
 
 function CustomerLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -20,4 +18,4 @@ function CustomerLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default withRole(CustomerLayout, Roles.CLIENT);
+export default CustomerLayout;
