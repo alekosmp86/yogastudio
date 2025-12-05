@@ -41,7 +41,7 @@ export class MagicLinkServiceImpl implements MagicLinkService {
       },
     });
 
-    return `${process.env.NEXT_PRIVATE_APP_URL}/auth/verify?token=${token}`;
+    return `${process.env.NEXT_PUBLIC_APP_URL}/auth/verify?token=${token}`;
   }
 
   async findLinkByToken(token: string): Promise<MagicLink | null> {

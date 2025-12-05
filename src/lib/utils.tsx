@@ -8,9 +8,9 @@ export async function validateToken(
   token: string,
   callbackFn: (status: ExecutionStatus) => void
 ) {
-  console.log(`Validating token: ${token}. Fetching from: ${process.env.NEXT_PRIVATE_APP_URL}/api/auth/token`);
+  console.log(`Validating token: ${token}. Fetching from: ${process.env.NEXT_PUBLIC_APP_URL}/api/auth/token`);
   const response = await fetch(
-    `${process.env.NEXT_PRIVATE_APP_URL}/api/auth/token`,
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/token`,
     {
       method: "POST",
       headers: {
