@@ -1,16 +1,17 @@
-import { http } from "@/lib/http";
-import { ApiResponse } from "@/types/requests/ApiResponse";
-import { ApiType } from "@/enums/ApiTypes";
-import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
-import { User } from "@/types/User";
+import { userService } from "app/api";
+import { UserDto } from "app/api/users/(dto)/UserDto";
+import { RequestStatus } from "@/enums/RequestStatus";
+import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+
+const logger = new ConsoleLogger('User Controller');
 
 export async function GET() {
-  const {message, data} = await http.get<ApiResponse<User[]>>("/owner/users", ApiType.BACKEND);
-
-  if (message !== RequestStatus.SUCCESS) {
-    return NextResponse.json({ message }, { status: 500 });
+  try {
+    const users = await userService.getAllUsers();
+    return NextResponse.json({ message: RequestStatus.SUCCESS, data: users.map(user => UserDto.fromUser(user))});
+  } catch (error) {
+    logger.error(error as string);
+    return NextResponse.json({ message: RequestStatus.ERROR, data: [] });
   }
-
-  return NextResponse.json({ message, data });
 }
