@@ -56,7 +56,7 @@ export default function ClassesCard({
   };
 
   return (
-    <div className='bg-theme-bg-4 border border-primary-500 rounded-md p-2 shadow-md'>
+    <div className='bg-theme-inputbg border border-primary-500 p-2 shadow-xl'>
       {fields.map(({ key, placeholder, style, mobileLabel }) => (
         <div
           key={key}
@@ -102,7 +102,7 @@ export default function ClassesCard({
           <Button
             size='md'
             variant={busy ? "secondary" : "primary"}
-            className={busy ? "disabled:cursor-not-allowed disabled:pointer-events-none" : ""}
+            className={busy ? "disabled:cursor-not-allowed disabled:pointer-events-none" : "text-white"}
             Icon={Pencil}
             onClick={() => setIsEditing(true)}
             disabled={busy}
@@ -112,7 +112,7 @@ export default function ClassesCard({
             <Button
               size='md'
               variant={busy ? "secondary" : "negative"}
-              className={busy ? "disabled:cursor-not-allowed disabled:pointer-events-none" : ""}
+              className={busy ? "disabled:cursor-not-allowed disabled:pointer-events-none" : "text-white"}
               Icon={Trash}
               onClick={() => onDelete(gymClass.id)}
               disabled={busy}

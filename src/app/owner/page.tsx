@@ -6,8 +6,8 @@ import { Calendar, Users, PlusCircle } from "lucide-react";
 export default function OwnerDashboard() {
   return (
     <>
-      <p className='text-brand-600 text-xl m-6'>
-        Welcome! Choose an action to manage your yoga studio.
+      <p className='text-white text-xl mt-6 mb-6'>
+        Welcome! Choose an action to manage your studio.
       </p>
 
       <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
