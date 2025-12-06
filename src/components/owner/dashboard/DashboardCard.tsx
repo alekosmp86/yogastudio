@@ -14,7 +14,7 @@ export default function DashboardCard({ title, description, href, icon }: Dashbo
   return (
     <Link
       href={href}
-      className="group rounded-sm p-6 shadow-md bg-theme-bodybg hover:bg-secondary-50/80 transition-all cursor-pointer border border-primary"
+      className="group rounded-md p-6 shadow-xl bg-theme-bodybg hover:bg-secondary-50/80 transition-all cursor-pointer border border-primary"
     >
       <div className="flex items-center gap-4">
         <div className="text-primary-900 group-hover:scale-110 transition-transform">

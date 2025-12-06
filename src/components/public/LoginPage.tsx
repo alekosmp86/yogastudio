@@ -62,7 +62,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen p-6 bg-theme-bg-3 text-brand-200'>
+    <div className='flex flex-col items-center justify-center min-h-screen p-6 bg-theme-bg-3 text-white'>
       <form
         onSubmit={handleSubmit}
         className='flex flex-col gap-4 w-full max-w-xs bg-theme-cardbg p-6 rounded-lg shadow-xl border border-brand-600'
@@ -96,7 +96,7 @@ export default function LoginPage() {
         {messageUI && (
           <p
             className={`text-sm text-center ${
-              (status === Status.ERROR || status === Status.USER_NOT_APPROVED) ? "text-danger-600" : "text-primary-700"
+              (status === Status.ERROR || status === Status.USER_NOT_APPROVED) ? "text-danger-600" : "text-success-800"
             }`}
           >
             {messageUI}
