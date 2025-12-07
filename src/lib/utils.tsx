@@ -34,6 +34,31 @@ export async function validateToken(
 export const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export const HOURS = Array.from({ length: 15 }, (_, i) => {
-  const hour = i + 7; // 07 → 21
+  const hour = i + 6; // 06 → 21
   return `${String(hour).padStart(2, "0")}:00`;
 });
+
+export function getCurrentWeekDates(): Date[] {
+  const today = new Date();
+
+  // getDay(): Sunday=0, Monday=1, ... Saturday=6
+  const dayOfWeek = today.getDay();
+
+  // We want Monday=0, Tuesday=1, ..., Sunday=6
+  const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+
+  const monday = new Date(today);
+  monday.setDate(today.getDate() + mondayOffset);
+
+  // Build array [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
+  return Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return d;
+  });
+}
+
+export function pad2(n: number): string {
+  return String(n).padStart(2, "0");
+}
+

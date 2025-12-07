@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { HOURS, WEEKDAYS } from "@/static/StaticMockData";
 import { ScheduleHeader } from "./ScheduleHeader";
 import { HourCell } from "./HourCell";
 import { DayCell } from "./DayCell";
@@ -17,6 +16,7 @@ import { ToastType } from "@/enums/ToastType";
 import { ScheduledClass } from "@/types/schedule/ScheduledClass";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { useScheduledClasses } from "@/lib/contexts/ScheduledClassesContext";
+import { HOURS, WEEKDAYS } from "@/lib/utils";
 
 export default function WeeklyScheduleGrid() {
   // grid columns: 70px for hour column, then 1fr per weekday (keeps flexible)
@@ -153,7 +153,7 @@ export default function WeeklyScheduleGrid() {
                 <HourCell hour={hour} />
                 {WEEKDAYS.map((d, index) => (
                   <DayCell
-                    key={`${d.label}-${hour}`}
+                    key={`${d}-${hour}`}
                     data={findClassInSchedule(index, hour)}
                     onClick={() => showClassSelectorModal(index, hour)}
                   />
