@@ -28,7 +28,7 @@ function OwnerLayout({ children }: { children: React.ReactNode }) {
             <Breadcrumbs />
             <Button
               variant='ghost'
-              className='underline hover:scale-110 transition-transform'
+              className='underline hover:scale-110 transition-transform text-white'
               onClick={handleLogout}
             >
               <Power className='w-5 h-5 mr-1'/> Logout

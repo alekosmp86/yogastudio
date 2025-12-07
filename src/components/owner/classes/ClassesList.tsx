@@ -162,7 +162,7 @@ export default function ClassesList() {
 
   return (
     <div className='w-full mt-4'>
-      <h2 className='text-xl font-semibold text-theme-inputbg mb-4'>
+      <h2 className='text-xl font-semibold text-white mb-4'>
         Your Classes
       </h2>
 

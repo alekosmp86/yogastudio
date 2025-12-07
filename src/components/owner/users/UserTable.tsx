@@ -37,7 +37,7 @@ export default function UserTable({ users, onAction }: UserTableProps) {
           </table>
         </div>
       ) : (
-        <h1 className='text-left py-2'>No users found</h1>
+        <h1 className='text-left bg-white py-2'>No users found</h1>
       )}
     </>
   );

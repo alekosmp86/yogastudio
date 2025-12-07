@@ -131,7 +131,7 @@ export default function WeeklyScheduleGrid() {
       </ClassSelectorModal>
 
       <div className='w-full mt-4'>
-        <h2 className='text-lg sm:text-xl font-semibold text-theme-inputbg mb-4'>
+        <h2 className='text-lg sm:text-xl font-semibold text-white mb-4'>
           Weekly Schedule
         </h2>
 

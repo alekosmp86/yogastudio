@@ -85,7 +85,7 @@ export default function UserList() {
 
   return (
     <div className='w-full '>
-      <h2 className='text-xl font-semibold text-theme-inputbg mt-4 mb-4'>
+      <h2 className='text-xl font-semibold text-white mt-4 mb-4'>
         Users
       </h2>
 

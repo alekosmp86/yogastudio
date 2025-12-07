@@ -56,7 +56,7 @@ export default function EditableRow({
   };
 
   return (
-    <tr className='bg-theme-inputbg border-b border-brand-300'>
+    <tr className='bg-white border-b border-brand-300'>
       {fields.map(({ key, placeholder }) => (
         <td key={key} className='px-4 py-3 text-theme-secondarytextcolor'>
           {isEditing ? (

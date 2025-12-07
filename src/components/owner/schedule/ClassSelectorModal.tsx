@@ -36,7 +36,7 @@ export function ClassSelectorModal({open, onClose, onRemove, title, children, em
         onClick={(e) => e.stopPropagation()}
       >
         {title && (
-          <h2 className='text-lg font-semibold text-theme-inputbg px-6 pt-5 pb-3'>
+          <h2 className='text-lg font-semibold text-white px-6 pt-5 pb-3'>
             {title}
           </h2>
         )}
@@ -50,13 +50,13 @@ export function ClassSelectorModal({open, onClose, onRemove, title, children, em
 
         <div className='px-6 py-4 mt-2 flex flex-row gap-2'>
           <Button variant="primary"
-            className="w-full text-theme-inputbg"
+            className="w-full text-white"
             Icon={X}
             onClick={onClose}
           >Close</Button>
           {!emptyCell && (
             <Button variant="negative"
-            className="w-full text-theme-inputbg"
+            className="w-full text-white"
             Icon={Trash}
             onClick={onRemove}
           >Remove</Button>

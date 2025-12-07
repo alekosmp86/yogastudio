@@ -56,11 +56,11 @@ export default function ClassesCard({
   };
 
   return (
-    <div className='bg-theme-inputbg border border-primary-500 p-2 shadow-xl'>
+    <div className='bg-white border border-primary-500 p-2 shadow-xl'>
       {fields.map(({ key, placeholder, style, mobileLabel }) => (
         <div
           key={key}
-          className={`px-2 text-primary-800 ${style}`}
+          className={`px-2 text-white ${style}`}
         >
           {isEditing ? (
             <div className="mt-2 mb-2">

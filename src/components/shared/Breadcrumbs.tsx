@@ -11,15 +11,15 @@ export default function Breadcrumbs() {
   });
 
   return (
-    <nav className='flex items-center text-md text-brand-400'>
+    <nav className='flex items-center text-md text-white'>
       <ol className='flex flex-wrap items-center gap-2'>
         {links.map((item, index) => (
           <li key={item.href} className='flex items-center gap-2'>
-            {index > 0 && <span className='text-brand-600'>/</span>}
+            {index > 0 && <span className='text-white'>/</span>}
 
             <Link
               href={item.href}
-              className='capitalize hover:scale-110 transition underline'
+              className='capitalize hover:scale-110 transition underline text-white'
             >
               {item.name}
             </Link>
