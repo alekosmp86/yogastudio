@@ -6,10 +6,11 @@ import TableHeader from "../../shared/TableHeader";
 
 type UserTableProps = {
   users: User[];
+  loading: boolean;
   onAction: (id: number, action: OwnerActions) => void;
 };
 
-export default function UserTable({ users, onAction }: UserTableProps) {
+export default function UserTable({ users, loading, onAction }: UserTableProps) {
   const fields: TableField<User>[] = [
     { key: "name", placeholder: "Name" },
     { key: "email", placeholder: "Email" },
@@ -37,7 +38,7 @@ export default function UserTable({ users, onAction }: UserTableProps) {
           </table>
         </div>
       ) : (
-        <h1 className='text-left bg-white py-2'>No users found</h1>
+        <h1 className='text-left bg-white py-2'>{loading ? "Loading..." : "No users found"}</h1>
       )}
     </>
   );

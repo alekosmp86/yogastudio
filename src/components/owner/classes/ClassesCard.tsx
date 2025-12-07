@@ -60,11 +60,11 @@ export default function ClassesCard({
       {fields.map(({ key, placeholder, style, mobileLabel }) => (
         <div
           key={key}
-          className={`px-2 text-white ${style}`}
+          className={`px-2 text-primary-900 ${style}`}
         >
           {isEditing ? (
             <div className="mt-2 mb-2">
-              <label htmlFor={key}>{placeholder}</label>
+              <label htmlFor={key} className="text-primary-900">{placeholder}</label>
               <input
                 className='w-full px-2 py-2 rounded-md focus:ring-1 focus:ring-brand-600'
                 value={form[key] as string | number}

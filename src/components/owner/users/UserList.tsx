@@ -15,6 +15,7 @@ import { ToastType } from "@/enums/ToastType";
 export default function UserList() {
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   const { showToast, hideToast } = useToast();
 
   const filteredUsers = users.filter(
@@ -38,6 +39,7 @@ export default function UserList() {
 
   useEffect(() => {
     const getAllUsers = async () => {
+      setLoading(true);
       const { message, data } = await http.get<ApiResponse<User[]>>(
         "/owner/users",
         ApiType.FRONTEND
@@ -45,6 +47,7 @@ export default function UserList() {
       if (message !== RequestStatus.SUCCESS) return;
 
       setUsers(data || []);
+      setLoading(false);
     };
 
     getAllUsers();
@@ -95,10 +98,10 @@ export default function UserList() {
         <TableToolbar toolbar={toolbar} search={search} setSearch={setSearch} />
 
         {/* Desktop */}
-        <UserTable users={filteredUsers} onAction={handleAction} />
+        <UserTable users={filteredUsers} loading={loading} onAction={handleAction} />
 
         {/* Mobile */}
-        <UserCardList users={filteredUsers} onAction={handleAction} />
+        <UserCardList users={filteredUsers} loading={loading} onAction={handleAction} />
       </div>
     </div>
   );
