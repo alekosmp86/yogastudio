@@ -66,7 +66,7 @@ export default function ClassesCard({
             <div className="mt-2 mb-2">
               <label htmlFor={key} className="text-primary-900">{placeholder}</label>
               <input
-                className='w-full px-2 py-2 rounded-md focus:ring-1 focus:ring-brand-600'
+                className='w-full px-2 py-2 rounded-md focus:ring-1 focus:ring-brand-600 text-white'
                 value={form[key] as string | number}
                 onChange={(e) => handleChange(key, e.target.value)}
                 placeholder={placeholder}

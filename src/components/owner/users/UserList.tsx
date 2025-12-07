@@ -60,7 +60,10 @@ export default function UserList() {
     });
 
     try {
-      const { message, data } = await http.put<ApiResponse<User>>(`/owner/users/${id}/${action}`, ApiType.FRONTEND);
+      const { message, data } = await http.put<ApiResponse<User>>(
+        `/owner/users/${id}/${action}`,
+        ApiType.FRONTEND
+      );
       if (message !== RequestStatus.SUCCESS) {
         showToast({
           message: "Failed to update user",
@@ -88,9 +91,7 @@ export default function UserList() {
 
   return (
     <div className='w-full '>
-      <h2 className='text-xl font-semibold text-white mt-4 mb-4'>
-        Users
-      </h2>
+      <h2 className='text-xl font-semibold text-white mt-4 mb-4'>Users</h2>
 
       {/* TABLE BOX (toolbar + table inside) */}
       <div className='bg-transparent rounded-sm overflow-hidden shadow'>
@@ -98,10 +99,15 @@ export default function UserList() {
         <TableToolbar toolbar={toolbar} search={search} setSearch={setSearch} />
 
         {/* Desktop */}
-        <UserTable users={filteredUsers} loading={loading} onAction={handleAction} />
+        <UserTable users={filteredUsers} onAction={handleAction} />
 
         {/* Mobile */}
-        <UserCardList users={filteredUsers} loading={loading} onAction={handleAction} />
+        <UserCardList users={filteredUsers} onAction={handleAction} />
+        {users.length === 0 && (
+          <h1 className='pl-2 text-left bg-white py-2 text-primary-900'>
+            {loading ? "Loading..." : "No users found"}
+          </h1>
+        )}
       </div>
     </div>
   );
