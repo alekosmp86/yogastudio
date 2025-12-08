@@ -20,7 +20,7 @@ async function verifyJWT(token: string) {
   try {
     const { payload } = await jwtVerify(token, secret);
     return payload as {user: SessionUser}; // contains your user object
-  } catch (error) {
+  } catch {
     return null;
   }
 }
