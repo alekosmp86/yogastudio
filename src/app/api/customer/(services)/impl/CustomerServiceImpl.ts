@@ -1,16 +1,19 @@
-import { pad2 } from "@/lib/utils";
 import { CustomerService } from "../CustomerService";
 import { ScheduledClassExtended } from "@/types/schedule/ScheduledClassExtended";
 import { PrismaClient } from "@prisma/client";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 export class CustomerServiceImpl implements CustomerService {
   constructor(private readonly prisma: PrismaClient) {}
 
   async getTodayClasses(): Promise<ScheduledClassExtended[]> {
-    const now = new Date();
-    
-    const oneHourLaterDate = new Date(now.getTime() + 60 * 60 * 1000);
-    const oneHourLater = `${pad2(oneHourLaterDate.getHours())}:00`;
+    dayjs.extend(utc);
+    dayjs.extend(timezone);
+    const now = dayjs().tz("America/Montevideo");
+    const oneHourLater = now.add(1, "hour").minute(0).second(0).millisecond(0).format("HH:mm");
+    console.log(`Searching for classes after ${oneHourLater}`);
 
     const scheduleFilter = {
       weekday: this.getTodayWeekday(),
