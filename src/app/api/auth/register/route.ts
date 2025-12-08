@@ -1,12 +1,24 @@
 import { NextResponse } from "next/server";
-import { http } from "@/lib/http";
-import { ApiResponse } from "@/types/requests/ApiResponse";
-import { ApiType } from "@/enums/ApiTypes";
-import { User } from "@/types/User";
+import { registryService } from "..";
+import { userMapper } from "app/api";
+import { RequestStatus } from "@/enums/RequestStatus";
+import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+
+const logger = new ConsoleLogger("RegistryRoute");
 
 export async function POST(request: Request) {
-    const body = await request.json();
-    const response = await http.post<ApiResponse<User>>(`/auth/register`, ApiType.BACKEND, body);
+    const { name, email, phone } = await request.json();
 
-    return NextResponse.json({message: response.message, data: response.data});
+    try {
+        logger.log("Registering user:", { name, email, phone });
+        const response = await registryService.register(name, email, phone);
+        logger.log("User registered successfully:", response);
+        return NextResponse.json({message: RequestStatus.SUCCESS, data: userMapper.toUser(response)});
+    } catch (error) {
+        logger.error("Error registering user:", error);
+        return NextResponse.json(
+            { message: RequestStatus.ERROR },
+            { status: 500 }
+        );
+    }
 }

@@ -31,7 +31,7 @@ export default function RegisterForm() {
       setCountdown((c) => {
         if (c === 1) {
           clearInterval(interval);
-          router.push("/");
+          router.replace("/");
         }
         return c - 1;
       });
@@ -46,18 +46,18 @@ export default function RegisterForm() {
   };
 
   const handleCancel = () => {
-    router.push("/");
+    router.replace("/");
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const { message } = await http.post<ApiResponse<User>>(
+    const response = await http.post<ApiResponse<User>>(
       `/auth/register`,
       ApiType.FRONTEND,
       form
     );
 
-    if (message === RequestStatus.SUCCESS) {
+    if (response.message === RequestStatus.SUCCESS) {
       setRegisterStatus({
         status: RequestStatus.SUCCESS,
         message: "User registered successfully",
