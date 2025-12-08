@@ -2,13 +2,13 @@ import { NavBarLink } from "../types/NavBarLink";
 import { Home, Calendar, BookmarkCheck, User } from "lucide-react";
 
 export const NavBarItems: NavBarLink[] = [
-  { id: 1, label: "Inicio", url: "/customer/home", icon: Home },
-  { id: 2, label: "Clases", url: "/customer/classes", icon: Calendar },
+  { id: 1, label: "Home", url: "/customer/home", icon: Home },
+  { id: 2, label: "Classes", url: "/customer/classes", icon: Calendar },
   {
     id: 3,
-    label: "Reservas",
+    label: "Reservations",
     url: "/customer/reservations",
     icon: BookmarkCheck,
   },
-  { id: 4, label: "Perfil", url: "/customer/profile", icon: User },
+  { id: 4, label: "Profile", url: "/customer/profile", icon: User },
 ];

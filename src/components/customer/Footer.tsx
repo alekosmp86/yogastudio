@@ -2,16 +2,17 @@
 
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { Instagram, MessageCircle } from "lucide-react";
+import { APPCONFIG } from "app/config";
 
 export default function Footer() {
-  const iconClasses = "h-5 w-5 text-gray-600 hover:text-blue-600 transition";
+  const iconClasses = "h-5 w-5 text-white hover:text-primary-400 transition";
 
   return (
-    <footer className="border-t bg-white mt-10">
+    <footer className="border-t bg-theme-headings text-white">
       <div className="mx-auto max-w-4xl px-4 py-8 flex flex-col items-center gap-4">
         {/* Copyright */}
-        <p className="text-sm text-gray-500">
-          © {new Date().getFullYear()} Yoga Studio — All rights reserved
+        <p className="text-sm">
+          © {new Date().getFullYear()} {APPCONFIG.BUSINESS_NAME} — All rights reserved
         </p>
 
         {/* Icons */}
@@ -25,7 +26,7 @@ export default function Footer() {
           </a>
 
           <a
-            href="https://wa.me/00000000"
+            href={`https://wa.me/${APPCONFIG.BUSINESS_WHATSAPP_NUMBER}`}
             target="_blank"
             className="hover:scale-110 transition"
           >
@@ -33,7 +34,7 @@ export default function Footer() {
           </a>
 
           <a
-            href="mailto:contact@yogastudio.com"
+            href={`mailto:${APPCONFIG.BUSINESS_EMAIL}`}
             className="hover:scale-110 transition"
           >
             <EnvelopeIcon className={iconClasses} />
@@ -41,14 +42,14 @@ export default function Footer() {
         </div>
 
         {/* Links */}
-        <div className="flex gap-6 text-sm text-gray-600">
-          <a href="/about" className="hover:text-blue-600">
+        <div className="flex gap-6 text-sm">
+          <a href="/about" className="hover:text-primary-400">
             About
           </a>
-          <a href="/contact" className="hover:text-blue-600">
+          <a href="/contact" className="hover:text-primary-400">
             Contact
           </a>
-          <a href="/terms" className="hover:text-blue-600">
+          <a href="/terms" className="hover:text-primary-400">
             Terms & Privacy
           </a>
         </div>

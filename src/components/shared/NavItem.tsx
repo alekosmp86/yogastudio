@@ -14,12 +14,12 @@ export default function NavItem({
       href={href}
       className={`flex items-center gap-2 transition ${
         active
-          ? "text-blue-600 font-semibold"
-          : "text-gray-700 hover:text-blue-600"
+          ? "text-white font-semibold"
+          : "text-white/80 hover:text-primary-400"
       }`}
     >
       <Icon
-        className={`h-4 w-4 ${active ? "text-blue-600" : "text-gray-500"}`}
+        className={`h-4 w-4 ${active ? "text-white" : "text-white/80"}`}
       />
       {label}
     </a>

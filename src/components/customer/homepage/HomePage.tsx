@@ -8,10 +8,10 @@ export default function HomePage() {
     <div className='py-6 space-y-8'>
       {/* Welcome Section */}
       <section className='text-center'>
-        <h1 className='text-2xl font-bold text-gray-800'>
+        <h1 className='text-2xl font-bold text-primary-800'>
           Welcome to {APPCONFIG.BUSINESS_NAME}
         </h1>
-        <p className='text-gray-600 mt-2 text-sm'>
+        <p className='text-gray-600 mt-2 text-md'>
           Book your classes, manage reservations, and stay connected.
         </p>
       </section>
@@ -21,16 +21,16 @@ export default function HomePage() {
         <QuickActionCard
           icon={Calendar}
           label='Today’s Classes'
-          href='/classes'
+          href='/customer/classes'
         />
 
         <QuickActionCard
           icon={BookOpenCheck}
           label='My Reservations'
-          href='/reservations'
+          href='/customer/reservations'
         />
 
-        <QuickActionCard icon={User2} label='My Profile' href='/profile' />
+        <QuickActionCard icon={User2} label='My Profile' href='/customer/profile' />
       </section>
 
       {/* Next Class Placeholder */}

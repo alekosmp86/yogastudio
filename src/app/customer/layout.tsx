@@ -1,7 +1,7 @@
 "use client";
 
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from "@/components/customer/Navbar";
+import Footer from "@/components/customer/Footer";
 import Container from "@/components/shared/Container";
 
 function CustomerLayout({ children }: { children: React.ReactNode }) {
@@ -9,7 +9,7 @@ function CustomerLayout({ children }: { children: React.ReactNode }) {
     <>
       <Navbar />
 
-      <main className='flex-1'>
+      <main className='flex-1 bg-theme-bodybg'>
         <Container>{children}</Container>
       </main>
 
