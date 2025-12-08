@@ -5,7 +5,8 @@ import { Sun, Flame, Sparkles, Dumbbell } from "lucide-react";
 import { Progress } from "@/components/shared/Progress";
 import Button from "@/components/shared/Button";
 import { Card, CardContent } from "@/components/shared/Card";
-import { GymClassBase } from "@/types/classes/GymClassBase";
+import { ScheduledClassExtended } from "@/types/schedule/ScheduledClassExtended";
+import { Schedule } from "@/types/schedule/Schedule";
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   sun: Sun,
@@ -14,32 +15,38 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   default: Dumbbell,
 };
 
-export default function ClassCard({ gymClass }: { gymClass: GymClassBase }) {
+type ClassCardProps = {
+  gymClass: Omit<ScheduledClassExtended, 'schedule'>;
+  schedule: Schedule;
+}
+
+export default function ClassCard({ gymClass, schedule }: ClassCardProps) {
   const Icon = ICON_MAP.default;
 
   const percentage = (10 / 20) * 100;
 
-  // ✔ TEMPORARY HANDLER
   const handleReserve = () => {};
 
   return (
-    <Card className='shadow-sm'>
+    <Card className='shadow-lg bg-white'>
       <CardContent className='p-4 flex items-center gap-4'>
-        <Icon className='h-8 w-8 text-blue-600 flex-shrink-0' />
+        <Icon className='h-8 w-8 text-primary-800 flex-shrink-0' />
 
         <div className='flex flex-col w-full'>
           <div className='flex justify-between'>
-            <h2 className='font-semibold'>Class name</h2>
-            <span className='text-sm text-gray-600'>Time</span>
+            <h2 className='font-semibold text-primary-800'>{gymClass.title}</h2>
+            <span className='text-sm text-primary-800'>{schedule.startTime}</span>
           </div>
 
-          <p className='text-sm text-gray-700'>
-            Instructor: Instructor name
+          <p className='text-sm font-semibold text-primary-800'>{gymClass.description}</p>
+
+          <p className='text-sm text-primary-800'>
+            Instructor: {gymClass.instructor}
           </p>
 
           <div className='mt-2'>
             <Progress value={percentage} className='h-2' />
-            <p className='text-xs text-gray-500 mt-1'>
+            <p className='text-xs text-primary-800 mt-1'>
               10/20 spots filled
             </p>
           </div>
