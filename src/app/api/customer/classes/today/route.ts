@@ -9,7 +9,7 @@ export async function GET() {
   try {
     logger.log("Fetching classes...");
     const todayClasses = await customerService.getTodayClasses();
-    logger.log(`Classes fetched successfully: ${todayClasses}`);
+    logger.log(`Classes fetched successfully: ${JSON.stringify(todayClasses)}`);
     return NextResponse.json({
       message: RequestStatus.SUCCESS,
       data: todayClasses,

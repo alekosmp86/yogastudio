@@ -33,7 +33,7 @@ export default function Navbar() {
         </div>
 
         {/* Mobile toggle */}
-        <button onClick={() => setOpen(!open)} className='md:hidden p-2'>
+        <button onClick={() => setOpen(!open)} className='md:hidden p-2 text-white'>
           {open ? (
             <XMarkIcon className='h-6 w-6' />
           ) : (

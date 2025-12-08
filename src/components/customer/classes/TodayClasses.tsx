@@ -14,8 +14,7 @@ export default function TodayClasses() {
     const getTodayClasses = async () => {
       setLoading(true);
       const {data}: {data: ScheduledClassExtended[]} = await http.get("/customer/classes/today", ApiType.FRONTEND);
-      data.sort((a, b) => a.schedule[0].startTime.localeCompare(b.schedule[0].startTime));
-      setUpcomingClasses(data);
+      setUpcomingClasses(data.sort((a, b) => a.schedule[0].startTime.localeCompare(b.schedule[0].startTime)));
       setLoading(false);
     };
 

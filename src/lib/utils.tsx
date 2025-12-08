@@ -33,7 +33,7 @@ export async function validateToken(
 
 export const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
-export const HOURS = Array.from({ length: 15 }, (_, i) => {
+export const HOURS = Array.from({ length: 16 }, (_, i) => {
   const hour = i + 6; // 06 → 21
   return `${String(hour).padStart(2, "0")}:00`;
 });
