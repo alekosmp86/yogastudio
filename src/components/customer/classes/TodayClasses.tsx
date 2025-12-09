@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
 import { ApiType } from "@/enums/ApiTypes";
 import { http } from "@/lib/http";
 import { ScheduledClassExtended } from "@/types/schedule/ScheduledClassExtended";
-import { useEffect, useState } from "react";
+import { Activity, useEffect, useState, Suspense } from "react";
 import ClassCard from "./ClassCard";
 
 export default function TodayClasses() {
@@ -13,8 +13,12 @@ export default function TodayClasses() {
   useEffect(() => {
     const getTodayClasses = async () => {
       setLoading(true);
-      const {data}: {data: ScheduledClassExtended[]} = await http.get("/customer/classes/today", ApiType.FRONTEND);
-      setUpcomingClasses(data.sort((a, b) => a.schedule[0].startTime.localeCompare(b.schedule[0].startTime)));
+      const { data }: { data: ScheduledClassExtended[] } = await http.get("/customer/classes/today", ApiType.FRONTEND);
+      setUpcomingClasses(
+        data.sort((a, b) =>
+          a.schedule[0].startTime.localeCompare(b.schedule[0].startTime)
+        )
+      );
       setLoading(false);
     };
 
@@ -25,21 +29,27 @@ export default function TodayClasses() {
     <div className='p-4 flex flex-col gap-6'>
       <h1 className='text-2xl font-bold text-primary-800'>Today’s Classes</h1>
 
-      {loading && (
-        <p className='text-primary-800'>Loading classes...</p>
-      )}
+      <Suspense fallback={<p className='text-primary-800'>Loading classes...</p>}>
+        <Activity>
+          <div className='flex flex-col gap-4'>
+            {upcomingClasses.map((gymClass) => {
+              return gymClass.schedule.map((schedule) => {
+                return (
+                  <ClassCard
+                    key={schedule.id}
+                    gymClass={gymClass}
+                    schedule={schedule}
+                  />
+                );
+              });
+            })}
+          </div>
+        </Activity>
+      </Suspense>
 
-      {upcomingClasses.length === 0 && !loading && (
+      <Activity mode={upcomingClasses.length === 0 && !loading ? "visible" : "hidden"}>
         <p className='text-primary-800'>No classes scheduled for today.</p>
-      )}
-
-      <div className='flex flex-col gap-4'>
-        {upcomingClasses.map((gymClass) => {
-          return gymClass.schedule.map((schedule) => {
-            return <ClassCard key={schedule.id} gymClass={gymClass} schedule={schedule} />
-          })
-        })}
-      </div>
+      </Activity>
     </div>
   );
 }
