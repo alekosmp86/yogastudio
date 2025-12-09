@@ -23,11 +23,18 @@ export default function WeeklyScheduleGrid() {
   const gridCols = `70px repeat(${WEEKDAYS.length}, minmax(140px, 1fr))`;
   const { classes } = useClasses();
   const { scheduledClasses, setScheduledClasses } = useScheduledClasses();
-  const [dayTime, setDayTime] = useState<{ weekday: number; hour: string }>({ weekday: 0, hour: "" });
+  const [dayTime, setDayTime] = useState<{ weekday: number; hour: string }>({
+    weekday: 0,
+    hour: "",
+  });
   const [modalOpen, setModalOpen] = useState(false);
   const { showToast } = useToast();
-  
-  const scheduledClass = scheduledClasses.find((scheduledClass) => scheduledClass.weekday === dayTime.weekday && scheduledClass.hour === dayTime.hour);
+
+  const scheduledClass = scheduledClasses.find(
+    (scheduledClass) =>
+      scheduledClass.weekday === dayTime.weekday &&
+      scheduledClass.hour === dayTime.hour
+  );
   const classInSchedule = classes.find((c) => c.id === scheduledClass?.classId);
 
   const showClassSelectorModal = (weekday: number, hour: string) => {
@@ -38,11 +45,23 @@ export default function WeeklyScheduleGrid() {
   const handleClassClick = async (c: GymClass) => {
     handleCloseModal();
 
-    const payload = { weekday: dayTime.weekday, hour: dayTime.hour, classId: c.id };
+    const payload = {
+      weekday: dayTime.weekday,
+      hour: dayTime.hour,
+      classId: c.id,
+    };
 
     const request = classInSchedule
-      ? http.put<ApiResponse<ScheduledClass>>(`/owner/schedule/${classInSchedule.id}`, ApiType.FRONTEND, payload)
-      : http.post<ApiResponse<ScheduledClass>>("/owner/schedule", ApiType.FRONTEND, payload);
+      ? http.put<ApiResponse<ScheduledClass>>(
+          `/owner/schedule/${classInSchedule.id}`,
+          ApiType.FRONTEND,
+          payload
+        )
+      : http.post<ApiResponse<ScheduledClass>>(
+          "/owner/schedule",
+          ApiType.FRONTEND,
+          payload
+        );
 
     const { message, data } = await request;
 
@@ -52,12 +71,15 @@ export default function WeeklyScheduleGrid() {
         type: ToastType.SUCCESS,
       });
       setScheduledClasses(
-        classInSchedule ? scheduledClasses.map((s) => {
+        classInSchedule
+          ? scheduledClasses.map((s) => {
               return s.classId === classInSchedule.id &&
                 s.weekday === data!.weekday &&
                 s.hour === data!.hour
-                ? data! : s;
-            }) : [...scheduledClasses, data!]
+                ? data!
+                : s;
+            })
+          : [...scheduledClasses, data!]
       );
     } else {
       showToast({
@@ -69,14 +91,22 @@ export default function WeeklyScheduleGrid() {
 
   const findClassInSchedule = (weekday: number, hour: string) => {
     return classes.find(
-      (c) => c.id === scheduledClasses.find((scheduledClass) => scheduledClass.weekday === weekday && scheduledClass.hour === hour)?.classId
+      (c) =>
+        c.id ===
+        scheduledClasses.find(
+          (scheduledClass) =>
+            scheduledClass.weekday === weekday && scheduledClass.hour === hour
+        )?.classId
     );
   };
 
   const handleRemoveClass = async () => {
     if (!scheduledClass) return;
 
-    const request = http.delete<ApiResponse<RequestStatus>>(`/owner/schedule/${scheduledClass.id}`, ApiType.FRONTEND);
+    const request = http.delete<ApiResponse<RequestStatus>>(
+      `/owner/schedule/${scheduledClass.id}`,
+      ApiType.FRONTEND
+    );
 
     const { message } = await request;
 
@@ -122,9 +152,7 @@ export default function WeeklyScheduleGrid() {
               <div className='text-base text-primary-800 font-semibold'>
                 {c.title}
               </div>
-              <div className='text-xs mt- text-primary-800'>
-                {c.instructor}
-              </div>
+              <div className='text-xs mt- text-primary-800'>{c.instructor}</div>
             </CardContent>
           </Card>
         ))}
@@ -135,7 +163,7 @@ export default function WeeklyScheduleGrid() {
           Weekly Schedule
         </h2>
 
-        <div className="overflow-x-auto max-h-[65vh] overflow-y-auto">
+        <div className='overflow-x-auto max-h-[65vh] overflow-y-auto'>
           <div
             className='grid min-w-max'
             style={{

@@ -3,7 +3,7 @@ import { http } from "@/lib/http";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { Activity, useRef, useState } from "react";
 import Input from "../shared/Input";
 import Button from "../shared/Button";
 import { ApiType } from "@/enums/ApiTypes";
@@ -21,7 +21,8 @@ const messages: Record<Status, string> = {
   [Status.SENT]: "A login link has been sent to your email.",
   [Status.IDLE]: "",
   [Status.LOADING]: "Requesting link...",
-  [Status.USER_NOT_APPROVED]: "User pending approval. Please contact the admin.",
+  [Status.USER_NOT_APPROVED]:
+    "User pending approval. Please contact the admin.",
 };
 
 const logger = new ConsoleLogger("LoginPage");
@@ -37,7 +38,10 @@ export default function LoginPage() {
     setStatus(Status.LOADING);
 
     try {
-      const {message} = await http.get<ApiResponse<string>>(`/auth/magic-link?email=${emailInput.current?.value}`, ApiType.FRONTEND);
+      const { message } = await http.get<ApiResponse<string>>(
+        `/auth/magic-link?email=${emailInput.current?.value}`,
+        ApiType.FRONTEND
+      );
 
       switch (message) {
         case RequestStatus.EMAIL_SENT:
@@ -47,7 +51,11 @@ export default function LoginPage() {
           setStatus(Status.USER_NOT_APPROVED);
           break;
         case RequestStatus.USER_NOT_FOUND:
-          router.push(`/register?email=${encodeURIComponent(emailInput.current?.value || "")}`);
+          router.push(
+            `/register?email=${encodeURIComponent(
+              emailInput.current?.value || ""
+            )}`
+          );
           break;
         default:
           setStatus(Status.ERROR);
@@ -93,15 +101,17 @@ export default function LoginPage() {
           {status === Status.LOADING ? "Sending..." : "Get link"}
         </Button>
 
-        {messageUI && (
+        <Activity mode={messageUI ? "visible" : "hidden"}>
           <p
             className={`text-sm text-center ${
-              (status === Status.ERROR || status === Status.USER_NOT_APPROVED) ? "text-danger-600" : "text-success-800"
+              status === Status.ERROR || status === Status.USER_NOT_APPROVED
+                ? "text-danger-600"
+                : "text-success-800"
             }`}
           >
             {messageUI}
           </p>
-        )}
+        </Activity>
       </form>
     </div>
   );
