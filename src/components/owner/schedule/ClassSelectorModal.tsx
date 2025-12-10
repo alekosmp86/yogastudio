@@ -1,6 +1,6 @@
 import Button from "@/components/shared/Button";
 import { Trash, X } from "lucide-react";
-import React, { useEffect } from "react";
+import React, { Activity, useEffect } from "react";
 import ReactDOM from "react-dom";
 
 interface ModalProps {
@@ -54,13 +54,13 @@ export function ClassSelectorModal({open, onClose, onRemove, title, children, em
             Icon={X}
             onClick={onClose}
           >Close</Button>
-          {!emptyCell && (
+          <Activity mode={emptyCell ? "hidden" : "visible"}>
             <Button variant="negative"
-            className="w-full text-white"
-            Icon={Trash}
-            onClick={onRemove}
-          >Remove</Button>
-          )}
+              className="w-full text-white"
+              Icon={Trash}
+              onClick={onRemove}
+            >Remove</Button>
+          </Activity>
         </div>
       </div>
     </div>,

@@ -1,7 +1,7 @@
 import Button from "@/components/shared/Button";
 import { GymClass } from "@/types/classes/GymClass";
 import { Check, Pencil, Trash, X } from "lucide-react";
-import { useState } from "react";
+import { Activity, useState } from "react";
 
 type ClassesCardProps = {
   gymClass: GymClass;
@@ -60,13 +60,13 @@ export default function ClassesCard({
       {fields.map(({ key, placeholder, style, mobileLabel }) => (
         <div
           key={key}
-          className={`px-2 text-primary-900 ${style}`}
+          className={`px-2 text-primary-900 ${isEditing ? style : ""}`}
         >
           {isEditing ? (
             <div className="mt-2 mb-2">
               <label htmlFor={key} className="text-primary-900">{placeholder}</label>
               <input
-                className='w-full px-2 py-2 rounded-md focus:ring-1 focus:ring-brand-600 text-white'
+                className='w-full px-2 py-2 rounded-md border border-primary-800 font-normal'
                 value={form[key] as string | number}
                 onChange={(e) => handleChange(key, e.target.value)}
                 placeholder={placeholder}
@@ -108,16 +108,16 @@ export default function ClassesCard({
             disabled={busy}
           />
 
-          {onDelete && (
+          <Activity mode={onDelete ? "visible" : "hidden"}>
             <Button
               size='md'
               variant={busy ? "secondary" : "negative"}
               className={busy ? "disabled:cursor-not-allowed disabled:pointer-events-none" : "text-white"}
               Icon={Trash}
-              onClick={() => onDelete(gymClass.id)}
+              onClick={() => onDelete?.(gymClass.id)}
               disabled={busy}
             />
-          )}
+          </Activity>
         </div>
       )}
     </div>

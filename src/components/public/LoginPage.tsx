@@ -3,7 +3,7 @@ import { http } from "@/lib/http";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { Activity, useRef, useState } from "react";
 import Input from "../shared/Input";
 import Button from "../shared/Button";
 import { ApiType } from "@/enums/ApiTypes";
@@ -39,8 +39,8 @@ export default function LoginPage() {
     setStatus(Status.LOADING);
 
     try {
-      const { message } = await http.get<ApiResponse<string>>(
-        `/auth/magic-link?email=${emailInput.current?.value}`,
+      const {  message  } = await http.get<ApiResponse<string>>(        
+        `/auth/magic-link?email=${emailInput.current?.value}`,       
         ApiType.FRONTEND
       );
 
@@ -115,7 +115,7 @@ export default function LoginPage() {
           <span className='text-sm font-medium'>Continue with Google</span>
         </button>
 
-        {messageUI && (
+        <Activity mode={messageUI ? "visible" : "hidden"}>
           <p
             className={`text-sm text-center ${
               status === Status.ERROR || status === Status.USER_NOT_APPROVED
@@ -125,7 +125,7 @@ export default function LoginPage() {
           >
             {messageUI}
           </p>
-        )}
+        </Activity>
       </form>
     </div>
   );
