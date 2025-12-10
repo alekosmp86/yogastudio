@@ -1,9 +1,14 @@
-import { accountService, googleUserMapper, userService } from "app/api";
+import { accountService, googleUserMapper, tokenService, userService } from "app/api";
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleUserInfo } from "app/api/auth/providers/google/(dto)/GoogleUserInfo";
+import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 
-export async function GET(req: NextRequest) {
-  const code = req.nextUrl.searchParams.get("code");
+const logger = new ConsoleLogger("GoogleCallback");
+
+export async function GET(req: NextRequest, res: NextResponse) {
+  const url = new URL(req.url);
+
+  const code = url.searchParams.get("code");
   if (!code)
     return NextResponse.json({ error: "Missing code" }, { status: 400 });
 
@@ -46,19 +51,33 @@ export async function GET(req: NextRequest) {
     user = await userService.create(userToCreate);
   }
 
-  const accountToCreate = {
-    userId: user.id,
-    provider: "google",
-    providerAccountId: profile.id,
-    type: "oauth",
-    access_token: tokenRes.access_token,
-    refresh_token: tokenRes.refresh_token,
-    expires_at: tokenRes.expires_in,
-    token_type: tokenRes.token_type,
-    scope: tokenRes.scope,
-  };
+  try {
+    const accountToCreate = {
+      userId: user.id,
+      provider: "google",
+      providerAccountId: profile.id,
+      type: "oauth",
+      access_token: tokenRes.access_token,
+      refresh_token: tokenRes.refresh_token,
+      expires_at: tokenRes.expires_in,
+      token_type: tokenRes.token_type,
+      scope: tokenRes.scope,
+    };
 
-  await accountService.upsert(accountToCreate);
+    await accountService.upsert(accountToCreate);
+
+    // 4. Create response to set the session cookie
+    const response = NextResponse.redirect(url.origin + "/");
+    await tokenService.createSession(response, user);
+
+    return response;
+  } catch (error) {
+    logger.error("Error creating account:", error);
+    return NextResponse.json(
+      { error: "Failed to create account" },
+      { status: 500 }
+    );
+  }
 
   return NextResponse.json({ user });
 }
