@@ -8,7 +8,7 @@ export default async function HomePage() {
 
   if (!session) redirect("/login");
 
-  if (session.role === Roles.CLIENT) {
+  if (session.role === Roles.USER) {
     redirect("/customer/home");
   }
 

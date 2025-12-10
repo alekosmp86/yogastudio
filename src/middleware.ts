@@ -12,6 +12,7 @@ const PUBLIC_PATHS = [
   "/api/auth/register",
   "/api/auth/token",
   "/api/auth/magic-link",
+  "/api/auth/providers/google",
 ];
 
 async function verifyJWT(token: string) {
@@ -61,7 +62,7 @@ export async function middleware(req: NextRequest) {
     }
 
     // Optional: protect customer-only pages
-    if (pathname.startsWith("/customer") && payload.user.role !== Roles.CLIENT) {
+    if (pathname.startsWith("/customer") && payload.user.role !== Roles.USER) {
       console.log("Customer-only page accessed by non-customer");
       return NextResponse.redirect(new URL("/", req.url));
     }

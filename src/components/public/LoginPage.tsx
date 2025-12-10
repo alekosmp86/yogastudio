@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 import Input from "../shared/Input";
 import Button from "../shared/Button";
 import { ApiType } from "@/enums/ApiTypes";
+import { GoogleIcon } from "../shared/GoogleIcon";
 
 enum Status {
   IDLE = "idle",
@@ -21,7 +22,8 @@ const messages: Record<Status, string> = {
   [Status.SENT]: "A login link has been sent to your email.",
   [Status.IDLE]: "",
   [Status.LOADING]: "Requesting link...",
-  [Status.USER_NOT_APPROVED]: "User pending approval. Please contact the admin.",
+  [Status.USER_NOT_APPROVED]:
+    "User pending approval. Please contact the admin.",
 };
 
 const logger = new ConsoleLogger("LoginPage");
@@ -37,7 +39,10 @@ export default function LoginPage() {
     setStatus(Status.LOADING);
 
     try {
-      const {message} = await http.get<ApiResponse<string>>(`/auth/magic-link?email=${emailInput.current?.value}`, ApiType.FRONTEND);
+      const { message } = await http.get<ApiResponse<string>>(
+        `/auth/magic-link?email=${emailInput.current?.value}`,
+        ApiType.FRONTEND
+      );
 
       switch (message) {
         case RequestStatus.EMAIL_SENT:
@@ -47,7 +52,11 @@ export default function LoginPage() {
           setStatus(Status.USER_NOT_APPROVED);
           break;
         case RequestStatus.USER_NOT_FOUND:
-          router.push(`/register?email=${encodeURIComponent(emailInput.current?.value || "")}`);
+          router.push(
+            `/register?email=${encodeURIComponent(
+              emailInput.current?.value || ""
+            )}`
+          );
           break;
         default:
           setStatus(Status.ERROR);
@@ -59,6 +68,10 @@ export default function LoginPage() {
       logger.error("Error requesting link", error);
       setStatus(Status.ERROR);
     }
+  }
+
+  async function handleGoogleLogin() {
+    window.location.href = "/api/auth/providers/google";
   }
 
   return (
@@ -93,10 +106,21 @@ export default function LoginPage() {
           {status === Status.LOADING ? "Sending..." : "Get link"}
         </Button>
 
+        <button
+          type='button'
+          onClick={handleGoogleLogin}
+          className='flex items-center justify-center gap-2 w-full py-2 px-4 bg-white text-gray-800 rounded-lg shadow-md hover:bg-gray-100 transition border border-gray-300'
+        >
+          <GoogleIcon className='w-5 h-5' />
+          <span className='text-sm font-medium'>Continue with Google</span>
+        </button>
+
         {messageUI && (
           <p
             className={`text-sm text-center ${
-              (status === Status.ERROR || status === Status.USER_NOT_APPROVED) ? "text-danger-600" : "text-success-800"
+              status === Status.ERROR || status === Status.USER_NOT_APPROVED
+                ? "text-danger-600"
+                : "text-success-800"
             }`}
           >
             {messageUI}
