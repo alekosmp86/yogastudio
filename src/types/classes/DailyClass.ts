@@ -7,5 +7,5 @@ export interface DailyClass {
     description: string,
     capacity: number,
     reserved: number,
-    available: number,
+    available: boolean,
 }

@@ -44,45 +44,49 @@ export default function TodayClasses() {
       case RequestStatus.SUCCESS:
         setUpcomingClasses((prev) =>
           prev.map((c) =>
-            c.id === gymClass.id ? { ...c, reserved: c.reserved + 1 } : c
+            c.id === gymClass.id
+              ? { ...c, reserved: c.reserved + 1, available: false }
+              : c
           )
         );
         toast.showToast({
           type: ToastType.SUCCESS,
           message: "Class reserved successfully.",
           duration: 3000,
-        })
+        });
         break;
       case RequestStatus.CLASS_ALREADY_RESERVED:
         toast.showToast({
           type: ToastType.INFO,
           message: "You have already reserved this class.",
           duration: 3000,
-        })
+        });
         break;
       case RequestStatus.CLASS_FULL:
         toast.showToast({
           type: ToastType.ERROR,
           message: "This class is full.",
           duration: 3000,
-        })
+        });
         break;
       default:
         toast.showToast({
           type: ToastType.ERROR,
           message: "An error occurred.",
           duration: 3000,
-        })
+        });
         break;
     }
   };
+
+  const handleCancelation = async (gymClass: DailyClass) => {};
 
   return (
     <div className='p-4 flex flex-col gap-6 h-full'>
       <h1 className='text-2xl font-bold text-primary-800'>Today’s Classes</h1>
 
       {/* Scroll area */}
-      <div className='overflow-y-auto max-h-[70vh] pr-2'>
+      <div className='overflow-y-auto max-h-[65vh] pr-2'>
         <Suspense
           fallback={<p className='text-primary-800'>Loading classes...</p>}
         >
@@ -92,6 +96,8 @@ export default function TodayClasses() {
                 key={gymClass.id}
                 gymClass={gymClass}
                 handleReserve={() => handleReserve(gymClass)}
+                handleCancelation={() => handleCancelation(gymClass)}
+                canReserve={gymClass.available}
               />
             ))}
           </div>

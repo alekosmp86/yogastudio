@@ -2,6 +2,7 @@ import { DailyClass } from "@/types/classes/DailyClass";
 import { CustomerClassesService } from "../CustomerClassesService";
 import { PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
+import { ApiUtils } from "app/api/utils/ApiUtils";
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
   constructor(private readonly prisma: PrismaClient) {}
@@ -17,6 +18,8 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
       .second(0)
       .millisecond(0)
       .format("HH:mm");
+
+    const user = await ApiUtils.getSessionUser();
 
     const classes = await this.prisma.classInstance.findMany({
       where: {
@@ -40,6 +43,10 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
         _count: {
           select: { reservations: true },
         },
+        reservations: {
+          where: { userId: user.id },
+          select: { id: true }, // we only need to check if it exists
+        },
       },
     });
 
@@ -52,7 +59,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
       instructor: c.template.instructor,
       capacity: c.template.capacity,
       reserved: c._count.reservations,
-      available: c.template.capacity - c._count.reservations,
+      available: c.reservations.length === 0
     }));
   }
 }

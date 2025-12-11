@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Sun, Flame, Sparkles, Dumbbell } from "lucide-react";
+import { Sun, Flame, Sparkles, Dumbbell, X, ClockCheck } from "lucide-react";
 import { Progress } from "@/components/shared/Progress";
 import Button from "@/components/shared/Button";
 import { Card, CardContent } from "@/components/shared/Card";
@@ -17,9 +17,16 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
 type ClassCardProps = {
   gymClass: DailyClass;
   handleReserve: () => void;
-}
+  handleCancelation: () => void;
+  canReserve: boolean;
+};
 
-export default function ClassCard({ gymClass, handleReserve }: ClassCardProps) {
+export default function ClassCard({
+  gymClass,
+  handleReserve,
+  handleCancelation,
+  canReserve,
+}: ClassCardProps) {
   const Icon = ICON_MAP.default;
 
   const percentage = (gymClass.reserved / gymClass.capacity) * 100;
@@ -32,10 +39,14 @@ export default function ClassCard({ gymClass, handleReserve }: ClassCardProps) {
         <div className='flex flex-col w-full'>
           <div className='flex justify-between'>
             <h2 className='font-semibold text-primary-800'>{gymClass.title}</h2>
-            <span className='text-sm text-primary-800'>{gymClass.startTime}</span>
+            <span className='text-sm text-primary-800'>
+              {gymClass.startTime}
+            </span>
           </div>
 
-          <p className='text-sm font-semibold text-primary-800'>{gymClass.description}</p>
+          <p className='text-sm font-semibold text-primary-800'>
+            {gymClass.description}
+          </p>
 
           <p className='text-sm text-primary-800'>
             Instructor: {gymClass.instructor}
@@ -49,16 +60,31 @@ export default function ClassCard({ gymClass, handleReserve }: ClassCardProps) {
           </div>
 
           {/* Reserve Button */}
-          <div className='mt-3'>
-            <Button
-              size='sm'
-              variant='primary'
-              onClick={handleReserve}
-              className='w-full md:w-auto'
-            >
-              Reserve
-            </Button>
-          </div>
+          {canReserve ? (
+            <div className='mt-3'>
+              <Button
+                size='sm'
+                variant='primary'
+                onClick={handleReserve}
+                className='w-full md:w-auto'
+              >
+                <ClockCheck className='mr-2 h-4 w-4' />
+                Reserve
+              </Button>
+            </div>
+          ) : (
+            <div className='mt-3'>
+              <Button
+                size='sm'
+                variant='negative'
+                onClick={handleCancelation}
+                className='w-full md:w-auto'
+              >
+                <X className='mr-2 h-4 w-4' />
+                Cancel
+              </Button>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
