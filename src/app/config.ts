@@ -5,6 +5,6 @@ export const APPCONFIG = {
     email: "alekosmp86@gmail.com",
   },
   USER: {
-    requiresApproval: false,
+    requiresApproval: true,
   },
 };
