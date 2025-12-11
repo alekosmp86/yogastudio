@@ -8,6 +8,9 @@ import { ClassesMapperImpl } from "./owner/classes/(mappers)/impl/ClassesMapperI
 import { ScheduleMapperImpl } from "./owner/schedule/(mappers)/impl/ScheduleMapperImpl";
 import { UserMapperImpl } from "./owner/users/(mappers)/impl/UserMapperImpl";
 import { CustomerServiceImpl } from "./customer/(services)/impl/CustomerServiceImpl";
+import { GoogleUserMapperImpl } from "./auth/providers/google/(mappers)/impl/GoogleUserMapperImpl";
+import { AccountServiceImpl } from "./account/(services)/impl/AccountServiceImpl";
+import { TokenServiceImpl } from "./auth/token/(services)/impl/TokenServiceImpl";
 
 const prisma = new PrismaClient();
 
@@ -17,7 +20,10 @@ export const mailService = new ResendMailServiceImpl();
 export const classesService = new ClassesServiceImpl(prisma);
 export const scheduleService = new ScheduleServiceImpl(prisma);
 export const customerService = new CustomerServiceImpl(prisma);
+export const accountService = new AccountServiceImpl(prisma);
+export const tokenService = new TokenServiceImpl(userService);
 
 export const classesMapper = new ClassesMapperImpl();
 export const scheduleMapper = new ScheduleMapperImpl();
 export const userMapper = new UserMapperImpl();
+export const googleUserMapper = new GoogleUserMapperImpl();

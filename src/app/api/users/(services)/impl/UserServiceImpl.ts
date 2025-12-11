@@ -6,6 +6,10 @@ import { UserActions } from "@/enums/UserActions";
 export class UserServiceImpl implements UserService {
   constructor(private readonly prisma: PrismaClient) {}
 
+  async create(data: Omit<User, "id">): Promise<User> {
+    return this.prisma.user.create({ data });
+  }
+
   async getUserById(id: number): Promise<User | null> {
     return this.prisma.user.findUnique({ where: { id } });
   }
@@ -43,5 +47,15 @@ export class UserServiceImpl implements UserService {
       data: { approved: false },
     });
     return this.getUserById(id);
+  }
+
+  validateRequiredFields<T extends Record<string, never>>(data: T): void {
+    const requiredFields = ["email", "role"] as const;
+
+    for (const field of requiredFields) {
+      if (!data[field]) {
+        throw new Error(`Missing required field: ${field}`);
+      }
+    }
   }
 }

@@ -1,3 +1,4 @@
+import { Roles } from "@/enums/Roles";
 import { RegistryService } from "../RegistryService";
 import { User } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
@@ -12,7 +13,7 @@ export class RegistryServiceImpl implements RegistryService {
         email,
         phone,
         approved: false,
-        role: "CLIENT",
+        role: Roles.USER,
         createdAt: new Date(),
         updatedAt: new Date(),
         emailVerified: false,

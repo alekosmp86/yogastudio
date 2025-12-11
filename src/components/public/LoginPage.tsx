@@ -7,6 +7,7 @@ import { Activity, useRef, useState } from "react";
 import Input from "../shared/Input";
 import Button from "../shared/Button";
 import { ApiType } from "@/enums/ApiTypes";
+import { GoogleIcon } from "../shared/GoogleIcon";
 
 enum Status {
   IDLE = "idle",
@@ -38,8 +39,8 @@ export default function LoginPage() {
     setStatus(Status.LOADING);
 
     try {
-      const { message } = await http.get<ApiResponse<string>>(
-        `/auth/magic-link?email=${emailInput.current?.value}`,
+      const {  message  } = await http.get<ApiResponse<string>>(        
+        `/auth/magic-link?email=${emailInput.current?.value}`,       
         ApiType.FRONTEND
       );
 
@@ -67,6 +68,10 @@ export default function LoginPage() {
       logger.error("Error requesting link", error);
       setStatus(Status.ERROR);
     }
+  }
+
+  async function handleGoogleLogin() {
+    window.location.href = "/api/auth/providers/google";
   }
 
   return (
@@ -100,6 +105,15 @@ export default function LoginPage() {
         >
           {status === Status.LOADING ? "Sending..." : "Get link"}
         </Button>
+
+        <button
+          type='button'
+          onClick={handleGoogleLogin}
+          className='flex items-center justify-center gap-2 w-full py-2 px-4 bg-white text-gray-800 rounded-lg shadow-md hover:bg-gray-100 transition border border-gray-300'
+        >
+          <GoogleIcon className='w-5 h-5' />
+          <span className='text-sm font-medium'>Continue with Google</span>
+        </button>
 
         <Activity mode={messageUI ? "visible" : "hidden"}>
           <p
