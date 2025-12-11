@@ -1,15 +1,13 @@
 import { ConsoleLogger } from "../../../logger/impl/ConsoleLogger";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
-import { customerService } from "../../..";
+import { customerClassesService } from "../../..";
 
 const logger = new ConsoleLogger("CustomerController");
 
 export async function GET() {
   try {
-    logger.log("Fetching classes...");
-    const todayClasses = await customerService.getTodayClasses();
-    logger.log(`Classes fetched successfully: ${JSON.stringify(todayClasses)}`);
+    const todayClasses = await customerClassesService.getTodayClasses();
     return NextResponse.json({
       message: RequestStatus.SUCCESS,
       data: todayClasses,

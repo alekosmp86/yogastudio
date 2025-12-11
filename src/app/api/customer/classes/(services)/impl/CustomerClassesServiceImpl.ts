@@ -1,0 +1,58 @@
+import { DailyClass } from "@/types/classes/DailyClass";
+import { CustomerClassesService } from "../CustomerClassesService";
+import { PrismaClient } from "@prisma/client";
+import dayjs from "dayjs";
+
+export class CustomerClassesServiceImpl implements CustomerClassesService {
+  constructor(private readonly prisma: PrismaClient) {}
+
+  async getTodayClasses(): Promise<DailyClass[]> {
+    const now = dayjs();
+    const todayStart = now.startOf("day").toDate(); // 00:00:00
+    const todayEnd = now.endOf("day").toDate(); // 23:59:59
+
+    const oneHourLater = now
+      .add(1, "hour")
+      .minute(0)
+      .second(0)
+      .millisecond(0)
+      .format("HH:mm");
+
+    const classes = await this.prisma.classInstance.findMany({
+      where: {
+        date: {
+          gte: todayStart,
+          lte: todayEnd,
+        },
+        startTime: {
+          gte: oneHourLater,
+        },
+      },
+      include: {
+        template: {
+          select: {
+            title: true,
+            instructor: true,
+            capacity: true,
+            description: true,
+          },
+        },
+        _count: {
+          select: { reservations: true },
+        },
+      },
+    });
+
+    return classes.map((c) => ({
+      id: c.id,
+      date: c.date.toISOString(),
+      startTime: c.startTime,
+      title: c.template.title,
+      description: c.template.description || "",
+      instructor: c.template.instructor,
+      capacity: c.template.capacity,
+      reserved: c._count.reservations,
+      available: c.template.capacity - c._count.reservations,
+    }));
+  }
+}

@@ -38,6 +38,12 @@ export const HOURS = Array.from({ length: 16 }, (_, i) => {
   return `${String(hour).padStart(2, "0")}:00`;
 });
 
+export const getTodayWeekday = () => {
+  // Monday = 0 ... Sunday = 6
+  const jsDay = new Date().getDay(); // Sun=0 ... Sat=6
+  return jsDay === 0 ? 6 : jsDay - 1;
+}
+
 export function getCurrentWeekDates(): Date[] {
   const today = new Date();
 

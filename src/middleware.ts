@@ -45,16 +45,12 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
-  console.log("Token: ", token);
-
   // Verify JWT
   try {
     const payload = await verifyJWT(token);
     if (!payload) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
-
-    console.log("Approved?: ", APPCONFIG.USER.requiresApproval && !payload.user.approved);
 
     if (APPCONFIG.USER.requiresApproval && !payload.user.approved) {
       return NextResponse.redirect(new URL("/login", req.url));

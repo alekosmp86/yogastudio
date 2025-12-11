@@ -5,8 +5,7 @@ import { Sun, Flame, Sparkles, Dumbbell } from "lucide-react";
 import { Progress } from "@/components/shared/Progress";
 import Button from "@/components/shared/Button";
 import { Card, CardContent } from "@/components/shared/Card";
-import { ScheduledClassExtended } from "@/types/schedule/ScheduledClassExtended";
-import { Schedule } from "@/types/schedule/Schedule";
+import { DailyClass } from "@/types/classes/DailyClass";
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   sun: Sun,
@@ -16,14 +15,13 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
 };
 
 type ClassCardProps = {
-  gymClass: Omit<ScheduledClassExtended, 'schedule'>;
-  schedule: Schedule;
+  gymClass: DailyClass;
 }
 
-export default function ClassCard({ gymClass, schedule }: ClassCardProps) {
+export default function ClassCard({ gymClass }: ClassCardProps) {
   const Icon = ICON_MAP.default;
 
-  const percentage = (10 / 20) * 100;
+  const percentage = (gymClass.reserved / gymClass.capacity) * 100;
 
   const handleReserve = () => {};
 
@@ -35,7 +33,7 @@ export default function ClassCard({ gymClass, schedule }: ClassCardProps) {
         <div className='flex flex-col w-full'>
           <div className='flex justify-between'>
             <h2 className='font-semibold text-primary-800'>{gymClass.title}</h2>
-            <span className='text-sm text-primary-800'>{schedule.startTime}</span>
+            <span className='text-sm text-primary-800'>{gymClass.startTime}</span>
           </div>
 
           <p className='text-sm font-semibold text-primary-800'>{gymClass.description}</p>
@@ -47,7 +45,7 @@ export default function ClassCard({ gymClass, schedule }: ClassCardProps) {
           <div className='mt-2'>
             <Progress value={percentage} className='h-2' />
             <p className='text-xs text-primary-800 mt-1'>
-              10/20 spots filled
+              {gymClass.reserved}/{gymClass.capacity} spots filled
             </p>
           </div>
 
