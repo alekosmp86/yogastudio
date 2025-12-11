@@ -16,14 +16,13 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
 
 type ClassCardProps = {
   gymClass: DailyClass;
+  handleReserve: () => void;
 }
 
-export default function ClassCard({ gymClass }: ClassCardProps) {
+export default function ClassCard({ gymClass, handleReserve }: ClassCardProps) {
   const Icon = ICON_MAP.default;
 
   const percentage = (gymClass.reserved / gymClass.capacity) * 100;
-
-  const handleReserve = () => {};
 
   return (
     <Card className='shadow-lg bg-white'>

@@ -11,6 +11,7 @@ import { GoogleUserMapperImpl } from "./auth/providers/google/(mappers)/impl/Goo
 import { AccountServiceImpl } from "./account/(services)/impl/AccountServiceImpl";
 import { TokenServiceImpl } from "./auth/token/(services)/impl/TokenServiceImpl";
 import { CustomerClassesServiceImpl } from "./customer/classes/(services)/impl/CustomerClassesServiceImpl";
+import { ReservationServiceImpl } from "./customer/reservations/(services)/impl/ReservationServiceImpl";
 
 const prisma = new PrismaClient();
 
@@ -22,6 +23,7 @@ export const scheduleService = new ScheduleServiceImpl(prisma);
 export const customerClassesService = new CustomerClassesServiceImpl(prisma);
 export const accountService = new AccountServiceImpl(prisma);
 export const tokenService = new TokenServiceImpl(userService);
+export const reservationService = new ReservationServiceImpl(prisma);
 
 export const classesMapper = new ClassesMapperImpl();
 export const scheduleMapper = new ScheduleMapperImpl();
