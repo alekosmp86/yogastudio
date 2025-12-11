@@ -39,8 +39,8 @@ export default function LoginPage() {
     setStatus(Status.LOADING);
 
     try {
-      const {  message  } = await http.get<ApiResponse<string>>(        
-        `/auth/magic-link?email=${emailInput.current?.value}`,       
+      const { message } = await http.get<ApiResponse<string>>(
+        `/auth/magic-link?email=${emailInput.current?.value}`,
         ApiType.FRONTEND
       );
 
@@ -105,6 +105,14 @@ export default function LoginPage() {
         >
           {status === Status.LOADING ? "Sending..." : "Get link"}
         </Button>
+
+        <div className='flex items-center'>
+          <div className='flex-grow border-t border-gray-300'></div>
+          <span className='px-3 py-1 text-gray-500 text-xs bg-gray-100 rounded-full'>
+            or
+          </span>
+          <div className='flex-grow border-t border-gray-300'></div>
+        </div>
 
         <button
           type='button'
