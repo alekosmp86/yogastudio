@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import { Roles } from "./enums/Roles";
 import { jwtVerify } from "jose";
 import { SessionUser } from "./types/SessionUser";
+import { APPCONFIG } from "app/config";
 
 const PUBLIC_PATHS = [
   "/",
@@ -53,7 +54,11 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
-    console.log("Decoded: ", payload);
+    console.log("Approved?: ", APPCONFIG.USER.requiresApproval && !payload.user.approved);
+
+    if (APPCONFIG.USER.requiresApproval && !payload.user.approved) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
 
     // Optional: protect owner-only pages
     if (pathname.startsWith("/owner") && payload.user.role !== Roles.OWNER) {

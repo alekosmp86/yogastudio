@@ -18,7 +18,7 @@ export default function Navbar() {
       <Container className='flex h-16 items-center justify-between'>
         {/* Logo */}
         <div className='text-xl font-bold text-white'>
-          {APPCONFIG.BUSINESS_NAME}
+          {APPCONFIG.BUSINESS.name}
         </div>
 
         {/* Desktop Menu */}

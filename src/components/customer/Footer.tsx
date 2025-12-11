@@ -12,7 +12,7 @@ export default function Footer() {
       <div className="mx-auto max-w-4xl px-4 py-8 flex flex-col items-center gap-4">
         {/* Copyright */}
         <p className="text-sm">
-          © {new Date().getFullYear()} {APPCONFIG.BUSINESS_NAME} — All rights reserved
+          © {new Date().getFullYear()} {APPCONFIG.BUSINESS.name} — All rights reserved
         </p>
 
         {/* Icons */}
@@ -26,7 +26,7 @@ export default function Footer() {
           </a>
 
           <a
-            href={`https://wa.me/${APPCONFIG.BUSINESS_WHATSAPP_NUMBER}`}
+            href={`https://wa.me/${APPCONFIG.BUSINESS.whatsappNumber}`}
             target="_blank"
             className="hover:scale-110 transition"
           >
@@ -34,7 +34,7 @@ export default function Footer() {
           </a>
 
           <a
-            href={`mailto:${APPCONFIG.BUSINESS_EMAIL}`}
+            href={`mailto:${APPCONFIG.BUSINESS.email}`}
             className="hover:scale-110 transition"
           >
             <EnvelopeIcon className={iconClasses} />
