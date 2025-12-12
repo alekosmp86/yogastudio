@@ -24,6 +24,8 @@ export class AdminServiceImpl implements AdminService {
       const today = new Date();
       const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
 
+      this.logger.log(`Today is ${todayUTC}`);
+
       const createdInstances: ClassInstance[] = [];
 
       // 1. Get all active schedules for today

@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { adminService } from "..";
 import { RequestStatus } from "@/enums/RequestStatus";
 
+export const runtime = "nodejs";
+export const maxDuration = 60;
+
 export async function GET(request: Request) {
   try {
     const authHeader = request.headers.get("authorization");
