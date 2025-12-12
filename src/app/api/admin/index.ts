@@ -1,3 +1,6 @@
 import { AdminServiceImpl } from "./(services)/impl/AdminServiceImpl";
+import { PrismaClient } from "@prisma/client";
 
-export const adminService = new AdminServiceImpl();
+const prisma = new PrismaClient();
+
+export const adminService = new AdminServiceImpl(prisma);

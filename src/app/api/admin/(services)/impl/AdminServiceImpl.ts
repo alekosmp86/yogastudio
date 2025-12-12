@@ -1,12 +1,14 @@
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { scheduledTasks } from "../../ScheduledTasks";
 import { AdminService } from "../AdminService";
-import { classInstanceService, weeklyScheduleService } from "app/api";
+import { classInstanceService } from "app/api";
 import { getTodayWeekday } from "@/lib/utils";
-import { ClassInstance } from "@prisma/client";
+import { ClassInstance, PrismaClient } from "@prisma/client";
 
 export class AdminServiceImpl implements AdminService {
   private logger = new ConsoleLogger(this.constructor.name);
+
+  constructor(private prisma: PrismaClient) {}
 
   async runScheduledTasks(): Promise<void> {
     for (const task of scheduledTasks) {
@@ -22,16 +24,27 @@ export class AdminServiceImpl implements AdminService {
     try {
       const weekday = getTodayWeekday();
       const today = new Date();
-      const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
+      const todayUTC = new Date(
+        Date.UTC(
+          today.getUTCFullYear(),
+          today.getUTCMonth(),
+          today.getUTCDate()
+        )
+      );
 
       this.logger.log(`Today is ${todayUTC}`);
 
       const createdInstances: ClassInstance[] = [];
 
       // 1. Get all active schedules for today
-      const schedules = await weeklyScheduleService.getWeeklyScheduleByFields({
-        weekday,
-        isActive: true,
+      const schedules = await this.prisma.weeklySchedule.findMany({
+        where: {
+          weekday,
+          isActive: true,
+        },
+        include: {
+          template: true,
+        },
       });
 
       this.logger.log(`Found ${schedules.length} schedules for today`);
