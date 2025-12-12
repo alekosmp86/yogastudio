@@ -14,8 +14,8 @@ export async function GET(request: Request) {
       });
     }
 
-    
-    await adminService.runScheduledTasks();
+
+    await adminService.generateDailyClasses();
     return NextResponse.json({ message: "Scheduled tasks completed" });
   } catch (error) {
     console.error(error);
