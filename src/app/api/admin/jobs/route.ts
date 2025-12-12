@@ -14,6 +14,7 @@ export async function GET(request: Request) {
       });
     }
 
+    
     await adminService.runScheduledTasks();
     return NextResponse.json({ message: "Scheduled tasks completed" });
   } catch (error) {

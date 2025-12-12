@@ -1,14 +1,12 @@
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { scheduledTasks } from "../../ScheduledTasks";
 import { AdminService } from "../AdminService";
-import { classInstanceService } from "app/api";
+import { classInstanceService, weeklyScheduleService } from "app/api";
 import { getTodayWeekday } from "@/lib/utils";
-import { ClassInstance, PrismaClient } from "@prisma/client";
+import { ClassInstance } from "@prisma/client";
 
 export class AdminServiceImpl implements AdminService {
   private logger = new ConsoleLogger(this.constructor.name);
-
-  constructor(private prisma: PrismaClient) {}
 
   async runScheduledTasks(): Promise<void> {
     for (const task of scheduledTasks) {
@@ -24,30 +22,14 @@ export class AdminServiceImpl implements AdminService {
     try {
       const weekday = getTodayWeekday();
       const today = new Date();
-      const todayUTC = new Date(
-        Date.UTC(
-          today.getUTCFullYear(),
-          today.getUTCMonth(),
-          today.getUTCDate()
-        )
-      );
-
-      this.logger.log(`Today is ${todayUTC}`);
+      const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
 
       const createdInstances: ClassInstance[] = [];
 
       // 1. Get all active schedules for today
-      /*const schedules = await this.prisma.weeklySchedule.findMany({
-        where: {
-          weekday,
-          isActive: true,
-        },
-        include: {
-          template: true,
-        },
-      }).catch((e) => {
-        this.logger.error(`Error fetching schedules: ${e}`);
-        return [];
+      const schedules = await weeklyScheduleService.getWeeklyScheduleByFields({
+        weekday,
+        isActive: true,
       });
 
       this.logger.log(`Found ${schedules.length} schedules for today`);
@@ -72,11 +54,9 @@ export class AdminServiceImpl implements AdminService {
 
           createdInstances.push(newInstance);
         }
-      }*/
-      const users = await this.prisma.user.findMany();
-      this.logger.log(`Found ${users.length} users`);
+      }
 
-      //this.logger.log(`Created ${createdInstances.length} class instances`);
+      this.logger.log(`Created ${createdInstances.length} class instances`);
       return createdInstances;
     } catch (e) {
       this.logger.error(`Error in generateDailyClasses(): ${e}`);

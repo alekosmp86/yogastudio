@@ -1,5 +1,5 @@
 import { UserLinkServiceImpl } from "./user-link/(services)/impl/UserLinkService";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { UserServiceImpl } from "./users/(services)/impl/UserServiceImpl";
 import { ResendMailServiceImpl } from "./mailer/services/impl/ResendMailServiceImpl";
 import { ClassesServiceImpl } from "./owner/classes/(services)/impl/ClassesServiceImpl";
@@ -14,8 +14,6 @@ import { CustomerClassesServiceImpl } from "./customer/classes/(services)/impl/C
 import { ReservationServiceImpl } from "./customer/reservations/(services)/impl/ReservationServiceImpl";
 import { WeeklyScheduleServiceImpl } from "./weekly-schedule/(services)/impl/WeeklyScheduleServiceImpl";
 import { ClassInstanceServiceImpl } from "./class-instance/(services)/impl/ClassInstanceServiceImpl";
-
-const prisma = new PrismaClient();
 
 export const userLinkService = new UserLinkServiceImpl(prisma);
 export const userService = new UserServiceImpl(prisma);
