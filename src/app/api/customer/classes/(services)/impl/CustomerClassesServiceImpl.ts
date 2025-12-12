@@ -1,27 +1,30 @@
 import { DailyClass } from "@/types/classes/DailyClass";
 import { CustomerClassesService } from "../CustomerClassesService";
-import dayjs from "dayjs";
 import { ApiUtils } from "app/api/utils/ApiUtils";
 import { prisma } from "@/lib/prisma";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import { APPCONFIG } from "app/config";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
 
   async getTodayClasses(): Promise<DailyClass[]> {
-    const today = dayjs().format("YYYY-MM-DD");
-    const todayDate = dayjs(today).toDate();
+    const nowUTC = dayjs().tz(APPCONFIG.TIMEZONE);
+    const today = dayjs(nowUTC.format("YYYY-MM-DD")).toDate();
 
-    const oneHourLater = dayjs()
+    const oneHourLater = nowUTC
       .add(1, "hour")
-      .minute(0)
-      .second(0)
-      .millisecond(0)
       .format("HH:mm");
 
     const user = await ApiUtils.getSessionUser();
 
     const classes = await prisma.classInstance.findMany({
       where: {
-        date: todayDate,
+        date: today,
         startTime: {
           gte: oneHourLater,
         },
