@@ -1,17 +1,16 @@
-import { PrismaClient } from "@prisma/client";
 import { ScheduleService } from "../ScheduleService";
 import { WeeklySchedule } from "@prisma/client";
 import { ScheduledClass } from "@/types/schedule/ScheduledClass";
+import { prisma } from "@/lib/prisma";
 
 export class ScheduleServiceImpl implements ScheduleService {
-  constructor(private readonly prisma: PrismaClient) {}
 
   async getScheduledClasses(): Promise<WeeklySchedule[]> {
-    return await this.prisma.weeklySchedule.findMany();
+    return await prisma.weeklySchedule.findMany();
   }
 
   async createScheduledClass(scheduledClass: Omit<ScheduledClass, "id">): Promise<WeeklySchedule> {
-    return await this.prisma.weeklySchedule.create({
+    return await prisma.weeklySchedule.create({
       data: {
         templateId: scheduledClass.classId,
         weekday: scheduledClass.weekday,
@@ -22,7 +21,7 @@ export class ScheduleServiceImpl implements ScheduleService {
 
   async updateScheduledClass(scheduledClass: ScheduledClass, id: number): Promise<WeeklySchedule> {
     console.log("Updating schedule:", JSON.stringify(scheduledClass));
-    return await this.prisma.weeklySchedule.update({
+    return await prisma.weeklySchedule.update({
       where: {
         templateId_weekday_startTime: {
           templateId: id,
@@ -37,7 +36,7 @@ export class ScheduleServiceImpl implements ScheduleService {
   }
 
   async deleteScheduledClass(id: number): Promise<number> {
-    await this.prisma.weeklySchedule.delete({ where: { id } });
+    await prisma.weeklySchedule.delete({ where: { id } });
     return id;
   }
 }

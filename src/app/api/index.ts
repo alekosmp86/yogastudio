@@ -1,5 +1,4 @@
 import { UserLinkServiceImpl } from "./user-link/(services)/impl/UserLinkService";
-import { prisma } from "@/lib/prisma";
 import { UserServiceImpl } from "./users/(services)/impl/UserServiceImpl";
 import { ResendMailServiceImpl } from "./mailer/services/impl/ResendMailServiceImpl";
 import { ClassesServiceImpl } from "./owner/classes/(services)/impl/ClassesServiceImpl";
@@ -15,17 +14,17 @@ import { ReservationServiceImpl } from "./customer/reservations/(services)/impl/
 import { WeeklyScheduleServiceImpl } from "./weekly-schedule/(services)/impl/WeeklyScheduleServiceImpl";
 import { ClassInstanceServiceImpl } from "./class-instance/(services)/impl/ClassInstanceServiceImpl";
 
-export const userLinkService = new UserLinkServiceImpl(prisma);
-export const userService = new UserServiceImpl(prisma);
+export const userLinkService = new UserLinkServiceImpl();
+export const userService = new UserServiceImpl();
 export const mailService = new ResendMailServiceImpl();
-export const classesService = new ClassesServiceImpl(prisma);
-export const scheduleService = new ScheduleServiceImpl(prisma);
-export const customerClassesService = new CustomerClassesServiceImpl(prisma);
-export const accountService = new AccountServiceImpl(prisma);
+export const classesService = new ClassesServiceImpl();
+export const scheduleService = new ScheduleServiceImpl();
+export const customerClassesService = new CustomerClassesServiceImpl();
+export const accountService = new AccountServiceImpl();
 export const tokenService = new TokenServiceImpl(userService);
-export const reservationService = new ReservationServiceImpl(prisma);
-export const weeklyScheduleService = new WeeklyScheduleServiceImpl(prisma);
-export const classInstanceService = new ClassInstanceServiceImpl(prisma);
+export const reservationService = new ReservationServiceImpl();
+export const weeklyScheduleService = new WeeklyScheduleServiceImpl();
+export const classInstanceService = new ClassInstanceServiceImpl();
 
 export const classesMapper = new ClassesMapperImpl();
 export const scheduleMapper = new ScheduleMapperImpl();

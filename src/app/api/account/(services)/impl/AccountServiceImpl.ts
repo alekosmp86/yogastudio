@@ -1,16 +1,15 @@
-import { PrismaClient } from "@prisma/client";
 import { AccountService } from "../AccountService";
 import { Account } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 export class AccountServiceImpl implements AccountService {
-  constructor(private readonly prisma: PrismaClient) {}
 
   async create(data: Omit<Account, "id">): Promise<Account> {
-    return this.prisma.account.create({ data });
+    return prisma.account.create({ data });
   }
 
   async upsert(data: Omit<Account, "id">): Promise<Account> {
-    return this.prisma.account.upsert({
+    return prisma.account.upsert({
       where: {
         provider_providerAccountId: {
           provider: "google",

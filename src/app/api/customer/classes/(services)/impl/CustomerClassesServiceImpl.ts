@@ -1,11 +1,10 @@
 import { DailyClass } from "@/types/classes/DailyClass";
 import { CustomerClassesService } from "../CustomerClassesService";
-import { PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
 import { ApiUtils } from "app/api/utils/ApiUtils";
+import { prisma } from "@/lib/prisma";
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
-  constructor(private readonly prisma: PrismaClient) {}
 
   async getTodayClasses(): Promise<DailyClass[]> {
     const now = dayjs();
@@ -21,7 +20,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
 
     const user = await ApiUtils.getSessionUser();
 
-    const classes = await this.prisma.classInstance.findMany({
+    const classes = await prisma.classInstance.findMany({
       where: {
         date: {
           gte: todayStart,

@@ -1,10 +1,10 @@
 import { UserLinkService } from "../UserLinkService";
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 export class UserLinkServiceImpl implements UserLinkService {
-    constructor(private readonly prisma: PrismaClient) {}
     
     async findUserByEmail(email: string): Promise<User | null> {
-        return this.prisma.user.findUnique({ where: { email } });
+        return prisma.user.findUnique({ where: { email } });
     }
 }

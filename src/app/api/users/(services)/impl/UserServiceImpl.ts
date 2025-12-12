@@ -1,25 +1,23 @@
-import { PrismaClient } from "@prisma/client";
 import { UserService } from "../UserService";
 import { User } from "@prisma/client";
 import { UserActions } from "@/enums/UserActions";
+import { prisma } from "@/lib/prisma";
 
 export class UserServiceImpl implements UserService {
-  constructor(private readonly prisma: PrismaClient) {}
-
   async create(data: Omit<User, "id">): Promise<User> {
-    return this.prisma.user.create({ data });
+    return prisma.user.create({ data });
   }
 
   async getUserById(id: number): Promise<User | null> {
-    return this.prisma.user.findUnique({ where: { id } });
+    return prisma.user.findUnique({ where: { id } });
   }
 
   async findUniqueByFields(fields: Pick<User, "email">): Promise<User | null> {
-    return this.prisma.user.findUnique({ where: fields });
+    return prisma.user.findUnique({ where: fields });
   }
 
   async getAllUsers(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return prisma.user.findMany();
   }
 
   executeAction(id: number, action: string): Promise<User | null> {
@@ -34,7 +32,7 @@ export class UserServiceImpl implements UserService {
   }
 
   async approveUser(id: number): Promise<User | null> {
-    await this.prisma.user.update({
+    await prisma.user.update({
       where: { id },
       data: { approved: true },
     });
@@ -42,7 +40,7 @@ export class UserServiceImpl implements UserService {
   }
 
   async rejectUser(id: number): Promise<User | null> {
-    await this.prisma.user.update({
+    await prisma.user.update({
       where: { id },
       data: { approved: false },
     });

@@ -1,4 +1,4 @@
-import { MagicLink, PrismaClient } from "@prisma/client";
+import { MagicLink } from "@prisma/client";
 import { RequestStatus } from "@/enums/RequestStatus";
 import crypto from "crypto";
 import { MagicLinkService } from "../MagicLinkService";
@@ -6,11 +6,12 @@ import { LoggerService } from "app/api/logger/LoggerService";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { UserLinkService } from "app/api/user-link/(services)/UserLinkService";
 import { MagicLinkResponse } from "@/types/requests/MagicLinkResponse";
+import { prisma } from "@/lib/prisma";
 
 export class MagicLinkServiceImpl implements MagicLinkService {
   private readonly logger: LoggerService;
 
-  constructor(private readonly prisma: PrismaClient, private readonly userLinkService: UserLinkService) {
+  constructor(private readonly userLinkService: UserLinkService) {
     this.logger = new ConsoleLogger(this.constructor.name);
   }
 
@@ -40,7 +41,7 @@ export class MagicLinkServiceImpl implements MagicLinkService {
     const expiresAt = new Date(Date.now() + 1000 * 60 * 15); // 15 min
 
     this.logger.log("Saving magic link");
-    await this.prisma.magicLink.create({
+    await prisma.magicLink.create({
       data: {
         token,
         userId: user.id,
@@ -55,6 +56,6 @@ export class MagicLinkServiceImpl implements MagicLinkService {
   }
 
   async findLinkByToken(token: string): Promise<MagicLink | null> {
-    return this.prisma.magicLink.findUnique({ where: { token } });
+    return prisma.magicLink.findUnique({ where: { token } });
   }
 }

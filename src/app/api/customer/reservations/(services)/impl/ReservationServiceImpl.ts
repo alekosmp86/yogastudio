@@ -1,13 +1,12 @@
-import { PrismaClient } from "@prisma/client";
 import { ReservationService } from "../ReservationService";
 import { RequestStatus } from "@/enums/RequestStatus";
+import { prisma } from "@/lib/prisma";
 
 export class ReservationServiceImpl implements ReservationService {
-  constructor(private prisma: PrismaClient) {}
 
   async createReservation(classId: number, userId: number): Promise<string> {
     // 1 — Load class + reservations + capacity
-    const classInstance = await this.prisma.classInstance.findUnique({
+    const classInstance = await prisma.classInstance.findUnique({
       where: { id: classId },
       include: {
         template: true,
@@ -36,7 +35,7 @@ export class ReservationServiceImpl implements ReservationService {
     }
 
     // 4 — Create reservation
-    await this.prisma.reservation.create({
+    await prisma.reservation.create({
       data: {
         userId,
         classId,
