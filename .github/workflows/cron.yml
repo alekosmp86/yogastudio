@@ -1,0 +1,27 @@
+name: Daily Cron Job
+
+on:
+  schedule:
+    - cron: "0 3 * * *"   # Runs every day at 03:00 UTC
+  workflow_dispatch:       # allow manual trigger
+
+jobs:
+  run-cron:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call API Cron Endpoint
+        run: |
+          echo "Triggering Scheduled Task..."
+          http_code=$(curl -s -o response.txt -w "%{http_code}" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            ${{ secrets.CRON_ENDPOINT }})
+
+          echo "Status code: $http_code"
+          echo "Response:"
+          cat response.txt
+
+          if [ "$http_code" -ne 200 ]; then
+            echo "Cron job failed"
+            exit 1
+          fi
