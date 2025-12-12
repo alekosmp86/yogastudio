@@ -10,6 +10,7 @@ const PUBLIC_PATHS = [
   "/login",
   "/register",
   "/auth/verify",
+  "/api/admin",
   "/api/auth/register",
   "/api/auth/token",
   "/api/auth/magic-link",
@@ -29,13 +30,6 @@ async function verifyJWT(token: string) {
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-
-  const cronSecret = req.headers.get("authorization");
-
-  // Allow cron job to bypass auth
-  if (cronSecret && cronSecret === process.env.CRON_SECRET) {
-    return NextResponse.next();
-  }
 
   // Allow all public pages
   if (
