@@ -45,6 +45,9 @@ export class AdminServiceImpl implements AdminService {
         include: {
           template: true,
         },
+      }).catch((e) => {
+        this.logger.error(`Error fetching schedules: ${e}`);
+        return [];
       });
 
       this.logger.log(`Found ${schedules.length} schedules for today`);

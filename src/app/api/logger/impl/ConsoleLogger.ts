@@ -10,6 +10,7 @@ export class ConsoleLogger implements LoggerService {
     log(message: string, data?: unknown): void {
         console.log(`INFO ${this.loggerClass}: ${message}`, data || '');
     }
+    
     error(message: string, data?: unknown): void {
         console.error(`ERROR ${this.loggerClass}: ${message}`, data || '');
     }
