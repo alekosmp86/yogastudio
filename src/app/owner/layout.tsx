@@ -5,15 +5,14 @@ import { AppProviders } from "@/lib/contexts/ComposeProviders";
 import ToastContainer from "@/components/shared/ToastContainer";
 import Button from "@/components/shared/Button";
 import { Power } from "lucide-react";
-import { http } from "@/lib/http";
-import { ApiType } from "@/enums/ApiTypes";
 import { useRouter } from "next/navigation";
+import { removeSession } from "@/lib/utils";
 
 function OwnerLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const handleLogout = async () => {
-    await http.post("/auth/logout", ApiType.FRONTEND);
+    await removeSession();
     router.push("/login");
   };
 

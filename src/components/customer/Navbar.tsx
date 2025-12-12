@@ -9,10 +9,9 @@ import Container from "../shared/Container";
 import { NavBarItems } from "static/StaticMockData";
 import { APPCONFIG } from "app/config";
 import { Power } from "lucide-react";
-import { http } from "@/lib/http";
-import { ApiType } from "@/enums/ApiTypes";
 import { useRouter } from "next/navigation";
 import Button from "../shared/Button";
+import { removeSession } from "@/lib/utils";
 
 export default function Navbar() {
   const router = useRouter();
@@ -20,7 +19,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   const signOut = async () => {
-    await http.post("/auth/logout", ApiType.FRONTEND);
+    await removeSession();
     router.push("/login");
   };
 
