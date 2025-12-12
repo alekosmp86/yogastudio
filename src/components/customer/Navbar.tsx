@@ -1,16 +1,14 @@
 "use client";
 
 import { Activity, useState } from "react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import MobileNavItem from "../shared/MobileNavItem";
 import { usePathname } from "next/navigation";
 import NavItem from "../shared/NavItem";
 import Container from "../shared/Container";
 import { NavBarItems } from "static/StaticMockData";
 import { APPCONFIG } from "app/config";
-import { Power } from "lucide-react";
+import { Menu, Power, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Button from "../shared/Button";
 import { removeSession } from "@/lib/utils";
 
 export default function Navbar() {
@@ -40,7 +38,6 @@ export default function Navbar() {
               href={item.url}
               Icon={item.icon}
               active={pathname === item.url}
-              executeFn={item.executeFn}
             />
           ))}
           <Power
@@ -50,17 +47,18 @@ export default function Navbar() {
         </div>
 
         {/* Mobile toggle */}
-        <Button
-          variant='ghost'
-          onClick={() => setOpen(!open)}
-          className='md:hidden p-2 text-white'
-        >
-          {open ? (
-            <XMarkIcon className='h-6 w-6' />
-          ) : (
-            <Bars3Icon className='h-6 w-6' />
-          )}
-        </Button>
+        <div className='flex items-center md:hidden'>
+          <button
+            onClick={() => setOpen(!open)}
+            className='p-2 text-white'
+          >
+            {open ? <X className='h-6 w-6' /> : <Menu className='h-6 w-6' />}
+          </button>
+          <Power
+            className='text-white h-5 w-5 hover:scale-110 transition cursor-pointer hover:bg-gray-200 hover:text-black rounded-full'
+            onClick={() => signOut()}
+          />
+        </div>
       </Container>
 
       {/* Mobile Menu */}
@@ -73,7 +71,6 @@ export default function Navbar() {
               href={item.url}
               Icon={item.icon}
               active={pathname === item.url}
-              executeFn={item.executeFn}
             />
           ))}
         </div>

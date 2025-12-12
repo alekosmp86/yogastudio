@@ -11,6 +11,7 @@ const PUBLIC_PATHS = [
   "/register",
   "/auth/verify",
   "/api/admin",
+  "/api/auth/logout",
   "/api/auth/register",
   "/api/auth/token",
   "/api/auth/magic-link",

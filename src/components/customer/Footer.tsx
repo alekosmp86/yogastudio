@@ -1,7 +1,5 @@
 "use client";
-
-import { EnvelopeIcon } from "@heroicons/react/24/outline";
-import { Instagram, MessageCircle } from "lucide-react";
+import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { APPCONFIG } from "app/config";
 
 export default function Footer() {
@@ -37,7 +35,7 @@ export default function Footer() {
             href={`mailto:${APPCONFIG.BUSINESS.email}`}
             className="hover:scale-110 transition"
           >
-            <EnvelopeIcon className={iconClasses} />
+            <Mail className={iconClasses} />
           </a>
         </div>
 

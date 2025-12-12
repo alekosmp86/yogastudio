@@ -3,7 +3,6 @@ type NavItemProps = {
   href: string;
   Icon: React.ComponentType<{ className?: string }>;
   active: boolean;
-  executeFn?: () => void;
 };
 
 export default function NavItem({
@@ -11,17 +10,10 @@ export default function NavItem({
   href,
   Icon,
   active,
-  executeFn,
 }: NavItemProps) {
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault();
-    if (executeFn) executeFn();
-  };
-
   return (
     <a
       href={href}
-      onClick={handleClick}
       className={`flex items-center gap-2 transition ${
         active
           ? "text-white font-semibold"

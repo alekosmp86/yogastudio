@@ -3,7 +3,6 @@ type MobileNavItemProps = {
   href: string;
   Icon: React.ComponentType<{ className?: string }>;
   active: boolean;
-  executeFn?: () => void;
 };
 
 export default function MobileNavItem({
@@ -11,16 +10,10 @@ export default function MobileNavItem({
   href,
   Icon,
   active,
-  executeFn,
 }: MobileNavItemProps) {
-  const handleClick = () => {
-    if (executeFn) executeFn();
-  };
-
   return (
     <a
       href={href}
-      onClick={handleClick}
       className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100 transition"
     >
       <Icon
