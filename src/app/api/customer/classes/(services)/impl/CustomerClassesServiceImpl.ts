@@ -8,6 +8,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
 
   async getTodayClasses(): Promise<DailyClass[]> {
     const today = dayjs().format("YYYY-MM-DD");
+    const todayDate = dayjs(today).toDate();
 
     const oneHourLater = dayjs()
       .add(1, "hour")
@@ -20,7 +21,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
 
     const classes = await prisma.classInstance.findMany({
       where: {
-        date: today,
+        date: todayDate,
         startTime: {
           gte: oneHourLater,
         },
