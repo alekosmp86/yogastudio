@@ -37,7 +37,7 @@ export class AdminServiceImpl implements AdminService {
       const createdInstances: ClassInstance[] = [];
 
       // 1. Get all active schedules for today
-      const schedules = await this.prisma.weeklySchedule.findMany({
+      /*const schedules = await this.prisma.weeklySchedule.findMany({
         where: {
           weekday,
           isActive: true,
@@ -72,9 +72,11 @@ export class AdminServiceImpl implements AdminService {
 
           createdInstances.push(newInstance);
         }
-      }
+      }*/
+      const users = await this.prisma.user.findMany();
+      this.logger.log(`Found ${users.length} users`);
 
-      this.logger.log(`Created ${createdInstances.length} class instances`);
+      //this.logger.log(`Created ${createdInstances.length} class instances`);
       return createdInstances;
     } catch (e) {
       this.logger.error(`Error in generateDailyClasses(): ${e}`);
