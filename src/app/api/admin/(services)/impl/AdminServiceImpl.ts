@@ -21,8 +21,8 @@ export class AdminServiceImpl implements AdminService {
 
     try {
       const weekday = getTodayWeekday();
-      const today = new Date();
-      const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
+      const todayLocal = new Date();
+      todayLocal.setHours(0, 0, 0, 0);
 
       const createdInstances: ClassInstance[] = [];
 
@@ -42,12 +42,12 @@ export class AdminServiceImpl implements AdminService {
         const existing = await classInstanceService.findFirstByFields({
           templateId: schedule.templateId,
           startTime: schedule.startTime,
-          date: todayUTC,
+          date: todayLocal,
         });
 
         if (!existing) {
           const newInstance = await classInstanceService.create({
-            date: todayUTC,
+            date: todayLocal,
             startTime: schedule.startTime,
             templateId: schedule.templateId,
           });
