@@ -17,42 +17,50 @@ export class AdminServiceImpl implements AdminService {
   }
 
   async generateDailyClasses(): Promise<ClassInstance[]> {
-    const weekday = getTodayWeekday();
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const createdInstances: ClassInstance[] = [];
-    
-    // 1. Get all active schedules for today
-    const schedules = await weeklyScheduleService.getWeeklyScheduleByFields({
-      weekday,
-      isActive: true,
-    });
+    this.logger.log("Starting generateDailyClasses()");
 
-    this.logger.log(`Found ${schedules.length} schedules for today`);
+    try {
+      const weekday = getTodayWeekday();
+      const today = new Date();
+      const todayUTC = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
 
-    if (!schedules.length) {
-      return createdInstances;
-    }
+      const createdInstances: ClassInstance[] = [];
 
-    for (const schedule of schedules) {
-      const existing = await classInstanceService.findFirstByFields({
-        templateId: schedule.templateId,
-        startTime: schedule.startTime,
-        date: today,
+      // 1. Get all active schedules for today
+      const schedules = await weeklyScheduleService.getWeeklyScheduleByFields({
+        weekday,
+        isActive: true,
       });
 
-      if (!existing) {
-        const newInstance = await classInstanceService.create({
-          date: today,
-          startTime: schedule.startTime,
+      this.logger.log(`Found ${schedules.length} schedules for today`);
+
+      if (!schedules.length) {
+        return createdInstances;
+      }
+
+      for (const schedule of schedules) {
+        const existing = await classInstanceService.findFirstByFields({
           templateId: schedule.templateId,
+          startTime: schedule.startTime,
+          date: todayUTC,
         });
 
-        createdInstances.push(newInstance);
-      }
-    }
+        if (!existing) {
+          const newInstance = await classInstanceService.create({
+            date: todayUTC,
+            startTime: schedule.startTime,
+            templateId: schedule.templateId,
+          });
 
-    this.logger.log(`Created ${createdInstances.length} class instances`);
-    return createdInstances;
+          createdInstances.push(newInstance);
+        }
+      }
+
+      this.logger.log(`Created ${createdInstances.length} class instances`);
+      return createdInstances;
+    } catch (e) {
+      this.logger.error(`Error in generateDailyClasses(): ${e}`);
+      throw e;
+    }
   }
 }
