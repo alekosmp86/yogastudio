@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { adminService } from ".";
+import { adminService } from "..";
 import { RequestStatus } from "@/enums/RequestStatus";
 
 export async function GET(request: Request) {
@@ -10,7 +10,7 @@ export async function GET(request: Request) {
         status: 401,
       });
     }
-    
+
     await adminService.runScheduledTasks();
     return NextResponse.json({ message: "Scheduled tasks completed" });
   } catch (error) {

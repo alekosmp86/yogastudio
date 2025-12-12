@@ -6,13 +6,13 @@ import { getTodayWeekday } from "@/lib/utils";
 import { ClassInstance } from "@prisma/client";
 
 export class AdminServiceImpl implements AdminService {
-  constructor(private logger: ConsoleLogger) {}
+  private logger = new ConsoleLogger(this.constructor.name);
 
   async runScheduledTasks(): Promise<void> {
     for (const task of scheduledTasks) {
-      this.logger.log(`Running task: ${task.taskName}`);
+      this.logger.log(`Running task: "${task.taskName}"`);
       await task.run();
-      this.logger.log(`Task ${task.taskName} completed`);
+      this.logger.log(`Task "${task.taskName}" completed`);
     }
   }
 
