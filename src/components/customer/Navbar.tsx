@@ -12,6 +12,7 @@ import { Power } from "lucide-react";
 import { http } from "@/lib/http";
 import { ApiType } from "@/enums/ApiTypes";
 import { useRouter } from "next/navigation";
+import Button from "../shared/Button";
 
 export default function Navbar() {
   const router = useRouter();
@@ -40,6 +41,7 @@ export default function Navbar() {
               href={item.url}
               Icon={item.icon}
               active={pathname === item.url}
+              executeFn={item.executeFn}
             />
           ))}
           <Power
@@ -49,7 +51,8 @@ export default function Navbar() {
         </div>
 
         {/* Mobile toggle */}
-        <button
+        <Button
+          variant='ghost'
           onClick={() => setOpen(!open)}
           className='md:hidden p-2 text-white'
         >
@@ -58,7 +61,7 @@ export default function Navbar() {
           ) : (
             <Bars3Icon className='h-6 w-6' />
           )}
-        </button>
+        </Button>
       </Container>
 
       {/* Mobile Menu */}
@@ -71,6 +74,7 @@ export default function Navbar() {
               href={item.url}
               Icon={item.icon}
               active={pathname === item.url}
+              executeFn={item.executeFn}
             />
           ))}
         </div>

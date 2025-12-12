@@ -34,7 +34,7 @@ export default function HomePage() {
       </section>
 
       {/* Next Class Placeholder */}
-      <section className='p-4 border rounded-lg shadow-sm bg-white'>
+      <section className='p-4 border rounded-lg shadow-lg bg-white'>
         <h2 className='text-lg font-semibold text-gray-800 mb-2'>
           Next Available Class
         </h2>

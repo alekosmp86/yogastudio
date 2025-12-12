@@ -15,7 +15,7 @@ export async function readSession(): Promise<SessionUser | null> {
     if (!payload?.user) return null;
 
     return payload.user as SessionUser;
-  } catch (err) {
+  } catch {
     return null;
   }
 }

@@ -1,4 +1,6 @@
 import { ExecutionStatus } from "@/enums/ExecutionStatus";
+import { http } from "./http";
+import { ApiType } from "@/enums/ApiTypes";
 
 export function cn(...inputs: Array<string | undefined | null | false>) {
   return inputs.filter(Boolean).join(" ");
@@ -29,6 +31,10 @@ export async function validateToken(
   }
 
   callbackFn(ExecutionStatus.COMPLETED);
+}
+
+export async function removeSession() {
+  await http.post("/auth/logout", ApiType.FRONTEND);
 }
 
 export const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];

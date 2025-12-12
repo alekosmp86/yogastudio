@@ -1,17 +1,27 @@
+type NavItemProps = {
+  label: string;
+  href: string;
+  Icon: React.ComponentType<{ className?: string }>;
+  active: boolean;
+  executeFn?: () => void;
+};
+
 export default function NavItem({
   label,
   href,
   Icon,
   active,
-}: {
-  label: string;
-  href: string;
-  Icon: React.ComponentType<{ className?: string }>;
-  active: boolean;
-}) {
+  executeFn,
+}: NavItemProps) {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    if (executeFn) executeFn();
+  };
+
   return (
     <a
       href={href}
+      onClick={handleClick}
       className={`flex items-center gap-2 transition ${
         active
           ? "text-white font-semibold"
