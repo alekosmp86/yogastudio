@@ -8,10 +8,20 @@ import NavItem from "../shared/NavItem";
 import Container from "../shared/Container";
 import { NavBarItems } from "static/StaticMockData";
 import { APPCONFIG } from "app/config";
+import { Power } from "lucide-react";
+import { http } from "@/lib/http";
+import { ApiType } from "@/enums/ApiTypes";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+
+  const signOut = async () => {
+    await http.post("/auth/logout", ApiType.FRONTEND);
+    router.push("/login");
+  };
 
   return (
     <nav className='w-full border-b shadow-sm bg-theme-headings'>
@@ -32,6 +42,10 @@ export default function Navbar() {
               active={pathname === item.url}
             />
           ))}
+          <Power
+            className='text-white h-5 w-5 hover:scale-110 transition cursor-pointer hover:bg-gray-200 hover:text-black rounded-full'
+            onClick={() => signOut()}
+          />
         </div>
 
         {/* Mobile toggle */}
