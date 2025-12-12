@@ -1,8 +1,8 @@
-import { http } from "@/lib/http";
+import { adminService } from ".";
 
 export const scheduledTasks = [{
     taskName: "Create daily classes",
     run: async () => {
-        //synchronize classes
+        adminService.generateDailyClasses();
     }
 }]

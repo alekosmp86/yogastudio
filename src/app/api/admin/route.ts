@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
-import { scheduledTasks } from "./ScheduledTasks";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
-import { AdminServiceImpl } from "./(services)/impl/AdminServiceImpl";
-
-const logger = new ConsoleLogger("ScheduledTasks");
+import { adminService } from ".";
 
 export async function GET() {
-  logger.log("Running scheduled tasks");
-  const adminService = new AdminServiceImpl(logger);
-  await adminService.runScheduledTasks();
-  logger.log("Scheduled tasks completed");
-  return NextResponse.json({ ok: true });
+  try {
+    await adminService.runScheduledTasks();
+    return NextResponse.json({ message: "Scheduled tasks completed" });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 }

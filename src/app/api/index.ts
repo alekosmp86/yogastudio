@@ -12,6 +12,8 @@ import { AccountServiceImpl } from "./account/(services)/impl/AccountServiceImpl
 import { TokenServiceImpl } from "./auth/token/(services)/impl/TokenServiceImpl";
 import { CustomerClassesServiceImpl } from "./customer/classes/(services)/impl/CustomerClassesServiceImpl";
 import { ReservationServiceImpl } from "./customer/reservations/(services)/impl/ReservationServiceImpl";
+import { WeeklyScheduleServiceImpl } from "./weekly-schedule/(services)/impl/WeeklyScheduleServiceImpl";
+import { ClassInstanceServiceImpl } from "./class-instance/(services)/impl/ClassInstanceServiceImpl";
 
 const prisma = new PrismaClient();
 
@@ -24,6 +26,8 @@ export const customerClassesService = new CustomerClassesServiceImpl(prisma);
 export const accountService = new AccountServiceImpl(prisma);
 export const tokenService = new TokenServiceImpl(userService);
 export const reservationService = new ReservationServiceImpl(prisma);
+export const weeklyScheduleService = new WeeklyScheduleServiceImpl(prisma);
+export const classInstanceService = new ClassInstanceServiceImpl(prisma);
 
 export const classesMapper = new ClassesMapperImpl();
 export const scheduleMapper = new ScheduleMapperImpl();
