@@ -28,6 +28,8 @@ export class AdminServiceImpl implements AdminService {
       isActive: true,
     });
 
+    this.logger.log(`Found ${schedules.length} schedules for today`);
+
     if (!schedules.length) {
       return createdInstances;
     }
@@ -38,6 +40,8 @@ export class AdminServiceImpl implements AdminService {
         startTime: schedule.startTime,
         date: today,
       });
+
+      this.logger.log(`Found ${existing ? "existing" : "new"} class instance for schedule: ${schedule.templateId}`);
 
       if (!existing) {
         const newInstance = await classInstanceService.create({
@@ -50,6 +54,7 @@ export class AdminServiceImpl implements AdminService {
       }
     }
 
+    this.logger.log(`Created ${createdInstances.length} class instances`);
     return createdInstances;
   }
 }
