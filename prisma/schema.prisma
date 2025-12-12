@@ -59,8 +59,8 @@ model ClassTemplate {
 
 model ClassInstance {
   id          Int      @id @default(autoincrement())
-  date        DateTime // The specific date of the class
-  startTime   String // "18:00"
+  date        DateTime @db.Date
+  startTime   String
   isCancelled Boolean  @default(false)
 
   template   ClassTemplate @relation(fields: [templateId], references: [id])

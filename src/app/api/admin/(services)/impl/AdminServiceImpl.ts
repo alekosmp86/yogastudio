@@ -41,8 +41,6 @@ export class AdminServiceImpl implements AdminService {
         date: today,
       });
 
-      this.logger.log(`Found ${existing ? "existing" : "new"} class instance for schedule: ${schedule.templateId}`);
-
       if (!existing) {
         const newInstance = await classInstanceService.create({
           date: today,
