@@ -82,7 +82,7 @@ export default function TodayClasses() {
   const handleCancelation = async (gymClass: DailyClass) => {};
 
   return (
-    <div className='p-4 flex flex-col gap-6 h-full'>
+    <div className='p-4 flex flex-col gap-4 h-full'>
       <h1 className='text-2xl font-bold text-primary-800'>Today’s Classes</h1>
 
       {/* Scroll area */}
@@ -108,7 +108,7 @@ export default function TodayClasses() {
       <Activity
         mode={upcomingClasses.length === 0 && !loading ? "visible" : "hidden"}
       >
-        <p className='text-primary-800'>No classes scheduled for today.</p>
+        <p className='text-primary-800'>No classes available for today.</p>
       </Activity>
     </div>
   );

@@ -9,10 +9,12 @@ import { NavBarItems } from "static/StaticMockData";
 import { APPCONFIG } from "app/config";
 import { Menu, X } from "lucide-react";
 import LogoutButton from "../shared/LogoutButton";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();  
+  const router = useRouter();
 
   return (
     <nav className='w-full border-b shadow-sm bg-theme-headings'>
@@ -26,7 +28,7 @@ export default function Navbar() {
         </button>
         
         {/* Logo */}
-        <div className='text-xl font-bold text-white'>
+        <div className='text-xl font-bold text-white cursor-pointer' onClick={() => router.push('/')}>
           {APPCONFIG.BUSINESS.name}
         </div>
 
