@@ -1,10 +1,10 @@
 import ToastContainer from "../shared/ToastContainer";
 import Breadcrumbs from "../shared/Breadcrumbs";
-import { Power } from "lucide-react";
 import { AppProviders } from "@/lib/contexts/ComposeProviders";
 import Button from "../shared/Button";
 import { useRouter } from "next/navigation";
 import { removeSession } from "@/lib/utils";
+import LogoutButton from "../shared/LogoutButton";
 
 export default function OwnerHomePage({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -27,7 +27,7 @@ export default function OwnerHomePage({ children }: { children: React.ReactNode 
             className='underline hover:scale-110 transition-transform text-white'
             onClick={handleLogout}
           >
-            <Power className='w-5 h-5 mr-1'/> Logout
+            <LogoutButton className='w-5 h-5 mr-1'/> Logout
           </Button>
         </div>
       </div>

@@ -7,23 +7,24 @@ import NavItem from "../shared/NavItem";
 import Container from "../shared/Container";
 import { NavBarItems } from "static/StaticMockData";
 import { APPCONFIG } from "app/config";
-import { Menu, Power, X } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { removeSession } from "@/lib/utils";
+import { Menu, X } from "lucide-react";
+import LogoutButton from "../shared/LogoutButton";
 
 export default function Navbar() {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
-
-  const signOut = async () => {
-    await removeSession();
-    router.push("/login");
-  };
+  const pathname = usePathname();  
 
   return (
     <nav className='w-full border-b shadow-sm bg-theme-headings'>
       <Container className='flex h-16 items-center justify-between'>
+        {/* Mobile toggle */}
+        <button
+          onClick={() => setOpen(!open)}
+          className='md:hidden p-2 text-white'
+        >
+          {open ? <X className='h-6 w-6' /> : <Menu className='h-6 w-6' />}
+        </button>
+        
         {/* Logo */}
         <div className='text-xl font-bold text-white'>
           {APPCONFIG.BUSINESS.name}
@@ -40,25 +41,10 @@ export default function Navbar() {
               active={pathname === item.url}
             />
           ))}
-          <Power
-            className='text-white h-5 w-5 hover:scale-110 transition cursor-pointer hover:bg-gray-200 hover:text-black rounded-full'
-            onClick={() => signOut()}
-          />
+          <LogoutButton/>
         </div>
 
-        {/* Mobile toggle */}
-        <div className='flex items-center md:hidden'>
-          <button
-            onClick={() => setOpen(!open)}
-            className='p-2 text-white'
-          >
-            {open ? <X className='h-6 w-6' /> : <Menu className='h-6 w-6' />}
-          </button>
-          <Power
-            className='text-white h-5 w-5 hover:scale-110 transition cursor-pointer hover:bg-gray-200 hover:text-black rounded-full'
-            onClick={() => signOut()}
-          />
-        </div>
+        <LogoutButton className='md:hidden'/>
       </Container>
 
       {/* Mobile Menu */}
