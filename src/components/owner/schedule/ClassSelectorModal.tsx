@@ -48,15 +48,15 @@ export function ClassSelectorModal({open, onClose, onRemove, title, children, em
           {children}
         </div>
 
-        <div className='px-6 py-4 mt-2 flex flex-row gap-2'>
+        <div className='px-6 py-4 mt-2 flex flex-row gap-2 justify-end'>
           <Button variant="primary"
-            className="w-full text-white"
+            className="text-white"
             Icon={X}
             onClick={onClose}
           >Close</Button>
           <Activity mode={emptyCell ? "hidden" : "visible"}>
             <Button variant="negative"
-              className="w-full text-white"
+              className="text-white"
               Icon={Trash}
               onClick={onRemove}
             >Remove</Button>

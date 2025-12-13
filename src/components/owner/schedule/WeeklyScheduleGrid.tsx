@@ -163,7 +163,7 @@ export default function WeeklyScheduleGrid() {
           Weekly Schedule
         </h2>
 
-        <div className='overflow-x-auto max-h-[65vh] overflow-y-auto'>
+        <div className='overflow-x-auto max-h-[65vh] overflow-y-auto border border-theme-bodycolor'>
           <div
             className='grid min-w-max'
             style={{

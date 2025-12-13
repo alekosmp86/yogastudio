@@ -2,7 +2,8 @@ import { LucideIcon } from "lucide-react";
 
 type ToolbarItem = {
     icon: LucideIcon,
-    onClick: () => void
+    onClick: () => void,
+    text?: string
 };
 
 export type Toolbar = {

@@ -56,6 +56,7 @@ export default function ClassesList() {
     () => ({
       items: [
         {
+          text: "Add",
           icon: Plus,
           onClick: () => setAdding(true),
         },
