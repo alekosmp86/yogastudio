@@ -90,11 +90,11 @@ export default function UserList() {
   };
 
   return (
-    <div className='w-full '>
-      <h2 className='text-xl font-semibold text-white mt-4 mb-4'>Users</h2>
+    <div className='w-full'>
+      <h2 className='text-xl font-semibold text-white mt-4 mb-4 rounded-md'>Users</h2>
 
       {/* TABLE BOX (toolbar + table inside) */}
-      <div className='bg-transparent rounded-sm overflow-hidden shadow'>
+      <div className='bg-transparent rounded-sm border border-white/50 overflow-hidden shadow'>
         {/* TOOLBAR sitting as the table header */}
         <TableToolbar toolbar={toolbar} search={search} setSearch={setSearch} />
 

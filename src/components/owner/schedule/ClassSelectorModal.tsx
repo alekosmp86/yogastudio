@@ -32,7 +32,7 @@ export function ClassSelectorModal({open, onClose, onRemove, title, children, em
   return ReactDOM.createPortal(
     <div className='fixed inset-0 bg-black/20 flex items-center justify-center z-50 p-4' onClick={onClose}>
       <div
-        className='bg-theme-headercolor rounded-xl shadow-elevated w-full max-w-md max-h-[50vh] flex flex-col'
+        className='bg-black rounded-xl shadow-elevated w-full max-w-md max-h-[50vh] flex flex-col'
         onClick={(e) => e.stopPropagation()}
       >
         {title && (

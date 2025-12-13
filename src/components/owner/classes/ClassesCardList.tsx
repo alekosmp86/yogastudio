@@ -14,7 +14,7 @@ type ClassesCardListProps = {
 
 export default function ClassesCardList({classes, adding, busy, fields, handleSaveNew, handleUpdate, handleCancelAdd, handleDelete}: ClassesCardListProps) {
     return (
-        <div className="md:hidden bg-primary flex flex-col gap-4 shadow-sm">
+        <div className="md:hidden bg-theme-headings flex flex-col gap-2 rounded-md shadow-sm">
             {adding && (
                 <ClassesCard
                     gymClass={{

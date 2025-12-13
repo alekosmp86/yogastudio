@@ -75,7 +75,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen p-6 bg-theme-bg-3 text-white'>
+    <div className='flex flex-col items-center justify-center min-h-screen p-6 bg-theme-headings text-white'>
       <form
         onSubmit={handleSubmit}
         className='flex flex-col gap-4 w-full max-w-xs bg-theme-cardbg p-6 rounded-lg shadow-xl border border-brand-600'
