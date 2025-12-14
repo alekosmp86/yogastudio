@@ -1,8 +1,32 @@
 import { ReservationService } from "../ReservationService";
+import { ClassInstance } from "@prisma/client";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { prisma } from "@/lib/prisma";
+import { ClassReservation } from "@/types/reservations/ClassReservation";
 
 export class ReservationServiceImpl implements ReservationService {
+  async getReservations(userId: number): Promise<ClassReservation[]> {
+    return prisma.reservation.findMany({
+      where: { userId },
+      select: {
+        id: true,
+        class: {
+          select: {
+            id: true,
+            startTime: true,
+            template: {
+              select: {
+                title: true,
+                instructor: true,
+                capacity: true,
+                description: true,
+              },
+            }
+          }
+        }
+      }
+    });
+  }
 
   async createReservation(classId: number, userId: number): Promise<string> {
     // 1 — Load class + reservations + capacity

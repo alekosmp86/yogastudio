@@ -2,8 +2,20 @@ import { reservationService } from "app/api";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { NextResponse } from "next/server";
 import { ApiUtils } from "app/api/utils/ApiUtils";
+import { RequestStatus } from "@/enums/RequestStatus";
 
 const logger = new ConsoleLogger("ReservationService");
+
+export async function GET(req: Request) {
+  try {
+    const user = await ApiUtils.getSessionUser();
+    const reservations = await reservationService.getReservations(user.id);
+    return NextResponse.json({message: RequestStatus.SUCCESS, data: reservations});
+  } catch (error) {
+    logger.error("Error fetching reservations:", error);
+    return NextResponse.json({ message: RequestStatus.ERROR }, { status: 500 });
+  }
+}
 
 export async function POST(req: Request) {
   try {

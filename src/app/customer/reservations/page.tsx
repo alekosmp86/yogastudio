@@ -1,7 +1,7 @@
-import Reservations from "@/components/customer/reservations/Reservations";
+import CustomerReservations from "@/components/customer/reservations/CustomerReservations";
 
 export default function ReservationsPage() {
   return (
-    <Reservations/>
+    <CustomerReservations/>
   );
 }

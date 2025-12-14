@@ -103,7 +103,7 @@ export default function WeeklyScheduleGrid() {
   const handleRemoveClass = async () => {
     if (!scheduledClass) return;
 
-    const request = http.delete<ApiResponse<RequestStatus>>(
+    const request = http.delete<ApiResponse<void>>(
       `/owner/schedule/${scheduledClass.id}`,
       ApiType.FRONTEND
     );

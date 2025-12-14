@@ -51,7 +51,7 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await http.post<ApiResponse<User>>(
+    const response = await http.post<ApiResponse<void>>(
       `/auth/register`,
       ApiType.FRONTEND,
       form

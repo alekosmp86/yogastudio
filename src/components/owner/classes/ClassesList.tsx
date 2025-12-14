@@ -124,7 +124,7 @@ export default function ClassesList() {
     const toastId = showWarningToast("Updating class...");
     try {
       setBusy(true);
-      const { message }: ApiResponse<RequestStatus> = await http.put<ApiResponse<RequestStatus>>(`/owner/classes/${id}`, ApiType.FRONTEND, updated);
+      const { message } = await http.put<ApiResponse<void>>(`/owner/classes/${id}`, ApiType.FRONTEND, updated);
 
       if (message === RequestStatus.ERROR) {
         showErrorToast("Error updating class");

@@ -32,7 +32,7 @@ export default function TodayClasses() {
   }, []);
 
   const handleReserve = async (gymClass: DailyClass) => {
-    const { message } = await http.post<ApiResponse<string>>(
+    const { message } = await http.post<ApiResponse<void>>(
       "/customer/reservations",
       ApiType.FRONTEND,
       {
