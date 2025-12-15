@@ -9,8 +9,5 @@ export type ToastOptions = {
 
 export type Toast = {
   id: string;
-  type: ToastType;
-  message: string;
-  persistent: boolean;
-  duration: number;
+  options: ToastOptions;
 };

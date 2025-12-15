@@ -23,22 +23,22 @@ export default function ToastContainer() {
 
   return (
     <div className="fixed top-4 right-4 z-[9999] space-y-3 pointer-events-none">
-      {toasts.map((t) => (
+      {toasts.map((toast) => (
         <div
-          key={t.id}
+          key={toast.id}
           className={clsx(
             "flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg border pointer-events-auto animate-toast-in text-sm",
             {
-              "bg-green-100 border-green-500 text-green-900": t.type === ToastType.SUCCESS,
-              "bg-red-100 border-red-500 text-red-900": t.type === ToastType.ERROR,
-              "bg-yellow-100 border-yellow-500 text-yellow-900": t.type === ToastType.WARNING,
-              "bg-blue-100 border-blue-500 text-blue-900": t.type === ToastType.INFO,
+              "bg-green-100 border-green-500 text-green-900": toast.options.type === ToastType.SUCCESS,
+              "bg-red-100 border-red-500 text-red-900": toast.options.type === ToastType.ERROR,
+              "bg-yellow-100 border-yellow-500 text-yellow-900": toast.options.type === ToastType.WARNING,
+              "bg-blue-100 border-blue-500 text-blue-900": toast.options.type === ToastType.INFO,
             }
           )}
-          onClick={() => hideToast(t.id)}
+          onClick={() => hideToast(toast.id)}
         >
-          {icon(t.type)}
-          <span>{t.message}</span>
+          {icon(toast.options.type)}
+          <span>{toast.options.message}</span>
           <X className="w-4 h-4 opacity-70 cursor-pointer" />
         </div>
       ))}

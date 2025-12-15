@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback } from "react";
-import { Toast, ToastOptions } from "@/types/ToastOptions";
+import { Toast, ToastOptions } from "@/types/Toast";
 
 type ToastContextType = {
   toasts: Toast[];
@@ -24,16 +24,18 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
       const toast: Toast = {
         id,
-        type: options.type,
-        message: options.message,
-        persistent: options.persistent ?? false,
-        duration: options.duration ?? 3500,
+        options: {
+          type: options.type,
+          message: options.message,
+          persistent: options.persistent ?? false,
+          duration: options.duration ?? 3500,
+        },
       };
 
       setToasts((prev) => [...prev, toast]);
 
-      if (!toast.persistent) {
-        setTimeout(() => hideToast(id), toast.duration);
+      if (!toast.options.persistent) {
+        setTimeout(() => hideToast(id), toast.options.duration);
       }
 
       return id; // allow manual closing
