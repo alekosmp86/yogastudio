@@ -67,4 +67,10 @@ export class ReservationServiceImpl implements ReservationService {
 
     return RequestStatus.SUCCESS;
   }
+
+  async cancelReservation(reservationId: number): Promise<void> {
+    await prisma.reservation.delete({
+      where: { id: reservationId },
+    });
+  }
 }

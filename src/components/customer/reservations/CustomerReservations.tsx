@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { ApiType } from "@/enums/ApiTypes";
 import { http } from "@/lib/http";
@@ -9,65 +9,98 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/shared/Card";
 import { X } from "lucide-react";
 import Button from "@/components/shared/Button";
+import dayjs from "dayjs";
+import { useToast } from "@/lib/contexts/ToastContext";
+import { ToastType } from "@/enums/ToastType";
 
 export default function CustomerReservations() {
   const [reservations, setReservations] = useState<ClassReservation[]>([]);
+  const toast = useToast();
 
   useEffect(() => {
     const fetchReservations = async () => {
-      const date = new Date();
-      const {message, data} = await http.get<ApiResponse<ClassReservation[]>>(`/customer/reservations?date=${date.toISOString()}`, ApiType.FRONTEND);
+      const toastId = toast.showToast({
+        type: ToastType.INFO,
+        message: "Loading reservations...",
+        persistent: true,
+      });
+
+      const date = dayjs(new Date()).hour(0).minute(0).second(0).millisecond(0).toISOString();
+      const { message, data } = await http.get<ApiResponse<ClassReservation[]>>(
+        `/customer/reservations?date=${date}`,
+        ApiType.FRONTEND
+      );
       if (message === RequestStatus.SUCCESS) {
         setReservations(data!);
       }
+
+      toast.hideToast(toastId);
     };
     fetchReservations();
   }, []);
 
   const cancelReservation = async (reservationId: number) => {
-    const {message} = await http.delete<ApiResponse<void>>(`/customer/reservations/${reservationId}`, ApiType.FRONTEND);
+    const toastId = toast.showToast({
+      type: ToastType.INFO,
+      message: "Canceling reservation...",
+      persistent: true,
+    });
+
+    const { message } = await http.delete<ApiResponse<void>>(
+      `/customer/reservations/${reservationId}`,
+      ApiType.FRONTEND
+    );
     if (message === RequestStatus.SUCCESS) {
       setReservations((prev) => prev.filter((r) => r.id !== reservationId));
     }
+
+    toast.hideToast(toastId);
   };
 
   return (
     <div className='p-4 flex flex-col gap-6 h-full'>
       <h1 className='text-2xl font-bold text-primary-800'>Reservations</h1>
-      <p className='text-primary-800'>Here you’ll see your upcoming class reservations.</p>
-      <div className="flex flex-col gap-4">
-        {reservations.map(({id, class: reservationClass}) => (
-          <Card key={id} className='shadow-lg bg-white'>
-            <CardContent className='p-4 flex items-center gap-4'>
-              <div className='flex flex-col w-full'>
-                <div className='flex justify-between'>
-                  <h2 className='font-semibold text-primary-800'>{reservationClass.template.title}</h2>
-                  <span className='text-sm text-primary-800'>
-                    {reservationClass.startTime}
-                  </span>
-                </div>
-                <p className='text-sm font-semibold text-primary-800 pb-2'>
-                  {reservationClass.template.description}
-                </p>
-                <p className='text-sm text-primary-800'>
-                  Instructor: {reservationClass.template.instructor}
-                </p>
+      {reservations.length === 0 ? (
+        <p className='text-primary-800'>No reservations found.</p>
+      ) : (
+        <div className='flex flex-col gap-4'>
+          {reservations.map(({ id, class: reservationClass }) => (
+            <Card key={id} className='shadow-lg bg-white'>
+              <CardContent className='p-4 flex items-center gap-4'>
+                <div className='flex flex-col w-full'>
+                  <div className='flex justify-between'>
+                    <h2 className='font-semibold text-primary-800'>
+                      {reservationClass.template.title}
+                    </h2>
+                    <span className='text-sm text-primary-800'>
+                      {reservationClass.startTime}
+                    </span>
+                  </div>
+                  <p className='text-sm font-semibold text-primary-800 pb-2'>
+                    {reservationClass.template.description}
+                  </p>
+                  <p className='text-sm text-primary-800'>
+                    Instructor: {reservationClass.template.instructor}
+                  </p>
 
-                <div className='flex justify-end'>
-                  <Button
-                    size='sm'
-                    variant='negative'
-                    onClick={() => {cancelReservation(id)}}
-                  >
-                    <X className='mr-2 h-4 w-4' />
-                    Cancel
-                  </Button>
+                  <div className='flex justify-end'>
+                    <Button
+                      size='sm'
+                      variant='negative'
+                      onClick={() => {
+                        cancelReservation(id);
+                      }}
+                    >
+                      <X className='mr-2 h-4 w-4' />
+                      Cancel
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
