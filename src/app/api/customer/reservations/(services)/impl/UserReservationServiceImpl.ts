@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
 
 export class UserReservationServiceImpl implements UserReservationService {
-  async getReservations(userId: number, date: string): Promise<ClassReservation[]> {
+  async getReservations(userId: number, date: string, time: string): Promise<ClassReservation[]> {
     return prisma.reservation.findMany({
-      where: { userId, class: { date: date } },
+      where: { userId, class: { date, startTime: { gte: time } } },
       select: {
         id: true,
         class: {

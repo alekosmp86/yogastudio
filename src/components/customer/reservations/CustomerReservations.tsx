@@ -13,6 +13,8 @@ import dayjs from "dayjs";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
+import { getTimeXHoursFromNow } from "@/lib/utils/date";
+import { APPCONFIG } from "app/config";
 
 export default function CustomerReservations() {
   const [loading, setLoading] = useState(true);
@@ -22,9 +24,12 @@ export default function CustomerReservations() {
   useEffect(() => {
     const fetchReservations = async () => {
       setLoading(true);
-      const date = dayjs(new Date()).hour(0).minute(0).second(0).millisecond(0).toISOString();
+
+      const date = dayjs().tz(APPCONFIG.TIMEZONE).startOf("day").toISOString();
+      const oneHourLaterRounded = getTimeXHoursFromNow(1, APPCONFIG.TIMEZONE).minute(0).second(0).millisecond(0).format("HH:mm");
+
       const { message, data } = await http.get<ApiResponse<ClassReservation[]>>(
-        `/customer/reservations?date=${date}`,
+        `/customer/reservations?date=${date}&time=${oneHourLaterRounded}`,
         ApiType.FRONTEND
       );
       if (message === RequestStatus.SUCCESS) {
