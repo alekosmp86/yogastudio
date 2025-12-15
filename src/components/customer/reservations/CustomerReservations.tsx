@@ -6,9 +6,8 @@ import { ApiResponse } from "@/types/requests/ApiResponse";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { useEffect, useState } from "react";
-import ClassCard from "../classes/ClassCard";
 import { Card, CardContent } from "@/components/shared/Card";
-import { Icon, X } from "lucide-react";
+import { X } from "lucide-react";
 import Button from "@/components/shared/Button";
 
 export default function CustomerReservations() {
@@ -16,7 +15,8 @@ export default function CustomerReservations() {
 
   useEffect(() => {
     const fetchReservations = async () => {
-      const {message, data} = await http.get<ApiResponse<ClassReservation[]>>("/customer/reservations", ApiType.FRONTEND);
+      const date = new Date();
+      const {message, data} = await http.get<ApiResponse<ClassReservation[]>>(`/customer/reservations?date=${date.toISOString()}`, ApiType.FRONTEND);
       if (message === RequestStatus.SUCCESS) {
         setReservations(data!);
       }

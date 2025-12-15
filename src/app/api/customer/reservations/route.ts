@@ -7,9 +7,12 @@ import { RequestStatus } from "@/enums/RequestStatus";
 const logger = new ConsoleLogger("ReservationService");
 
 export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const date = searchParams.get("date");
+
   try {
     const user = await ApiUtils.getSessionUser();
-    const reservations = await reservationService.getReservations(user.id);
+    const reservations = await reservationService.getReservations(user.id, date!);
     return NextResponse.json({message: RequestStatus.SUCCESS, data: reservations});
   } catch (error) {
     logger.error("Error fetching reservations:", error);
