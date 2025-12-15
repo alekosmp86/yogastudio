@@ -1,7 +1,7 @@
 "use client";
 
 import DashboardCard from "@/components/owner/dashboard/DashboardCard";
-import { Calendar, Users, PlusCircle } from "lucide-react";
+import { DashboardItems } from "@/components/owner/dashboard/DashboardItems";
 
 export default function OwnerDashboard() {
   return (
@@ -10,27 +10,16 @@ export default function OwnerDashboard() {
         Welcome! Choose an action to manage your studio.
       </p>
 
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-        <DashboardCard
-          title='Manage classes'
-          description='Add, edit, or delete classes.'
-          href='/owner/classes'
-          icon={<PlusCircle size={40} />}
-        />
-
-        <DashboardCard
-          title='Manage schedule'
-          description='Manage recurring weekly classes.'
-          href='/owner/schedule'
-          icon={<Calendar size={40} />}
-        />
-
-        <DashboardCard
-          title='Manage users'
-          description='View and manage your users list.'
-          href='/owner/users'
-          icon={<Users size={40} />}
-        />
+      <div className='grid grid-cols-1 md:grid-cols-4 gap-6'>
+        {DashboardItems.map((item) => (
+          <DashboardCard
+            key={item.title}
+            title={item.title}
+            description={item.description}
+            href={item.href}
+            icon={<item.icon size={40} />}
+          />
+        ))}
       </div>
     </>
   );
