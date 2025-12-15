@@ -12,19 +12,16 @@ import Button from "@/components/shared/Button";
 import dayjs from "dayjs";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
+import { CardSkeleton } from "@/components/shared/CardSkeleton";
 
 export default function CustomerReservations() {
+  const [loading, setLoading] = useState(true);
   const [reservations, setReservations] = useState<ClassReservation[]>([]);
   const toast = useToast();
 
   useEffect(() => {
     const fetchReservations = async () => {
-      const toastId = toast.showToast({
-        type: ToastType.INFO,
-        message: "Loading reservations...",
-        persistent: true,
-      });
-
+      setLoading(true);
       const date = dayjs(new Date()).hour(0).minute(0).second(0).millisecond(0).toISOString();
       const { message, data } = await http.get<ApiResponse<ClassReservation[]>>(
         `/customer/reservations?date=${date}`,
@@ -33,8 +30,7 @@ export default function CustomerReservations() {
       if (message === RequestStatus.SUCCESS) {
         setReservations(data!);
       }
-
-      toast.hideToast(toastId);
+      setLoading(false);
     };
     fetchReservations();
   }, []);
@@ -60,7 +56,13 @@ export default function CustomerReservations() {
   return (
     <div className='p-4 flex flex-col gap-6 h-full'>
       <h1 className='text-2xl font-bold text-primary-800'>Reservations</h1>
-      {reservations.length === 0 ? (
+      {loading ? (
+        <div className='flex flex-col gap-4'>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <CardSkeleton key={i} />
+          ))}
+        </div>
+      ) : reservations.length === 0 ? (
         <p className='text-primary-800'>No reservations found.</p>
       ) : (
         <div className='flex flex-col gap-4'>

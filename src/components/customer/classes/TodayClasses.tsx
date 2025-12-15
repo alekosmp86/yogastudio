@@ -2,13 +2,14 @@
 
 import { ApiType } from "@/enums/ApiTypes";
 import { http } from "@/lib/http";
-import { Activity, useEffect, useState, Suspense } from "react";
+import { Activity, useEffect, useState } from "react";
 import ClassCard from "./ClassCard";
 import { DailyClass } from "@/types/classes/DailyClass";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
+import { CardSkeleton } from "@/components/shared/CardSkeleton";
 
 export default function TodayClasses() {
   const [upcomingClasses, setUpcomingClasses] = useState<DailyClass[]>([]);
@@ -87,11 +88,15 @@ export default function TodayClasses() {
 
       {/* Scroll area */}
       <div className='overflow-y-auto max-h-[65vh] pr-2'>
-        <Suspense
-          fallback={<p className='text-primary-800'>Loading classes...</p>}
-        >
-          <div className='flex flex-col gap-4'>
-            {upcomingClasses.map((gymClass) => (
+        <div className='flex flex-col gap-4'>
+          {loading ? (
+            <div className='flex flex-col gap-4'>
+              {Array.from({ length: 3 }).map((_, i) => (
+                <CardSkeleton key={i} />
+              ))}
+            </div>
+          ) : (
+            upcomingClasses.map((gymClass) => (
               <ClassCard
                 key={gymClass.id}
                 gymClass={gymClass}
@@ -99,9 +104,9 @@ export default function TodayClasses() {
                 handleCancelation={() => handleCancelation(gymClass)}
                 canReserve={gymClass.available}
               />
-            ))}
-          </div>
-        </Suspense>
+            ))
+          )}
+        </div>
       </div>
 
       {/* When there are NO classes */}
