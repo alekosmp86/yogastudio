@@ -16,7 +16,7 @@ import { ToastType } from "@/enums/ToastType";
 import { ScheduledClass } from "@/types/schedule/ScheduledClass";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { useScheduledClasses } from "@/lib/contexts/ScheduledClassesContext";
-import { HOURS, WEEKDAYS } from "@/lib/utils";
+import { HOURS, WEEKDAYS } from "@/lib/utils/date";
 
 export default function WeeklyScheduleGrid() {
   // grid columns: 70px for hour column, then 1fr per weekday (keeps flexible)

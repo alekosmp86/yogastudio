@@ -1,6 +1,7 @@
 "use client";
 
-import { getCurrentWeekDates, pad2, WEEKDAYS } from "@/lib/utils";
+import { pad2 } from "@/lib/utils";
+import { getCurrentWeekDates, WEEKDAYS } from "@/lib/utils/date";
 
 export function ScheduleHeader() {
   const dates = getCurrentWeekDates();

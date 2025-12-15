@@ -2,7 +2,7 @@ import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { scheduledTasks } from "../../ScheduledTasks";
 import { AdminService } from "../AdminService";
 import { classInstanceService, weeklyScheduleService } from "app/api";
-import { getTodayWeekday } from "@/lib/utils";
+import { getTodayWeekday } from "@/lib/utils/date";
 import { ClassInstance } from "@prisma/client";
 
 export class AdminServiceImpl implements AdminService {
