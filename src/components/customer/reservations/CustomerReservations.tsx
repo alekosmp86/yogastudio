@@ -24,7 +24,7 @@ export default function CustomerReservations() {
       setLoading(true);
 
       const date = getStartOfDay(true);
-      const oneHourLaterRounded = getTimeXHoursFromNow(1, true).minute(0).second(0).millisecond(0).format("HH:mm");
+      const oneHourLaterRounded = getTimeXHoursFromNow(0, true).minute(0).second(0).millisecond(0).format("HH:mm");
 
       const { message, data } = await http.get<ApiResponse<ClassReservation[]>>(
         `/customer/reservations?date=${date}&time=${oneHourLaterRounded}`,

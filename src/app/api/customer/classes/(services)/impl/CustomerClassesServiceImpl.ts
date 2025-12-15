@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
-import { APPCONFIG } from "app/config";
+import { getStartOfDay, getTimeXHoursFromNow } from "@/lib/utils/date";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -13,13 +13,8 @@ dayjs.extend(timezone);
 export class CustomerClassesServiceImpl implements CustomerClassesService {
 
   async getTodayClasses(): Promise<DailyClass[]> {
-    const nowUTC = dayjs().tz(APPCONFIG.TIMEZONE);
-    const today = dayjs(nowUTC.format("YYYY-MM-DD")).toDate();
-
-    const oneHourLater = nowUTC
-      .add(1, "hour")
-      .format("HH:mm");
-
+    const today = getStartOfDay(true);
+    const oneHourLater = getTimeXHoursFromNow(0, true).format("HH:mm");
     const user = await ApiUtils.getSessionUser();
 
     const classes = await prisma.classInstance.findMany({
