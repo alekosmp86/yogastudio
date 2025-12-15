@@ -9,12 +9,10 @@ import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/shared/Card";
 import { X } from "lucide-react";
 import Button from "@/components/shared/Button";
-import dayjs from "dayjs";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
-import { getTimeXHoursFromNow } from "@/lib/utils/date";
-import { APPCONFIG } from "app/config";
+import { getStartOfDay, getTimeXHoursFromNow } from "@/lib/utils/date";
 
 export default function CustomerReservations() {
   const [loading, setLoading] = useState(true);
@@ -25,8 +23,8 @@ export default function CustomerReservations() {
     const fetchReservations = async () => {
       setLoading(true);
 
-      const date = dayjs().tz(APPCONFIG.TIMEZONE).startOf("day").toISOString();
-      const oneHourLaterRounded = getTimeXHoursFromNow(1, APPCONFIG.TIMEZONE).minute(0).second(0).millisecond(0).format("HH:mm");
+      const date = getStartOfDay(true);
+      const oneHourLaterRounded = getTimeXHoursFromNow(1, true).minute(0).second(0).millisecond(0).format("HH:mm");
 
       const { message, data } = await http.get<ApiResponse<ClassReservation[]>>(
         `/customer/reservations?date=${date}&time=${oneHourLaterRounded}`,

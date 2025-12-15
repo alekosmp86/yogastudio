@@ -1,12 +1,18 @@
 import dayjs from "dayjs";
 import timezone from "dayjs/plugin/timezone";
 import utc from "dayjs/plugin/utc";
+import { APPCONFIG } from "app/config";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-export const getTimeXHoursFromNow = (hours: number, timezone?: string) => {
-    const now = timezone ? dayjs().tz(timezone) : dayjs();
+export const getStartOfDay = (useTimezone?: boolean) => {
+    const now = useTimezone ? dayjs().tz(APPCONFIG.TIMEZONE) : dayjs();
+    return now.startOf("day").toISOString();
+}
+
+export const getTimeXHoursFromNow = (hours: number, useTimezone?: boolean) => {
+    const now = useTimezone ? dayjs().tz(APPCONFIG.TIMEZONE) : dayjs();
     return now.add(hours, "hours");
 }
 
