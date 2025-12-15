@@ -1,4 +1,4 @@
-import { reservationService } from "app/api";
+import { userReservationService } from "app/api";
 import { NextResponse } from "next/server";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
@@ -12,7 +12,7 @@ type RequestParams = {
 export async function DELETE(req: Request, { params }: RequestParams) {
   try {
     const { id } = await params;
-    await reservationService.cancelReservation(Number(id));
+    await userReservationService.cancelReservation(Number(id));
     return NextResponse.json({ message: RequestStatus.SUCCESS }, { status: 200 });
   } catch (error) {
     logger.error("Error canceling reservation:", error);
