@@ -1,9 +1,9 @@
-import { ReservationService } from "../ReservationService";
+import { UserReservationService } from "../UserReservationService";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { prisma } from "@/lib/prisma";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
 
-export class ReservationServiceImpl implements ReservationService {
+export class UserReservationServiceImpl implements UserReservationService {
   async getReservations(userId: number, date: string): Promise<ClassReservation[]> {
     return prisma.reservation.findMany({
       where: { userId, class: { date: date } },

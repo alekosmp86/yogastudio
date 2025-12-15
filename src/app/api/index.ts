@@ -10,9 +10,10 @@ import { GoogleUserMapperImpl } from "./auth/providers/google/(mappers)/impl/Goo
 import { AccountServiceImpl } from "./account/(services)/impl/AccountServiceImpl";
 import { TokenServiceImpl } from "./auth/token/(services)/impl/TokenServiceImpl";
 import { CustomerClassesServiceImpl } from "./customer/classes/(services)/impl/CustomerClassesServiceImpl";
-import { ReservationServiceImpl } from "./customer/reservations/(services)/impl/ReservationServiceImpl";
 import { WeeklyScheduleServiceImpl } from "./weekly-schedule/(services)/impl/WeeklyScheduleServiceImpl";
 import { ClassInstanceServiceImpl } from "./class-instance/(services)/impl/ClassInstanceServiceImpl";
+import { UserReservationServiceImpl } from "./customer/reservations/(services)/impl/UserReservationServiceImpl";
+import { OnwerReservationServiceImpl } from "./owner/reservations/(services)/impl/OnwerReservationServiceImpl";
 
 export const userLinkService = new UserLinkServiceImpl();
 export const userService = new UserServiceImpl();
@@ -22,7 +23,8 @@ export const scheduleService = new ScheduleServiceImpl();
 export const customerClassesService = new CustomerClassesServiceImpl();
 export const accountService = new AccountServiceImpl();
 export const tokenService = new TokenServiceImpl(userService);
-export const reservationService = new ReservationServiceImpl();
+export const userReservationService = new UserReservationServiceImpl();
+export const ownerReservationService = new OnwerReservationServiceImpl();
 export const weeklyScheduleService = new WeeklyScheduleServiceImpl();
 export const classInstanceService = new ClassInstanceServiceImpl();
 

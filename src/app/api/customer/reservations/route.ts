@@ -1,4 +1,4 @@
-import { reservationService } from "app/api";
+import { userReservationService } from "app/api";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { NextResponse } from "next/server";
 import { ApiUtils } from "app/api/utils/ApiUtils";
@@ -12,7 +12,7 @@ export async function GET(req: Request) {
 
   try {
     const user = await ApiUtils.getSessionUser();
-    const reservations = await reservationService.getReservations(user.id, date!);
+    const reservations = await userReservationService.getReservations(user.id, date!);
     return NextResponse.json({message: RequestStatus.SUCCESS, data: reservations});
   } catch (error) {
     logger.error("Error fetching reservations:", error);
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
     const { classId } = await req.json();
 
     logger.log("Creating reservation for class:", classId);
-    const result = await reservationService.createReservation(classId, user.id);
+    const result = await userReservationService.createReservation(classId, user.id);
     logger.log(`Reservation processed: ${result}`);
     return NextResponse.json({ message: result }, { status: 200 });
   } catch (error) {
