@@ -16,7 +16,7 @@ export default function LogoutButton({className}: LogoutButtonProps) {
 
   return (
       <Power
-          className={`${className} text-white h-5 w-5 hover:scale-110 transition cursor-pointer hover:bg-gray-200 hover:text-black rounded-full`}
+          className={`${className} text-white h-5 w-5 hover:scale-110 transition cursor-pointer rounded-full`}
           onClick={() => signOut()}
       />
   )
