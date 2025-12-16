@@ -16,6 +16,7 @@ import TableToolbar from "@/components/shared/TableToolbar";
 import { Plus } from "lucide-react";
 import { Toolbar } from "@/types/Toolbar";
 import { TableField } from "@/types/TableField";
+import Container from "@/components/shared/Container";
 
 const fields: TableField<GymClass>[] = [
   {
@@ -168,41 +169,43 @@ export default function ClassesList() {
   };
 
   return (
-    <div className='w-full mt-4'>
-      <h2 className='text-xl font-semibold text-white mb-4'>
-        Your Classes
-      </h2>
+    <Container>
+      <div className='w-full mt-6'>
+        <h2 className='text-xl font-semibold text-white mb-4'>
+          Your Classes
+        </h2>
 
-      {/* TABLE BOX (toolbar + table inside) */}
-      <div className='bg-theme-bodybg rounded-sm border border-theme-bodycolor overflow-hidden shadow'>
-        {/* TOOLBAR sitting as the table header */}
-        <TableToolbar toolbar={toolbar} search={search} setSearch={setSearch} />
+        {/* TABLE BOX (toolbar + table inside) */}
+        <div className='bg-theme-bodybg rounded-sm border border-theme-bodycolor overflow-hidden shadow'>
+          {/* TOOLBAR sitting as the table header */}
+          <TableToolbar toolbar={toolbar} search={search} setSearch={setSearch} />
 
-        {/* TABLE (desktop) + CARDS (mobile) */}
-        <div className='overflow-x-auto max-h-[500px] overflow-y-auto'>
-          <ClassesTable
-            classes={filteredClasses}
-            fields={fields}
-            adding={adding}
-            busy={busy}
-            handleSaveNew={handleSaveNew}
-            handleUpdate={handleUpdate}
-            handleDelete={handleDelete}
-            handleCancelAdd={handleCancelAdd}
-          />
+          {/* TABLE (desktop) + CARDS (mobile) */}
+          <div className='overflow-x-auto max-h-[500px] overflow-y-auto'>
+            <ClassesTable
+              classes={filteredClasses}
+              fields={fields}
+              adding={adding}
+              busy={busy}
+              handleSaveNew={handleSaveNew}
+              handleUpdate={handleUpdate}
+              handleDelete={handleDelete}
+              handleCancelAdd={handleCancelAdd}
+            />
 
-          <ClassesCardList
-            classes={filteredClasses}
-            fields={fields}
-            adding={adding}
-            busy={busy}
-            handleSaveNew={handleSaveNew}
-            handleUpdate={handleUpdate}
-            handleCancelAdd={handleCancelAdd}
-            handleDelete={handleDelete}
-          />
+            <ClassesCardList
+              classes={filteredClasses}
+              fields={fields}
+              adding={adding}
+              busy={busy}
+              handleSaveNew={handleSaveNew}
+              handleUpdate={handleUpdate}
+              handleCancelAdd={handleCancelAdd}
+              handleDelete={handleDelete}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </Container>
   );
 }

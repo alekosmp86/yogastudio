@@ -11,6 +11,7 @@ import TableToolbar from "@/components/shared/TableToolbar";
 import { Toolbar } from "@/types/Toolbar";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
+import Container from "@/components/shared/Container";
 
 export default function UserList() {
   const [users, setUsers] = useState<User[]>([]);
@@ -90,25 +91,27 @@ export default function UserList() {
   };
 
   return (
-    <div className='w-full'>
-      <h2 className='text-xl font-semibold text-white mt-4 mb-4 rounded-md'>Users</h2>
+    <Container>
+      <div className='w-full mt-6'>
+        <h2 className='text-xl font-semibold text-white mt-4 mb-4 rounded-md'>Users</h2>
 
-      {/* TABLE BOX (toolbar + table inside) */}
-      <div className='bg-transparent rounded-sm border border-white/50 overflow-hidden shadow'>
-        {/* TOOLBAR sitting as the table header */}
-        <TableToolbar toolbar={toolbar} search={search} setSearch={setSearch} />
+        {/* TABLE BOX (toolbar + table inside) */}
+        <div className='bg-transparent rounded-sm border border-white/50 overflow-hidden shadow'>
+          {/* TOOLBAR sitting as the table header */}
+          <TableToolbar toolbar={toolbar} search={search} setSearch={setSearch} />
 
-        {/* Desktop */}
-        <UserTable users={filteredUsers} onAction={handleAction} />
+          {/* Desktop */}
+          <UserTable users={filteredUsers} onAction={handleAction} />
 
-        {/* Mobile */}
-        <UserCardList users={filteredUsers} onAction={handleAction} />
-        {users.length === 0 && (
-          <h1 className='pl-2 text-left bg-white py-2 text-primary-900'>
-            {loading ? "Loading..." : "No users found"}
-          </h1>
-        )}
+          {/* Mobile */}
+          <UserCardList users={filteredUsers} onAction={handleAction} />
+          {users.length === 0 && (
+            <h1 className='pl-2 text-left bg-white py-2 text-primary-900'>
+              {loading ? "Loading..." : "No users found"}
+            </h1>
+          )}
+        </div>
       </div>
-    </div>
+    </Container>
   );
 }

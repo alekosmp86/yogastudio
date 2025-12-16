@@ -13,12 +13,11 @@ export function Accordion({ title, children }: AccordionProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border rounded-md bg-black shadow-sm mb-1">
+    <div className="border rounded-md bg-black/50 shadow-sm">
       {/* Header */}
-      <button
-        type="button"
+      <span
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between p-4 text-left font-semibold text-white"
+        className="w-full cursor-pointer flex items-center justify-between p-4 text-left font-semibold text-white"
       >
         {title}
         <ChevronDown
@@ -27,13 +26,13 @@ export function Accordion({ title, children }: AccordionProps) {
             open && "rotate-180"
           )}
         />
-      </button>
+      </span>
 
       {/* Content */}
       <div
         className={clsx(
           "overflow-hidden transition-all duration-300",
-          open ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+          children && open ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
         )}
       >
         <div className="p-4 pt-0 text-sm text-info-500">

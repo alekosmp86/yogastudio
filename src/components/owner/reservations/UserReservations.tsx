@@ -8,6 +8,7 @@ import { ApiResponse } from "@/types/requests/ApiResponse";
 import { useEffect, useState } from "react";
 import { ReservationsPerClass } from "@/types/reservations/ReservationsPerClass";
 import dayjs from "dayjs";
+import Container from "@/components/shared/Container";
 
 export default function UserReservations() {
     const [reservationsPerClass, setReservationsPerClass] = useState<ReservationsPerClass[]>([]);
@@ -23,6 +24,7 @@ export default function UserReservations() {
 
                 if(message === RequestStatus.SUCCESS) {
                     setReservationsPerClass(data!);
+                    console.log(data);
                 }
             } catch (error) {
                 console.error('Error fetching reservations:', error);
@@ -32,19 +34,21 @@ export default function UserReservations() {
     }, []);
 
     return (
-        <div className='w-full mt-4 overflow-hidden'>
-            <h2 className='text-xl font-semibold text-white mb-4'>
-                Users' Reservations
-            </h2>
-            <div className='overflow-x-auto max-h-[500px] overflow-y-auto'>
-                {reservationsPerClass.map((reservation) => (
-                    <Accordion title={reservation.template.title}>
-                        {reservation.reservations.map((reservation) => (
-                            <p key={reservation.id}>{reservation.user.name}</p>
+        <Container>
+            <div className='w-full mt-6 overflow-hidden'>
+                <h2 className='text-xl font-semibold text-white mb-4'>
+                    Users' Reservations
+                </h2>
+                <div className='overflow-x-auto max-h-[500px] overflow-y-auto'>
+                    {reservationsPerClass.map(({id, startTime, reservations, template}) => (
+                    <Accordion key={id} title={`${template.title} - ${startTime}`}>
+                        {reservations.map((reservation) => (
+                            <p key={reservation.id}>{reservation.user.name} | {reservation.user.email}</p>
                         ))}
                     </Accordion>
                 ))}
             </div>
         </div>
+        </Container>
     );
 }

@@ -6,7 +6,10 @@ export class OnwerReservationServiceImpl implements OnwerReservationService {
     async getReservations(targetDate: string): Promise<ReservationsPerClass[]> {
       return await prisma.classInstance.findMany({
         where: {
-          date: targetDate, // Date object (YYYY-MM-DD)
+          date: targetDate,
+        },
+        orderBy: {
+          startTime: "asc",
         },
         include: {
           template: {
