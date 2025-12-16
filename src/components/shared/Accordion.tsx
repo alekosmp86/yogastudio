@@ -7,13 +7,14 @@ import clsx from "clsx";
 type AccordionProps = {
   title: string;
   children: React.ReactNode;
+  className?: string;
 };
 
-export function Accordion({ title, children }: AccordionProps) {
+export function Accordion({ title, children, className }: AccordionProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border rounded-md bg-black/50 shadow-sm">
+    <div className={clsx("border rounded-md bg-black/50 shadow-sm", className)}>
       {/* Header */}
       <span
         onClick={() => setOpen((v) => !v)}

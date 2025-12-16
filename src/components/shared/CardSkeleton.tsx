@@ -1,9 +1,7 @@
 import { Card, CardContent } from "./Card";
 
 function Skeleton({ className }: { className?: string }) {
-  return (
-    <div className={`animate-pulse bg-gray-200 rounded ${className}`} />
-  );
+  return <div className={`animate-pulse bg-gray-200 rounded ${className}`} />;
 }
 
 export function CardSkeleton() {
