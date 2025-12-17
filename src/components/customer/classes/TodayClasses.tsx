@@ -80,7 +80,36 @@ export default function TodayClasses() {
     }
   };
 
-  const handleCancelation = async (gymClass: DailyClass) => {};
+  const handleCancelation = async (gymClass: DailyClass) => {
+    const { message } = await http.delete<ApiResponse<void>>(
+      `/customer/classes/${gymClass.id}/reservation`,
+      ApiType.FRONTEND
+    );
+
+    switch (message) {
+      case RequestStatus.SUCCESS:
+        setUpcomingClasses((prev) =>
+          prev.map((c) =>
+            c.id === gymClass.id
+              ? { ...c, reserved: c.reserved - 1, available: true }
+              : c
+          )
+        );
+        toast.showToast({
+          type: ToastType.SUCCESS,
+          message: "Class canceled successfully.",
+          duration: 3000,
+        });
+        break;
+      default:
+        toast.showToast({
+          type: ToastType.ERROR,
+          message: "An error occurred.",
+          duration: 3000,
+        });
+        break;
+    }
+  };
 
   return (
     <div className='p-4 flex flex-col gap-4 h-full'>
@@ -90,7 +119,7 @@ export default function TodayClasses() {
       <div className='overflow-y-auto max-h-[65vh] pr-2'>
         <div className='flex flex-col gap-4'>
           {loading ? (
-            <div className='flex flex-col gap-4'>
+            <div className='flex flex-col gap-4 mb-2'>
               {Array.from({ length: 3 }).map((_, i) => (
                 <CardSkeleton key={i} />
               ))}

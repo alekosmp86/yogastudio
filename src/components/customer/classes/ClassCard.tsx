@@ -61,7 +61,7 @@ export default function ClassCard({
 
           {/* Reserve Button */}
           {canReserve ? (
-            <div className='mt-3'>
+            <div className='mt-3 flex justify-end'>
               <Button
                 size='sm'
                 variant='primary'
@@ -73,7 +73,7 @@ export default function ClassCard({
               </Button>
             </div>
           ) : (
-            <div className='mt-3'>
+            <div className='mt-3 flex justify-end'>
               <Button
                 size='sm'
                 variant='negative'

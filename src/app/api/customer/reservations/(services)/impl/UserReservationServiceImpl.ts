@@ -73,4 +73,10 @@ export class UserReservationServiceImpl implements UserReservationService {
       where: { id: reservationId },
     });
   }
+
+  async cancelReservationFromClass(classId: number): Promise<void> {
+    await prisma.reservation.deleteMany({
+      where: { classId },
+    });
+  }
 }
