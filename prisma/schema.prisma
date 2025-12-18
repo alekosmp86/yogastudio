@@ -99,6 +99,7 @@ model AppPreferences {
   id Int @id @default(autoincrement())
 
   name String @unique
+  label String
   type String @default("text")
   value String
 }

@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run sync-preferences && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync-preferences": "tsx src/scripts/sync-preferences.ts"
   },
   "dependencies": {
     "@prisma/client": "6.19.0",
@@ -33,6 +34,7 @@
     "eslint-config-next": "16.0.3",
     "postcss": "8.5.6",
     "tailwindcss": "3.4.3",
+    "tsx": "^4.21.0",
     "typescript": "5.9.3"
   }
 }
