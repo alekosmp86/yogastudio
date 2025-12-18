@@ -94,3 +94,11 @@ model WeeklySchedule {
 
   @@unique([templateId, weekday, startTime])
 }
+
+model AppPreferences {
+  id Int @id @default(autoincrement())
+
+  name String @unique
+  type String @default("text")
+  value String
+}
