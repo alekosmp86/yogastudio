@@ -1,4 +1,4 @@
-import { Calendar, NotebookText, PlusCircle, Users } from "lucide-react"
+import { Calendar, NotebookText, PlusCircle, Settings, Users } from "lucide-react"
 
 export const DashboardItems = [{
   title: "Manage classes",
@@ -20,4 +20,9 @@ export const DashboardItems = [{
   description: "View and manage your users' reservations list.",
   href: "/owner/reservations",
   icon: NotebookText,
+}, {
+  title: "Manage preferences",
+  description: "Manage your app preferences.",
+  href: "/owner/preferences",
+  icon: Settings,
 }]

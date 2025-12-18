@@ -1,13 +1,13 @@
-import { AppPreferences } from "@prisma/client";
 import { createContext, useContext, useEffect, useState } from "react";
 import { http } from "../http";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { ApiType } from "@/enums/ApiTypes";
 import { RequestStatus } from "@/enums/RequestStatus";
+import { AppPreference } from "@/types/preferences/AppPreference";
 
 interface AppPreferencesContextType {
-  preferences: AppPreferences[];
-  updatePreference: (name: string, value: string) => void;
+  preferences: AppPreference[];
+  updatePreference: (id: number, value: string) => void;
 }
 
 const AppPreferencesContext = createContext<AppPreferencesContextType>({
@@ -20,17 +20,17 @@ export const AppPreferencesProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [preferences, setPreferences] = useState<AppPreferences[]>([]);
+  const [preferences, setPreferences] = useState<AppPreference[]>([]);
 
-  const updatePreference = (name: string, value: string) => {
+  const updatePreference = (id: number, value: string) => {
     setPreferences((prev) =>
-      prev.map((pref) => (pref.name === name ? { ...pref, value } : pref))
+      prev.map((pref) => (pref.id === id ? { ...pref, value } : pref))
     );
   };
 
   useEffect(() => {
     const fetchPreferences = async () => {
-      const {message, data} = await http.get<ApiResponse<AppPreferences[]>>("/preferences", ApiType.FRONTEND);
+      const {message, data} = await http.get<ApiResponse<AppPreference[]>>("/owner/preferences", ApiType.FRONTEND);
 
       if(message === RequestStatus.SUCCESS) {
         setPreferences(data!);

@@ -50,7 +50,7 @@ export default function UserReservations() {
     <Container>
       <div className="w-full mt-6 overflow-hidden">
         <h2 className="text-xl font-semibold text-white mb-4">
-          Users' Reservations
+          Users&apos; Reservations
         </h2>
         <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
           {isLoading ? (

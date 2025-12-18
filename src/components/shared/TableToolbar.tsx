@@ -16,7 +16,7 @@ export default function TableToolbar({
   const showToolbar = toolbar.items?.length > 0 || toolbar.searchInput.active;
 
   return showToolbar ? (
-    <div className='px-4 py-3 border-b border-theme-bodycolor bg-black'>
+    <div className='px-4 py-3 border-b border-theme-bodycolor bg-black rounded-sm'>
       <div className='w-full flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
         <div className='flex items-center gap-2'>
           {toolbar.items?.map((item, index) => (
