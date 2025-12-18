@@ -14,6 +14,7 @@ import { WeeklyScheduleServiceImpl } from "./weekly-schedule/(services)/impl/Wee
 import { ClassInstanceServiceImpl } from "./class-instance/(services)/impl/ClassInstanceServiceImpl";
 import { UserReservationServiceImpl } from "./customer/reservations/(services)/impl/UserReservationServiceImpl";
 import { OnwerReservationServiceImpl } from "./owner/reservations/(services)/impl/OnwerReservationServiceImpl";
+import { PreferenceServiceImpl } from "./preferences/(services)/impl/PreferenceServiceImpl";
 
 export const userLinkService = new UserLinkServiceImpl();
 export const userService = new UserServiceImpl();
@@ -27,6 +28,7 @@ export const userReservationService = new UserReservationServiceImpl();
 export const ownerReservationService = new OnwerReservationServiceImpl();
 export const weeklyScheduleService = new WeeklyScheduleServiceImpl();
 export const classInstanceService = new ClassInstanceServiceImpl();
+export const preferenceService = new PreferenceServiceImpl();
 
 export const classesMapper = new ClassesMapperImpl();
 export const scheduleMapper = new ScheduleMapperImpl();

@@ -2,6 +2,7 @@ import { ToastProvider } from "@/lib/contexts/ToastContext";
 import { ReactNode } from "react";
 import { ClassesProvider } from "./ClassesContext";
 import { ScheduledClassesProvider } from "./ScheduledClassesContext";
+import { AppPreferencesProvider } from "./AppPreferencesContext";
 
 function composeProviders(
   ...providers: Array<React.ComponentType<{ children: ReactNode }>>
@@ -13,4 +14,4 @@ function composeProviders(
     );
 }
 
-export const AppProviders = composeProviders(ToastProvider, ClassesProvider, ScheduledClassesProvider);
+export const AppProviders = composeProviders(ToastProvider, ClassesProvider, ScheduledClassesProvider, AppPreferencesProvider);
