@@ -11,7 +11,7 @@ export async function GET() {
     const preferences = await preferenceService.getPreferences();
     return NextResponse.json({
       message: RequestStatus.SUCCESS,
-      data: preferenceMapper.toAppPreferenceArray(preferences),
+      data: preferenceMapper.toAppPreferenceArray(preferences).sort((a, b) => a.id - b.id),
     });
   } catch (error) {
     console.error("Error fetching preferences:", error);

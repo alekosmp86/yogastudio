@@ -4,12 +4,12 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function syncPreferences() {
+  const existingPrefs = await prisma.appPreferences.findMany();
+
   for (const pref of CorePreferences) {
-    await prisma.appPreferences.upsert({
-      where: { name: pref.name },
-      update: { value: pref.value },
-      create: pref,
-    });
+    if(!existingPrefs.find(p => p.name === pref.name)) {
+      await prisma.appPreferences.create({ data: pref });
+    }
   }
 }
 
