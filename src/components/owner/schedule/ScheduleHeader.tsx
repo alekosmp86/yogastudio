@@ -1,11 +1,11 @@
 "use client";
 
-import { pad2 } from "@/lib/utils";
+import { pad2 } from "@/lib/utils/utils";
 import { getCurrentWeekDates, WEEKDAYS } from "@/lib/utils/date";
 
 export function ScheduleHeader() {
   const dates = getCurrentWeekDates();
-  
+
   return (
     <>
       {/* top-left blank cell (corner) */}

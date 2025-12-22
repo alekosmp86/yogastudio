@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { validateToken } from "@/lib/utils";
+import { validateToken } from "@/lib/utils/utils";
 import { ExecutionStatus } from "@/enums/ExecutionStatus";
 
 export default function VerifyMaginLink() {

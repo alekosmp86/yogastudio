@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "../../lib/utils";
+import { cn } from "@/lib/utils/utils";
 import * as React from "react";
 
 export function Progress({
@@ -23,7 +23,7 @@ export function Progress({
       {...props}
     >
       <div
-        className="h-full bg-blue-500 transition-all"
+        className='h-full bg-blue-500 transition-all'
         style={{ width: `${percentage}%` }}
       />
     </div>

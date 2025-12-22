@@ -1,12 +1,12 @@
-import { Power } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { removeSession } from "@/lib/utils"
+import { Power } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { removeSession } from "@/lib/utils/utils";
 
 type LogoutButtonProps = {
-    className?: string;
-}
+  className?: string;
+};
 
-export default function LogoutButton({className}: LogoutButtonProps) {
+export default function LogoutButton({ className }: LogoutButtonProps) {
   const router = useRouter();
 
   const signOut = async () => {
@@ -15,9 +15,9 @@ export default function LogoutButton({className}: LogoutButtonProps) {
   };
 
   return (
-      <Power
-          className={`${className} text-white h-5 w-5 hover:scale-110 transition cursor-pointer rounded-full`}
-          onClick={() => signOut()}
-      />
-  )
+    <Power
+      className={`${className} text-white h-5 w-5 hover:scale-110 transition cursor-pointer rounded-full`}
+      onClick={() => signOut()}
+    />
+  );
 }

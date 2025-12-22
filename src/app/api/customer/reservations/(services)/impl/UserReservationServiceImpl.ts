@@ -1,8 +1,11 @@
+import { NotificationType } from "@/enums/NotificationTypes";
 import { UserReservationService } from "../UserReservationService";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { prisma } from "@/lib/prisma";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
 import { WaitingList } from "@prisma/client";
+import { notificationService } from "app/api";
+import { NotificationTypePayload } from "@/types/NotificationTypePayload";
 
 export class UserReservationServiceImpl implements UserReservationService {
   async getReservations(userId: number, date: string, time: string): Promise<ClassReservation[]> {
@@ -70,6 +73,15 @@ export class UserReservationServiceImpl implements UserReservationService {
             classId,
           },
         });
+
+        //notify user
+        const payload: NotificationTypePayload[NotificationType.ADDED_TO_WAITING_LIST] = {
+            classTitle: classInstance.template.title,
+            classDate: classInstance.date.toDateString(),
+            classTime: classInstance.startTime,
+            instructorName: classInstance.template.instructor,
+        };
+        notificationService.sendNotification(userId, NotificationType.ADDED_TO_WAITING_LIST, payload);
       }
 
       return RequestStatus.CLASS_FULL;

@@ -66,7 +66,7 @@ export default function TodayClasses() {
       case RequestStatus.CLASS_FULL:
         toast.showToast({
           type: ToastType.ERROR,
-          message: "This class is full.",
+          message: "This class is full. You have been added to the waiting list.",
           duration: 3000,
         });
         break;
