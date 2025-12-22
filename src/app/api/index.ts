@@ -16,6 +16,7 @@ import { UserReservationServiceImpl } from "./customer/reservations/(services)/i
 import { OnwerReservationServiceImpl } from "./owner/reservations/(services)/impl/OnwerReservationServiceImpl";
 import { PreferenceServiceImpl } from "./owner/preferences/(services)/impl/PreferenceServiceImpl";
 import { PreferenceMapperImpl } from "./owner/preferences/(mapper)/impl/PreferenceMapperImpl";
+import { ProfileServiceImpl } from "./customer/profile/(services)/impl/ProfileServiceImpl";
 
 export const userLinkService = new UserLinkServiceImpl();
 export const userService = new UserServiceImpl();
@@ -30,6 +31,7 @@ export const ownerReservationService = new OnwerReservationServiceImpl();
 export const weeklyScheduleService = new WeeklyScheduleServiceImpl();
 export const classInstanceService = new ClassInstanceServiceImpl();
 export const preferenceService = new PreferenceServiceImpl();
+export const profileService = new ProfileServiceImpl();
 
 export const classesMapper = new ClassesMapperImpl();
 export const scheduleMapper = new ScheduleMapperImpl();

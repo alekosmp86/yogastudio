@@ -3,5 +3,6 @@ export type SessionUser = {
   email: string;
   role: string;
   name: string;
+  phone: string;
   approved: boolean;
 };
