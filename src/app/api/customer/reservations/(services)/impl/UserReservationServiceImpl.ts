@@ -2,6 +2,7 @@ import { UserReservationService } from "../UserReservationService";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { prisma } from "@/lib/prisma";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
+import { WaitingList } from "@prisma/client";
 
 export class UserReservationServiceImpl implements UserReservationService {
   async getReservations(userId: number, date: string, time: string): Promise<ClassReservation[]> {
@@ -34,6 +35,7 @@ export class UserReservationServiceImpl implements UserReservationService {
       include: {
         template: true,
         reservations: true,
+        waitingList: true,
       },
     });
 
@@ -54,6 +56,22 @@ export class UserReservationServiceImpl implements UserReservationService {
     const isFull = classInstance.reservations.length >= classInstance.template.capacity;
 
     if (isFull) {
+      const isOnWaitingList = classInstance.waitingList.some(
+        (waitingList: WaitingList) => waitingList.userId === userId
+      );
+
+      if (isOnWaitingList) {
+        return RequestStatus.ON_WAITING_LIST;
+      } else {
+        //add to waiting list
+        await prisma.waitingList.create({
+          data: {
+            userId,
+            classId,
+          },
+        });
+      }
+
       return RequestStatus.CLASS_FULL;
     }
 

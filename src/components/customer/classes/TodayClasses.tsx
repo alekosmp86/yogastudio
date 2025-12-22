@@ -70,6 +70,13 @@ export default function TodayClasses() {
           duration: 3000,
         });
         break;
+      case RequestStatus.ON_WAITING_LIST:
+        toast.showToast({
+          type: ToastType.INFO,
+          message: "You are on the waiting list.",
+          duration: 3000,
+        });
+        break;
       default:
         toast.showToast({
           type: ToastType.ERROR,
