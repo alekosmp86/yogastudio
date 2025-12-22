@@ -11,7 +11,7 @@ export class ResendMailServiceImpl implements MailService {
     try {
       await resend.emails.send({
         to: email,
-        from: "Gym Studio <onboarding@resend.dev>",
+        from: "GymStudio <noreply@alekosoft.lat>",
         subject,
         html: body,
       });
