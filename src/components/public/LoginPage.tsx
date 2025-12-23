@@ -49,7 +49,7 @@ export default function LoginPage() {
           setStatus(Status.SENT);
           break;
         case RequestStatus.USER_NOT_APPROVED:
-          setStatus(Status.USER_NOT_APPROVED);
+          router.push("/approval");
           break;
         case RequestStatus.USER_NOT_FOUND:
           router.push(
