@@ -9,6 +9,7 @@ import { SessionUser } from "@/types/SessionUser";
 import { ClassInstance, ClassTemplate } from "@prisma/client";
 import dayjs from "dayjs";
 import { APPCONFIG } from "app/config";
+import { preferencesStore } from "@/lib/preferences";
 
 type MailTemplate = {
   subject: string;
@@ -17,6 +18,14 @@ type MailTemplate = {
 
 export class MailNotification implements NotificationService {
   private logger = new ConsoleLogger(this.constructor.name);
+
+  constructor() {
+    this.init();
+  }
+
+  async init() {
+    await preferencesStore.load();
+  }
 
   async sendNotification<K extends NotificationType>(
     userId: number,
@@ -100,11 +109,12 @@ export class MailNotification implements NotificationService {
           cancelBookingUrl: `${process.env.NEXT_PUBLIC_APP_URL}/customer/reservations`,
         } as NotificationTypePayload[K];
 
-      case NotificationType.CLASS_CANCELATION:
+      case NotificationType.CLASS_CANCELATION:        
         return {
           ...base,
-          contactEmail: process.env.NEXT_PUBLIC_APP_EMAIL,
-          contactPhone: process.env.NEXT_PUBLIC_APP_PHONE,
+          contactEmail: preferencesStore.getByName<string>("businessEmail"),
+          contactPhone: preferencesStore.getByName<string>("businessWhatsappNumber"),
+          rescheduleBookingUrl: `${process.env.NEXT_PUBLIC_APP_URL}/customer/classes`,
         } as NotificationTypePayload[K];
     }
   }

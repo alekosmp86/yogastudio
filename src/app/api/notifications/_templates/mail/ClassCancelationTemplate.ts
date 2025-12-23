@@ -37,8 +37,31 @@ export function classCancelationTemplate(
           </table>
 
           <p style="font-size: 15px; color: #333;">
-            If it was a mistake, please contact us at ${data.contactEmail} or ${data.contactPhone}; or try to reschedule it.
+            If it was a mistake, please contact us via email at ${data.contactEmail} or WhatsApp at
+            <a
+              href="${`https://wa.me/${data.contactPhone}`}"
+              target="_blank"
+              className="hover:scale-110 transition"
+            >${data.contactPhone}</a>. Or try to reschedule it using the following link.
           </p>
+
+          <div style="text-align: center; margin: 24px 0;">
+            <a
+              href="${data.rescheduleBookingUrl}"
+              style="
+                display: inline-block;
+                background-color: #4f5dd9ff;
+                color: #ffffff;
+                text-decoration: none;
+                padding: 12px 20px;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: bold;
+              "
+            >
+              Reschedule booking
+            </a>
+          </div>
 
           <p style="font-size: 12px; color: #999; text-align: center;">
             This is an automated message — please do not reply.

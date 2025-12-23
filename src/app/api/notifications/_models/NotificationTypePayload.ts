@@ -22,6 +22,7 @@ export type NotificationTypePayload = {
     classDate: string;
     classTime: string;
     instructorName: string;
+    rescheduleBookingUrl: string;
     contactEmail: string;
     contactPhone: string;
   };
