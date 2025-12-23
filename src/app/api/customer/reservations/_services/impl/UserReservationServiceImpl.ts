@@ -1,11 +1,10 @@
-import { NotificationType } from "app/api/notifications/(enums)/NotificationTypes";
+import { NotificationType } from "app/api/notifications/_enums/NotificationTypes";
 import { UserReservationService } from "../UserReservationService";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { prisma } from "@/lib/prisma";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
 import { WaitingList } from "@prisma/client";
 import { classInstanceService, notificationService, waitingListService } from "app/api";
-import { NotificationTypePayload } from "app/api/notifications/(models)/NotificationTypePayload";
 import { SessionUser } from "@/types/SessionUser";
 import dayjs from "dayjs";
 import { APPCONFIG } from "app/config";

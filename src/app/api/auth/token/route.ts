@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { RequestStatus } from "@/enums/RequestStatus";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { tokenService } from "app/api";
 
 const logger = new ConsoleLogger("TokenRoute");

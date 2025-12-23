@@ -1,6 +1,6 @@
 import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { scheduleMapper, scheduleService } from "app/api";
 
 const logger =  new ConsoleLogger('ScheduleController');

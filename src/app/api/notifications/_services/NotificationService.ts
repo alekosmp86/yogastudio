@@ -1,5 +1,5 @@
-import { NotificationType } from "app/api/notifications/(enums)/NotificationTypes";
-import { NotificationTypePayload } from "app/api/notifications/(models)/NotificationTypePayload";
+import { NotificationType } from "../_enums/NotificationTypes";
+import { NotificationTypePayload } from "../_models/NotificationTypePayload";
 
 export interface NotificationService {
   sendNotification<K extends NotificationType>(

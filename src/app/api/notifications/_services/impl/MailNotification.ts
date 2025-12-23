@@ -1,10 +1,10 @@
 import { NotificationService } from "../NotificationService";
-import { NotificationType } from "app/api/notifications/(enums)/NotificationTypes";
-import { NotificationTypePayload } from "app/api/notifications/(models)/NotificationTypePayload";
+import { NotificationType } from "app/api/notifications/_enums/NotificationTypes";
+import { NotificationTypePayload } from "app/api/notifications/_models/NotificationTypePayload";
 import { prisma } from "@/lib/prisma";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { mailService } from "app/api";
-import * as templates from "app/api/notifications/(templates)/mail";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
+import * as templates from "app/api/notifications/_templates/mail";
 
 type MailTemplate = {
   subject: string;

@@ -1,3 +1,3 @@
-import { AdminServiceImpl } from "./(services)/impl/AdminServiceImpl";
+import { AdminServiceImpl } from "./_services/impl/AdminServiceImpl";
 
 export const adminService = new AdminServiceImpl();

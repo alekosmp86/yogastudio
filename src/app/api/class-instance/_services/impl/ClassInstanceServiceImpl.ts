@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import {
   ClassInstanceRelations,
   ClassInstanceWithRelations,
-} from "../../(types)/ClassInstanceRelations";
+} from "../../_types/ClassInstanceRelations";
 
 export class ClassInstanceServiceImpl implements ClassInstanceService {
   async findFirstByFields(

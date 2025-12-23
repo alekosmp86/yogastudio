@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { classesMapper, classesService } from "app/api";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { GymClass } from "@/types/classes/GymClass";
 
 const logger =  new ConsoleLogger('ClassesController');

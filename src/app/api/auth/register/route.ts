@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { registryService } from "..";
 import { userMapper } from "app/api";
 import { RequestStatus } from "@/enums/RequestStatus";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 
 const logger = new ConsoleLogger("RegistryRoute");
 

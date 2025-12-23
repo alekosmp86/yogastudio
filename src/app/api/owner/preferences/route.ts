@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { preferenceMapper, preferenceService } from "../..";
 import { RequestStatus } from "@/enums/RequestStatus";
-import { ConsoleLogger } from "../../logger/impl/ConsoleLogger";
+import { ConsoleLogger } from "../../logger/_services/impl/ConsoleLogger";
 import { AppPreference } from "@/types/preferences/AppPreference";
 
 const logger = new ConsoleLogger("PreferencesController");

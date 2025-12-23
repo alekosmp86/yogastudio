@@ -1,7 +1,12 @@
-import { accountService, googleUserMapper, tokenService, userService } from "app/api";
+import {
+  accountService,
+  googleUserMapper,
+  tokenService,
+  userService,
+} from "app/api";
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleUserInfo } from "app/api/auth/providers/google/(dto)/GoogleUserInfo";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInfo";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 
 const logger = new ConsoleLogger("GoogleCallback");
 

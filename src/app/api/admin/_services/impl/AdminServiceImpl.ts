@@ -1,4 +1,4 @@
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { scheduledTasks } from "../../ScheduledTasks";
 import { AdminService } from "../AdminService";
 import { classInstanceService, weeklyScheduleService } from "app/api";

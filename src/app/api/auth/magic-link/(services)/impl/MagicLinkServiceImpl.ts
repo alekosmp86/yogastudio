@@ -2,9 +2,9 @@ import { MagicLink } from "@prisma/client";
 import { RequestStatus } from "@/enums/RequestStatus";
 import crypto from "crypto";
 import { MagicLinkService } from "../MagicLinkService";
-import { LoggerService } from "app/api/logger/LoggerService";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
-import { UserLinkService } from "app/api/user-link/(services)/UserLinkService";
+import { LoggerService } from "app/api/logger/_services/LoggerService";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
+import { UserLinkService } from "app/api/user-link/_services/UserLinkService";
 import { MagicLinkResponse } from "@/types/requests/MagicLinkResponse";
 import { prisma } from "@/lib/prisma";
 
@@ -24,16 +24,16 @@ export class MagicLinkServiceImpl implements MagicLinkService {
       this.logger.log("User not found");
       return {
         status: RequestStatus.USER_NOT_FOUND,
-        magicLink: null
-      }
+        magicLink: null,
+      };
     }
 
     if (!user.approved) {
       this.logger.log("User not approved");
       return {
         status: RequestStatus.USER_NOT_APPROVED,
-        magicLink: null
-      }
+        magicLink: null,
+      };
     }
 
     this.logger.log("User found, generating magic link");
@@ -51,7 +51,7 @@ export class MagicLinkServiceImpl implements MagicLinkService {
 
     return {
       status: RequestStatus.SUCCESS,
-      magicLink: `${process.env.NEXT_PUBLIC_APP_URL}/auth/verify?token=${token}`
+      magicLink: `${process.env.NEXT_PUBLIC_APP_URL}/auth/verify?token=${token}`,
     };
   }
 

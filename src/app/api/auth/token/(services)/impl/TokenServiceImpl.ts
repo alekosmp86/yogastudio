@@ -1,17 +1,15 @@
 import { TokenService } from "../TokenService";
 import { User } from "@prisma/client";
 import { magicLinkService } from "app/api/auth";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
-import { UserService } from "app/api/users/(services)/UserService";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
+import { UserService } from "app/api/users/_services/UserService";
 import { NextResponse } from "next/server";
 import { SignJWT } from "jose";
 
 const logger = new ConsoleLogger("TokenServiceImpl");
 
 export class TokenServiceImpl implements TokenService {
-  constructor(
-    private readonly userService: UserService
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   async getUserWithToken(token: string): Promise<User> {
     const linkWithToken = await magicLinkService.findLinkByToken(token);
@@ -33,7 +31,7 @@ export class TokenServiceImpl implements TokenService {
 
   async createSession(res: NextResponse, user: User): Promise<void> {
     logger.log("Creating session for user:", user.email);
-    
+
     const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
     const token = await new SignJWT({ user })
       .setProtectedHeader({ alg: "HS256" })

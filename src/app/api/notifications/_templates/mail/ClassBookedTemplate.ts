@@ -1,16 +1,16 @@
-import { NotificationTypePayload } from "../../(models)/NotificationTypePayload";
+import { NotificationTypePayload } from "../../_models/NotificationTypePayload";
 
-export function addedToWaitingListTemplate(
-  data: NotificationTypePayload["ADDED_TO_WAITING_LIST"]
+export function classBookedTemplate(
+  data: NotificationTypePayload["CLASS_BOOKED"]
 ) {
   return {
-    subject: "You’ve been added to the waiting list",
+    subject: "You’ve booked a class",
     body: `
       <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <h3>Hi ${data.userName}, you’ve been added to the waiting list</h3>
+        <h3>Hi ${data.userName}</h3>
 
         <p>
-          You’ve been added to the waiting list for:
+          You’ve booked a class:
         </p>
 
         <ul>
@@ -21,7 +21,7 @@ export function addedToWaitingListTemplate(
         </ul>
 
         <p>
-          We’ll notify you if a spot becomes available.
+          You can cancel your booking by clicking the button below.
         </p>
 
         <p style="color: #666; font-size: 12px;">

@@ -1,5 +1,5 @@
 import { userReservationService } from "app/api";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { NextResponse } from "next/server";
 import { ApiUtils } from "app/api/utils/ApiUtils";
 import { RequestStatus } from "@/enums/RequestStatus";

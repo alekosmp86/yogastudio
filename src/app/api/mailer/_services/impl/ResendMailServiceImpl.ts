@@ -1,4 +1,4 @@
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { MailService } from "../MailService";
 import { Resend } from "resend";
 

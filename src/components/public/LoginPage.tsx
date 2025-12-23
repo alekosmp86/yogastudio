@@ -1,7 +1,7 @@
 import { RequestStatus } from "@/enums/RequestStatus";
 import { http } from "@/lib/http";
 import { ApiResponse } from "@/types/requests/ApiResponse";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { useRouter } from "next/navigation";
 import { Activity, useRef, useState } from "react";
 import Input from "../shared/Input";

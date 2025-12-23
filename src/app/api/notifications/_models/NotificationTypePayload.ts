@@ -1,4 +1,4 @@
-import { NotificationType } from "app/api/notifications/(enums)/NotificationTypes";
+import { NotificationType } from "../_enums/NotificationTypes";
 
 export type NotificationTypePayload = {
   [NotificationType.ADDED_TO_WAITING_LIST]: {

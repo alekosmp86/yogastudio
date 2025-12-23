@@ -1,7 +1,7 @@
 import { userReservationService } from "app/api";
 import { NextResponse } from "next/server";
 import { RequestStatus } from "@/enums/RequestStatus";
-import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 
 const logger = new ConsoleLogger("ReservationService");
 
