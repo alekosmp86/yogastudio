@@ -1,53 +1,45 @@
 import { NotificationService } from "../NotificationService";
-import { NotificationType } from "@/enums/NotificationTypes";
+import { NotificationType } from "app/api/notifications/(enums)/NotificationTypes";
+import { NotificationTypePayload } from "app/api/notifications/(models)/NotificationTypePayload";
 import { prisma } from "@/lib/prisma";
-import { NotificationTypePayload } from "@/types/NotificationTypePayload";
-import { mailService } from "app/api";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
+import { mailService } from "app/api";
+import { addedToWaitingListTemplate } from "../../(templates)/AddedToWaitingListTemplate";
 
 export class MailNotification implements NotificationService {
   private logger = new ConsoleLogger(this.constructor.name);
 
-  async sendNotification<K extends NotificationType, T>(
+  async sendNotification<K extends NotificationType>(
     userId: number,
     notificationType: K,
-    payload: T
+    payload: NotificationTypePayload[K]
   ): Promise<void> {
     this.logger.log(
       `Sending ${notificationType} notification to user ${userId}`
     );
 
     try {
-      const userToNotify = await prisma.user.findUnique({
-        where: {
-          id: userId,
-        },
-      });
-
-      if (!userToNotify) {
+      const user = await prisma.user.findUnique({ where: { id: userId } });
+      if (!user) {
         this.logger.error(`User ${userId} not found`);
         return;
       }
 
-      let mailSubject,
-        mailBody = "";
-      switch (notificationType) {
-        case NotificationType.ADDED_TO_WAITING_LIST: {
-          const data =
-            payload as NotificationTypePayload[NotificationType.ADDED_TO_WAITING_LIST];
-          mailSubject = "You’ve been added to the waiting list";
-          mailBody = `You have been added to the waiting list for ${data.classTitle} \n
-                    Date: ${data.classDate} \n
-                    Time: ${data.classTime} \n
-                    Instructor: ${data.instructorName}`;
-          break;
-        }
+      const template = addedToWaitingListTemplate(payload);
+      if (!template) {
+        this.logger.error(`No mail template for ${notificationType}`);
+        return;
       }
 
-      mailService.sendMail(userToNotify.email, mailSubject, mailBody);
-    } catch {
+      await mailService.sendMail(
+        user.email,
+        template.subject,
+        template.body
+      );
+    } catch (error) {
       this.logger.error(
-        `Failed to send ${notificationType} notification to user ${userId}`
+        `Failed to send ${notificationType} notification to user ${userId}`,
+        error
       );
     }
   }

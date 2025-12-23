@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     const { classId } = await req.json();
 
     logger.log("Creating reservation for class:", classId);
-    const result = await userReservationService.createReservation(classId, user.id);
+    const result = await userReservationService.createReservation(classId, user);
     logger.log(`Reservation processed: ${result}`);
     return NextResponse.json({ message: result }, { status: 200 });
   } catch (error) {
