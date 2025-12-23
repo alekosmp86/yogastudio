@@ -51,7 +51,7 @@ export default function Preferences() {
       }
       return [...prev.slice(0, index), preference, ...prev.slice(index + 1)];
     });
-    updatePreference(preference.id, preference.value);
+    updatePreference(preference.id, preference.value as string);
   };
 
   const handleSave = async () => {

@@ -1,3 +1,4 @@
+import { PreferenceTypes } from "@/enums/PreferenceTypes";
 import { AppPreference } from "@/types/preferences/AppPreference";
 
 type PreferencesTableProps = {
@@ -34,7 +35,7 @@ export default function PreferencesTable({
 
                 {/* Value column */}
                 <td className='px-4 py-3 text-left'>
-                  {preference.type === "boolean" ? (
+                  {preference.type === PreferenceTypes.BOOLEAN ? (
                     <input
                       type='checkbox'
                       checked={value === "true"}
@@ -46,7 +47,7 @@ export default function PreferencesTable({
                   ) : (
                     <input
                       type='text'
-                      value={value}
+                      value={value as string}
                       onChange={(e) => onChange({...preference, value: e.target.value})}
                       className='w-full rounded-md border border-primary-900/40 bg-transparent px-3 py-1.5 text-brand-200 placeholder:text-brand-200/50 focus:outline-none focus:ring-2 focus:ring-primary-700'
                     />

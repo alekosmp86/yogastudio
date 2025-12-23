@@ -8,7 +8,7 @@ async function syncPreferences() {
 
   for (const pref of CorePreferences) {
     if(!existingPrefs.find(p => p.name === pref.name)) {
-      await prisma.appPreferences.create({ data: pref });
+      await prisma.appPreferences.create({ data: {...pref, value: String(pref.value)}});
     }
   }
 }

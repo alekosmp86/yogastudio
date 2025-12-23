@@ -5,5 +5,5 @@ export type AppPreference = {
     name: string;
     label: string;
     type: PreferenceTypes;
-    value: string;
+    value: string | number | boolean;
 };
