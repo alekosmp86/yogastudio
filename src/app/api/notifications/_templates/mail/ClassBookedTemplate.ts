@@ -4,29 +4,67 @@ export function classBookedTemplate(
   data: NotificationTypePayload["CLASS_BOOKED"]
 ) {
   return {
-    subject: "You’ve booked a class",
+    subject: "You’ve booked a class 🧘‍♂️",
     body: `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <h3>Hi ${data.userName}</h3>
+      <div style="font-family: Arial, Helvetica, sans-serif; background-color: #f5f7fa; padding: 24px;">
+        <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; padding: 24px;">
 
-        <p>
-          You’ve booked a class:
-        </p>
+          <h2 style="color: #1A4D6D; margin-top: 0;">
+            Hi ${data.userName},
+          </h2>
 
-        <ul>
-          <li><strong>Class:</strong> ${data.classTitle}</li>
-          <li><strong>Date:</strong> ${data.classDate}</li>
-          <li><strong>Time:</strong> ${data.classTime}</li>
-          <li><strong>Instructor:</strong> ${data.instructorName}</li>
-        </ul>
+          <p style="font-size: 15px; color: #333;">
+            Your spot has been <strong>successfully booked</strong>. Here are the details:
+          </p>
 
-        <p>
-          You can cancel your booking by clicking the button below.
-        </p>
+          <table style="width: 100%; font-size: 14px; color: #333; border-collapse: collapse; margin: 8px 0;">
+            <tr>
+              <td style="padding: 2px 0; font-weight: 600; width: 20%;">Class:</td>
+              <td style="padding: 2px 0;">${data.classTitle}</td>
+            </tr>
+            <tr>
+              <td style="padding: 2px 0; font-weight: 600; width: 20%;">Date:</td>
+              <td style="padding: 2px 0;">${data.classDate}</td>
+            </tr>
+            <tr>
+              <td style="padding: 2px 0; font-weight: 600; width: 20%;">Time:</td>
+              <td style="padding: 2px 0;">${data.classTime}</td>
+            </tr>
+            <tr>
+              <td style="padding: 2px 0; font-weight: 600; width: 20%;">Instructor:</td>
+              <td style="padding: 2px 0;">${data.instructorName}</td>
+            </tr>
+          </table>
 
-        <p style="color: #666; font-size: 12px;">
-          This is an automated message — please do not reply.
-        </p>
+          <div style="text-align: center; margin: 24px 0;">
+            <a
+              href="${data.cancelBookingUrl}"
+              style="
+                display: inline-block;
+                background-color: #d9534f;
+                color: #ffffff;
+                text-decoration: none;
+                padding: 12px 20px;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: bold;
+              "
+            >
+              Cancel booking
+            </a>
+          </div>
+
+          <p style="font-size: 13px; color: #666;">
+            If you can’t attend, please cancel in advance so someone else can take your place.
+          </p>
+
+          <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
+
+          <p style="font-size: 12px; color: #999; text-align: center;">
+            This is an automated message — please do not reply.
+          </p>
+
+        </div>
       </div>
     `,
   };

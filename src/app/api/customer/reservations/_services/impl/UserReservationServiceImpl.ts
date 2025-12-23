@@ -3,11 +3,12 @@ import { UserReservationService } from "../UserReservationService";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { prisma } from "@/lib/prisma";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
-import { WaitingList } from "@prisma/client";
+import { ClassInstance, ClassTemplate, WaitingList } from "@prisma/client";
 import { classInstanceService, notificationService, waitingListService } from "app/api";
 import { SessionUser } from "@/types/SessionUser";
 import dayjs from "dayjs";
 import { APPCONFIG } from "app/config";
+import { NotificationTypePayload } from "app/api/notifications/_models/NotificationTypePayload";
 
 export class UserReservationServiceImpl implements UserReservationService {
   async getReservations(userId: number, date: string, time: string): Promise<ClassReservation[]> {
@@ -45,18 +46,6 @@ export class UserReservationServiceImpl implements UserReservationService {
       return RequestStatus.NOT_FOUND;
     }
 
-    //create payload for notification
-    const payload = {
-      userName: user.name,
-      classTitle: classInstance.template.title,
-      classDate: dayjs(classInstance.date)
-        .tz(APPCONFIG.TIMEZONE)
-        .toISOString()
-        .split("T")[0],
-      classTime: classInstance.startTime,
-      instructorName: classInstance.template.instructor,
-    };
-
     // 2 — Check if user already reserved
     const alreadyReserved = classInstance.reservations.some(
       (r) => r.userId === user.id
@@ -85,7 +74,11 @@ export class UserReservationServiceImpl implements UserReservationService {
         notificationService.sendNotification(
           user.id,
           NotificationType.ADDED_TO_WAITING_LIST,
-          payload
+          notificationService.buildNotificationPayload(
+            NotificationType.ADDED_TO_WAITING_LIST,
+            user,
+            classInstance
+          )
         );
       }
 
@@ -104,7 +97,11 @@ export class UserReservationServiceImpl implements UserReservationService {
     notificationService.sendNotification(
       user.id,
       NotificationType.CLASS_BOOKED,
-      payload
+      notificationService.buildNotificationPayload(
+        NotificationType.CLASS_BOOKED,
+        user,
+        classInstance
+      )
     );
 
     return RequestStatus.SUCCESS;

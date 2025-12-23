@@ -5,6 +5,10 @@ import { prisma } from "@/lib/prisma";
 import { mailService } from "app/api";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import * as templates from "app/api/notifications/_templates/mail";
+import { SessionUser } from "@/types/SessionUser";
+import { ClassInstance, ClassTemplate } from "@prisma/client";
+import dayjs from "dayjs";
+import { APPCONFIG } from "app/config";
 
 type MailTemplate = {
   subject: string;
@@ -45,17 +49,50 @@ export class MailNotification implements NotificationService {
     }
   }
 
-  getMailTemplate<K extends NotificationType>(
-    notificationType: K,
-    payload: NotificationTypePayload[K]
+  getMailTemplate(
+    notificationType: NotificationType,
+    payload: NotificationTypePayload[NotificationType]
   ): MailTemplate | null {
     switch (notificationType) {
       case NotificationType.ADDED_TO_WAITING_LIST:
-        return templates.addedToWaitingListTemplate(payload);
+        return templates.addedToWaitingListTemplate(
+          payload as NotificationTypePayload[NotificationType.ADDED_TO_WAITING_LIST]
+        );
+
       case NotificationType.CLASS_BOOKED:
-        return templates.classBookedTemplate(payload);
+        return templates.classBookedTemplate(
+          payload as NotificationTypePayload[NotificationType.CLASS_BOOKED]
+        );
+
       default:
         return null;
+    }
+  }
+
+  buildNotificationPayload<K extends NotificationType>(
+    notificationType: K,
+    user: SessionUser,
+    classInstance: ClassInstance & { template: ClassTemplate }
+  ): NotificationTypePayload[K] {
+    const base = {
+      userName: user.name,
+      classTitle: classInstance.template.title,
+      classDate: dayjs(classInstance.date)
+        .tz(APPCONFIG.TIMEZONE)
+        .format("YYYY-MM-DD"),
+      classTime: classInstance.startTime,
+      instructorName: classInstance.template.instructor,
+    };
+
+    switch (notificationType) {
+      case NotificationType.ADDED_TO_WAITING_LIST:
+        return base as NotificationTypePayload[K];
+
+      case NotificationType.CLASS_BOOKED:
+        return {
+          ...base,
+          cancelBookingUrl: `${process.env.NEXT_PUBLIC_APP_URL}/customer/reservations`,
+        } as NotificationTypePayload[K];
     }
   }
 }
