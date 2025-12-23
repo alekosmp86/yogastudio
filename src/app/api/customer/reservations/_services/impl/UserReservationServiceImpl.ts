@@ -6,9 +6,6 @@ import { ClassReservation } from "@/types/reservations/ClassReservation";
 import { ClassInstance, ClassTemplate, WaitingList } from "@prisma/client";
 import { classInstanceService, notificationService, waitingListService } from "app/api";
 import { SessionUser } from "@/types/SessionUser";
-import dayjs from "dayjs";
-import { APPCONFIG } from "app/config";
-import { NotificationTypePayload } from "app/api/notifications/_models/NotificationTypePayload";
 
 export class UserReservationServiceImpl implements UserReservationService {
   async getReservations(userId: number, date: string, time: string): Promise<ClassReservation[]> {
@@ -107,15 +104,49 @@ export class UserReservationServiceImpl implements UserReservationService {
     return RequestStatus.SUCCESS;
   }
 
-  async cancelReservation(reservationId: number): Promise<void> {
-    await prisma.reservation.delete({
+  async cancelReservation(reservationId: number, user: SessionUser): Promise<void> {
+    const reservation = await prisma.reservation.delete({
       where: { id: reservationId },
+      include: {
+        class: {
+          include: {
+            template: true,
+          },
+        },
+      },
     });
+
+    this.notifyUserAboutReservationCancellation(reservation.class, user);
   }
 
-  async cancelReservationFromClass(classId: number): Promise<void> {
+  async cancelReservationFromClass(classId: number, user: SessionUser): Promise<void> {
+    const classInstance = await prisma.classInstance.findUnique({
+      where: { id: classId },
+      include: {
+        template: true,
+      },
+    });
+
+    if (!classInstance) {
+      throw new Error("Class not found");
+    }
+
     await prisma.reservation.deleteMany({
       where: { classId },
     });
+
+    this.notifyUserAboutReservationCancellation(classInstance, user);
+  }
+
+  notifyUserAboutReservationCancellation(classInstance: ClassInstance & { template: ClassTemplate }, user: SessionUser): void {
+    notificationService.sendNotification(
+      user.id,
+      NotificationType.CLASS_CANCELATION,
+      notificationService.buildNotificationPayload(
+        NotificationType.CLASS_CANCELATION,
+        user,
+        classInstance,
+      )
+    );
   }
 }

@@ -16,4 +16,13 @@ export type NotificationTypePayload = {
     instructorName: string;
     cancelBookingUrl: string;
   };
+  [NotificationType.CLASS_CANCELATION]: {
+    userName: string;
+    classTitle: string;
+    classDate: string;
+    classTime: string;
+    instructorName: string;
+    contactEmail: string;
+    contactPhone: string;
+  };
 };

@@ -40,6 +40,7 @@ export class MailNotification implements NotificationService {
         return;
       }
 
+      this.logger.log(`Sending mail notification to ${user.email}`);
       await mailService.sendMail(user.email, template.subject, template.body);
     } catch (error) {
       this.logger.error(
@@ -62,6 +63,11 @@ export class MailNotification implements NotificationService {
       case NotificationType.CLASS_BOOKED:
         return templates.classBookedTemplate(
           payload as NotificationTypePayload[NotificationType.CLASS_BOOKED]
+        );
+
+      case NotificationType.CLASS_CANCELATION:
+        return templates.classCancelationTemplate(
+          payload as NotificationTypePayload[NotificationType.CLASS_CANCELATION]
         );
 
       default:
@@ -92,6 +98,13 @@ export class MailNotification implements NotificationService {
         return {
           ...base,
           cancelBookingUrl: `${process.env.NEXT_PUBLIC_APP_URL}/customer/reservations`,
+        } as NotificationTypePayload[K];
+
+      case NotificationType.CLASS_CANCELATION:
+        return {
+          ...base,
+          contactEmail: process.env.NEXT_PUBLIC_APP_EMAIL,
+          contactPhone: process.env.NEXT_PUBLIC_APP_PHONE,
         } as NotificationTypePayload[K];
     }
   }
