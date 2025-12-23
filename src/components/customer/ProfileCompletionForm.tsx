@@ -1,5 +1,7 @@
 import { SessionUser } from "@/types/SessionUser";
 import Button from "../shared/Button";
+import { useToast } from "@/lib/contexts/ToastContext";
+import { ToastType } from "@/enums/ToastType";
 
 type ProfileCompletionFormProps = {
   isOpen: boolean;
@@ -10,15 +12,33 @@ type ProfileCompletionFormProps = {
 export function ProfileCompletionForm({ isOpen, onSubmit, userData }: ProfileCompletionFormProps) {
   if (!isOpen) return null;
 
+  const toast = useToast();
+
+  function validatePhoneNumber(phone: string) {
+    const phoneRegex = /^\+?[1-9]\d{1,8}$/;
+    if (!phoneRegex.test(phone)) {
+      toast.showToast({
+        message: "Invalid phone number",
+        type: ToastType.ERROR,
+        duration: 3000,
+      });
+      return false;
+    }
+    return true;
+  }
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const phone = formData.get("phone") as string;
 
-    onSubmit({
-      name: String(formData.get("name") || ""),
-      phone: String(formData.get("phone") || ""),
-    });
+    if (!name || !phone) return;
+
+    if (!validatePhoneNumber(phone)) return;
+
+    onSubmit({ name, phone });
   }
 
   return (
@@ -30,13 +50,13 @@ export function ProfileCompletionForm({ isOpen, onSubmit, userData }: ProfileCom
 
       {/* Modal */}
       <div className="relative z-10 w-full max-w-md rounded-md bg-theme-headings p-6 shadow-lg">
-        <h2 className="mb-4 text-xl font-semibold text-theme-text">
+        <h2 className="mb-4 text-xl font-semibold text-white">
           Complete your profile
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-theme-text">
+            <label className="block text-sm font-medium text-white">
               Name
             </label>
             <input
@@ -48,8 +68,8 @@ export function ProfileCompletionForm({ isOpen, onSubmit, userData }: ProfileCom
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-theme-text">
-              Phone
+            <label className="block text-sm font-medium text-white">
+              Phone (e.g. 94154879)
             </label>
             <input
               name="phone"
