@@ -6,6 +6,11 @@ import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { mailService } from "app/api";
 import { addedToWaitingListTemplate } from "../../(templates)/AddedToWaitingListTemplate";
 
+type MailTemplate = {
+  subject: string;
+  body: string;
+};
+
 export class MailNotification implements NotificationService {
   private logger = new ConsoleLogger(this.constructor.name);
 
@@ -25,7 +30,7 @@ export class MailNotification implements NotificationService {
         return;
       }
 
-      const template = addedToWaitingListTemplate(payload);
+      const template = this.getMailTemplate(notificationType, payload);
       if (!template) {
         this.logger.error(`No mail template for ${notificationType}`);
         return;
@@ -41,6 +46,15 @@ export class MailNotification implements NotificationService {
         `Failed to send ${notificationType} notification to user ${userId}`,
         error
       );
+    }
+  }
+
+  getMailTemplate<K extends NotificationType>(notificationType: K, payload: NotificationTypePayload[K]): MailTemplate | null {
+    switch (notificationType) {
+      case NotificationType.ADDED_TO_WAITING_LIST:
+        return addedToWaitingListTemplate(payload);
+      default:
+        return null;
     }
   }
 }

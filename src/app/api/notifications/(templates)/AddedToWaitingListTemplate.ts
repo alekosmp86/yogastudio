@@ -7,7 +7,7 @@ export function addedToWaitingListTemplate(
     subject: "You’ve been added to the waiting list",
     body: `
       <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-        <h2>Hi ${data.userName}, you’ve been added to the waiting list 🎟️</h2>
+        <h3>Hi ${data.userName}, you’ve been added to the waiting list</h3>
 
         <p>
           You’ve been added to the waiting list for:
