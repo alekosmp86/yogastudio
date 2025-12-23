@@ -8,5 +8,11 @@ export type NotificationTypePayload = {
     classTime: string;
     instructorName: string;
   };
-  // future notifications go here
+  [NotificationType.CLASS_BOOKED]: {
+    userName: string;
+    classTitle: string;
+    classDate: string;
+    classTime: string;
+    instructorName: string;
+  };
 };

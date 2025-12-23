@@ -1,4 +1,4 @@
-import { NotificationTypePayload } from "../(models)/NotificationTypePayload";
+import { NotificationTypePayload } from "../../(models)/NotificationTypePayload";
 
 export function addedToWaitingListTemplate(
   data: NotificationTypePayload["ADDED_TO_WAITING_LIST"]
@@ -28,6 +28,6 @@ export function addedToWaitingListTemplate(
           This is an automated message — please do not reply.
         </p>
       </div>
-    `
+    `,
   };
 }

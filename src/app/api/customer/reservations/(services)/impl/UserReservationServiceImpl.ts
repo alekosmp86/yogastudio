@@ -4,18 +4,14 @@ import { RequestStatus } from "@/enums/RequestStatus";
 import { prisma } from "@/lib/prisma";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
 import { WaitingList } from "@prisma/client";
-import { notificationService } from "app/api";
+import { classInstanceService, notificationService, waitingListService } from "app/api";
 import { NotificationTypePayload } from "app/api/notifications/(models)/NotificationTypePayload";
 import { SessionUser } from "@/types/SessionUser";
 import dayjs from "dayjs";
 import { APPCONFIG } from "app/config";
 
 export class UserReservationServiceImpl implements UserReservationService {
-  async getReservations(
-    userId: number,
-    date: string,
-    time: string
-  ): Promise<ClassReservation[]> {
+  async getReservations(userId: number, date: string, time: string): Promise<ClassReservation[]> {
     return prisma.reservation.findMany({
       where: { userId, class: { date, startTime: { gt: time } } },
       select: {
@@ -40,18 +36,27 @@ export class UserReservationServiceImpl implements UserReservationService {
 
   async createReservation(classId: number, user: SessionUser): Promise<string> {
     // 1 — Load class + reservations + capacity
-    const classInstance = await prisma.classInstance.findUnique({
-      where: { id: classId },
-      include: {
-        template: true,
-        reservations: true,
-        waitingList: true,
-      },
+    const classInstance = await classInstanceService.findUniqueByIdIncludingData(classId, {
+      template: true,
+      reservations: true,
+      waitingList: true,
     });
 
     if (!classInstance) {
       return RequestStatus.NOT_FOUND;
     }
+
+    //create payload for notification
+    const payload = {
+      userName: user.name,
+      classTitle: classInstance.template.title,
+      classDate: dayjs(classInstance.date)
+        .tz(APPCONFIG.TIMEZONE)
+        .toISOString()
+        .split("T")[0],
+      classTime: classInstance.startTime,
+      instructorName: classInstance.template.instructor,
+    };
 
     // 2 — Check if user already reserved
     const alreadyReserved = classInstance.reservations.some(
@@ -75,22 +80,9 @@ export class UserReservationServiceImpl implements UserReservationService {
         return RequestStatus.ON_WAITING_LIST;
       } else {
         //add to waiting list
-        await prisma.waitingList.create({
-          data: {
-            userId: user.id,
-            classId,
-          },
-        });
+        await waitingListService.addToWaitingList(user.id, classId);
 
         //notify user
-        const payload: NotificationTypePayload[NotificationType.ADDED_TO_WAITING_LIST] =
-          {
-            userName: user.name,
-            classTitle: classInstance.template.title,
-            classDate: dayjs(classInstance.date).tz(APPCONFIG.TIMEZONE).toISOString().split('T')[0],
-            classTime: classInstance.startTime,
-            instructorName: classInstance.template.instructor,
-          };
         notificationService.sendNotification(
           user.id,
           NotificationType.ADDED_TO_WAITING_LIST,
@@ -108,6 +100,13 @@ export class UserReservationServiceImpl implements UserReservationService {
         classId,
       },
     });
+
+    //notify user
+    notificationService.sendNotification(
+      user.id,
+      NotificationType.CLASS_BOOKED,
+      payload
+    );
 
     return RequestStatus.SUCCESS;
   }

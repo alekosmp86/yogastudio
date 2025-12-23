@@ -4,7 +4,7 @@ import { NotificationTypePayload } from "app/api/notifications/(models)/Notifica
 import { prisma } from "@/lib/prisma";
 import { ConsoleLogger } from "app/api/logger/impl/ConsoleLogger";
 import { mailService } from "app/api";
-import { addedToWaitingListTemplate } from "../../(templates)/AddedToWaitingListTemplate";
+import * as templates from "app/api/notifications/(templates)/mail";
 
 type MailTemplate = {
   subject: string;
@@ -36,11 +36,7 @@ export class MailNotification implements NotificationService {
         return;
       }
 
-      await mailService.sendMail(
-        user.email,
-        template.subject,
-        template.body
-      );
+      await mailService.sendMail(user.email, template.subject, template.body);
     } catch (error) {
       this.logger.error(
         `Failed to send ${notificationType} notification to user ${userId}`,
@@ -49,10 +45,15 @@ export class MailNotification implements NotificationService {
     }
   }
 
-  getMailTemplate<K extends NotificationType>(notificationType: K, payload: NotificationTypePayload[K]): MailTemplate | null {
+  getMailTemplate<K extends NotificationType>(
+    notificationType: K,
+    payload: NotificationTypePayload[K]
+  ): MailTemplate | null {
     switch (notificationType) {
       case NotificationType.ADDED_TO_WAITING_LIST:
-        return addedToWaitingListTemplate(payload);
+        return templates.addedToWaitingListTemplate(payload);
+      case NotificationType.CLASS_BOOKED:
+        return templates.classBookedTemplate(payload);
       default:
         return null;
     }
