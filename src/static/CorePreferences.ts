@@ -4,8 +4,8 @@ import { PreferenceTypes } from "@/enums/PreferenceTypes";
 export const CorePreferences: AppPreference[] = [
     {
         id: 1,
-        name: "appName",
-        label: "Name of the app",
+        name: "businessName",
+        label: "Business Name",
         type: PreferenceTypes.TEXT,
         value: "GymStudio"
     },
@@ -25,14 +25,14 @@ export const CorePreferences: AppPreference[] = [
     },
     {
         id: 4,
-        name: "defaultTimezone",
+        name: "timezone",
         label: "Timezone",
         type: PreferenceTypes.TEXT,
         value: "America/Montevideo"
     },
     {
         id: 5,
-        name: "defaultLanguage",
+        name: "language",
         label: "Default Language",
         type: PreferenceTypes.TEXT,
         value: "en"

@@ -6,15 +6,16 @@ import { usePathname } from "next/navigation";
 import NavItem from "../shared/NavItem";
 import Container from "../shared/Container";
 import { NavBarItems } from "static/StaticMockData";
-import { APPCONFIG } from "app/config";
 import { Menu, X } from "lucide-react";
 import LogoutButton from "../shared/LogoutButton";
 import { useRouter } from "next/navigation";
+import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();  
   const router = useRouter();
+  const {getPreferenceByName} = useAppPreferences();
 
   return (
     <nav className='w-full border-b shadow-sm bg-theme-headings'>
@@ -29,7 +30,7 @@ export default function Navbar() {
         
         {/* Logo */}
         <div className='text-xl font-bold text-white cursor-pointer' onClick={() => router.push('/')}>
-          {APPCONFIG.BUSINESS.name}
+          {getPreferenceByName<string>("businessName")}
         </div>
 
         {/* Desktop Menu */}

@@ -13,18 +13,20 @@ import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
 import { getStartOfDay, getTimeXHoursFromNow } from "@/lib/utils/date";
+import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 
 export default function CustomerReservations() {
   const [loading, setLoading] = useState(true);
   const [reservations, setReservations] = useState<ClassReservation[]>([]);
   const toast = useToast();
+  const {getPreferenceByName} = useAppPreferences();
 
   useEffect(() => {
     const fetchReservations = async () => {
       setLoading(true);
 
-      const date = getStartOfDay(true);
-      const oneHourLaterRounded = getTimeXHoursFromNow(0, true).minute(0).second(0).millisecond(0).format("HH:mm");
+      const date = getStartOfDay(getPreferenceByName<string>("timezone"));
+      const oneHourLaterRounded = getTimeXHoursFromNow(0, getPreferenceByName<string>("timezone")).minute(0).second(0).millisecond(0).format("HH:mm");
 
       const { message, data } = await http.get<ApiResponse<ClassReservation[]>>(
         `/customer/reservations?date=${date}&time=${oneHourLaterRounded}`,
@@ -36,7 +38,7 @@ export default function CustomerReservations() {
       setLoading(false);
     };
     fetchReservations();
-  }, []);
+  }, [getPreferenceByName]);
 
   const cancelReservation = async (reservationId: number) => {
     const toastId = toast.showToast({

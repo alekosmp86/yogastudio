@@ -1,15 +1,19 @@
-import { APPCONFIG } from "app/config";
+'use client';
+
 import QuickActionCard from "./QuickActionCard";
 import Testimonials from "./Testimonials";
 import { Calendar, BookOpenCheck, User2 } from "lucide-react";
+import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 
 export default function HomePage() {
+  const {getPreferenceByName} = useAppPreferences();
+
   return (
     <div className='py-6 space-y-8'>
       {/* Welcome Section */}
       <section className='text-center'>
         <h1 className='text-2xl font-bold text-primary-800'>
-          Welcome to {APPCONFIG.BUSINESS.name}
+          Welcome to {getPreferenceByName<string>("businessName")}
         </h1>
         <p className='text-gray-600 mt-2 text-md'>
           Book your classes, manage reservations, and stay connected.

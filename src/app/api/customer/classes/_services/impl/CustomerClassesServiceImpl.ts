@@ -6,15 +6,23 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { getStartOfDay, getTimeXHoursFromNow } from "@/lib/utils/date";
+import { preferencesStore } from "@/lib/preferences";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
+  constructor() {
+    this.init();
+  }
+
+  async init() {
+    await preferencesStore.load();
+  }
 
   async getTodayClasses(): Promise<DailyClass[]> {
-    const today = getStartOfDay(true);
-    const oneHourLater = getTimeXHoursFromNow(0, true).format("HH:mm");
+    const today = getStartOfDay(preferencesStore.getByName<string>("timezone"));
+    const oneHourLater = getTimeXHoursFromNow(0, preferencesStore.getByName<string>("timezone")).format("HH:mm");
     const user = await ApiUtils.getSessionUser();
 
     const classes = await prisma.classInstance.findMany({
@@ -52,7 +60,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
       instructor: c.template.instructor,
       capacity: c.template.capacity,
       reserved: c._count.reservations,
-      available: c.reservations.length === 0
+      available: c.reservations.length === 0,
     }));
   }
 }

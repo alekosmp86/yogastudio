@@ -1,8 +1,9 @@
 "use client";
 import { Instagram, Mail, MessageCircle } from "lucide-react";
-import { APPCONFIG } from "app/config";
+import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 
 export default function Footer() {
+  const {getPreferenceByName} = useAppPreferences();
   const iconClasses = "h-5 w-5 text-white hover:text-primary-400 transition";
 
   return (
@@ -10,7 +11,7 @@ export default function Footer() {
       <div className="mx-auto max-w-4xl px-4 py-8 flex flex-col items-center gap-4">
         {/* Copyright */}
         <p className="text-sm">
-          © {new Date().getFullYear()} {APPCONFIG.BUSINESS.name} — All rights reserved
+          © {new Date().getFullYear()} {getPreferenceByName<string>("businessName")} — All rights reserved
         </p>
 
         {/* Icons */}
@@ -24,7 +25,7 @@ export default function Footer() {
           </a>
 
           <a
-            href={`https://wa.me/${APPCONFIG.BUSINESS.whatsappNumber}`}
+            href={`https://wa.me/${getPreferenceByName<string>("businessWhatsappNumber")}`}
             target="_blank"
             className="hover:scale-110 transition"
           >
@@ -32,7 +33,7 @@ export default function Footer() {
           </a>
 
           <a
-            href={`mailto:${APPCONFIG.BUSINESS.email}`}
+            href={`mailto:${getPreferenceByName<string>("businessEmail")}`}
             className="hover:scale-110 transition"
           >
             <Mail className={iconClasses} />

@@ -94,7 +94,7 @@ export class MailNotification implements NotificationService {
     classInstance: ClassInstance & { template: ClassTemplate }
   ): NotificationTypePayload[K] {
     const classDateUsingTimezone = dayjs(classInstance.date)
-      .tz(preferencesStore.getByName<string>("defaultTimezone"))
+      .tz(preferencesStore.getByName<string>("timezone"))
       .toISOString()
       .split("T")[0];
     const base = {
