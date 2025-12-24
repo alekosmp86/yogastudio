@@ -3,7 +3,6 @@ import { useRef, useState, useEffect } from "react";
 import { http } from "@/lib/http";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { ApiType } from "@/enums/ApiTypes";
-import { User } from "@/types/User";
 import { RequestStatus } from "@/enums/RequestStatus";
 import Input from "../shared/Input";
 import Button from "../shared/Button";

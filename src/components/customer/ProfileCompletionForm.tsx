@@ -10,9 +10,9 @@ type ProfileCompletionFormProps = {
 };
 
 export function ProfileCompletionForm({ isOpen, onSubmit, userData }: ProfileCompletionFormProps) {
-  if (!isOpen) return null;
-
   const toast = useToast();
+
+  if (!isOpen) return null;
 
   function validatePhoneNumber(phone: string) {
     const phoneRegex = /^\+?[1-9]\d{1,8}$/;
