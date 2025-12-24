@@ -117,6 +117,7 @@ export class UserReservationServiceImpl implements UserReservationService {
     });
 
     this.notifyUserAboutReservationCancellation(reservation.class, user);
+    this.notifyUsersInWaitingList(reservation.class, user);
   }
 
   async cancelReservationFromClass(classId: number, user: SessionUser): Promise<void> {
@@ -141,12 +142,38 @@ export class UserReservationServiceImpl implements UserReservationService {
   notifyUserAboutReservationCancellation(classInstance: ClassInstance & { template: ClassTemplate }, user: SessionUser): void {
     notificationService.sendNotification(
       user.id,
-      NotificationType.CLASS_CANCELATION,
+      NotificationType.CLASS_CANCELLED,
       notificationService.buildNotificationPayload(
-        NotificationType.CLASS_CANCELATION,
+        NotificationType.CLASS_CANCELLED,
         user,
         classInstance,
       )
     );
+  }
+
+  async notifyUsersInWaitingList(classInstance: ClassInstance & { template: ClassTemplate }, user: SessionUser): Promise<void> {
+    const waitingList = await prisma.waitingList.findMany({
+      where: { classId: classInstance.id },
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true
+          },
+        },
+      },
+    });
+
+    waitingList.forEach((waitingListUser) => {
+      notificationService.sendNotification(
+        waitingListUser.userId,
+        NotificationType.CLASS_SPOT_OPENED,
+        notificationService.buildNotificationPayload(
+          NotificationType.CLASS_SPOT_OPENED,
+          user,
+          classInstance,
+        )
+      );
+    });
   }
 }

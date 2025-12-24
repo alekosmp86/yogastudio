@@ -1,3 +1,4 @@
 export * from "./AddedToWaitingListTemplate";
 export * from "./ClassBookedTemplate";
-export * from "./ClassCancelationTemplate";
+export * from "./ClassCancelledTemplate";
+export * from "./ClassSpotOpenedTemplate";

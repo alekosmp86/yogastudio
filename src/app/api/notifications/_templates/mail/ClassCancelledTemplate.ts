@@ -1,7 +1,7 @@
 import { NotificationTypePayload } from "../../_models/NotificationTypePayload";
 
-export function classCancelationTemplate(
-  data: NotificationTypePayload["CLASS_CANCELATION"]
+export function classCancelledTemplate(
+  data: NotificationTypePayload["CLASS_CANCELLED"]
 ) {
   return {
     subject: "Class cancelled",
@@ -50,7 +50,7 @@ export function classCancelationTemplate(
               href="${data.rescheduleBookingUrl}"
               style="
                 display: inline-block;
-                background-color: #4f5dd9ff;
+                background-color: #4f5dd9;
                 color: #ffffff;
                 text-decoration: none;
                 padding: 12px 20px;

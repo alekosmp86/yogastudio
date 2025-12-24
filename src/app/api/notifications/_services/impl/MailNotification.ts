@@ -74,9 +74,14 @@ export class MailNotification implements NotificationService {
           payload as NotificationTypePayload[NotificationType.CLASS_BOOKED]
         );
 
-      case NotificationType.CLASS_CANCELATION:
-        return templates.classCancelationTemplate(
-          payload as NotificationTypePayload[NotificationType.CLASS_CANCELATION]
+      case NotificationType.CLASS_CANCELLED:
+        return templates.classCancelledTemplate(
+          payload as NotificationTypePayload[NotificationType.CLASS_CANCELLED]
+        );
+
+      case NotificationType.CLASS_SPOT_OPENED:
+        return templates.classSpotOpenedTemplate(
+          payload as NotificationTypePayload[NotificationType.CLASS_SPOT_OPENED]
         );
 
       default:
@@ -89,12 +94,14 @@ export class MailNotification implements NotificationService {
     user: SessionUser,
     classInstance: ClassInstance & { template: ClassTemplate }
   ): NotificationTypePayload[K] {
+    const classDateUsingTimezone = dayjs(classInstance.date)
+      .tz(preferencesStore.getByName<string>("defaultTimezone"))
+      .toISOString()
+      .split("T")[0];
     const base = {
       userName: user.name,
       classTitle: classInstance.template.title,
-      classDate: dayjs(classInstance.date)
-        .tz(APPCONFIG.TIMEZONE)
-        .format("YYYY-MM-DD"),
+      classDate: classDateUsingTimezone,
       classTime: classInstance.startTime,
       instructorName: classInstance.template.instructor,
     };
@@ -109,12 +116,20 @@ export class MailNotification implements NotificationService {
           cancelBookingUrl: `${process.env.NEXT_PUBLIC_APP_URL}/customer/reservations`,
         } as NotificationTypePayload[K];
 
-      case NotificationType.CLASS_CANCELATION:        
+      case NotificationType.CLASS_CANCELLED:
         return {
           ...base,
           contactEmail: preferencesStore.getByName<string>("businessEmail"),
-          contactPhone: preferencesStore.getByName<string>("businessWhatsappNumber"),
+          contactPhone: preferencesStore.getByName<string>(
+            "businessWhatsappNumber"
+          ),
           rescheduleBookingUrl: `${process.env.NEXT_PUBLIC_APP_URL}/customer/classes`,
+        } as NotificationTypePayload[K];
+
+      case NotificationType.CLASS_SPOT_OPENED:
+        return {
+          ...base,
+          bookClassUrl: `${process.env.NEXT_PUBLIC_APP_URL}/customer/classes`,
         } as NotificationTypePayload[K];
     }
   }
