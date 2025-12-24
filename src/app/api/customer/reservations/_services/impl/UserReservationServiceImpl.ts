@@ -132,11 +132,16 @@ export class UserReservationServiceImpl implements UserReservationService {
       throw new Error("Class not found");
     }
 
-    await prisma.reservation.deleteMany({
+    const existingReservations = await prisma.reservation.findMany({
       where: { classId },
     });
 
-    this.notifyUserAboutReservationCancellation(classInstance, user);
+    if(existingReservations.length > 0) {
+      await prisma.reservation.deleteMany({
+        where: { classId },
+      });
+      this.notifyUserAboutReservationCancellation(classInstance, user);
+    }
   }
 
   notifyUserAboutReservationCancellation(classInstance: ClassInstance & { template: ClassTemplate }, user: SessionUser): void {

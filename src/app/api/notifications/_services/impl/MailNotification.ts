@@ -8,7 +8,6 @@ import * as templates from "app/api/notifications/_templates/mail";
 import { SessionUser } from "@/types/SessionUser";
 import { ClassInstance, ClassTemplate } from "@prisma/client";
 import dayjs from "dayjs";
-import { APPCONFIG } from "app/config";
 import { preferencesStore } from "@/lib/preferences";
 
 type MailTemplate = {
