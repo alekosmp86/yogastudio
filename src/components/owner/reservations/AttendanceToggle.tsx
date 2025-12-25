@@ -1,7 +1,7 @@
 type AttendanceToggleProps = {
   reservationId: number;
   attended: boolean | null;
-  onToggleAttendance: (id: number, attended: boolean) => void;
+  onToggleAttendance: (attended: boolean) => void;
 };
 
 export function AttendanceToggle({
@@ -12,7 +12,7 @@ export function AttendanceToggle({
   return (
     <div className="flex gap-2">
       <button
-        onClick={() => onToggleAttendance(reservationId, true)}
+        onClick={() => onToggleAttendance(true)}
         className={`
           px-3 py-1 rounded text-sm font-semibold
           ${attended === true ? "bg-green-600 text-white" : "bg-gray-700 text-gray-300"}
@@ -22,7 +22,7 @@ export function AttendanceToggle({
       </button>
 
       <button
-        onClick={() => onToggleAttendance(reservationId, false)}
+        onClick={() => onToggleAttendance(false)}
         className={`
           px-3 py-1 rounded text-sm font-semibold
           ${attended === false ? "bg-red-600 text-white" : "bg-gray-700 text-gray-300"}

@@ -33,4 +33,15 @@ export class OnwerReservationServiceImpl implements OnwerReservationService {
         },
       });
     }
+
+    async updateAttendance(reservationId: number, attended: boolean): Promise<void> {
+      await prisma.reservation.update({
+        where: {
+          id: reservationId,
+        },
+        data: {
+          attended,
+        },
+      });
+    }
 }

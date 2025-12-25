@@ -52,21 +52,22 @@ export default function UserReservations() {
     reservationId: number,
     attended: boolean
   ) => {
-    /** @todo: sync to db */
-    /*setReservationsPerClass((prev) =>
-      prev.map((c) => ({
-        ...c,
-        reservations: c.reservations.map((r) =>
-          r.id === reservationId ? { ...r, attended } : r
-        ),
-      }))
-    );
-
-    await http.patch(
+    const { message } = await http.patch<ApiResponse<void>>(
       `/owner/reservations/${reservationId}/attendance`,
       ApiType.FRONTEND,
-      { attended },
-    );*/
+      { attended }
+    );
+
+    if (message === RequestStatus.SUCCESS) {
+      setReservationsPerClass((prev) =>
+        prev.map((c) => ({
+          ...c,
+          reservations: c.reservations.map((r) =>
+            r.id === reservationId ? { ...r, attended } : r
+          ),
+        }))
+      );
+    }
   };
 
   return (
@@ -103,7 +104,7 @@ export default function UserReservations() {
                       <ReservationRow
                         key={reservation.id}
                         reservation={reservation}
-                        onToggleAttendance={handleToggleAttendance}
+                        onToggleAttendance={(attended: boolean) => handleToggleAttendance(reservation.id, attended)}
                       />
                     ))
                   )}

@@ -8,7 +8,7 @@ type ReservationWithUser = {
 
 type ReservationRowProps = {
   reservation: ReservationWithUser;
-  onToggleAttendance: (id: number, attended: boolean) => void;
+  onToggleAttendance: (attended: boolean) => void;
 };
 
 export function ReservationRow({
@@ -35,7 +35,7 @@ export function ReservationRow({
         <AttendanceToggle
           reservationId={reservation.id}
           attended={reservation.attended}
-          onToggleAttendance={onToggleAttendance}
+          onToggleAttendance={(attended: boolean) => onToggleAttendance(attended)}
         />
       </div>
     </div>
