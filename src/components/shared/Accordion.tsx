@@ -14,7 +14,7 @@ export function Accordion({ header, children, className }: AccordionProps) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={clsx("border rounded-md bg-black/50 shadow-sm", className)}>
+    <div className={clsx("border rounded-sm bg-black/50 shadow-sm", className)}>
       {/* Header */}
       <span
         onClick={() => setOpen((v) => !v)}

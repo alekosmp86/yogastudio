@@ -28,11 +28,11 @@ export default function ReservationsAccordionHeader({
       </div>
 
       {/* Row 2: Capacity info */}
-      <div className="flex items-center gap-3 mt-2">
+      <div className="flex flex-col justify-start gap-3 mt-2">
         <CapacityBar reserved={booked} capacity={capacity} />
 
         <span className={`text-xs font-semibold ${color}`}>
-          {booked}/{capacity}
+          Booked: {booked} out of {capacity}
         </span>
       </div>
     </div>

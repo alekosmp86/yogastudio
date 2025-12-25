@@ -9,5 +9,6 @@ export type ReservationsPerClass = {
     reservations: {
         id: number;
         user: Pick<User, 'name' | 'email'>;
+        attended: boolean | null;
     }[];
 }

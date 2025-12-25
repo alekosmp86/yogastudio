@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import Container from "@/components/shared/Container";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
 import ReservationsAccordionHeader from "./ReservationsAccordionHeader";
+import { ReservationRow } from "./ReservationRow";
 
 export default function UserReservations() {
   const [isLoading, setIsLoading] = useState(true);
@@ -47,6 +48,27 @@ export default function UserReservations() {
     fetchReservations();
   }, []);
 
+  const handleToggleAttendance = async (
+    reservationId: number,
+    attended: boolean
+  ) => {
+    /** @todo: sync to db */
+    /*setReservationsPerClass((prev) =>
+      prev.map((c) => ({
+        ...c,
+        reservations: c.reservations.map((r) =>
+          r.id === reservationId ? { ...r, attended } : r
+        ),
+      }))
+    );
+
+    await http.patch(
+      `/owner/reservations/${reservationId}/attendance`,
+      ApiType.FRONTEND,
+      { attended },
+    );*/
+  };
+
   return (
     <Container>
       <div className="w-full mt-6 overflow-hidden">
@@ -78,15 +100,11 @@ export default function UserReservations() {
                     <p className="text-white">No reservations found</p>
                   ) : (
                     reservations.map((reservation) => (
-                      <div
+                      <ReservationRow
                         key={reservation.id}
-                        className="flex justify-between text-sm text-gray-300 py-1 border-b border-gray-700"
-                      >
-                        <span>{reservation.user.name}</span>
-                        <span className="text-gray-400">
-                          {reservation.user.email}
-                        </span>
-                      </div>
+                        reservation={reservation}
+                        onToggleAttendance={handleToggleAttendance}
+                      />
                     ))
                   )}
                 </Accordion>

@@ -63,6 +63,28 @@ export const fetchClient: HttpClient = {
     return res.json() as Promise<TResponse>;
   },
 
+  async patch<TResponse, TBody = unknown>(
+    url: string,
+    apiType: ApiType,
+    body?: TBody,
+    options: RequestInit = {}
+  ) {
+    const fullUrl = this.getFullUrl(url, apiType);
+
+    const res = await fetch(fullUrl, {
+      ...options,
+      method: "PATCH",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+
+    return res.json() as Promise<TResponse>;
+  },
+
   async delete<TResponse>(url: string, apiType: ApiType, options: RequestInit = {}) {
     const fullUrl = this.getFullUrl(url, apiType);
 

@@ -79,6 +79,8 @@ model Reservation {
   class   ClassInstance @relation(fields: [classId], references: [id])
   classId Int
 
+  attended  Boolean? // null = not marked yet, true/false = attendance result
+
   createdAt DateTime @default(now())
 
   @@unique([userId, classId])
