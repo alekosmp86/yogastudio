@@ -10,6 +10,7 @@ import { ReservationsPerClass } from "@/types/reservations/ReservationsPerClass"
 import dayjs from "dayjs";
 import Container from "@/components/shared/Container";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
+import ReservationsAccordionHeader from "./ReservationsAccordionHeader";
 
 export default function UserReservations() {
   const [isLoading, setIsLoading] = useState(true);
@@ -64,16 +65,28 @@ export default function UserReservations() {
               ({ id, startTime, reservations, template }) => (
                 <Accordion
                   key={id}
-                  title={`${template.title} - ${startTime}`}
+                  header={
+                    <ReservationsAccordionHeader
+                      title={`${template.title} - ${startTime}`}
+                      booked={reservations.length}
+                      capacity={template.capacity}
+                    />
+                  }
                   className="hover:bg-gray-800"
                 >
                   {reservations.length === 0 ? (
                     <p className="text-white">No reservations found</p>
                   ) : (
                     reservations.map((reservation) => (
-                      <p key={reservation.id}>
-                        {reservation.user.name} | {reservation.user.email}
-                      </p>
+                      <div
+                        key={reservation.id}
+                        className="flex justify-between text-sm text-gray-300 py-1 border-b border-gray-700"
+                      >
+                        <span>{reservation.user.name}</span>
+                        <span className="text-gray-400">
+                          {reservation.user.email}
+                        </span>
+                      </div>
                     ))
                   )}
                 </Accordion>

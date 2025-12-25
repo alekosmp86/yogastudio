@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import clsx from "clsx";
 
 type AccordionProps = {
-  title: string;
-  children: React.ReactNode;
+  header: ReactNode;
+  children: ReactNode;
   className?: string;
 };
 
-export function Accordion({ title, children, className }: AccordionProps) {
+export function Accordion({ header, children, className }: AccordionProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -20,7 +20,7 @@ export function Accordion({ title, children, className }: AccordionProps) {
         onClick={() => setOpen((v) => !v)}
         className="w-full cursor-pointer flex items-center justify-between p-4 text-left font-semibold text-white"
       >
-        {title}
+        {header}
         <ChevronDown
           className={clsx(
             "h-5 w-5 transition-transform",
