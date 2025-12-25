@@ -2,6 +2,7 @@ import { GymClass } from "@/types/classes/GymClass";
 import { GymClassBase } from "@/types/classes/GymClassBase";
 import EditableRow from "./EditableRow";
 import TableHeader from "@/components/shared/TableHeader";
+import { useTranslation } from "react-i18next";
 
 type ClassesTableProps = {
   classes: GymClass[];
@@ -24,6 +25,8 @@ export default function ClassesTable({
   handleDelete,
   handleCancelAdd,
 }: ClassesTableProps) {
+  const {t} = useTranslation();
+
   return (
     <div className='hidden md:block overflow-hidden shadow-sm border border-primary-900'>
       <table className='w-full text-center text-brand-200'>
@@ -33,7 +36,7 @@ export default function ClassesTable({
           {classes.length === 0 && !adding && (
             <tr>
               <td colSpan={5} className='text-center py-4'>
-                No classes found
+                {t("noClassesFound")}
               </td>
             </tr>
           )}

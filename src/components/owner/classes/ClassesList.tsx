@@ -17,6 +17,7 @@ import { Plus } from "lucide-react";
 import { Toolbar } from "@/types/Toolbar";
 import { TableField } from "@/types/TableField";
 import Container from "@/components/shared/Container";
+import { useTranslation } from "react-i18next";
 
 const fields: TableField<GymClass>[] = [
   {
@@ -47,6 +48,7 @@ const fields: TableField<GymClass>[] = [
 ];
 
 export default function ClassesList() {
+  const {t} = useTranslation();
   const { classes, addClass, updateClass, removeClass } = useClasses();
   const [adding, setAdding] = useState(false);
   const [search, setSearch] = useState("");
@@ -64,7 +66,7 @@ export default function ClassesList() {
       ],
       searchInput: {
         active: true,
-        placeholder: "Search classes...",
+        placeholder: t("search"),
         value: search,
         onChange: setSearch,
       },
@@ -172,7 +174,7 @@ export default function ClassesList() {
     <Container>
       <div className='w-full mt-6'>
         <h2 className='text-xl font-semibold text-white mb-4'>
-          Your Classes
+          {t("yourClasses")}
         </h2>
 
         {/* TABLE BOX (toolbar + table inside) */}

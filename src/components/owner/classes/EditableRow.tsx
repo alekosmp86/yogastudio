@@ -2,6 +2,7 @@ import Button from "@/components/shared/Button";
 import { GymClass } from "@/types/classes/GymClass";
 import { Check, Pencil, Trash, X } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type EditableRowProps = {
   gymClass: GymClass;
@@ -24,6 +25,7 @@ export default function EditableRow({
   onCancel,
   onDelete,
 }: EditableRowProps) {
+  const {t} = useTranslation();
   const [isEditing, setIsEditing] = useState(adding);
   const [form, setForm] = useState(gymClass);
 
@@ -83,7 +85,7 @@ export default function EditableRow({
               onClick={save}
               disabled={isUnchanged}
             >
-              Save
+              {t("save")}
             </Button>
 
             <Button
@@ -92,7 +94,7 @@ export default function EditableRow({
               Icon={X}
               onClick={cancel}
             >
-              Cancel
+              {t("cancel")}
             </Button>
           </>
         ) : (
@@ -105,7 +107,7 @@ export default function EditableRow({
               onClick={() => setIsEditing(true)}
               disabled={busy}
             >
-              Edit
+              {t("edit")}
             </Button>
 
             {onDelete && (
@@ -117,7 +119,7 @@ export default function EditableRow({
                 onClick={() => onDelete(gymClass.id)}
                 disabled={busy}
               >
-                Delete
+                {t("delete")}
               </Button>
             )}
           </>

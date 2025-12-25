@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import Button from "./Button";
 import { Toolbar } from "@/types/Toolbar";
+import { useTranslation } from "react-i18next";
 
 type TableToolbarProps = {
   toolbar: Toolbar;
@@ -13,6 +14,7 @@ export default function TableToolbar({
   search,
   setSearch,
 }: TableToolbarProps) {
+  const {t} = useTranslation();
   const showToolbar = toolbar.items?.length > 0 || toolbar.searchInput.active;
 
   return showToolbar ? (
@@ -35,7 +37,7 @@ export default function TableToolbar({
           <div className='sm:w-64 w-full text-primary-900 flex items-center'>
             <input
               type='text'
-              placeholder='Search...'
+              placeholder={t("search")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className='w-full bg-white px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-brand-600 transition'
