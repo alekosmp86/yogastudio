@@ -27,6 +27,7 @@
       "@/enums/*": ["enums/*"],
       "@/types/*": ["types/*"],
       "@/static/*": ["static/*"],
+      "@/i18n/*": ["i18n/*"],
     },
     "baseUrl": "src/"
   },

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { http } from "@/lib/http";
 import { ApiResponse } from "@/types/requests/ApiResponse";
@@ -29,6 +30,7 @@ const messages: Record<Status, string> = {
 const logger = new ConsoleLogger("LoginPage");
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const emailInput = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<Status>(Status.IDLE);
   const messageUI = messages[status];
@@ -81,12 +83,12 @@ export default function LoginPage() {
         className='flex flex-col gap-4 w-full max-w-xs bg-theme-cardbg p-6 rounded-lg shadow-xl border border-brand-600'
       >
         <h1 className='text-xl font-semibold text-center text-primary-800'>
-          Log in
+          {t("login")}
         </h1>
 
         <div className='flex flex-col'>
           <label htmlFor='email' className='text-primary-800'>
-            Email
+            {t("email")}
           </label>
           <Input
             name='email'
@@ -103,13 +105,13 @@ export default function LoginPage() {
           disabled={status === Status.LOADING}
           variant='primary'
         >
-          {status === Status.LOADING ? "Sending..." : "Get link"}
+          {status === Status.LOADING ? t("sending") : t("getLink")}
         </Button>
 
         <div className='flex items-center'>
           <div className='flex-grow border-t border-gray-300'></div>
           <span className='px-3 py-1 text-gray-500 text-xs bg-gray-100 rounded-full'>
-            or
+            {t("or")}
           </span>
           <div className='flex-grow border-t border-gray-300'></div>
         </div>
@@ -120,7 +122,7 @@ export default function LoginPage() {
           className='flex items-center justify-center gap-2 w-full py-2 px-4 bg-white text-gray-800 rounded-lg shadow-md hover:bg-gray-100 transition border border-gray-300'
         >
           <GoogleIcon className='w-5 h-5' />
-          <span className='text-sm font-medium'>Continue with Google</span>
+          <span className='text-sm font-medium'>{t("continueWithGoogle")}</span>
         </button>
 
         <Activity mode={messageUI ? "visible" : "hidden"}>

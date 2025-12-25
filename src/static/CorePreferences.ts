@@ -35,7 +35,7 @@ export const CorePreferences: AppPreference[] = [
         name: "language",
         label: "Default Language",
         type: PreferenceTypes.TEXT,
-        value: "en"
+        value: "es"
     },
     {
         id: 6,
