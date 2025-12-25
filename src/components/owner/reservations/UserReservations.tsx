@@ -37,7 +37,6 @@ export default function UserReservations() {
 
         if (message === RequestStatus.SUCCESS) {
           setReservationsPerClass(data!);
-          console.log(data);
         }
       } catch (error) {
         console.error("Error fetching reservations:", error);
@@ -93,6 +92,7 @@ export default function UserReservations() {
                       title={`${template.title} - ${startTime}`}
                       booked={reservations.length}
                       capacity={template.capacity}
+                      attendance={reservations.reduce((acc, r) => acc + (r.attended ? 1 : 0), 0)}
                     />
                   }
                   className="hover:bg-gray-800"
