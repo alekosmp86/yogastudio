@@ -18,6 +18,7 @@ export default function UserReservations() {
   const [reservationsPerClass, setReservationsPerClass] = useState<
     ReservationsPerClass[]
   >([]);
+  const attendances = reservationsPerClass.map((c) => c.reservations).flat();
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -52,6 +53,11 @@ export default function UserReservations() {
     userId: number,
     attended: boolean
   ) => {
+    const reservation = attendances.find((r) => r.id === reservationId && r.user.id === userId);
+    if(reservation && reservation.attended === attended) {
+      return;
+    }
+
     const { message } = await http.patch<ApiResponse<void>>(
       `/owner/reservations/${reservationId}/attendance`,
       ApiType.FRONTEND,
