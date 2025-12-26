@@ -79,6 +79,7 @@ model Reservation {
   class   ClassInstance @relation(fields: [classId], references: [id])
   classId Int
 
+  cancelled Boolean @default(false)
   attended  Boolean? // null = not marked yet, true/false = attendance result
 
   createdAt DateTime @default(now())

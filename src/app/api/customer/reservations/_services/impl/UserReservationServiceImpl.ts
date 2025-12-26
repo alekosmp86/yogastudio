@@ -4,13 +4,21 @@ import { RequestStatus } from "@/enums/RequestStatus";
 import { prisma } from "@/lib/prisma";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
 import { ClassInstance, ClassTemplate, WaitingList } from "@prisma/client";
-import { classInstanceService, notificationService, waitingListService } from "app/api";
+import {
+  classInstanceService,
+  notificationService,
+  waitingListService,
+} from "app/api";
 import { SessionUser } from "@/types/SessionUser";
 
 export class UserReservationServiceImpl implements UserReservationService {
-  async getReservations(userId: number, date: string, time: string): Promise<ClassReservation[]> {
+  async getReservations(
+    userId: number,
+    date: string,
+    time: string
+  ): Promise<ClassReservation[]> {
     return prisma.reservation.findMany({
-      where: { userId, class: { date, startTime: { gt: time } } },
+      where: { userId, class: { date, startTime: { gt: time } }, cancelled: false },
       select: {
         id: true,
         class: {
@@ -33,23 +41,29 @@ export class UserReservationServiceImpl implements UserReservationService {
 
   async createReservation(classId: number, user: SessionUser): Promise<string> {
     // 1 — Load class + reservations + capacity
-    const classInstance = await classInstanceService.findUniqueByIdIncludingData(classId, {
-      template: true,
-      reservations: true,
-      waitingList: true,
-    });
+    const classInstance =
+      await classInstanceService.findUniqueByIdIncludingData(classId, {
+        template: true,
+        reservations: true,
+        waitingList: true,
+      });
 
     if (!classInstance) {
       return RequestStatus.NOT_FOUND;
     }
 
     // 2 — Check if user already reserved
-    const alreadyReserved = classInstance.reservations.some(
+    const alreadyReserved = classInstance.reservations.find(
       (r) => r.userId === user.id
     );
 
     if (alreadyReserved) {
-      return RequestStatus.CLASS_ALREADY_RESERVED;
+      if (alreadyReserved.cancelled) {
+        this.rescheduleReservation(alreadyReserved.id);
+        return RequestStatus.SUCCESS;
+      } else {
+        return RequestStatus.CLASS_ALREADY_RESERVED;
+      }
     }
 
     // 3 — Check if class is full
@@ -104,8 +118,11 @@ export class UserReservationServiceImpl implements UserReservationService {
     return RequestStatus.SUCCESS;
   }
 
-  async cancelReservation(reservationId: number, user: SessionUser): Promise<void> {
-    const reservation = await prisma.reservation.delete({
+  async cancelReservation(
+    reservationId: number,
+    user: SessionUser
+  ): Promise<void> {
+    const reservation = await prisma.reservation.findUnique({
       where: { id: reservationId },
       include: {
         class: {
@@ -116,11 +133,25 @@ export class UserReservationServiceImpl implements UserReservationService {
       },
     });
 
+    if (!reservation) {
+      throw new Error("Reservation not found");
+    }
+
+    await prisma.reservation.update({
+      where: { id: reservationId },
+      data: {
+        cancelled: true,
+      },
+    });
+
     this.notifyUserAboutReservationCancellation(reservation.class, user);
     this.notifyUsersInWaitingList(reservation.class, user);
   }
 
-  async cancelReservationFromClass(classId: number, user: SessionUser): Promise<void> {
+  async cancelReservationFromClass(
+    classId: number,
+    user: SessionUser
+  ): Promise<void> {
     const classInstance = await prisma.classInstance.findUnique({
       where: { id: classId },
       include: {
@@ -133,37 +164,55 @@ export class UserReservationServiceImpl implements UserReservationService {
     }
 
     const existingReservations = await prisma.reservation.findMany({
-      where: { classId },
+      where: { classId, userId: user.id },
     });
 
-    if(existingReservations.length > 0) {
-      await prisma.reservation.deleteMany({
-        where: { classId },
+    if (existingReservations.length > 0) {
+      await prisma.reservation.updateMany({
+        where: { classId, userId: user.id },
+        data: {
+          cancelled: true,
+        },
       });
       this.notifyUserAboutReservationCancellation(classInstance, user);
     }
   }
 
-  notifyUserAboutReservationCancellation(classInstance: ClassInstance & { template: ClassTemplate }, user: SessionUser): void {
+  async rescheduleReservation(reservationId: number): Promise<void> {
+    await prisma.reservation.update({
+      where: { id: reservationId },
+      data: {
+        cancelled: false,
+      },
+    });
+  }
+
+  notifyUserAboutReservationCancellation(
+    classInstance: ClassInstance & { template: ClassTemplate },
+    user: SessionUser
+  ): void {
     notificationService.sendNotification(
       user.id,
       NotificationType.CLASS_CANCELLED,
       notificationService.buildNotificationPayload(
         NotificationType.CLASS_CANCELLED,
         user,
-        classInstance,
+        classInstance
       )
     );
   }
 
-  async notifyUsersInWaitingList(classInstance: ClassInstance & { template: ClassTemplate }, user: SessionUser): Promise<void> {
+  async notifyUsersInWaitingList(
+    classInstance: ClassInstance & { template: ClassTemplate },
+    user: SessionUser
+  ): Promise<void> {
     const waitingList = await prisma.waitingList.findMany({
       where: { classId: classInstance.id },
       include: {
         user: {
           select: {
             name: true,
-            email: true
+            email: true,
           },
         },
       },
@@ -176,7 +225,7 @@ export class UserReservationServiceImpl implements UserReservationService {
         notificationService.buildNotificationPayload(
           NotificationType.CLASS_SPOT_OPENED,
           user,
-          classInstance,
+          classInstance
         )
       );
     });

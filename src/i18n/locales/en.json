@@ -1,15 +1,15 @@
 {
-  "delete": "Delete",
+  "search": "Search...",
+  "yourClasses": "Your classes",
+  "noClassesFound": "No classes found",
   "save": "Save",
   "cancel": "Cancel",
   "edit": "Edit",
+  "delete": "Delete",
   "login": "Log in",
   "email": "Email",
   "sending": "Sending...",
   "getLink": "Get link",
   "or": "or",
-  "continueWithGoogle": "Continue with Google",
-  "noClassesFound": "No classes found",
-  "search": "Search...",
-  "yourClasses": "Your classes"
+  "continueWithGoogle": "Continue with Google"
 }
