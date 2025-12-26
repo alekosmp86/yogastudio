@@ -11,10 +11,10 @@ export async function PATCH(
   { params }: RequestParams
 ) {
   const { id } = await params;
-  const { attended } = await req.json();
+  const { attended, userId } = await req.json();
 
   try {
-    await ownerReservationService.updateAttendance(Number(id), attended);
+    await ownerReservationService.updateAttendance(Number(id), attended, userId);
     return NextResponse.json(
       { message: RequestStatus.SUCCESS },
       { status: 200 }

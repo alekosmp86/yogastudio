@@ -4,12 +4,14 @@ import { Roles } from "./enums/Roles";
 import { jwtVerify } from "jose";
 import { SessionUser } from "./types/SessionUser";
 import { APPCONFIG } from "app/config";
+import dayjs from "dayjs";
 
 const PUBLIC_PATHS = [
   "/",
   "/login",
   "/register",
   "/approval",
+  "/penalty",
   "/auth/verify",
   "/api/public/preferences",
   "/api/admin/jobs",
@@ -60,6 +62,12 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
 
+    //restrict access to users with penalties
+    const currentDate = dayjs(new Date()).format("YYYY-MM-DD");
+    if(payload.user.penalties?.blockedUntil && dayjs(currentDate).isBefore(payload.user.penalties.blockedUntil)) {
+      return NextResponse.redirect(new URL("/penalty", req.url));
+    }
+
     // Optional: protect owner-only pages
     if (pathname.startsWith("/owner") && payload.user.role !== Roles.OWNER) {
       console.log("Owner-only page accessed by non-owner");
@@ -72,7 +80,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/", req.url));
     }
 
-    console.log("Authenticated");
+    console.log(`Authenticated ${JSON.stringify(payload.user)}`);
     return NextResponse.next();
   } catch (error) {
     console.log("Invalid token", error);

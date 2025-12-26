@@ -8,7 +8,7 @@ export type ReservationsPerClass = {
     template: GymClassBase;
     reservations: {
         id: number;
-        user: Pick<User, 'name' | 'email'>;
+        user: Pick<User, 'id' | 'name' | 'email'>;
         attended: boolean | null;
     }[];
 }

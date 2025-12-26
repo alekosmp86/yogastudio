@@ -2,11 +2,13 @@ import {
   accountService,
   googleUserMapper,
   tokenService,
+  userPenaltyService,
   userService,
 } from "app/api";
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInfo";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
+import { User, UserPenalty } from "@prisma/client";
 
 const logger = new ConsoleLogger("GoogleCallback");
 
@@ -50,15 +52,22 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Missing email" }, { status: 400 });
 
   // 3. Find or create User + Account
-  let user = await userService.findUniqueByFields({ email: profile.email });
+  let sessionUser: User & { penalties?: UserPenalty | null };
+  const user = await userService.findUniqueByFields({ email: profile.email });
+  
   if (!user) {
     const userToCreate = googleUserMapper.toUser(profile);
-    user = await userService.create(userToCreate);
+    sessionUser = await userService.create(userToCreate);
+    sessionUser.penalties = null;
+  } else {
+    //attach penalties info
+    sessionUser = user;
+    sessionUser.penalties = await userPenaltyService.findByUserId(user.id);
   }
 
   try {
     const accountToCreate = {
-      userId: user.id,
+      userId: sessionUser.id,
       provider: "google",
       providerAccountId: profile.id,
       type: "oauth",
@@ -73,7 +82,7 @@ export async function GET(req: NextRequest) {
 
     // 4. Create response to set the session cookie
     const response = NextResponse.redirect(url.origin + "/");
-    await tokenService.createSession(response, user);
+    await tokenService.createSession(response, sessionUser);
 
     return response;
   } catch (error) {

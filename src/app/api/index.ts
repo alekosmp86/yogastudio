@@ -20,6 +20,7 @@ import { ProfileServiceImpl } from "./customer/profile/_services/impl/ProfileSer
 import { MailNotification } from "./notifications/_services/impl/MailNotification";
 import { WaitingListServiceImpl } from "./customer/waiting-list/_services/impl/WaitingListServiceImpl";
 import { PublicPreferenceServiceImpl } from "./public/preferences/_services/impl/PublicPreferenceServiceImpl";
+import { UserPenaltyServiceImpl } from "./penalties/_services/impl/UserPenaltyServiceImpl";
 
 export const userLinkService = new UserLinkServiceImpl();
 export const userService = new UserServiceImpl();
@@ -38,6 +39,7 @@ export const profileService = new ProfileServiceImpl();
 export const notificationService = new MailNotification();
 export const waitingListService = new WaitingListServiceImpl();
 export const publicPreferenceService = new PublicPreferenceServiceImpl();
+export const userPenaltyService = new UserPenaltyServiceImpl();
 
 export const classesMapper = new ClassesMapperImpl();
 export const scheduleMapper = new ScheduleMapperImpl();
