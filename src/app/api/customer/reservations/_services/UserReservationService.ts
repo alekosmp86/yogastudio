@@ -6,4 +6,5 @@ export interface UserReservationService {
     getReservations(userId: number, date: string, time: string): Promise<ClassReservation[]>;
     cancelReservation(reservationId: number, user: SessionUser): Promise<void>;
     cancelReservationFromClass(classId: number, user: SessionUser): Promise<void>;
+    rescheduleReservation(reservationId: number, user: SessionUser): Promise<void>;
 }

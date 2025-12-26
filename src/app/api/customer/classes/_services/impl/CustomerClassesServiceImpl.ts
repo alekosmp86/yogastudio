@@ -22,7 +22,10 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
 
   async getTodayClasses(): Promise<DailyClass[]> {
     const today = getStartOfDay(preferencesStore.getByName<string>("timezone"));
-    const oneHourLater = getTimeXHoursFromNow(0, preferencesStore.getByName<string>("timezone")).format("HH:mm");
+    const oneHourLater = getTimeXHoursFromNow(
+      0,
+      preferencesStore.getByName<string>("timezone")
+    ).format("HH:mm");
     const user = await ApiUtils.getSessionUser();
 
     const classes = await prisma.classInstance.findMany({
@@ -46,7 +49,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
         },
         reservations: {
           where: { userId: user.id },
-          select: { id: true }, // we only need to check if it exists
+          select: { id: true, cancelled: true },
         },
       },
     });
@@ -59,8 +62,8 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
       description: c.template.description || "",
       instructor: c.template.instructor,
       capacity: c.template.capacity,
-      reserved: c._count.reservations,
-      available: c.reservations.length === 0,
+      reserved: c._count.reservations - c.reservations.reduce((acc, r) => acc + (r.cancelled ? 1 : 0), 0),
+      available: c.reservations.length === 0 && !c.reservations.some((r) => r.cancelled)
     }));
   }
 }
