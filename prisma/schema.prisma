@@ -21,7 +21,8 @@ model User {
   magicLinks   MagicLink[]
   accounts     Account[]
   reservations Reservation[]
-  waitingList WaitingList[]
+  waitingList  WaitingList[]
+  UserPenalty  UserPenalty?
 }
 
 model Account {
@@ -68,7 +69,7 @@ model ClassInstance {
   templateId Int
 
   reservations Reservation[]
-  waitingList WaitingList[]
+  waitingList  WaitingList[]
 }
 
 model Reservation {
@@ -79,7 +80,7 @@ model Reservation {
   class   ClassInstance @relation(fields: [classId], references: [id])
   classId Int
 
-  cancelled Boolean @default(false)
+  cancelled Boolean  @default(false)
   attended  Boolean? // null = not marked yet, true/false = attendance result
 
   createdAt DateTime @default(now())
@@ -87,13 +88,23 @@ model Reservation {
   @@unique([userId, classId])
 }
 
-model WaitingList {
-  id        Int      @id @default(autoincrement())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    Int
+model UserPenalty {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
 
-  class     ClassInstance @relation(fields: [classId], references: [id])
-  classId   Int
+  noShowCount  Int       @default(0)
+  blockedUntil DateTime? @db.Date
+  lastNoShowAt DateTime? @db.Date
+}
+
+model WaitingList {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  class   ClassInstance @relation(fields: [classId], references: [id])
+  classId Int
 
   createdAt DateTime @default(now())
 
@@ -117,8 +128,8 @@ model WeeklySchedule {
 model AppPreferences {
   id Int @id @default(autoincrement())
 
-  name String @unique
+  name  String @unique
   label String
-  type String @default("text")
+  type  String @default("text")
   value String
 }

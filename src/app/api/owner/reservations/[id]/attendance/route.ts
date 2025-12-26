@@ -1,5 +1,6 @@
 import { RequestStatus } from "@/enums/RequestStatus";
 import { ownerReservationService } from "app/api";
+import { ApiUtils } from "app/api/utils/ApiUtils";
 import { NextResponse } from "next/server";
 
 type RequestParams = {
@@ -12,9 +13,10 @@ export async function PATCH(
 ) {
   const { id } = await params;
   const { attended } = await req.json();
+  const user = await ApiUtils.getSessionUser();
 
   try {
-    await ownerReservationService.updateAttendance(Number(id), attended);
+    await ownerReservationService.updateAttendance(Number(id), attended, user);
     return NextResponse.json(
       { message: RequestStatus.SUCCESS },
       { status: 200 }
