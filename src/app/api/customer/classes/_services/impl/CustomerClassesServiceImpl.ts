@@ -12,15 +12,8 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
-  constructor() {
-    this.init();
-  }
-
-  async init() {
-    await preferencesStore.load();
-  }
-
   async getTodayClasses(): Promise<DailyClass[]> {
+    await preferencesStore.load();
     const today = getStartOfDay(preferencesStore.getByName<string>("timezone"));
     const oneHourLater = getTimeXHoursFromNow(
       0,
