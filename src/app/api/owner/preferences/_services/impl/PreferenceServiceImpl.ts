@@ -18,4 +18,13 @@ export class PreferenceServiceImpl implements PreferenceService {
     });
     await prisma.$transaction(queries);
   }
+
+  async getPreferenceValue<T>(name: string): Promise<T> {
+    const preference = await prisma.appPreferences.findUnique({
+      where: {
+        name: name,
+      },
+    });
+    return preference?.value as T;
+  }
 }
