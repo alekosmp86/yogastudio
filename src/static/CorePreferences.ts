@@ -43,5 +43,19 @@ export const CorePreferences: AppPreference[] = [
         label: "Users require approval",
         type: PreferenceTypes.BOOLEAN,
         value: "true"
+    },
+    {
+        id: 7,
+        name: "penaltyMaxNoShowCount",
+        label: "Max No Show Count",
+        type: PreferenceTypes.NUMBER,
+        value: "2"
+    },
+    {
+        id: 8,
+        name: "penaltyBlockDuration",
+        label: "Penalty Block Duration (days)",
+        type: PreferenceTypes.NUMBER,
+        value: "3"
     }
 ];
