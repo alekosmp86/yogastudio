@@ -1,5 +1,5 @@
 import { TokenService } from "../TokenService";
-import { User } from "@prisma/client";
+import { User, UserPenalty } from "@prisma/client";
 import { magicLinkService } from "app/api/auth";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { UserService } from "app/api/users/_services/UserService";
@@ -29,7 +29,7 @@ export class TokenServiceImpl implements TokenService {
     return user;
   }
 
-  async createSession(res: NextResponse, user: User): Promise<void> {
+  async createSession(res: NextResponse, user: User & { penalties?: UserPenalty | null }): Promise<void> {
     logger.log("Creating session for user:", user.email);
 
     const secret = new TextEncoder().encode(process.env.JWT_SECRET!);

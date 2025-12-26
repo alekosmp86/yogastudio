@@ -1,3 +1,5 @@
+import { UserPenalty } from "@prisma/client";
+
 export type SessionUser = {
   id: number;
   email: string;
@@ -5,4 +7,5 @@ export type SessionUser = {
   name: string;
   phone: string;
   approved: boolean;
+  penalties?: UserPenalty;
 };

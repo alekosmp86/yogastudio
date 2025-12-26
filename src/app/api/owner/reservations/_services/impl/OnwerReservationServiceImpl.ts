@@ -1,7 +1,7 @@
 import { OnwerReservationService } from "../OnwerReservationService";
 import { ReservationsPerClass } from "@/types/reservations/ReservationsPerClass";
 import { prisma } from "@/lib/prisma";
-import { SessionUser } from "@/types/SessionUser";
+import { userPenaltyService } from "app/api";
 
 export class OnwerReservationServiceImpl implements OnwerReservationService {
   async getReservations(targetDate: string): Promise<ReservationsPerClass[]> {
@@ -25,6 +25,7 @@ export class OnwerReservationServiceImpl implements OnwerReservationService {
           include: {
             user: {
               select: {
+                id: true,
                 name: true,
                 email: true,
               },
@@ -38,7 +39,7 @@ export class OnwerReservationServiceImpl implements OnwerReservationService {
   async updateAttendance(
     reservationId: number,
     attended: boolean,
-    user: SessionUser
+    userId: number
   ): Promise<void> {
     await prisma.reservation.update({
       where: {
@@ -49,21 +50,6 @@ export class OnwerReservationServiceImpl implements OnwerReservationService {
       },
     });
 
-    if (!attended) {
-      await prisma.userPenalty.upsert({
-        where: {
-          userId: user.id,
-        },
-        update: {
-          noShowCount: {
-            increment: 1,
-          },
-        },
-        create: {
-          userId: user.id,
-          noShowCount: 1,
-        },
-      });
-    }
+    await userPenaltyService.updateOrInsert(userId, attended);
   }
 }

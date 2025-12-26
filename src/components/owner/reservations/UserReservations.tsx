@@ -49,12 +49,13 @@ export default function UserReservations() {
 
   const handleToggleAttendance = async (
     reservationId: number,
+    userId: number,
     attended: boolean
   ) => {
     const { message } = await http.patch<ApiResponse<void>>(
       `/owner/reservations/${reservationId}/attendance`,
       ApiType.FRONTEND,
-      { attended }
+      { attended, userId }
     );
 
     if (message === RequestStatus.SUCCESS) {
@@ -104,7 +105,7 @@ export default function UserReservations() {
                       <ReservationRow
                         key={reservation.id}
                         reservation={reservation}
-                        onToggleAttendance={(attended: boolean) => handleToggleAttendance(reservation.id, attended)}
+                        onToggleAttendance={(attended: boolean) => handleToggleAttendance(reservation.id, reservation.user.id, attended)}
                       />
                     ))
                   )}

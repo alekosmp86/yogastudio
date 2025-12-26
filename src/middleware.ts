@@ -10,6 +10,7 @@ const PUBLIC_PATHS = [
   "/login",
   "/register",
   "/approval",
+  "/penalty",
   "/auth/verify",
   "/api/public/preferences",
   "/api/admin/jobs",
@@ -72,7 +73,7 @@ export async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/", req.url));
     }
 
-    console.log("Authenticated");
+    console.log(`Authenticated ${JSON.stringify(payload.user)}`);
     return NextResponse.next();
   } catch (error) {
     console.log("Invalid token", error);
