@@ -11,5 +11,8 @@
   "sending": "Enviando...",
   "getLink": "Obtener enlace",
   "or": "o",
-  "continueWithGoogle": "Continuar con Google"
+  "continueWithGoogle": "Continuar con Google",
+  "penalty": "Penalización",
+  "penaltyDescription": "Tu cuenta ha sido penalizada. Por favor, contacta al administrador.",
+  "backToLogin": "Volver al login"
 }

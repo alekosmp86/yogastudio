@@ -4,6 +4,7 @@ import { Roles } from "./enums/Roles";
 import { jwtVerify } from "jose";
 import { SessionUser } from "./types/SessionUser";
 import { APPCONFIG } from "app/config";
+import dayjs from "dayjs";
 
 const PUBLIC_PATHS = [
   "/",
@@ -59,6 +60,12 @@ export async function middleware(req: NextRequest) {
 
     if (APPCONFIG.USER.requiresApproval && !payload.user.approved) {
       return NextResponse.redirect(new URL("/login", req.url));
+    }
+
+    //restrict access to users with penalties
+    const currentDate = dayjs(new Date()).format("YYYY-MM-DD");
+    if(payload.user.penalties?.blockedUntil && dayjs(currentDate).isBefore(payload.user.penalties.blockedUntil)) {
+      return NextResponse.redirect(new URL("/penalty", req.url));
     }
 
     // Optional: protect owner-only pages
