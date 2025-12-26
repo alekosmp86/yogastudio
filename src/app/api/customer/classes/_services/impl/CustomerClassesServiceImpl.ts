@@ -28,42 +28,53 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
     ).format("HH:mm");
     const user = await ApiUtils.getSessionUser();
 
-    const classes = await prisma.classInstance.findMany({
-      where: {
-        date: today,
-        startTime: {
-          gte: oneHourLater,
+    const [classes, reservationCounts] = await Promise.all([
+      prisma.classInstance.findMany({
+        where: {
+          date: today,
+          startTime: { gte: oneHourLater },
         },
-      },
-      include: {
-        template: {
-          select: {
-            title: true,
-            instructor: true,
-            capacity: true,
-            description: true,
+        include: {
+          template: {
+            select: {
+              title: true,
+              instructor: true,
+              capacity: true,
+              description: true,
+            },
+          },
+          reservations: {
+            where: { userId: user.id },
+            select: { id: true, userId: true, cancelled: true },
           },
         },
-        _count: {
-          select: { reservations: true },
-        },
-        reservations: {
-          where: { userId: user.id },
-          select: { id: true, cancelled: true },
-        },
-      },
-    });
+      }),
 
-    return classes.map((c) => ({
-      id: c.id,
-      date: c.date.toISOString(),
-      startTime: c.startTime,
-      title: c.template.title,
-      description: c.template.description || "",
-      instructor: c.template.instructor,
-      capacity: c.template.capacity,
-      reserved: c._count.reservations - c.reservations.reduce((acc, r) => acc + (r.cancelled ? 1 : 0), 0),
-      available: c.reservations.length === 0 && !c.reservations.some((r) => r.cancelled)
-    }));
+      prisma.reservation.groupBy({
+        by: ["classId"],
+        where: { cancelled: false },
+        _count: true,
+      }),
+    ]);
+
+    return classes.map((c) => {
+      const availableSpots = c.template.capacity - c.reservations.length;
+
+      return {
+        id: c.id,
+        date: c.date.toISOString(),
+        startTime: c.startTime,
+        title: c.template.title,
+        description: c.template.description || "",
+        instructor: c.template.instructor,
+        capacity: c.template.capacity,
+        reserved: reservationCounts.find((r) => r.classId === c.id)?._count ?? 0,
+        available:
+          availableSpots > 0 &&
+          !c.reservations.some(
+            (r) => r.userId === user.id && r.cancelled === false
+          ),
+      };
+    });
   }
 }

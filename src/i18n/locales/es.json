@@ -1,15 +1,15 @@
 {
-  "delete": "Eliminar",
+  "search": "Buscar...",
+  "yourClasses": "Tus clases",
+  "noClassesFound": "No se encontraron clases",
   "save": "Guardar",
   "cancel": "Cancelar",
   "edit": "Editar",
+  "delete": "Eliminar",
   "login": "Acceder",
   "email": "Correo electrónico",
   "sending": "Enviando...",
   "getLink": "Obtener enlace",
   "or": "o",
-  "continueWithGoogle": "Continuar con Google",
-  "noClassesFound": "No se encontraron clases",
-  "search": "Buscar...",
-  "yourClasses": "Tus clases"
+  "continueWithGoogle": "Continuar con Google"
 }

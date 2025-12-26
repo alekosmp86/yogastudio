@@ -18,7 +18,7 @@ export class UserReservationServiceImpl implements UserReservationService {
     time: string
   ): Promise<ClassReservation[]> {
     return prisma.reservation.findMany({
-      where: { userId, class: { date, startTime: { gt: time } } },
+      where: { userId, class: { date, startTime: { gt: time } }, cancelled: false },
       select: {
         id: true,
         class: {
@@ -58,13 +58,10 @@ export class UserReservationServiceImpl implements UserReservationService {
     );
 
     if (alreadyReserved) {
-      console.log(alreadyReserved);
       if (alreadyReserved.cancelled) {
-        console.log("Rescheduled");
         this.rescheduleReservation(alreadyReserved.id);
         return RequestStatus.SUCCESS;
       } else {
-        console.log("Already reserved");
         return RequestStatus.CLASS_ALREADY_RESERVED;
       }
     }

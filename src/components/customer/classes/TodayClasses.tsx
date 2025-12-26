@@ -25,6 +25,7 @@ export default function TodayClasses() {
       );
 
       if (message === RequestStatus.SUCCESS) {
+        console.log(data);
         setUpcomingClasses(
           data!.sort((a, b) => a.startTime.localeCompare(b.startTime))
         );
