@@ -18,7 +18,9 @@ import { ToastType } from "@/enums/ToastType";
 export default function Preferences() {
   const { preferences, updatePreference } = useAppPreferences();
   const toast = useToast();
-  const [changedPreferences, setChangedPreferences] = useState<AppPreference[]>([]);
+  const [changedPreferences, setChangedPreferences] = useState<AppPreference[]>(
+    []
+  );
   const [search, setSearch] = useState("");
 
   const filteredPreferences = preferences.filter((p) =>
@@ -44,8 +46,8 @@ export default function Preferences() {
   };
 
   const handlePreferenceChange = (preference: AppPreference) => {
-    setChangedPreferences(prev => {
-      const index = prev.findIndex(p => p.id === preference.id);
+    setChangedPreferences((prev) => {
+      const index = prev.findIndex((p) => p.id === preference.id);
       if (index === -1) {
         return [...prev, preference];
       }
@@ -61,14 +63,21 @@ export default function Preferences() {
       persistent: true,
     });
 
-    const {message} = await http.post<ApiResponse<void>>("/owner/preferences", ApiType.FRONTEND, changedPreferences);
-    if(message === RequestStatus.SUCCESS) {
+    const { message } = await http.post<ApiResponse<void>>(
+      "/owner/preferences",
+      ApiType.FRONTEND,
+      changedPreferences.map((pref) => ({
+        ...pref,
+        value: pref.value as string,
+      }))
+    );
+    if (message === RequestStatus.SUCCESS) {
       toast.hideToast(toastId);
       toast.showToast({
         message: "Preferences saved successfully.",
         type: ToastType.SUCCESS,
       });
-      
+
       setChangedPreferences([]);
     } else {
       toast.hideToast(toastId);
