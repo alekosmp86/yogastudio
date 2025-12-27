@@ -100,7 +100,6 @@ export default function Preferences() {
             setSearch={setSearch}
           />
           <PreferencesTable
-            className="overflow-x-auto max-h-[500px] overflow-y-auto"
             preferences={filteredPreferences}
             onChange={handlePreferenceChange}
           />
