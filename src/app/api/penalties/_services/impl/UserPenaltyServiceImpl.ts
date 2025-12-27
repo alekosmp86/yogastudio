@@ -2,7 +2,7 @@ import { UserPenaltyService } from "../UserPenaltyService";
 import { UserPenalty } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { preferenceService } from "app/api";
-import dayjs from "dayjs";
+import { DateUtils } from "@/lib/utils/date";
 
 export class UserPenaltyServiceImpl implements UserPenaltyService {
   async findByUserId(userId: number): Promise<UserPenalty | null> {
@@ -21,13 +21,15 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     if (userPenalty) {
       userPenalty = await this.update(
         userId,
-        attended ? Math.max(userPenalty.noShowCount - 1, 0) : userPenalty.noShowCount + 1
+        attended ? Math.max(userPenalty.noShowCount - 1, 0) : userPenalty.noShowCount + 1,
+        attended ? null : DateUtils.startOfDay(new Date())
       );
     } else {
       userPenalty = await prisma.userPenalty.create({
         data: {
           userId: userId,
           noShowCount: attended ? 0 : 1,
+          lastNoShowAt: attended ? null : DateUtils.startOfDay(new Date()),
         },
       });
     }
@@ -36,13 +38,14 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     return userPenalty;
   }
 
-  async update(userId: number, noShowCount: number): Promise<UserPenalty> {
+  async update(userId: number, noShowCount: number, lastNoShowAt: Date | null): Promise<UserPenalty> {
     return await prisma.userPenalty.update({
       where: {
         userId: userId,
       },
       data: {
         noShowCount: noShowCount,
+        lastNoShowAt: lastNoShowAt,
       },
     });
   }
@@ -63,8 +66,8 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
           userId: userPenalty.userId,
         },
         data: {
-          blockedUntil: dayjs().add(penaltyBlockDuration, "days").toDate(),
-          lastNoShowAt: dayjs().toDate(),
+          blockedUntil: DateUtils.addDays(new Date(), penaltyBlockDuration),
+          lastNoShowAt: DateUtils.startOfDay(new Date()),
         },
       });
     } else {

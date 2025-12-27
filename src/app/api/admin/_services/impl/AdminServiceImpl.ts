@@ -1,9 +1,13 @@
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { scheduledTasks } from "../../ScheduledTasks";
 import { AdminService } from "../AdminService";
-import { classInstanceService, weeklyScheduleService } from "app/api";
-import { getTodayWeekday } from "@/lib/utils/date";
+import {
+  classInstanceService,
+  preferenceService,
+  weeklyScheduleService,
+} from "app/api";
 import { ClassInstance } from "@prisma/client";
+import { DateUtils } from "@/lib/utils/date";
 
 export class AdminServiceImpl implements AdminService {
   private logger = new ConsoleLogger(this.constructor.name);
@@ -20,43 +24,59 @@ export class AdminServiceImpl implements AdminService {
     this.logger.log("Starting generateDailyClasses()");
 
     try {
-      const weekday = getTodayWeekday();
-      const todayLocal = new Date();
-      todayLocal.setHours(0, 0, 0, 0);
+      const daysToGenerate = await preferenceService.getPreferenceValue<number>(
+        "generateClassesForXDays"
+      );
 
+      const today = DateUtils.startOfDay(new Date());
       const createdInstances: ClassInstance[] = [];
 
-      // 1. Get all active schedules for today
-      const schedules = await weeklyScheduleService.getWeeklyScheduleByFields({
-        weekday,
-        isActive: true,
-      });
+      for (let offset = 0; offset < daysToGenerate; offset++) {
+        const date = DateUtils.addDays(today, offset);
+        console.log(`Processing ${date.toDateString()}`);
+        const weekday = DateUtils.getWeekday(date);
+        console.log(`Weekday: ${weekday}`);
 
-      this.logger.log(`Found ${schedules.length} schedules for today`);
+        // 1. Get schedules for this weekday
+        const schedules = await weeklyScheduleService.getWeeklyScheduleByFields(
+          {
+            weekday,
+            isActive: true,
+          }
+        );
 
-      if (!schedules.length) {
-        return createdInstances;
-      }
+        if (!schedules.length) {
+          continue;
+        }
 
-      for (const schedule of schedules) {
-        const existing = await classInstanceService.findFirstByFields({
-          templateId: schedule.templateId,
-          startTime: schedule.startTime,
-          date: todayLocal,
-        });
+        this.logger.log(
+          `Processing ${schedules.length} schedules for ${date.toDateString()}`
+        );
 
-        if (!existing) {
-          const newInstance = await classInstanceService.create({
-            date: todayLocal,
+        // 2. Create instances if missing
+        for (const schedule of schedules) {
+          const existing = await classInstanceService.findFirstByFields({
+            templateId: schedule.templateId,
+            startTime: schedule.startTime,
+            date,
+          });
+
+          if (existing) continue;
+
+          const instance = await classInstanceService.create({
+            date,
             startTime: schedule.startTime,
             templateId: schedule.templateId,
           });
 
-          createdInstances.push(newInstance);
+          createdInstances.push(instance);
         }
       }
 
-      this.logger.log(`Created ${createdInstances.length} class instances`);
+      this.logger.log(
+        `generateDailyClasses(): created ${createdInstances.length} class instances`
+      );
+
       return createdInstances;
     } catch (e) {
       this.logger.error(`Error in generateDailyClasses(): ${e}`);

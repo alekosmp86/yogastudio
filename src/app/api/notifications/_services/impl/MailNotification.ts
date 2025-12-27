@@ -7,7 +7,7 @@ import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import * as templates from "app/api/notifications/_templates/mail";
 import { SessionUser } from "@/types/SessionUser";
 import { ClassInstance, ClassTemplate } from "@prisma/client";
-import dayjs from "dayjs";
+import { DateUtils } from "@/lib/utils/date";
 import { preferencesStore } from "@/lib/preferences";
 
 type MailTemplate = {
@@ -93,14 +93,10 @@ export class MailNotification implements NotificationService {
     user: SessionUser,
     classInstance: ClassInstance & { template: ClassTemplate }
   ): NotificationTypePayload[K] {
-    const classDateUsingTimezone = dayjs(classInstance.date)
-      .tz(preferencesStore.getByName<string>("timezone"))
-      .toISOString()
-      .split("T")[0];
     const base = {
       userName: user.name,
       classTitle: classInstance.template.title,
-      classDate: classDateUsingTimezone,
+      classDate: DateUtils.startOfDay(classInstance.date).toString(),
       classTime: classInstance.startTime,
       instructorName: classInstance.template.instructor,
     };

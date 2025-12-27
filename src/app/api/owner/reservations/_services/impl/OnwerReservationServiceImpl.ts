@@ -5,6 +5,7 @@ import { userPenaltyService } from "app/api";
 
 export class OnwerReservationServiceImpl implements OnwerReservationService {
   async getReservations(targetDate: string): Promise<ReservationsPerClass[]> {
+    console.log(`targetDate: ${targetDate}`);
     return await prisma.classInstance.findMany({
       where: {
         date: targetDate,

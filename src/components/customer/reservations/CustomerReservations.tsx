@@ -12,7 +12,7 @@ import Button from "@/components/shared/Button";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
-import { getStartOfDay, getTimeXHoursFromNow } from "@/lib/utils/date";
+import { DateUtils } from "@/lib/utils/date";
 import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 
 export default function CustomerReservations() {
@@ -25,11 +25,11 @@ export default function CustomerReservations() {
     const fetchReservations = async () => {
       setLoading(true);
 
-      const date = getStartOfDay(getPreferenceByName<string>("timezone"));
-      const oneHourLaterRounded = getTimeXHoursFromNow(0, getPreferenceByName<string>("timezone")).minute(0).second(0).millisecond(0).format("HH:mm");
+      const date = DateUtils.startOfDay(new Date());
+      const oneHourLater = DateUtils.addHours(DateUtils.getCurrentHour(), 1);
 
       const { message, data } = await http.get<ApiResponse<ClassReservation[]>>(
-        `/customer/reservations?date=${date}&time=${oneHourLaterRounded}`,
+        `/customer/reservations?date=${date}&time=${oneHourLater}`,
         ApiType.FRONTEND
       );
       if (message === RequestStatus.SUCCESS) {

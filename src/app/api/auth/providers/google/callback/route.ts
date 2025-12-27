@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInfo";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { User, UserPenalty } from "@prisma/client";
-import dayjs from "dayjs";
+import { DateUtils } from "@/lib/utils/date";
 
 const logger = new ConsoleLogger("GoogleCallback");
 
@@ -77,7 +77,11 @@ export async function GET(req: NextRequest) {
   }
 
   //check if user should be unblocked
-  if (penalties && dayjs().isAfter(penalties.blockedUntil)) {
+  if (
+    penalties &&
+    penalties.blockedUntil &&
+    DateUtils.startOfDay(new Date()) > penalties.blockedUntil
+  ) {
     await userPenaltyService.unblockUser(penalties.userId);
   }
 

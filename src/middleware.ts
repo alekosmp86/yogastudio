@@ -4,7 +4,7 @@ import { Roles } from "./enums/Roles";
 import { jwtVerify } from "jose";
 import { SessionUser } from "./types/SessionUser";
 import { APPCONFIG } from "app/config";
-import dayjs from "dayjs";
+import { DateUtils } from "./lib/utils/date";
 
 const PUBLIC_PATHS = [
   "/",
@@ -27,7 +27,7 @@ async function verifyJWT(token: string) {
 
   try {
     const { payload } = await jwtVerify(token, secret);
-    return payload as {user: SessionUser}; // contains your user object
+    return payload as { user: SessionUser }; // contains your user object
   } catch {
     return null;
   }
@@ -63,8 +63,11 @@ export async function middleware(req: NextRequest) {
     }
 
     //restrict access to users with penalties
-    const currentDate = dayjs(new Date()).format("YYYY-MM-DD");
-    if(payload.user.penalties?.blockedUntil && dayjs(currentDate).isBefore(payload.user.penalties.blockedUntil)) {
+    const currentDate = DateUtils.toDateOnly(new Date());
+    if (
+      payload.user.penalties?.blockedUntil &&
+      currentDate < DateUtils.toDateOnly(new Date(payload.user.penalties.blockedUntil))
+    ) {
       return NextResponse.redirect(new URL("/penalty", req.url));
     }
 

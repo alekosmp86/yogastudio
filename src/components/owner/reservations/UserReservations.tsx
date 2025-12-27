@@ -7,11 +7,11 @@ import { http } from "@/lib/http";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { useEffect, useState } from "react";
 import { ReservationsPerClass } from "@/types/reservations/ReservationsPerClass";
-import dayjs from "dayjs";
 import Container from "@/components/shared/Container";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
 import ReservationsAccordionHeader from "./ReservationsAccordionHeader";
 import { ReservationRow } from "./ReservationRow";
+import { DateUtils } from "@/lib/utils/date";
 
 export default function UserReservations() {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,11 +24,7 @@ export default function UserReservations() {
     const fetchReservations = async () => {
       setIsLoading(true);
       try {
-        const today = dayjs(new Date())
-          .hour(0)
-          .minute(0)
-          .second(0)
-          .millisecond(0);
+        const today = DateUtils.startOfDay(new Date());
         const { message, data } = await http.get<
           ApiResponse<ReservationsPerClass[]>
         >(

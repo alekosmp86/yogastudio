@@ -1,24 +1,37 @@
-import dayjs from "dayjs";
-import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
+export class DateUtils {
+  static startOfDay(date: Date): Date {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
+  static addDays(date: Date, days: number): Date {
+    const d = new Date(date);
+    d.setDate(d.getDate() + days);
+    return d;
+  }
 
-export const getStartOfDay = (timezone?: string) => {
-    const now = timezone ? dayjs().tz(timezone) : dayjs();
-    return now.startOf("day").toISOString();
-}
+  static getCurrentHour(): number {
+    const d = new Date();
+    d.setMinutes(0, 0, 0);
+    return d.getHours() % 24;
+  }
 
-export const getTimeXHoursFromNow = (hours: number, timezone?: string) => {
-    const now = timezone ? dayjs().tz(timezone) : dayjs();
-    return now.add(hours, "hours");
-}
+  static addHours(currentHour: number, hours: number): string {
+    return `${String((currentHour + hours) % 24).padStart(2, "0")}:00`;
+  }
 
-export const getTodayWeekday = () => {
-  // Monday = 0 ... Sunday = 6
-  const jsDay = new Date().getDay(); // Sun=0 ... Sat=6
-  return jsDay === 0 ? 6 : jsDay - 1;
+  static getWeekday(date: Date): number {
+    return date.getDay() === 0 ? 6 : date.getDay() - 1;
+  }
+
+  static toDateOnly(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
 }
 
 export function getCurrentWeekDates(): Date[] {
