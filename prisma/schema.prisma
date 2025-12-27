@@ -132,4 +132,5 @@ model AppPreferences {
   label String
   type  String @default("text")
   value String
+  category String @default("Business")
 }

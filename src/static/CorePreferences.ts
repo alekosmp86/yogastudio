@@ -1,5 +1,6 @@
 import { AppPreference } from "@/types/preferences/AppPreference";
 import { PreferenceTypes } from "@/enums/PreferenceTypes";
+import { PreferenceCategory } from "@/enums/PreferenceCategory";
 
 export const CorePreferences: AppPreference[] = [
     {
@@ -7,55 +8,63 @@ export const CorePreferences: AppPreference[] = [
         name: "businessName",
         label: "Business Name",
         type: PreferenceTypes.TEXT,
-        value: "GymStudio"
+        value: "GymStudio",
+        category: PreferenceCategory.BUSINESS
     },
     {
         id: 2,
         name: "businessWhatsappNumber",
         label: "Business Whatsapp Number",
         type: PreferenceTypes.TEXT,
-        value: "94662337"
+        value: "94662337",
+        category: PreferenceCategory.BUSINESS
     },
     {
         id: 3,
         name: "businessEmail",
         label: "Business Email",
         type: PreferenceTypes.TEXT,
-        value: "alekosmp86@gmail.com"
+        value: "alekosmp86@gmail.com",
+        category: PreferenceCategory.BUSINESS
     },
     {
         id: 4,
         name: "timezone",
         label: "Timezone",
         type: PreferenceTypes.TEXT,
-        value: "America/Montevideo"
+        value: "America/Montevideo",
+        category: PreferenceCategory.BUSINESS
     },
     {
         id: 5,
         name: "language",
         label: "Default Language",
         type: PreferenceTypes.TEXT,
-        value: "es"
+        value: "es",
+        category: PreferenceCategory.LANGUAGE
     },
     {
         id: 6,
         name: "usersRequireApproval",
         label: "Users require approval",
         type: PreferenceTypes.BOOLEAN,
-        value: "true"
+        value: "true",
+        category: PreferenceCategory.RULES
     },
     {
         id: 7,
         name: "penaltyMaxNoShowCount",
         label: "Max No Show Count",
         type: PreferenceTypes.NUMBER,
-        value: "2"
+        value: "2",
+        category: PreferenceCategory.RULES
     },
     {
         id: 8,
         name: "penaltyBlockDuration",
         label: "Penalty Block Duration (days)",
         type: PreferenceTypes.NUMBER,
-        value: "3"
+        value: "3",
+        category: PreferenceCategory.RULES
     }
 ];

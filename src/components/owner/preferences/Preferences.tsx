@@ -93,17 +93,18 @@ export default function Preferences() {
       <div className='w-full mt-6 overflow-hidden'>
         <h2 className='text-xl font-semibold text-white mb-4'>Preferences</h2>
 
-        <div className='overflow-x-auto max-h-[500px] overflow-y-auto'>
+        <span>
           <TableToolbar
             toolbar={toolbar}
             search={search}
             setSearch={setSearch}
           />
           <PreferencesTable
+            className="overflow-x-auto max-h-[500px] overflow-y-auto"
             preferences={filteredPreferences}
             onChange={handlePreferenceChange}
           />
-        </div>
+        </span>
       </div>
     </Container>
   );

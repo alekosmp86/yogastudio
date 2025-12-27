@@ -3,6 +3,7 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import { PreferenceTypes } from "@/enums/PreferenceTypes";
 import { AppPreference } from "@/types/preferences/AppPreference";
+import { PreferenceCategory } from "@/enums/PreferenceCategory";
 
 class PreferencesStore {
   private static instance: PreferencesStore;
@@ -37,6 +38,7 @@ class PreferencesStore {
       ...p,
       type: p.type as PreferenceTypes,
       value: this.parseValue(p.value, p.type as PreferenceTypes),
+      category: p.category as PreferenceCategory,
     }));
   }
 

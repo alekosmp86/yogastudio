@@ -1,4 +1,5 @@
 import { PreferenceTypes } from "@/enums/PreferenceTypes";
+import { PreferenceCategory } from "@/enums/PreferenceCategory";
 
 export type AppPreference = {
     id: number;
@@ -6,4 +7,5 @@ export type AppPreference = {
     label: string;
     type: PreferenceTypes;
     value: string | number | boolean;
+    category: PreferenceCategory;
 };
