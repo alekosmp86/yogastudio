@@ -24,7 +24,7 @@ export class PreferenceMapperImpl implements PreferenceMapper {
             name: preference.name,
             label: preference.label,
             type: preference.type,
-            value: preference.value as string,
+            value: preference.value.toString(),
         };
     }
 }

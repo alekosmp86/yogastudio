@@ -38,9 +38,9 @@ export default function PreferencesTable({
                   {preference.type === PreferenceTypes.BOOLEAN ? (
                     <input
                       type='checkbox'
-                      checked={value === "true"}
+                      checked={value === true}
                       onChange={(e) =>
-                        onChange({...preference, value: String(e.target.checked)})
+                        onChange({...preference, value: e.target.checked})
                       }
                       className='h-5 w-5 accent-primary-700 cursor-pointer'
                     />
