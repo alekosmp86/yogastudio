@@ -66,5 +66,12 @@ export const CorePreferences: AppPreference[] = [
         type: PreferenceTypes.NUMBER,
         value: "3",
         category: PreferenceCategory.RULES
+    }, {
+        id: 9,
+        name: "generateClassesForXDays",
+        label: "Generate classes for X days",
+        type: PreferenceTypes.NUMBER,
+        value: "3",
+        category: PreferenceCategory.BACKGROUND_TASKS
     }
 ];
