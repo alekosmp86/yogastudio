@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInfo";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { User, UserPenalty } from "@prisma/client";
+import dayjs from "dayjs";
 
 const logger = new ConsoleLogger("GoogleCallback");
 
@@ -52,17 +53,32 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Missing email" }, { status: 400 });
 
   // 3. Find or create User + Account
-  let sessionUser: User & { penalties?: UserPenalty | null };
-  const user = await userService.findUniqueByFields({ email: profile.email });
-  
-  if (!user) {
-    const userToCreate = googleUserMapper.toUser(profile);
-    sessionUser = await userService.create(userToCreate);
-    sessionUser.penalties = null;
-  } else {
-    //attach penalties info
-    sessionUser = user;
-    sessionUser.penalties = await userPenaltyService.findByUserId(user.id);
+  const existingUser = await userService.findUniqueByFields({
+    email: profile.email,
+  });
+
+  const penalties = existingUser
+    ? await userPenaltyService.findByUserId(existingUser.id)
+    : null;
+
+  const sessionUser: User & { penalties: UserPenalty | null } = existingUser
+    ? {
+        ...existingUser,
+        penalties,
+      }
+    : {
+        ...(await userService.create(googleUserMapper.toUser(profile))),
+        penalties,
+      };
+
+  // Attach penalties (only makes sense for existing users)
+  if (penalties) {
+    await userPenaltyService.calculatePenalty(penalties);
+  }
+
+  //check if user should be unblocked
+  if (penalties && dayjs().isAfter(penalties.blockedUntil)) {
+    await userPenaltyService.unblockUser(penalties.userId);
   }
 
   try {

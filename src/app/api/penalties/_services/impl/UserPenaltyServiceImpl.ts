@@ -21,13 +21,13 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     if (userPenalty) {
       userPenalty = await this.update(
         userId,
-        attended ? userPenalty.noShowCount -1 : userPenalty.noShowCount + 1
+        attended ? Math.max(userPenalty.noShowCount - 1, 0) : userPenalty.noShowCount + 1
       );
     } else {
       userPenalty = await prisma.userPenalty.create({
         data: {
           userId: userId,
-          noShowCount: attended ? 0 : 1
+          noShowCount: attended ? 0 : 1,
         },
       });
     }
@@ -36,10 +36,7 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     return userPenalty;
   }
 
-  async update(
-    userId: number,
-    noShowCount: number,
-  ): Promise<UserPenalty> {
+  async update(userId: number, noShowCount: number): Promise<UserPenalty> {
     return await prisma.userPenalty.update({
       where: {
         userId: userId,
@@ -80,5 +77,18 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
         },
       });
     }
+  }
+
+  async unblockUser(userId: number): Promise<void> {
+    await prisma.userPenalty.update({
+      where: {
+        userId: userId,
+      },
+      data: {
+        blockedUntil: null,
+        noShowCount: 0,
+        lastNoShowAt: null,
+      },
+    });
   }
 }
