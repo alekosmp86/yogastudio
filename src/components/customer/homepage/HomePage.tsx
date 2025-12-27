@@ -1,12 +1,34 @@
-'use client';
+"use client";
 
 import QuickActionCard from "./QuickActionCard";
 import Testimonials from "./Testimonials";
 import { Calendar, BookOpenCheck, User2 } from "lucide-react";
 import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
+import { useToast } from "@/lib/contexts/ToastContext";
+import { ToastType } from "@/enums/ToastType";
+import { useEffect } from "react";
 
-export default function HomePage() {
-  const {getPreferenceByName} = useAppPreferences();
+type HomePageProps = {
+  penaltyCount: number;
+  maxAllowedPenalties: number;
+};
+
+export default function HomePage({
+  penaltyCount,
+  maxAllowedPenalties,
+}: HomePageProps) {
+  const { getPreferenceByName } = useAppPreferences();
+  const { showToast } = useToast();
+
+  useEffect(() => {
+    if (penaltyCount > 0 && penaltyCount < maxAllowedPenalties) {
+      showToast({
+        message: `You have ${penaltyCount} penalties out of ${maxAllowedPenalties}.`,
+        type: ToastType.WARNING,
+        persistent: true,
+      });
+    }
+  }, [penaltyCount, maxAllowedPenalties, showToast]);
 
   return (
     <div className='py-6 space-y-8'>
@@ -34,7 +56,11 @@ export default function HomePage() {
           href='/customer/reservations'
         />
 
-        <QuickActionCard icon={User2} label='My Profile' href='/customer/profile' />
+        <QuickActionCard
+          icon={User2}
+          label='My Profile'
+          href='/customer/profile'
+        />
       </section>
 
       {/* Next Class Placeholder */}
