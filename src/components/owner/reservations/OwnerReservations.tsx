@@ -13,7 +13,7 @@ import ReservationsAccordionHeader from "./ReservationsAccordionHeader";
 import { ReservationRow } from "./ReservationRow";
 import { DateUtils } from "@/lib/utils/date";
 
-export default function UserReservations() {
+export default function OwnerReservations() {
   const [isLoading, setIsLoading] = useState(true);
   const [reservationsPerClass, setReservationsPerClass] = useState<
     ReservationsPerClass[]

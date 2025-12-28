@@ -1,5 +1,5 @@
-import UserReservations from "@/components/owner/reservations/UserReservations";
+import OwnerReservations from "@/components/owner/reservations/OwnerReservations";
 
-export default function UserReservationsPage() {
-    return <UserReservations />;
+export default function OwnerReservationsPage() {
+    return <OwnerReservations />;
 }
