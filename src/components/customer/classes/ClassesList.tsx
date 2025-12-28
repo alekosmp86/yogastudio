@@ -69,11 +69,16 @@ export default function ClassesList() {
     switch (message) {
       case RequestStatus.SUCCESS:
         setSortedClasses((prev) =>
-          prev.set(gymClass.date, prev.get(gymClass.date)!.map((c) =>
-            c.id === gymClass.id
-              ? { ...c, reserved: c.reserved + 1, available: false }
-              : c
-          ))
+          prev.set(
+            gymClass.date,
+            prev
+              .get(gymClass.date)!
+              .map((c) =>
+                c.id === gymClass.id
+                  ? { ...c, reserved: c.reserved + 1, available: false }
+                  : c
+              )
+          )
         );
         toast.showToast({
           type: ToastType.SUCCESS,
@@ -122,11 +127,16 @@ export default function ClassesList() {
     switch (message) {
       case RequestStatus.SUCCESS:
         setSortedClasses((prev) =>
-          prev.set(gymClass.date, prev.get(gymClass.date)!.map((c) =>
-            c.id === gymClass.id
-              ? { ...c, reserved: c.reserved - 1, available: true }
-              : c
-          ))
+          prev.set(
+            gymClass.date,
+            prev
+              .get(gymClass.date)!
+              .map((c) =>
+                c.id === gymClass.id
+                  ? { ...c, reserved: c.reserved - 1, available: true }
+                  : c
+              )
+          )
         );
         toast.showToast({
           type: ToastType.SUCCESS,
@@ -146,26 +156,28 @@ export default function ClassesList() {
 
   return (
     <div className="p-4 flex flex-col gap-4 h-full">
-      <h1 className="text-2xl font-bold text-primary-800">{t("availableClasses")}</h1>
+      <h1 className="text-2xl font-bold text-primary-800">
+        {t("availableClasses")}
+      </h1>
 
       {/* Scroll area */}
       <div className="overflow-y-auto max-h-[65vh] pr-2">
         {loading ? (
-            <div className="flex flex-col gap-4 mb-2">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <CardSkeleton key={i} />
-              ))}
-            </div>
-          ) : (
-            <ClassesBrowser
-              dates={dates}
-              activeDate={activeDate}
-              setActiveDate={setActiveDate}
-              sortedClasses={sortedClasses}
-              handleReserve={handleReserve}
-              handleCancelation={handleCancelation}
-            />
-          )}
+          <div className="flex flex-col gap-4 mb-2">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <CardSkeleton key={i} />
+            ))}
+          </div>
+        ) : (
+          <ClassesBrowser
+            dates={dates}
+            activeDate={activeDate}
+            setActiveDate={setActiveDate}
+            sortedClasses={sortedClasses}
+            handleReserve={handleReserve}
+            handleCancelation={handleCancelation}
+          />
+        )}
       </div>
 
       {/* When there are NO classes */}

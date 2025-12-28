@@ -17,7 +17,7 @@ export default function ClassesTab({
     <div className="flex flex-col gap-4">
       {classes.map((gymClass) => (
         <ClassCard
-          key={gymClass.id}
+          key={`${gymClass.date}-${gymClass.id}`}
           gymClass={gymClass}
           handleReserve={() => handleReserve(gymClass)}
           handleCancelation={() => handleCancelation(gymClass)}
