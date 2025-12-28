@@ -25,8 +25,20 @@ export default function ClassesList() {
 
   useEffect(() => {
     const setActiveDateTab = () => {
-      setActiveDate(dates[0]);
+      if (!dates.length) return;
+
+      setActiveDate((current) => {
+        // first load
+        if (!current) return dates[0];
+
+        // keep current tab if it still exists
+        if (dates.includes(current)) return current;
+
+        // fallback if current tab disappeared
+        return dates[0];
+      });
     };
+
     setActiveDateTab();
   }, [dates]);
 
@@ -72,11 +84,13 @@ export default function ClassesList() {
           const newMap = new Map(prev);
           newMap.set(
             gymClass.date,
-            prev.get(gymClass.date)!.map((c) =>
-              c.id === gymClass.id
-                ? { ...c, reserved: c.reserved + 1, available: false }
-                : c
-            )
+            prev
+              .get(gymClass.date)!
+              .map((c) =>
+                c.id === gymClass.id
+                  ? { ...c, reserved: c.reserved + 1, available: false }
+                  : c
+              )
           );
           return newMap;
         });
@@ -130,11 +144,13 @@ export default function ClassesList() {
           const newMap = new Map(prev);
           newMap.set(
             gymClass.date,
-            prev.get(gymClass.date)!.map((c) =>
-              c.id === gymClass.id
-                ? { ...c, reserved: c.reserved - 1, available: true }
-                : c
-            )
+            prev
+              .get(gymClass.date)!
+              .map((c) =>
+                c.id === gymClass.id
+                  ? { ...c, reserved: c.reserved - 1, available: true }
+                  : c
+              )
           );
           return newMap;
         });
