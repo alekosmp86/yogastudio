@@ -25,7 +25,7 @@ export default function CustomerReservations() {
     const fetchReservations = async () => {
       setLoading(true);
 
-      const date = DateUtils.startOfDay(new Date());
+      const date = DateUtils.startOfDay(new Date()).toISOString();
       const oneHourLater = DateUtils.addHours(DateUtils.getCurrentHour(), 1);
 
       const { message, data } = await http.get<ApiResponse<ClassReservation[]>>(
