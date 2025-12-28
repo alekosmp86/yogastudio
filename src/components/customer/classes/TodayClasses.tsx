@@ -10,11 +10,23 @@ import { RequestStatus } from "@/enums/RequestStatus";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
+import ClassesBrowser from "./ClassesBrowser";
+import { useTranslation } from "react-i18next";
 
 export default function TodayClasses() {
-  const [upcomingClasses, setUpcomingClasses] = useState<DailyClass[]>([]);
+  const { t } = useTranslation();
+  const [sortedClasses, setSortedClasses] = useState<Map<string, DailyClass[]>>(
+    new Map()
+  );
   const [loading, setLoading] = useState(true);
   const toast = useToast();
+
+  const dates = Array.from(sortedClasses.keys());
+  const [activeDate, setActiveDate] = useState(dates[0]);
+
+  useEffect(() => {
+    setActiveDate(dates[0]);
+  }, [sortedClasses]);
 
   useEffect(() => {
     const getTodayClasses = async () => {
@@ -25,9 +37,17 @@ export default function TodayClasses() {
       );
 
       if (message === RequestStatus.SUCCESS) {
-        setUpcomingClasses(
-          data!.sort((a, b) => a.startTime.localeCompare(b.startTime))
-        );
+        setSortedClasses((prev) => {
+          const newMap = new Map(prev);
+          data!.forEach((c) => {
+            const date = c.date;
+            if (!newMap.has(date)) {
+              newMap.set(date, []);
+            }
+            newMap.get(date)!.push(c);
+          });
+          return newMap;
+        });
       }
       setLoading(false);
     };
@@ -46,12 +66,12 @@ export default function TodayClasses() {
 
     switch (message) {
       case RequestStatus.SUCCESS:
-        setUpcomingClasses((prev) =>
-          prev.map((c) =>
+        setSortedClasses((prev) =>
+          prev.set(gymClass.date, prev.get(gymClass.date)!.map((c) =>
             c.id === gymClass.id
               ? { ...c, reserved: c.reserved + 1, available: false }
               : c
-          )
+          ))
         );
         toast.showToast({
           type: ToastType.SUCCESS,
@@ -99,12 +119,12 @@ export default function TodayClasses() {
 
     switch (message) {
       case RequestStatus.SUCCESS:
-        setUpcomingClasses((prev) =>
-          prev.map((c) =>
+        setSortedClasses((prev) =>
+          prev.set(gymClass.date, prev.get(gymClass.date)!.map((c) =>
             c.id === gymClass.id
               ? { ...c, reserved: c.reserved - 1, available: true }
               : c
-          )
+          ))
         );
         toast.showToast({
           type: ToastType.SUCCESS,
@@ -124,34 +144,31 @@ export default function TodayClasses() {
 
   return (
     <div className="p-4 flex flex-col gap-4 h-full">
-      <h1 className="text-2xl font-bold text-primary-800">Today’s Classes</h1>
+      <h1 className="text-2xl font-bold text-primary-800">{t("availableClasses")}</h1>
 
       {/* Scroll area */}
       <div className="overflow-y-auto max-h-[65vh] pr-2">
-        <div className="flex flex-col gap-4">
-          {loading ? (
+        {loading ? (
             <div className="flex flex-col gap-4 mb-2">
               {Array.from({ length: 3 }).map((_, i) => (
                 <CardSkeleton key={i} />
               ))}
             </div>
           ) : (
-            upcomingClasses.map((gymClass) => (
-              <ClassCard
-                key={gymClass.id}
-                gymClass={gymClass}
-                handleReserve={() => handleReserve(gymClass)}
-                handleCancelation={() => handleCancelation(gymClass)}
-                canReserve={gymClass.available}
-              />
-            ))
+            <ClassesBrowser
+              dates={dates}
+              activeDate={activeDate}
+              setActiveDate={setActiveDate}
+              sortedClasses={sortedClasses}
+              handleReserve={handleReserve}
+              handleCancelation={handleCancelation}
+            />
           )}
-        </div>
       </div>
 
       {/* When there are NO classes */}
       <Activity
-        mode={upcomingClasses.length === 0 && !loading ? "visible" : "hidden"}
+        mode={sortedClasses.size === 0 && !loading ? "visible" : "hidden"}
       >
         <p className="text-primary-800">No classes available for today.</p>
       </Activity>

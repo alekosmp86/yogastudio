@@ -3,21 +3,42 @@ import { CustomerClassesService } from "../CustomerClassesService";
 import { ApiUtils } from "app/api/utils/ApiUtils";
 import { prisma } from "@/lib/prisma";
 import { DateUtils } from "@/lib/utils/date";
+import { preferenceService } from "app/api";
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
   async getTodayClasses(): Promise<DailyClass[]> {
-    const today = DateUtils.startOfDay(new Date());
-    const oneHourLater = DateUtils.addHours(DateUtils.getCurrentHour(), 1).toString();
     const user = await ApiUtils.getSessionUser();
 
-    console.log(`today: ${today}`);
-    console.log(`oneHourLater: ${oneHourLater}`);
+    const daysToShow = await preferenceService.getPreferenceValue<number>(
+      "generateClassesForXDays"
+    );
+
+    const now = new Date();
+    const today = DateUtils.startOfDay(now).toISOString();
+    const lastDay = DateUtils.addDays(now, daysToShow).toISOString();
+    const nextHour = DateUtils.addHours(
+      DateUtils.getCurrentHour(),
+      1
+    ).toString();
 
     const [classes, reservationCounts] = await Promise.all([
       prisma.classInstance.findMany({
         where: {
-          date: today,
-          startTime: { gte: oneHourLater },
+          date: {
+            gte: today,
+            lte: lastDay,
+          },
+          OR: [
+            // Today → only future classes
+            {
+              date: today,
+              startTime: { gte: nextHour },
+            },
+            // Future days → all classes
+            {
+              date: { gt: today },
+            },
+          ],
         },
         include: {
           template: {
@@ -33,6 +54,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
             select: { id: true, userId: true, cancelled: true },
           },
         },
+        orderBy: [{ date: "asc" }, { startTime: "asc" }],
       }),
 
       prisma.reservation.groupBy({
@@ -47,13 +69,14 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
 
       return {
         id: c.id,
-        date: c.date.toString(),
+        date: DateUtils.toDateOnly(c.date),
         startTime: c.startTime,
         title: c.template.title,
         description: c.template.description || "",
         instructor: c.template.instructor,
         capacity: c.template.capacity,
-        reserved: reservationCounts.find((r) => r.classId === c.id)?._count ?? 0,
+        reserved:
+          reservationCounts.find((r) => r.classId === c.id)?._count ?? 0,
         available:
           availableSpots > 0 &&
           !c.reservations.some(

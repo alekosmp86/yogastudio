@@ -6,6 +6,7 @@ import { Progress } from "@/components/shared/Progress";
 import Button from "@/components/shared/Button";
 import { Card, CardContent } from "@/components/shared/Card";
 import { DailyClass } from "@/types/classes/DailyClass";
+import { useTranslation } from "react-i18next";
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   sun: Sun,
@@ -27,8 +28,8 @@ export default function ClassCard({
   handleCancelation,
   canReserve,
 }: ClassCardProps) {
+  const {t} = useTranslation();
   const Icon = ICON_MAP.default;
-
   const percentage = (gymClass.reserved / gymClass.capacity) * 100;
 
   return (
@@ -39,8 +40,8 @@ export default function ClassCard({
         <div className='flex flex-col w-full'>
           <div className='flex justify-between'>
             <h2 className='font-semibold text-primary-800'>{gymClass.title}</h2>
-            <span className='text-sm text-primary-800'>
-              {gymClass.startTime}
+            <span className='text-sm text-primary-800 font-semibold'>
+              {gymClass.date} ({gymClass.startTime})
             </span>
           </div>
 
@@ -49,13 +50,13 @@ export default function ClassCard({
           </p>
 
           <p className='text-sm text-primary-800'>
-            Instructor: {gymClass.instructor}
+            {t("instructor")}: {gymClass.instructor}
           </p>
 
           <div className='mt-2'>
             <Progress value={percentage} className='h-2' />
             <p className='text-xs text-primary-800 mt-1'>
-              {gymClass.reserved}/{gymClass.capacity} spots filled
+              {gymClass.reserved}/{gymClass.capacity} {t("spotsFilled")}
             </p>
           </div>
 
@@ -69,7 +70,7 @@ export default function ClassCard({
                 className='w-full md:w-auto'
               >
                 <ClockCheck className='mr-2 h-4 w-4' />
-                Reserve
+                {t("book")}
               </Button>
             </div>
           ) : (
@@ -81,7 +82,7 @@ export default function ClassCard({
                 className='w-full md:w-auto'
               >
                 <X className='mr-2 h-4 w-4' />
-                Cancel
+                {t("cancel")}
               </Button>
             </div>
           )}
