@@ -7,6 +7,7 @@ import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 type HomePageProps = {
   penaltyCount: number;
@@ -17,6 +18,7 @@ export default function HomePage({
   penaltyCount,
   maxAllowedPenalties,
 }: HomePageProps) {
+  const { t } = useTranslation();
   const { getPreferenceByName } = useAppPreferences();
   const { showToast } = useToast();
 
@@ -35,10 +37,10 @@ export default function HomePage({
       {/* Welcome Section */}
       <section className='text-center'>
         <h1 className='text-2xl font-bold text-primary-800'>
-          Welcome to {getPreferenceByName<string>("businessName")}
+          {t('welcomeTo')} {getPreferenceByName<string>("businessName")}
         </h1>
         <p className='text-gray-600 mt-2 text-md'>
-          Book your classes, manage reservations, and stay connected.
+          {t('homePageIntro')}
         </p>
       </section>
 
@@ -46,19 +48,19 @@ export default function HomePage({
       <section className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
         <QuickActionCard
           icon={Calendar}
-          label='Today’s Classes'
+          label={t('classes')}
           href='/customer/classes'
         />
 
         <QuickActionCard
           icon={BookOpenCheck}
-          label='My Reservations'
+          label={t('reservations')}
           href='/customer/reservations'
         />
 
         <QuickActionCard
           icon={User2}
-          label='My Profile'
+          label={t('profile')}
           href='/customer/profile'
         />
       </section>
