@@ -6,7 +6,7 @@ import { DateUtils } from "@/lib/utils/date";
 import { preferenceService } from "app/api";
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
-  async getTodayClasses(): Promise<DailyClass[]> {
+  async getClassesList(): Promise<DailyClass[]> {
     const user = await ApiUtils.getSessionUser();
 
     const daysToShow = await preferenceService.getPreferenceValue<number>(

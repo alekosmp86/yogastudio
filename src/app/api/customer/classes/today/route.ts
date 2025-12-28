@@ -7,10 +7,10 @@ const logger = new ConsoleLogger("CustomerController");
 
 export async function GET() {
   try {
-    const todayClasses = await customerClassesService.getTodayClasses();
+    const classesList = await customerClassesService.getClassesList();
     return NextResponse.json({
       message: RequestStatus.SUCCESS,
-      data: todayClasses,
+      data: classesList,
     });
   } catch (error) {
     logger.error("Error fetching classes:", error);

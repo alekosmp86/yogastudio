@@ -1,11 +1,9 @@
 type AttendanceToggleProps = {
-  reservationId: number;
   attended: boolean | null;
   onToggleAttendance: (attended: boolean) => void;
 };
 
 export function AttendanceToggle({
-  reservationId,
   attended,
   onToggleAttendance,
 }: AttendanceToggleProps) {

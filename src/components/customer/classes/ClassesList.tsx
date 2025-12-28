@@ -3,7 +3,6 @@
 import { ApiType } from "@/enums/ApiTypes";
 import { http } from "@/lib/http";
 import { Activity, useEffect, useState } from "react";
-import ClassCard from "./ClassCard";
 import { DailyClass } from "@/types/classes/DailyClass";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { RequestStatus } from "@/enums/RequestStatus";
@@ -13,7 +12,7 @@ import { CardSkeleton } from "@/components/shared/CardSkeleton";
 import ClassesBrowser from "./ClassesBrowser";
 import { useTranslation } from "react-i18next";
 
-export default function TodayClasses() {
+export default function ClassesList() {
   const { t } = useTranslation();
   const [sortedClasses, setSortedClasses] = useState<Map<string, DailyClass[]>>(
     new Map()
@@ -25,11 +24,14 @@ export default function TodayClasses() {
   const [activeDate, setActiveDate] = useState(dates[0]);
 
   useEffect(() => {
-    setActiveDate(dates[0]);
-  }, [sortedClasses]);
+    const setActiveDateTab = () => {
+      setActiveDate(dates[0]);
+    };
+    setActiveDateTab();
+  }, [dates]);
 
   useEffect(() => {
-    const getTodayClasses = async () => {
+    const getClassesList = async () => {
       setLoading(true);
       const { message, data } = await http.get<ApiResponse<DailyClass[]>>(
         "/customer/classes/today",
@@ -52,7 +54,7 @@ export default function TodayClasses() {
       setLoading(false);
     };
 
-    getTodayClasses();
+    getClassesList();
   }, []);
 
   const handleReserve = async (gymClass: DailyClass) => {

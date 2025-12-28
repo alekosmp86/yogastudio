@@ -1,5 +1,5 @@
-import TodayClasses from "@/components/customer/classes/TodayClasses";
+import ClassesList from "@/components/customer/classes/ClassesList";
 
 export default function ClassesPage() {
-  return <TodayClasses />;
+  return <ClassesList />;
 }

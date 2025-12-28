@@ -33,7 +33,6 @@ export function ReservationRow({
       {/* Attendance toggle */}
       <div className="self-end md:self-auto">
         <AttendanceToggle
-          reservationId={reservation.id}
           attended={reservation.attended}
           onToggleAttendance={(attended: boolean) => onToggleAttendance(attended)}
         />
