@@ -68,18 +68,18 @@ export default function ClassesList() {
 
     switch (message) {
       case RequestStatus.SUCCESS:
-        setSortedClasses((prev) =>
-          prev.set(
+        setSortedClasses((prev) => {
+          const newMap = new Map(prev);
+          newMap.set(
             gymClass.date,
-            prev
-              .get(gymClass.date)!
-              .map((c) =>
-                c.id === gymClass.id
-                  ? { ...c, reserved: c.reserved + 1, available: false }
-                  : c
-              )
-          )
-        );
+            prev.get(gymClass.date)!.map((c) =>
+              c.id === gymClass.id
+                ? { ...c, reserved: c.reserved + 1, available: false }
+                : c
+            )
+          );
+          return newMap;
+        });
         toast.showToast({
           type: ToastType.SUCCESS,
           message: "Class reserved successfully.",
@@ -126,18 +126,18 @@ export default function ClassesList() {
 
     switch (message) {
       case RequestStatus.SUCCESS:
-        setSortedClasses((prev) =>
-          prev.set(
+        setSortedClasses((prev) => {
+          const newMap = new Map(prev);
+          newMap.set(
             gymClass.date,
-            prev
-              .get(gymClass.date)!
-              .map((c) =>
-                c.id === gymClass.id
-                  ? { ...c, reserved: c.reserved - 1, available: true }
-                  : c
-              )
-          )
-        );
+            prev.get(gymClass.date)!.map((c) =>
+              c.id === gymClass.id
+                ? { ...c, reserved: c.reserved - 1, available: true }
+                : c
+            )
+          );
+          return newMap;
+        });
         toast.showToast({
           type: ToastType.SUCCESS,
           message: "Class canceled successfully.",
@@ -155,15 +155,15 @@ export default function ClassesList() {
   };
 
   return (
-    <div className="p-4 flex flex-col gap-4 h-full">
-      <h1 className="text-2xl font-bold text-primary-800">
+    <div className='p-4 flex flex-col gap-4 h-full'>
+      <h1 className='text-2xl font-bold text-primary-800'>
         {t("availableClasses")}
       </h1>
 
       {/* Scroll area */}
-      <div className="overflow-y-auto max-h-[65vh] pr-2">
+      <div className='overflow-y-auto max-h-[65vh] pr-2'>
         {loading ? (
-          <div className="flex flex-col gap-4 mb-2">
+          <div className='flex flex-col gap-4 mb-2'>
             {Array.from({ length: 3 }).map((_, i) => (
               <CardSkeleton key={i} />
             ))}
@@ -184,7 +184,7 @@ export default function ClassesList() {
       <Activity
         mode={sortedClasses.size === 0 && !loading ? "visible" : "hidden"}
       >
-        <p className="text-primary-800">No classes available for today.</p>
+        <p className='text-primary-800'>No classes available for today.</p>
       </Activity>
     </div>
   );
