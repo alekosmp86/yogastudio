@@ -1,6 +1,6 @@
 import { ReservationsPerClass } from "@/types/reservations/ReservationsPerClass";
 
 export interface OnwerReservationService {
-    getReservations(targetDate: string): Promise<ReservationsPerClass[]>;
+    getReservations(): Promise<ReservationsPerClass[]>;
     updateAttendance(id: number, attended: boolean, userId: number): Promise<void>;
 }   

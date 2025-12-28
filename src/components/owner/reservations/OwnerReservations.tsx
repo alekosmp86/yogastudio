@@ -11,7 +11,6 @@ import Container from "@/components/shared/Container";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
 import ReservationsAccordionHeader from "./ReservationsAccordionHeader";
 import { ReservationRow } from "./ReservationRow";
-import { DateUtils } from "@/lib/utils/date";
 
 export default function OwnerReservations() {
   const [isLoading, setIsLoading] = useState(true);
@@ -24,13 +23,9 @@ export default function OwnerReservations() {
     const fetchReservations = async () => {
       setIsLoading(true);
       try {
-        const today = DateUtils.startOfDay(new Date());
         const { message, data } = await http.get<
           ApiResponse<ReservationsPerClass[]>
-        >(
-          `/owner/reservations?targetDate=${today.toISOString()}`,
-          ApiType.FRONTEND
-        );
+        >(`/owner/reservations`, ApiType.FRONTEND);
 
         if (message === RequestStatus.SUCCESS) {
           setReservationsPerClass(data!);
@@ -49,8 +44,10 @@ export default function OwnerReservations() {
     userId: number,
     attended: boolean
   ) => {
-    const reservation = attendances.find((r) => r.id === reservationId && r.user.id === userId);
-    if(reservation && reservation.attended === attended) {
+    const reservation = attendances.find(
+      (r) => r.id === reservationId && r.user.id === userId
+    );
+    if (reservation && reservation.attended === attended) {
       return;
     }
 
@@ -95,7 +92,10 @@ export default function OwnerReservations() {
                       title={`${template.title} - ${startTime}`}
                       booked={reservations.length}
                       capacity={template.capacity}
-                      attendance={reservations.reduce((acc, r) => acc + (r.attended ? 1 : 0), 0)}
+                      attendance={reservations.reduce(
+                        (acc, r) => acc + (r.attended ? 1 : 0),
+                        0
+                      )}
                     />
                   }
                   className="hover:bg-gray-800"
@@ -107,7 +107,13 @@ export default function OwnerReservations() {
                       <ReservationRow
                         key={reservation.id}
                         reservation={reservation}
-                        onToggleAttendance={(attended: boolean) => handleToggleAttendance(reservation.id, reservation.user.id, attended)}
+                        onToggleAttendance={(attended: boolean) =>
+                          handleToggleAttendance(
+                            reservation.id,
+                            reservation.user.id,
+                            attended
+                          )
+                        }
                       />
                     ))
                   )}
