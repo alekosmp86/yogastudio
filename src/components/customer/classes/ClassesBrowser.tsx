@@ -23,7 +23,7 @@ export default function ClassesBrowser({
   return (
     <div className="w-full">
       {/* Tabs */}
-      <div className="flex flex-wrap gap-1 border-b border-primary-900/30 mb-2">
+      <div className="flex overflow-x-auto max-w-[calc(100%)] gap-1 border-b border-primary-900/30 mb-2">
         {dates.map((date) => (
           <Button
             key={date}

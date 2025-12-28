@@ -41,7 +41,7 @@ export default function ClassCard({
           <div className='flex justify-between'>
             <h2 className='font-semibold text-primary-800'>{gymClass.title}</h2>
             <span className='text-sm text-primary-800 font-semibold'>
-              {gymClass.date} ({gymClass.startTime})
+              {gymClass.startTime}
             </span>
           </div>
 
