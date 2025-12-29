@@ -36,6 +36,7 @@ export type NotificationTypePayload = {
   };
   [NotificationType.USER_BLOCKED]: {
     userName: string;
+    untilDate: Date;
     contactEmail: string;
     contactPhone: string;
   };

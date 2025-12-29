@@ -90,6 +90,7 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
       const businessPhone = await preferenceService.getStringPreferenceValue("businessWhatsappNumber");
       await notificationService.sendNotification(userPenalty.userId, NotificationType.USER_BLOCKED, {
         userName: user.name,
+        untilDate: DateUtils.addDays(new Date(), penaltyBlockDuration),
         contactEmail: businessEmail,
         contactPhone: businessPhone,
       });
