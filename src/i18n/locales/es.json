@@ -9,6 +9,8 @@
   "classes": "Clases",
   "reservations": "Reservas",
   "profile": "Perfil",
+  "cancelingReservation": "Cancelando reserva...",
+  "noReservationsFound": "No se encontraron reservas",
   "search": "Buscar...",
   "yourClasses": "Tus clases",
   "noClassesFound": "No se encontraron clases",

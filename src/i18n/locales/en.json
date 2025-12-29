@@ -9,6 +9,8 @@
   "classes": "Classes",
   "reservations": "Reservations",
   "profile": "Profile",
+  "cancelingReservation": "Canceling reservation...",
+  "noReservationsFound": "No reservations found",
   "search": "Search...",
   "yourClasses": "Your classes",
   "noClassesFound": "No classes found",
