@@ -6,13 +6,9 @@ import { ApiResponse } from "@/types/requests/ApiResponse";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { useEffect, useMemo, useState } from "react";
-import { Card, CardContent } from "@/components/shared/Card";
-import { X } from "lucide-react";
-import Button from "@/components/shared/Button";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
-import { DateUtils } from "@/lib/utils/date";
 import ReservationsByDate from "./ReservationsByDate";
 import { useTranslation } from "react-i18next";
 

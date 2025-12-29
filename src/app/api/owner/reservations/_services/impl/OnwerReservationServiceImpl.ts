@@ -1,23 +1,20 @@
 import { OnwerReservationService } from "../OnwerReservationService";
 import { ReservationsPerClass } from "@/types/reservations/ReservationsPerClass";
 import { prisma } from "@/lib/prisma";
-import { preferenceService, userPenaltyService } from "app/api";
+import { userPenaltyService } from "app/api";
 import { DateUtils } from "@/lib/utils/date";
 
 export class OnwerReservationServiceImpl implements OnwerReservationService {
   async getReservations(): Promise<ReservationsPerClass[]> {
-    const daysAhead = await preferenceService.getPreferenceValue<number>(
-      "generateClassesForXDays"
-    );
-
     const today = DateUtils.startOfDay(new Date());
-    const endDate = DateUtils.startOfDay(DateUtils.addDays(today, daysAhead));
-
+    
     /**
      * @todo: este codigo queda comentado por la posibilidad de obtener todas las reservas
      *        y mostrarlas al owner en una tabla
+     * const daysAhead = await preferenceService.getNumberPreferenceValue("generateClassesForXDays");
+     * const endDate = DateUtils.startOfDay(DateUtils.addDays(today, daysAhead));
      * 
-     * return prisma.classInstance.findMany({
+    return prisma.classInstance.findMany({
       where: {
         date: {
           gte: today.toISOString(),

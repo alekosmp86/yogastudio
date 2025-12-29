@@ -6,7 +6,7 @@ import { RequestStatus } from "@/enums/RequestStatus";
 
 const logger = new ConsoleLogger("ReservationService");
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     const user = await ApiUtils.getSessionUser();
     const reservations = await userReservationService.getReservations(user.id);

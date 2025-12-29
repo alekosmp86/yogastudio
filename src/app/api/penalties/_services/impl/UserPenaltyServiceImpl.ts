@@ -52,11 +52,11 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
 
   async calculatePenalty(userPenalty: UserPenalty): Promise<void> {
     const penaltyMaxNoShowCount =
-      await preferenceService.getPreferenceValue<number>(
+      await preferenceService.getNumberPreferenceValue(
         "penaltyMaxNoShowCount"
       );
     const penaltyBlockDuration =
-      await preferenceService.getPreferenceValue<number>(
+      await preferenceService.getNumberPreferenceValue(
         "penaltyBlockDuration"
       );
 

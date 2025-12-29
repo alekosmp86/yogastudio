@@ -2,6 +2,8 @@ import { DateUtils } from "@/lib/utils/date";
 import { cn } from "@/lib/utils/utils";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
 import ReservationCard from "./ReservationCard";
+import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
+import { useTranslation } from "react-i18next";
 
 type ReservationsByDateProps = {
   date: string;
@@ -9,13 +11,8 @@ type ReservationsByDateProps = {
   onCancel: (id: number) => void;
 };
 
-const isToday = (date: string) => {
-  const today = DateUtils.toDateOnly(new Date());
-  return date.startsWith(today);
-};
-
-const formatDate = (date: string) =>
-  new Date(date).toLocaleDateString(undefined, {
+const formatDate = (date: string, locale?: string) =>
+  new Date(date).toLocaleDateString(locale, {
     weekday: "long",
     day: "2-digit",
     month: "long",
@@ -26,7 +23,9 @@ export default function ReservationsByDate({
   reservations,
   onCancel,
 }: ReservationsByDateProps) {
-  const today = isToday(date);
+  const {t} = useTranslation();
+  const today = date.startsWith(DateUtils.toDateOnly(new Date()));
+  const {getPreferenceByName} = useAppPreferences();
 
   return (
     <section className="flex flex-col gap-3">
@@ -43,10 +42,10 @@ export default function ReservationsByDate({
             today ? "text-primary-900" : "text-primary-800"
           )}
         >
-          {formatDate(date)}
+          {formatDate(date, getPreferenceByName<string>("language"))}
           {today && (
             <span className="ml-2 text-sm font-medium text-primary-700">
-              (Today)
+              ({t("today")})
             </span>
           )}
         </h2>

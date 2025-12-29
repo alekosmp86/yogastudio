@@ -19,12 +19,36 @@ export class PreferenceServiceImpl implements PreferenceService {
     await prisma.$transaction(queries);
   }
 
-  async getPreferenceValue<T>(name: string): Promise<T> {
+  async getBooleanPreferenceValue(name: string): Promise<boolean> {
+    const preference = await this.getPreferenceValue(name);
+    if(preference === null) {
+      throw new Error("Preference not found");
+    }
+    return Boolean(preference);
+  }
+
+  async getNumberPreferenceValue(name: string): Promise<number> {
+    const preference = await this.getPreferenceValue(name);
+    if(preference === null) {
+      throw new Error("Preference not found");
+    }
+    return Number(preference);
+  }
+
+  async getStringPreferenceValue(name: string): Promise<string> {
+    const preference = await this.getPreferenceValue(name);
+    if(preference === null) {
+      throw new Error("Preference not found");
+    }
+    return String(preference);
+  }
+
+  async getPreferenceValue(name: string): Promise<string | null> {
     const preference = await prisma.appPreferences.findUnique({
       where: {
         name: name,
       },
     });
-    return preference?.value as T;
+    return preference?.value ?? null;
   }
 }

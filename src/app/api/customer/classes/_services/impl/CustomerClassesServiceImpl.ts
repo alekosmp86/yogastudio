@@ -9,7 +9,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
   async getClassesList(): Promise<DailyClass[]> {
     const user = await ApiUtils.getSessionUser();
 
-    const daysToShow = await preferenceService.getPreferenceValue<number>(
+    const daysToShow = await preferenceService.getNumberPreferenceValue(
       "generateClassesForXDays"
     );
 

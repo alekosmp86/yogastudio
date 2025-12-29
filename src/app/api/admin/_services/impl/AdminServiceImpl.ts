@@ -8,6 +8,7 @@ import {
 } from "app/api";
 import { ClassInstance } from "@prisma/client";
 import { DateUtils } from "@/lib/utils/date";
+import { PreferenceTypes } from "@/enums/PreferenceTypes";
 
 export class AdminServiceImpl implements AdminService {
   private logger = new ConsoleLogger(this.constructor.name);
@@ -24,7 +25,7 @@ export class AdminServiceImpl implements AdminService {
     this.logger.log("Starting generateDailyClasses()");
 
     try {
-      const daysToGenerate = await preferenceService.getPreferenceValue<number>(
+      const daysToGenerate = await preferenceService.getNumberPreferenceValue(
         "generateClassesForXDays"
       );
 
