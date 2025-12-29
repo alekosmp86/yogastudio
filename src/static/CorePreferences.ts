@@ -73,5 +73,12 @@ export const CorePreferences: AppPreference[] = [
         type: PreferenceTypes.NUMBER,
         value: "3",
         category: PreferenceCategory.BACKGROUND_TASKS
+    }, {
+        id: 10,
+        name: "lateCancelHours",
+        label: "Late cancel hours",
+        type: PreferenceTypes.NUMBER,
+        value: "1",
+        category: PreferenceCategory.RULES
     }
 ];
