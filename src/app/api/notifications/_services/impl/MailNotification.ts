@@ -96,7 +96,7 @@ export class MailNotification implements NotificationService {
     const base = {
       userName: user.name,
       classTitle: classInstance.template.title,
-      classDate: DateUtils.startOfDay(classInstance.date).toString(),
+      classDate: DateUtils.toDateOnly(classInstance.date),
       classTime: classInstance.startTime,
       instructorName: classInstance.template.instructor,
     };
