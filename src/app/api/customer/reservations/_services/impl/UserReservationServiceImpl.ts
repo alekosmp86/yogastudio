@@ -10,20 +10,41 @@ import {
   waitingListService,
 } from "app/api";
 import { SessionUser } from "@/types/SessionUser";
+import { DateUtils } from "@/lib/utils/date";
 
 export class UserReservationServiceImpl implements UserReservationService {
-  async getReservations(
-    userId: number,
-    date: string,
-    time: string
-  ): Promise<ClassReservation[]> {
+  async getReservations(userId: number): Promise<ClassReservation[]> {
+    const date = DateUtils.startOfDay(new Date()).toISOString();
+    const oneHourLater = DateUtils.addHours(DateUtils.getCurrentHour(), 1);
+
     return prisma.reservation.findMany({
-      where: { userId, class: { date, startTime: { gt: time } }, cancelled: false },
+      where: {
+        userId,
+        cancelled: false,
+        OR: [
+          // Future days
+          {
+            class: {
+              date: { gt: date },
+            },
+          },
+
+          // Today, but only future hours
+          {
+            class: {
+              date,
+              startTime: { gte: oneHourLater },
+            },
+          },
+        ],
+      },
+      orderBy: [{ class: { date: "asc" } }, { class: { startTime: "asc" } }],
       select: {
         id: true,
         class: {
           select: {
             id: true,
+            date: true,
             startTime: true,
             template: {
               select: {
