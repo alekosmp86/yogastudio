@@ -13,7 +13,11 @@ export class OnwerReservationServiceImpl implements OnwerReservationService {
     const today = DateUtils.startOfDay(new Date());
     const endDate = DateUtils.startOfDay(DateUtils.addDays(today, daysAhead));
 
-    return prisma.classInstance.findMany({
+    /**
+     * @todo: este codigo queda comentado por la posibilidad de obtener todas las reservas
+     *        y mostrarlas al owner en una tabla
+     * 
+     * return prisma.classInstance.findMany({
       where: {
         date: {
           gte: today.toISOString(),
@@ -42,11 +46,11 @@ export class OnwerReservationServiceImpl implements OnwerReservationService {
           },
         },
       },
-    });
+    });*/
 
-    /*return await prisma.classInstance.findMany({
+    return await prisma.classInstance.findMany({
       where: {
-        date: targetDate,
+        date: today,
       },
       orderBy: {
         startTime: "asc",
@@ -72,7 +76,7 @@ export class OnwerReservationServiceImpl implements OnwerReservationService {
           },
         },
       },
-    });*/
+    });
   }
 
   async updateAttendance(
