@@ -51,8 +51,9 @@ export default function ClassesList() {
       );
 
       if (message === RequestStatus.SUCCESS) {
-        setSortedClasses((prev) => {
-          const newMap = new Map(prev);
+        setSortedClasses(() => {
+          const newMap = new Map<string, DailyClass[]>();
+
           data!.forEach((c) => {
             const date = c.date;
             if (!newMap.has(date)) {
@@ -60,6 +61,7 @@ export default function ClassesList() {
             }
             newMap.get(date)!.push(c);
           });
+
           return newMap;
         });
       }
@@ -171,15 +173,15 @@ export default function ClassesList() {
   };
 
   return (
-    <div className='p-4 flex flex-col gap-4 h-full'>
-      <h1 className='text-2xl font-bold text-primary-800'>
+    <div className="p-4 flex flex-col gap-4 h-full">
+      <h1 className="text-2xl font-bold text-primary-800">
         {t("availableClasses")}
       </h1>
 
       {/* Scroll area */}
-      <div className='overflow-y-auto max-h-[65vh] pr-2'>
+      <div className="overflow-y-auto max-h-[65vh] pr-2">
         {loading ? (
-          <div className='flex flex-col gap-4 mb-2'>
+          <div className="flex flex-col gap-4 mb-2">
             {Array.from({ length: 3 }).map((_, i) => (
               <CardSkeleton key={i} />
             ))}
@@ -200,7 +202,7 @@ export default function ClassesList() {
       <Activity
         mode={sortedClasses.size === 0 && !loading ? "visible" : "hidden"}
       >
-        <p className='text-primary-800'>No classes available for today.</p>
+        <p className="text-primary-800">No classes available for today.</p>
       </Activity>
     </div>
   );
