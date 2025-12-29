@@ -46,7 +46,7 @@ export default function ClassesList() {
     const getClassesList = async () => {
       setLoading(true);
       const { message, data } = await http.get<ApiResponse<DailyClass[]>>(
-        "/customer/classes/today",
+        "/customer/classes/available",
         ApiType.FRONTEND
       );
 
