@@ -83,6 +83,11 @@ export class MailNotification implements NotificationService {
           payload as NotificationTypePayload[NotificationType.CLASS_SPOT_OPENED]
         );
 
+      case NotificationType.USER_BLOCKED:
+        return templates.blockedFromTheAppTemplate(
+          payload as NotificationTypePayload[NotificationType.USER_BLOCKED]
+        );
+
       default:
         return null;
     }
@@ -125,6 +130,15 @@ export class MailNotification implements NotificationService {
         return {
           ...base,
           bookClassUrl: `${process.env.NEXT_PUBLIC_APP_URL}/customer/classes`,
+        } as NotificationTypePayload[K];
+
+      case NotificationType.USER_BLOCKED:
+        return {
+          userName: user.name,
+          contactEmail: preferencesStore.getByName<string>("businessEmail"),
+          contactPhone: preferencesStore.getByName<string>(
+            "businessWhatsappNumber"
+          ),
         } as NotificationTypePayload[K];
     }
   }

@@ -22,7 +22,7 @@ export class PreferenceServiceImpl implements PreferenceService {
   async getBooleanPreferenceValue(name: string): Promise<boolean> {
     const preference = await this.getPreferenceValue(name);
     if(preference === null) {
-      throw new Error("Preference not found");
+      throw new Error(`Preference ${name} not found`);
     }
     return Boolean(preference);
   }
@@ -30,7 +30,7 @@ export class PreferenceServiceImpl implements PreferenceService {
   async getNumberPreferenceValue(name: string): Promise<number> {
     const preference = await this.getPreferenceValue(name);
     if(preference === null) {
-      throw new Error("Preference not found");
+      throw new Error(`Preference ${name} not found`);
     }
     return Number(preference);
   }
@@ -38,12 +38,12 @@ export class PreferenceServiceImpl implements PreferenceService {
   async getStringPreferenceValue(name: string): Promise<string> {
     const preference = await this.getPreferenceValue(name);
     if(preference === null) {
-      throw new Error("Preference not found");
+      throw new Error(`Preference ${name} not found`);
     }
     return String(preference);
   }
 
-  async getPreferenceValue(name: string): Promise<string | null> {
+  private async getPreferenceValue(name: string): Promise<string | null> {
     const preference = await prisma.appPreferences.findUnique({
       where: {
         name: name,

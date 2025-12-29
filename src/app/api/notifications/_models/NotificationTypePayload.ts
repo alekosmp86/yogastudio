@@ -34,4 +34,9 @@ export type NotificationTypePayload = {
     instructorName: string;
     bookClassUrl: string;
   };
+  [NotificationType.USER_BLOCKED]: {
+    userName: string;
+    contactEmail: string;
+    contactPhone: string;
+  };
 };
