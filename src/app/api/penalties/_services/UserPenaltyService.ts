@@ -5,4 +5,6 @@ export interface UserPenaltyService {
     findByUserId(userId: number): Promise<UserPenalty | null>;
     calculatePenalty(userPenalty: UserPenalty): Promise<void>;
     unblockUser(userId: number): Promise<void>;
+    addPenalty(userId: number, penalty: number): Promise<void>;
+    getPenaltyCount(userId: number): Promise<number>;
 }

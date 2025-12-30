@@ -11,12 +11,17 @@ import { ToastType } from "@/enums/ToastType";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
 import ClassesBrowser from "./ClassesBrowser";
 import { useTranslation } from "react-i18next";
+import { useConfirmDialog } from "@/lib/hooks/useConfirmDialog";
+import { DateUtils } from "@/lib/utils/date";
+import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 
 export default function ClassesList() {
   const { t } = useTranslation();
   const [sortedClasses, setSortedClasses] = useState<Map<string, DailyClass[]>>(
     new Map()
   );
+  const { getPreferenceByName } = useAppPreferences();
+  const { confirm, dialog } = useConfirmDialog();
   const [loading, setLoading] = useState(true);
   const toast = useToast();
 
@@ -135,6 +140,19 @@ export default function ClassesList() {
   };
 
   const handleCancelation = async (gymClass: DailyClass) => {
+    const lateCancelation = await checkForLateCancelation(gymClass);
+    const result = await confirm({
+      title: t("cancelation"),
+      description: lateCancelation
+        ? t("lateCancelation")
+        : t("classCancelConfirmation"),
+      danger: true,
+      confirmLabel: t("ok"),
+      cancelLabel: t("cancel"),
+    });
+
+    if (!result) return;
+
     const { message } = await http.delete<ApiResponse<void>>(
       `/customer/classes/${gymClass.id}/reservation`,
       ApiType.FRONTEND
@@ -172,38 +190,51 @@ export default function ClassesList() {
     }
   };
 
+  const checkForLateCancelation = (gymClass: DailyClass) => {
+    const lateCancelHours = getPreferenceByName<number>("lateCancelHours");
+    if (!lateCancelHours) return false;
+
+    return (
+      DateUtils.addHours(DateUtils.getCurrentHour(), lateCancelHours) >=
+      gymClass.startTime
+    );
+  };
+
   return (
-    <div className="p-4 flex flex-col gap-4 h-full">
-      <h1 className="text-2xl font-bold text-primary-800">
-        {t("availableClasses")}
-      </h1>
+    <>
+      <span className="min-w-[320px] max-w-md">{dialog}</span>
+      <div className="p-4 flex flex-col gap-4 h-full">
+        <h1 className="text-2xl font-bold text-primary-800">
+          {t("availableClasses")}
+        </h1>
 
-      {/* Scroll area */}
-      <div className="overflow-y-auto max-h-[65vh] pr-2">
-        {loading ? (
-          <div className="flex flex-col gap-4 mb-2">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <CardSkeleton key={i} />
-            ))}
-          </div>
-        ) : (
-          <ClassesBrowser
-            dates={dates}
-            activeDate={activeDate}
-            setActiveDate={setActiveDate}
-            sortedClasses={sortedClasses}
-            handleReserve={handleReserve}
-            handleCancelation={handleCancelation}
-          />
-        )}
+        {/* Scroll area */}
+        <div className="overflow-y-auto max-h-[65vh] pr-2">
+          {loading ? (
+            <div className="flex flex-col gap-4 mb-2">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <CardSkeleton key={i} />
+              ))}
+            </div>
+          ) : (
+            <ClassesBrowser
+              dates={dates}
+              activeDate={activeDate}
+              setActiveDate={setActiveDate}
+              sortedClasses={sortedClasses}
+              handleReserve={handleReserve}
+              handleCancelation={handleCancelation}
+            />
+          )}
+        </div>
+
+        {/* When there are NO classes */}
+        <Activity
+          mode={sortedClasses.size === 0 && !loading ? "visible" : "hidden"}
+        >
+          <p className="text-primary-800">No classes available for today.</p>
+        </Activity>
       </div>
-
-      {/* When there are NO classes */}
-      <Activity
-        mode={sortedClasses.size === 0 && !loading ? "visible" : "hidden"}
-      >
-        <p className="text-primary-800">No classes available for today.</p>
-      </Activity>
-    </div>
+    </>
   );
 }

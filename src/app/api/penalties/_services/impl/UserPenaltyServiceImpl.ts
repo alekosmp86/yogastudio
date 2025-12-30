@@ -118,4 +118,13 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
       },
     });
   }
+
+  async addPenalty(userId: number): Promise<void> {
+    this.updateOrInsert(userId, false);
+  }
+
+  async getPenaltyCount(userId: number): Promise<number> {
+    const userPenalty = await this.findByUserId(userId);
+    return userPenalty?.noShowCount ?? 0;
+  }
 }

@@ -7,6 +7,8 @@ import { ClassInstance, ClassTemplate, WaitingList } from "@prisma/client";
 import {
   classInstanceService,
   notificationService,
+  preferenceService,
+  userPenaltyService,
   waitingListService,
 } from "app/api";
 import { SessionUser } from "@/types/SessionUser";
@@ -158,6 +160,11 @@ export class UserReservationServiceImpl implements UserReservationService {
       throw new Error("Reservation not found");
     }
 
+    const isLateCancelation = await this.checkForLateCancelation(reservation.class);
+    if (isLateCancelation) {
+      userPenaltyService.addPenalty(user.id);
+    }
+
     await prisma.reservation.update({
       where: { id: reservationId },
       data: {
@@ -189,6 +196,12 @@ export class UserReservationServiceImpl implements UserReservationService {
     });
 
     if (existingReservations.length > 0) {
+      const isLateCancelation = await this.checkForLateCancelation(classInstance);
+      console.log("isLateCancelation", isLateCancelation);
+      if (isLateCancelation) {
+        userPenaltyService.addPenalty(user.id);
+      }
+
       await prisma.reservation.updateMany({
         where: { classId, userId: user.id },
         data: {
@@ -197,6 +210,11 @@ export class UserReservationServiceImpl implements UserReservationService {
       });
       this.notifyUserAboutReservationCancellation(classInstance, user);
     }
+  }
+
+  private async checkForLateCancelation(classInstance: ClassInstance & { template: ClassTemplate }) {
+    const lateCancelHours = await preferenceService.getNumberPreferenceValue("lateCancelHours");
+    return DateUtils.addHours(DateUtils.getCurrentHour(), lateCancelHours) >= classInstance.startTime;
   }
 
   async rescheduleReservation(reservationId: number): Promise<void> {
