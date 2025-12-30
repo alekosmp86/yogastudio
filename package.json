@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run sync-preferences && npx i18next-parser && next build",
+    "prebuild": "npm run lint && npx i18next-parser",
+    "build": "npm run sync-preferences && next build",
     "start": "next start",
     "lint": "eslint",
     "sync-preferences": "tsx src/scripts/sync-preferences.ts"

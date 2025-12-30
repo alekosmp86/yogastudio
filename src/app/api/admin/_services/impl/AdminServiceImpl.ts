@@ -8,7 +8,6 @@ import {
 } from "app/api";
 import { ClassInstance } from "@prisma/client";
 import { DateUtils } from "@/lib/utils/date";
-import { PreferenceTypes } from "@/enums/PreferenceTypes";
 
 export class AdminServiceImpl implements AdminService {
   private logger = new ConsoleLogger(this.constructor.name);

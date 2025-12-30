@@ -4,7 +4,10 @@
   "book": "Book",
   "cancel": "Cancel",
   "availableClasses": "Available classes",
-  "welcomeTo": "Welcome to",
+  "penalties_one": "You have {{count}} penalty out of {{max}}.",
+  "penalties_other": "You have {{count}} penalties out of {{max}}.",
+  "hiUser": "Hi {{user}}",
+  "welcomeTo": "welcome to",
   "homePageIntro": "Book your classes, manage reservations, and stay connected.",
   "classes": "Classes",
   "reservations": "Reservations",
@@ -26,5 +29,6 @@
   "continueWithGoogle": "Continue with Google",
   "penalty": "Penalty",
   "penaltyDescription": "Your account is penalized. Please contact the admin.",
-  "backToLogin": "Back to login"
+  "backToLogin": "Back to login",
+  "penalties_many": "You have {{count}} penalties out of {{max}}."
 }
