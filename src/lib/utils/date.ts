@@ -1,70 +1,86 @@
-export class DateUtils {
-  static dateWithTimezone(date: Date): Date {
-    return new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+// src/services/BusinessTime.ts
+export class BusinessTime {
+  static readonly TIMEZONE = "America/Montevideo";
+
+  /** Raw system time (UTC, never modified) */
+  private static systemNow(): Date {
+    return new Date();
   }
 
-  static today(): Date {
-    return DateUtils.dateWithTimezone(new Date());
+  /** Read system time AS business local time */
+  static now() {
+    return this.fromDate(this.systemNow());
   }
 
-  static startOfToday(): Date {
-    const d = DateUtils.dateWithTimezone(new Date());
-    d.setHours(0, 0, 0, 0);
-    return d;
+  /** Convert any Date into business-local representation */
+  static fromDate(date: Date) {
+    const parts = new Intl.DateTimeFormat("en-CA", {
+      timeZone: this.TIMEZONE,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    }).formatToParts(date);
+
+    const get = (t: string) =>
+      parts.find(p => p.type === t)!.value;
+
+    const year = get("year");
+    const month = get("month");
+    const day = get("day");
+    const hour = Number(get("hour"));
+    const minute = Number(get("minute"));
+    const second = Number(get("second"));
+
+    return {
+      /** YYYY-MM-DD */
+      date: `${year}-${month}-${day}`,
+
+      /** HH:mm */
+      time: `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`,
+      hour,
+      minute,
+      second,
+      
+      /** Monday = 0 ... Sunday = 6 */
+      weekday: this.businessWeekday(date),
+    };
   }
 
-  static addDays(date: Date, days: number): Date {
-    const d = new Date(date);
-    d.setDate(d.getDate() + days);
-    return d;
+  /** Monday = 0 ... Sunday = 6 */
+  static businessWeekday(date: Date): number {
+    const day = new Intl.DateTimeFormat("en-US", {
+      timeZone: this.TIMEZONE,
+      weekday: "short",
+    }).format(date);
+
+    return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].indexOf(day);
   }
 
-  static getCurrentHour(): number {
-    const d = DateUtils.dateWithTimezone(new Date());
-    d.setMinutes(0, 0, 0);
-    return d.getHours() % 24;
+  /** Adds days to a YYYY-MM-DD string */
+  static addDays(dateStr: string, days: number): string {
+    const d = new Date(`${dateStr}T00:00:00Z`);
+    d.setUTCDate(d.getUTCDate() + days);
+    return this.fromDate(d).date;
   }
 
-  static addHours(currentHour: number, hours: number): string {
-    return `${String((currentHour + hours) % 24).padStart(2, "0")}:00`;
+  static addHours(dateStr: string, hours: number): string {
+    const d = new Date(`${dateStr}T00:00:00Z`);
+    d.setUTCHours(d.getUTCHours() + hours);
+    return this.fromDate(d).date;
   }
 
-  static getWeekday(date: Date): number {
-    return date.getDay() === 0 ? 6 : date.getDay() - 1;
-  }
-
-  static toDateOnly(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
+  /** Compare date + time strings safely */
+  static isAfter(
+    dateA: string,
+    timeA: string,
+    dateB: string,
+    timeB: string
+  ): boolean {
+    if (dateA !== dateB) return dateA > dateB;
+    return timeA > timeB;
   }
 }
-
-export function getCurrentWeekDates(): Date[] {
-  const today = new Date();
-
-  // getDay(): Sunday=0, Monday=1, ... Saturday=6
-  const dayOfWeek = today.getDay();
-
-  // We want Monday=0, Tuesday=1, ..., Sunday=6
-  const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
-
-  const monday = new Date(today);
-  monday.setDate(today.getDate() + mondayOffset);
-
-  // Build array [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
-  return Array.from({ length: 7 }, (_, i) => {
-    const d = DateUtils.dateWithTimezone(new Date(monday));
-    d.setDate(monday.getDate() + i);
-    return d;
-  });
-}
-
-export const HOURS = Array.from({ length: 16 }, (_, i) => {
-  const hour = i + 6; // 06 → 21
-  return `${String(hour).padStart(2, "0")}:00`;
-});
-
-export const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
