@@ -1,4 +1,3 @@
-import { DateUtils } from "@/lib/utils/date";
 import { cn } from "@/lib/utils/utils";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
 import ReservationCard from "./ReservationCard";

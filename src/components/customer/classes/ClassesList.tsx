@@ -12,8 +12,8 @@ import { CardSkeleton } from "@/components/shared/CardSkeleton";
 import ClassesBrowser from "./ClassesBrowser";
 import { useTranslation } from "react-i18next";
 import { useConfirmDialog } from "@/lib/hooks/useConfirmDialog";
-import { DateUtils } from "@/lib/utils/date";
 import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
+import { BusinessTime } from "@/lib/utils/date";
 
 export default function ClassesList() {
   const { t } = useTranslation();
@@ -194,10 +194,7 @@ export default function ClassesList() {
     const lateCancelHours = getPreferenceByName<number>("lateCancelHours");
     if (!lateCancelHours) return false;
 
-    return (
-      DateUtils.addHours(DateUtils.getCurrentHour(), lateCancelHours) >=
-      gymClass.startTime
-    );
+    return BusinessTime.addHours(lateCancelHours) >= gymClass.startTime;
   };
 
   return (

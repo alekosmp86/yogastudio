@@ -2,16 +2,15 @@ import { DailyClass } from "@/types/classes/DailyClass";
 import { CustomerClassesService } from "../CustomerClassesService";
 import { ApiUtils } from "app/api/utils/ApiUtils";
 import { prisma } from "@/lib/prisma";
-import { preferenceService } from "app/api";
 import { BusinessTime } from "@/lib/utils/date";
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
   async getClassesList(): Promise<DailyClass[]> {
     const user = await ApiUtils.getSessionUser();
 
-    const today = BusinessTime.now().date;
-    const nextHour = BusinessTime.addHours(today, 1);
-    console.log("nextHour", nextHour);
+    const now = BusinessTime.now();
+    const today = now.date;
+    const nextHour = BusinessTime.addHours(1);
 
     const [classes, reservationCounts] = await Promise.all([
       prisma.classInstance.findMany({

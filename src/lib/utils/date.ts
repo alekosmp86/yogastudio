@@ -71,7 +71,7 @@ export class BusinessTime {
   }
 
   static shiftWeekday(weekday: number, offset: number): number {
-    return ((weekday + offset) % 7 + 7) % 7;
+    return (((weekday + offset) % 7) + 7) % 7;
   }
 
   /** Current business week (Mon → Sun) */
@@ -115,6 +115,12 @@ export class BusinessTime {
     safeDate.setUTCDate(safeDate.getUTCDate() + days);
 
     return this.fromDate(safeDate).date;
+  }
+
+  static addHours(hours: number): string {
+    const now = this.fromDate(this.systemNow());
+    const nextHour = (now.hour + hours) % 24;
+    return `${nextHour.toString().padStart(2, "0")}:00`;
   }
 
   /** Compare date + time strings safely */
