@@ -11,8 +11,15 @@ import Container from "@/components/shared/Container";
 import { CardSkeleton } from "@/components/shared/CardSkeleton";
 import ReservationsAccordionHeader from "./ReservationsAccordionHeader";
 import { ReservationRow } from "./ReservationRow";
+import { useTranslation } from "react-i18next";
+import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
+import { BusinessTime } from "@/lib/utils/date";
 
 export default function OwnerReservations() {
+  const { t } = useTranslation();
+  const { getPreferenceByName } = useAppPreferences();
+  const language = getPreferenceByName<string>("language")!;
+  const businessTime = new BusinessTime(getPreferenceByName("timezone")!);
   const [isLoading, setIsLoading] = useState(true);
   const [reservationsPerClass, setReservationsPerClass] = useState<
     ReservationsPerClass[]
@@ -73,9 +80,9 @@ export default function OwnerReservations() {
     <Container>
       <div className="w-full mt-6 overflow-hidden">
         <h2 className="text-xl font-semibold text-white mb-4">
-          Users&apos; Reservations
+          {t("reservations")} ({businessTime.formatDate(businessTime.now().date, language)})
         </h2>
-        <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
+        <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
           {isLoading ? (
             Array.from({ length: 3 }).map((_, index) => (
               <CardSkeleton key={index} />

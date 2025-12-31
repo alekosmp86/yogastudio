@@ -129,4 +129,18 @@ export class BusinessTime {
     if (dateA !== dateB) return dateA > dateB;
     return timeA > timeB;
   }
+
+  formatDate(dateStr: string, locale: string): string {
+    const [y, m, d] = dateStr.split("-").map(Number);
+
+    // Noon UTC avoids date shifting across timezones
+    const safeDate = new Date(Date.UTC(y, m - 1, d, 12));
+
+    return new Intl.DateTimeFormat(locale, {
+      timeZone: this.timezone,
+      weekday: "long",
+      day: "2-digit",
+      month: "long",
+    }).format(safeDate);
+  }
 }

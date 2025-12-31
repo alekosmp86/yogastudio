@@ -2,56 +2,63 @@
 import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 import { BusinessTime } from "@/lib/utils/date";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
-  const {getPreferenceByName} = useAppPreferences();
+  const { t } = useTranslation();
+  const { getPreferenceByName } = useAppPreferences();
   const iconClasses = "h-5 w-5 text-white hover:text-primary-400 transition";
-  const businessTime = new BusinessTime(getPreferenceByName<string>("timezone") || "UTC");
+  const businessTime = new BusinessTime(
+    getPreferenceByName<string>("timezone") || "UTC"
+  );
 
   return (
-    <footer className="border-t bg-theme-headings text-white">
-      <div className="mx-auto max-w-4xl px-4 py-8 flex flex-col items-center gap-4">
+    <footer className='border-t bg-theme-headings text-white'>
+      <div className='mx-auto max-w-4xl px-4 py-8 flex flex-col items-center gap-4'>
         {/* Copyright */}
-        <p className="text-sm">
-          © {businessTime.now().year} {getPreferenceByName<string>("businessName")} — All rights reserved
+        <p className='text-sm'>
+          © {businessTime.now().year}{" "}
+          {getPreferenceByName<string>("businessName")} — {t("allRightsReserved")}
         </p>
 
         {/* Icons */}
-        <div className="flex gap-6">
+        <div className='flex gap-6'>
           <a
-            href="https://instagram.com"
-            target="_blank"
-            className="hover:scale-110 transition"
+            href='https://instagram.com'
+            target='_blank'
+            className='hover:scale-110 transition'
           >
             <Instagram className={iconClasses} />
           </a>
 
           <a
-            href={`https://wa.me/${getPreferenceByName<string>("businessWhatsappNumber")}`}
-            target="_blank"
-            className="hover:scale-110 transition"
+            href={`https://wa.me/${getPreferenceByName<string>(
+              "businessWhatsappNumber"
+            )}`}
+            target='_blank'
+            className='hover:scale-110 transition'
           >
             <MessageCircle className={iconClasses} />
           </a>
 
           <a
             href={`mailto:${getPreferenceByName<string>("businessEmail")}`}
-            className="hover:scale-110 transition"
+            className='hover:scale-110 transition'
           >
             <Mail className={iconClasses} />
           </a>
         </div>
 
         {/* Links */}
-        <div className="flex gap-6 text-sm">
-          <a href="/about" className="hover:text-primary-400">
-            About
+        <div className='flex gap-6 text-sm'>
+          <a href='/about' className='hover:text-primary-400'>
+            {t("about")}
           </a>
-          <a href="/contact" className="hover:text-primary-400">
-            Contact
+          <a href='/contact' className='hover:text-primary-400'>
+            {t("contact")}
           </a>
-          <a href="/terms" className="hover:text-primary-400">
-            Terms & Privacy
+          <a href='/terms' className='hover:text-primary-400'>
+            {t("terms")}
           </a>
         </div>
       </div>

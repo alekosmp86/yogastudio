@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 type DashboardCardProps = {
   title: string;
@@ -11,6 +12,7 @@ type DashboardCardProps = {
 };
 
 export default function DashboardCard({ title, description, href, icon }: DashboardCardProps) {
+  const { t } = useTranslation();
   return (
     <Link
       href={href}
@@ -21,8 +23,8 @@ export default function DashboardCard({ title, description, href, icon }: Dashbo
           {icon}
         </div>
         <div>
-          <h3 className="text-xl font-semibold text-primary-900">{title}</h3>
-          <p className="text-sm text-primary-900">{description}</p>
+          <h3 className="text-xl font-semibold text-primary-900">{t(title)}</h3>
+          <p className="text-sm text-primary-900">{t(description)}</p>
         </div>
       </div>
     </Link>

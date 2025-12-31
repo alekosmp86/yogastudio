@@ -1,7 +1,9 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 export default function Breadcrumbs() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
 
@@ -21,7 +23,7 @@ export default function Breadcrumbs() {
               href={item.href}
               className='capitalize hover:scale-110 transition underline text-white'
             >
-              {item.name}
+              {t(item.name)}
             </Link>
           </li>
         ))}

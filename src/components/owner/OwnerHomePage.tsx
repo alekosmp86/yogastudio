@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { removeSession } from "@/lib/utils/utils";
 import LogoutButton from "../shared/LogoutButton";
 import Container from "../shared/Container";
+import { useTranslation } from "react-i18next";
 
 export default function OwnerHomePage({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const handleLogout = async () => {
@@ -25,7 +27,7 @@ export default function OwnerHomePage({
         <div className='shadow-bottomonly shadow-white pb-1'>
           <Container>
             <h1 className='text-3xl font-bold text-white mb-6'>
-              Owner Dashboard
+              {t("ownerDashboard")}
             </h1>
             <div className='flex justify-between items-center'>
               <Breadcrumbs />

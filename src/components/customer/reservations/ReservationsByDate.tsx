@@ -4,15 +4,13 @@ import ReservationCard from "./ReservationCard";
 import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 import { useTranslation } from "react-i18next";
 import DayjsUtils from "@/lib/utils/dayjs";
+import { BusinessTime } from "@/lib/utils/date";
 
 type ReservationsByDateProps = {
   date: string;
   reservations: ClassReservation[];
   onCancel: (id: number) => void;
 };
-
-const formatDate = (date: string, locale: string, timezone: string) =>
-  DayjsUtils.formatDate(date, locale, timezone);
 
 export default function ReservationsByDate({
   date,
@@ -23,6 +21,7 @@ export default function ReservationsByDate({
   const { getPreferenceByName } = useAppPreferences();
   const timezone = getPreferenceByName<string>("timezone")!;
   const language = getPreferenceByName<string>("language")!;
+  const businessTime = new BusinessTime(timezone);
   const today = date.startsWith(DayjsUtils.getToday(timezone).format("YYYY-MM-DD"));
 
   return (
@@ -40,7 +39,7 @@ export default function ReservationsByDate({
             today ? "text-primary-900" : "text-primary-800"
           )}
         >
-          {formatDate(date, language, timezone)}
+          {businessTime.formatDate(date, language)}
           {today && (
             <span className="ml-2 text-sm font-medium text-primary-700">
               ({t("today")})

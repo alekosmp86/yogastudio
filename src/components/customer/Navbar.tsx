@@ -10,8 +10,10 @@ import { Menu, X } from "lucide-react";
 import LogoutButton from "../shared/LogoutButton";
 import { useRouter } from "next/navigation";
 import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
+import { useTranslation } from "react-i18next";
 
 export default function Navbar() {
+  const {t} = useTranslation();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();  
   const router = useRouter();
@@ -38,7 +40,7 @@ export default function Navbar() {
           {NavBarItems.map((item) => (
             <NavItem
               key={item.id}
-              label={item.label}
+              label={t(item.label)}
               href={item.url}
               Icon={item.icon}
               active={pathname === item.url}
@@ -56,7 +58,7 @@ export default function Navbar() {
           {NavBarItems.map((item) => (
             <MobileNavItem
               key={item.id}
-              label={item.label}
+              label={t(item.label)}
               href={item.url}
               Icon={item.icon}
               active={pathname === item.url}

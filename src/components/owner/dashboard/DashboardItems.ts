@@ -1,28 +1,28 @@
 import { Calendar, NotebookText, PlusCircle, Settings, Users } from "lucide-react"
 
 export const DashboardItems = [{
-  title: "Manage classes",
-  description: "Add, edit, or delete classes.",
+  title: "manageClasses",
+  description: "manageClassesDescription",
   href: "/owner/classes",
   icon: PlusCircle,
 }, {
-  title: "Manage schedule",
-  description: "Manage recurring weekly classes.",
+  title: "manageSchedule",
+  description: "manageScheduleDescription",
   href: "/owner/schedule",
   icon: Calendar,
 }, {
-  title: "Manage users",
-  description: "View and manage your users list.",
+  title: "manageUsers",
+  description: "manageUsersDescription",
   href: "/owner/users",
   icon: Users,
 }, {
-  title: "View reservations",
-  description: "View and manage your users' reservations list.",
+  title: "manageReservations",
+  description: "manageReservationsDescription",
   href: "/owner/reservations",
   icon: NotebookText,
 }, {
-  title: "Manage preferences",
-  description: "Manage your app preferences.",
+  title: "managePreferences",
+  description: "managePreferencesDescription",
   href: "/owner/preferences",
   icon: Settings,
 }]

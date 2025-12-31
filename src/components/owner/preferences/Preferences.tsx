@@ -14,6 +14,7 @@ import { AppPreference } from "@/types/preferences/AppPreference";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
+import { useTranslation } from "react-i18next";
 
 export default function Preferences() {
   const { preferences, updatePreference } = useAppPreferences();
@@ -22,6 +23,7 @@ export default function Preferences() {
     []
   );
   const [search, setSearch] = useState("");
+  const { t } = useTranslation();
 
   const filteredPreferences = preferences.filter((p) =>
     p.label.toLowerCase().includes(search.toLowerCase())
@@ -91,7 +93,9 @@ export default function Preferences() {
   return (
     <Container>
       <div className='w-full mt-6 overflow-hidden'>
-        <h2 className='text-xl font-semibold text-white mb-4'>Preferences</h2>
+        <h2 className='text-xl font-semibold text-white mb-4'>
+          {t("preferences")}
+        </h2>
 
         <span>
           <TableToolbar
