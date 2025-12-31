@@ -15,9 +15,21 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
     const [classes, reservationCounts] = await Promise.all([
       prisma.classInstance.findMany({
         where: {
-          date: {
-            gte: today,
-          },
+          OR: [
+            // Today → only future classes, from the next hour onward
+            {
+              date: {
+                gte: today,
+              },
+              startTime: { gte: nextHour },
+            },
+            // Future days → all classes
+            {
+              date: {
+                gt: today,
+              },
+            },
+          ],
         },
         include: {
           template: {
@@ -43,11 +55,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
       }),
     ]);
 
-    const filteredByCurrentHour = classes.filter(
-      (c) => c.startTime >= nextHour
-    );
-
-    return filteredByCurrentHour.map((c) => {
+    return classes.map((c) => {
       const availableSpots = c.template.capacity - c.reservations.length;
 
       return {
