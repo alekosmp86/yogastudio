@@ -1,6 +1,7 @@
 "use client";
 import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
+import { BusinessTime } from "@/lib/utils/date";
 
 export default function Footer() {
   const {getPreferenceByName} = useAppPreferences();
@@ -11,7 +12,7 @@ export default function Footer() {
       <div className="mx-auto max-w-4xl px-4 py-8 flex flex-col items-center gap-4">
         {/* Copyright */}
         <p className="text-sm">
-          © {new Date().getFullYear()} {getPreferenceByName<string>("businessName")} — All rights reserved
+          © {BusinessTime.now().year} {getPreferenceByName<string>("businessName")} — All rights reserved
         </p>
 
         {/* Icons */}
