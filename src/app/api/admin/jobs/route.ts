@@ -2,10 +2,9 @@ import { NextResponse } from "next/server";
 import { adminService } from "..";
 import { RequestStatus } from "@/enums/RequestStatus";
 
-export const runtime = "nodejs";
-export const maxDuration = 60;
-
 export async function GET(request: Request) {
+  console.log("Running scheduled tasks");
+
   try {
     const authHeader = request.headers.get("authorization");
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
@@ -13,7 +12,6 @@ export async function GET(request: Request) {
         status: 401,
       });
     }
-
 
     await adminService.generateDailyClasses();
     return NextResponse.json({ message: "Scheduled tasks completed" });
