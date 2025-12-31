@@ -1,6 +1,14 @@
 export class DateUtils {
-  static startOfDay(date: Date): Date {
-    const d = new Date(date);
+  static dateWithTimezone(date: Date): Date {
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+  }
+
+  static today(): Date {
+    return DateUtils.dateWithTimezone(new Date());
+  }
+
+  static startOfToday(): Date {
+    const d = DateUtils.dateWithTimezone(new Date());
     d.setHours(0, 0, 0, 0);
     return d;
   }
@@ -12,7 +20,7 @@ export class DateUtils {
   }
 
   static getCurrentHour(): number {
-    const d = new Date();
+    const d = DateUtils.dateWithTimezone(new Date());
     d.setMinutes(0, 0, 0);
     return d.getHours() % 24;
   }
@@ -48,7 +56,7 @@ export function getCurrentWeekDates(): Date[] {
 
   // Build array [Mon, Tue, Wed, Thu, Fri, Sat, Sun]
   return Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(monday);
+    const d = DateUtils.dateWithTimezone(new Date(monday));
     d.setDate(monday.getDate() + i);
     return d;
   });

@@ -3,24 +3,23 @@ import { CustomerClassesService } from "../CustomerClassesService";
 import { ApiUtils } from "app/api/utils/ApiUtils";
 import { prisma } from "@/lib/prisma";
 import { preferenceService } from "app/api";
-import DayjsUtils from "@/lib/utils/dayjs";
+import { DateUtils } from "@/lib/utils/date";
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
   async getClassesList(): Promise<DailyClass[]> {
     const user = await ApiUtils.getSessionUser();
 
-    const timezone = await preferenceService.getStringPreferenceValue(
-      "timezone"
-    );
-
-    const today = DayjsUtils.getToday(timezone);
-    const nextHour = DayjsUtils.nextHour(today);
+    const today = DateUtils.dateWithTimezone(new Date());
+    const nextHour = DateUtils.addHours(today.getUTCHours(), 1);
 
     const [classes, reservationCounts] = await Promise.all([
       prisma.classInstance.findMany({
         where: {
           date: {
-            gte: today.format("YYYY-MM-DD"),
+            gte: DateUtils.toDateOnly(today),
+          },
+          startTime: {
+            gte: nextHour,
           },
         },
         include: {
@@ -47,11 +46,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
       }),
     ]);
 
-    const filteredByCurrentHour = classes.filter(
-      (c) => c.startTime >= nextHour
-    );
-
-    return filteredByCurrentHour.map((c) => {
+    return classes.map((c) => {
       const availableSpots = c.template.capacity - c.reservations.length;
 
       return {
