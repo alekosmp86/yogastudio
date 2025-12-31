@@ -63,10 +63,12 @@ export async function middleware(req: NextRequest) {
     }
 
     //restrict access to users with penalties
-    const currentDate = BusinessTime.now().date;
+    /** @todo: use timezone from preferences */
+    const businessTime = new BusinessTime('America/Montevideo');
+    const currentDate = businessTime.now().date;
     if (
       payload.user.penalties?.blockedUntil &&
-      currentDate < BusinessTime.fromDate(new Date(payload.user.penalties.blockedUntil)).date
+      currentDate < businessTime.fromDate(new Date(payload.user.penalties.blockedUntil)).date
     ) {
       return NextResponse.redirect(new URL("/penalty", req.url));
     }

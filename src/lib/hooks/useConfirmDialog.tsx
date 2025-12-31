@@ -13,16 +13,13 @@ export function useConfirmDialog() {
   const [options, setOptions] = useState<ConfirmOptions | null>(null);
   const resolverRef = useRef<(value: boolean) => void>(null);
 
-  const confirm = useCallback(
-    (opts: ConfirmOptions): Promise<boolean> => {
-      setOptions(opts);
+  const confirm = useCallback((opts: ConfirmOptions): Promise<boolean> => {
+    setOptions(opts);
 
-      return new Promise<boolean>((resolve) => {
-        resolverRef.current = resolve;
-      });
-    },
-    []
-  );
+    return new Promise<boolean>((resolve) => {
+      resolverRef.current = resolve;
+    });
+  }, []);
 
   const handleConfirm = () => {
     resolverRef.current?.(true);
@@ -35,16 +32,18 @@ export function useConfirmDialog() {
   };
 
   const dialog = options ? (
-    <ConfirmationDialog
-      open={true}
-      title={options.title}
-      description={options.description}
-      danger={options.danger}
-      confirmLabel={options.confirmLabel}
-      cancelLabel={options.cancelLabel}
-      onConfirm={handleConfirm}
-      onClose={handleCancel}
-    />
+    <span className="min-w-[320px] max-w-md">
+      <ConfirmationDialog
+        open={true}
+        title={options.title}
+        description={options.description}
+        danger={options.danger}
+        confirmLabel={options.confirmLabel}
+        cancelLabel={options.cancelLabel}
+        onConfirm={handleConfirm}
+        onClose={handleCancel}
+      />
+    </span>
   ) : null;
 
   return { confirm, dialog };

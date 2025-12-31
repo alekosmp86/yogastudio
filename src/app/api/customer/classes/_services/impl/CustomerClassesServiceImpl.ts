@@ -3,14 +3,19 @@ import { CustomerClassesService } from "../CustomerClassesService";
 import { ApiUtils } from "app/api/utils/ApiUtils";
 import { prisma } from "@/lib/prisma";
 import { BusinessTime } from "@/lib/utils/date";
+import { preferenceService } from "app/api";
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
   async getClassesList(): Promise<DailyClass[]> {
     const user = await ApiUtils.getSessionUser();
+    const timezone = await preferenceService.getStringPreferenceValue(
+      "timezone"
+    );
 
-    const now = BusinessTime.now();
+    const businessTime = new BusinessTime(timezone);
+    const now = businessTime.now();
     const today = now.date;
-    const nextHour = BusinessTime.addHours(1);
+    const nextHour = businessTime.addHours(1);
 
     const [classes, reservationCounts] = await Promise.all([
       prisma.classInstance.findMany({

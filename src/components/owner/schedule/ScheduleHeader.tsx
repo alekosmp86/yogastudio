@@ -1,9 +1,12 @@
 "use client";
 
 import { BusinessTime } from "@/lib/utils/date";
+import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 
 export function ScheduleHeader() {
-  const week = BusinessTime.getCurrentBusinessWeek();
+  const {getPreferenceByName} = useAppPreferences();
+  const businessTime = new BusinessTime(getPreferenceByName<string>("timezone") || "UTC");
+  const week = businessTime.getCurrentBusinessWeek();
 
   return (
     <>
@@ -16,7 +19,7 @@ export function ScheduleHeader() {
           key={index}
           className='text-center py-3 font-semibold text-primary-50 bg-black sticky top-0 z-10 text-xs sm:text-sm border-b border-theme-border'
         >
-          {BusinessTime.formatWeekdayLabel(d.date)}
+          {businessTime.formatWeekdayLabel(d.date)}
         </div>
       ))}
     </>

@@ -27,14 +27,17 @@ export class AdminServiceImpl implements AdminService {
       const daysToGenerate = await preferenceService.getNumberPreferenceValue(
         "generateClassesForXDays"
       );
+      const timezone = await preferenceService.getStringPreferenceValue(
+        "timezone"
+      );
 
-      const businessTime = BusinessTime.now();
-      const today = businessTime.date;
+      const businessTime = new BusinessTime(timezone);
+      const today = businessTime.now().date;
       const createdInstances: ClassInstance[] = [];
 
       for (let offset = 0; offset < daysToGenerate; offset++) {
-        const date = BusinessTime.addDays(today, offset);
-        const weekday = BusinessTime.shiftWeekday(businessTime.weekday, offset);
+        const date = businessTime.addDays(today, offset);
+        const weekday = businessTime.shiftWeekday(businessTime.now().weekday, offset);
 
         // 1. Get schedules for this weekday
         const schedules = await weeklyScheduleService.getWeeklyScheduleByFields(

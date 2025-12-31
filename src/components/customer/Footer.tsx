@@ -6,13 +6,14 @@ import { BusinessTime } from "@/lib/utils/date";
 export default function Footer() {
   const {getPreferenceByName} = useAppPreferences();
   const iconClasses = "h-5 w-5 text-white hover:text-primary-400 transition";
+  const businessTime = new BusinessTime(getPreferenceByName<string>("timezone") || "UTC");
 
   return (
     <footer className="border-t bg-theme-headings text-white">
       <div className="mx-auto max-w-4xl px-4 py-8 flex flex-col items-center gap-4">
         {/* Copyright */}
         <p className="text-sm">
-          © {BusinessTime.now().year} {getPreferenceByName<string>("businessName")} — All rights reserved
+          © {businessTime.now().year} {getPreferenceByName<string>("businessName")} — All rights reserved
         </p>
 
         {/* Icons */}

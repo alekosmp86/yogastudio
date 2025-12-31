@@ -17,10 +17,11 @@ import { BusinessTime } from "@/lib/utils/date";
 
 export default function ClassesList() {
   const { t } = useTranslation();
+  const {getPreferenceByName} = useAppPreferences();
+  const businessTime = new BusinessTime(getPreferenceByName<string>("timezone") || "UTC");
   const [sortedClasses, setSortedClasses] = useState<Map<string, DailyClass[]>>(
     new Map()
   );
-  const { getPreferenceByName } = useAppPreferences();
   const { confirm, dialog } = useConfirmDialog();
   const [loading, setLoading] = useState(true);
   const toast = useToast();
@@ -140,7 +141,7 @@ export default function ClassesList() {
   };
 
   const handleCancelation = async (gymClass: DailyClass) => {
-    const lateCancelation = await checkForLateCancelation(gymClass);
+    const lateCancelation = checkForLateCancelation(gymClass);
     const result = await confirm({
       title: t("cancelation"),
       description: lateCancelation
@@ -194,12 +195,12 @@ export default function ClassesList() {
     const lateCancelHours = getPreferenceByName<number>("lateCancelHours");
     if (!lateCancelHours) return false;
 
-    return BusinessTime.addHours(lateCancelHours) >= gymClass.startTime;
+    return businessTime.addHours(lateCancelHours) >= gymClass.startTime;
   };
 
   return (
     <>
-      <span className="min-w-[320px] max-w-md">{dialog}</span>
+      {dialog}
       <div className="p-4 flex flex-col gap-4 h-full">
         <h1 className="text-2xl font-bold text-primary-800">
           {t("availableClasses")}

@@ -1,20 +1,20 @@
 export class BusinessTime {
-  static readonly TIMEZONE = "America/Montevideo";
+  constructor(private readonly timezone: string) {}
 
   /** Raw system time (UTC, never modified) */
-  private static systemNow(): Date {
+  private systemNow(): Date {
     return new Date();
   }
 
   /** Read system time AS business local time */
-  static now() {
+  now() {
     return this.fromDate(this.systemNow());
   }
 
   /** Convert any Date into business-local representation */
-  static fromDate(date: Date) {
+  fromDate(date: Date) {
     const parts = new Intl.DateTimeFormat("en-CA", {
-      timeZone: this.TIMEZONE,
+      timeZone: this.timezone,
       year: "numeric",
       month: "2-digit",
       day: "2-digit",
@@ -41,10 +41,9 @@ export class BusinessTime {
       date: dateStr,
 
       /** HH:mm */
-      time: `${String(hour).padStart(2, "0")}:${String(minute).padStart(
-        2,
-        "0"
-      )}`,
+      time: `${hour.toString().padStart(2, "0")}:${minute
+        .toString()
+        .padStart(2, "0")}`,
 
       year,
       month,
@@ -59,29 +58,27 @@ export class BusinessTime {
   }
 
   /** Monday = 0 ... Sunday = 6 */
-  static businessWeekday(dateStr: string): number {
+  businessWeekday(dateStr: string): number {
     const [y, m, d] = dateStr.split("-").map(Number);
 
-    // Create a LOCAL date at noon to avoid day shifts
+    // Noon UTC avoids date shifting
     const safeDate = new Date(Date.UTC(y, m - 1, d, 12));
 
     const day = new Intl.DateTimeFormat("en-US", {
-      timeZone: this.TIMEZONE,
+      timeZone: this.timezone,
       weekday: "short",
     }).format(safeDate);
 
     return ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].indexOf(day);
   }
 
-  static shiftWeekday(weekday: number, offset: number): number {
+  /** Safe weekday shifting */
+  shiftWeekday(weekday: number, offset: number): number {
     return (((weekday + offset) % 7) + 7) % 7;
   }
 
   /** Current business week (Mon → Sun) */
-  static getCurrentBusinessWeek(): {
-    date: string;
-    weekday: number;
-  }[] {
+  getCurrentBusinessWeek(): { date: string; weekday: number }[] {
     const today = this.now().date;
     const weekday = this.businessWeekday(today);
 
@@ -93,13 +90,13 @@ export class BusinessTime {
     }));
   }
 
-  static formatWeekdayLabel(dateStr: string): string {
+  formatWeekdayLabel(dateStr: string): string {
     const [y, m, d] = dateStr.split("-").map(Number);
 
     const safeDate = new Date(Date.UTC(y, m - 1, d, 12));
 
     const parts = new Intl.DateTimeFormat("en-US", {
-      timeZone: this.TIMEZONE,
+      timeZone: this.timezone,
       weekday: "short",
       day: "2-digit",
     }).formatToParts(safeDate);
@@ -111,7 +108,7 @@ export class BusinessTime {
   }
 
   /** Adds days to a YYYY-MM-DD string (SAFE) */
-  static addDays(dateStr: string, days: number): string {
+  addDays(dateStr: string, days: number): string {
     const [y, m, d] = dateStr.split("-").map(Number);
 
     const safeDate = new Date(Date.UTC(y, m - 1, d, 12));
@@ -120,19 +117,15 @@ export class BusinessTime {
     return this.fromDate(safeDate).date;
   }
 
-  static addHours(hours: number): string {
-    const now = this.fromDate(this.systemNow());
+  /** Returns HH:00 based on business time */
+  addHours(hours: number): string {
+    const now = this.now();
     const nextHour = (now.hour + hours) % 24;
     return `${nextHour.toString().padStart(2, "0")}:00`;
   }
 
   /** Compare date + time strings safely */
-  static isAfter(
-    dateA: string,
-    timeA: string,
-    dateB: string,
-    timeB: string
-  ): boolean {
+  isAfter(dateA: string, timeA: string, dateB: string, timeB: string): boolean {
     if (dateA !== dateB) return dateA > dateB;
     return timeA > timeB;
   }
