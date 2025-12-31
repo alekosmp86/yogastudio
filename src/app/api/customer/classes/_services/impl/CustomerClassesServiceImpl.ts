@@ -10,7 +10,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
     const user = await ApiUtils.getSessionUser();
 
     const today = DateUtils.dateWithTimezone(new Date());
-    const nextHour = DateUtils.addHours(today.getUTCHours(), 1);
+    const nextHour = DateUtils.addHours(today.getHours(), 1);
 
     const [classes, reservationCounts] = await Promise.all([
       prisma.classInstance.findMany({
