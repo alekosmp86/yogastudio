@@ -4,7 +4,7 @@ import { Roles } from "./enums/Roles";
 import { jwtVerify } from "jose";
 import { SessionUser } from "./types/SessionUser";
 import { APPCONFIG } from "app/config";
-import { DateUtils } from "./lib/utils/date";
+import { BusinessTime } from "./lib/utils/date";
 
 const PUBLIC_PATHS = [
   "/",
@@ -63,10 +63,10 @@ export async function middleware(req: NextRequest) {
     }
 
     //restrict access to users with penalties
-    const currentDate = DateUtils.toDateOnly(new Date());
+    const currentDate = BusinessTime.now().date;
     if (
       payload.user.penalties?.blockedUntil &&
-      currentDate < DateUtils.toDateOnly(new Date(payload.user.penalties.blockedUntil))
+      currentDate < BusinessTime.fromDate(new Date(payload.user.penalties.blockedUntil)).date
     ) {
       return NextResponse.redirect(new URL("/penalty", req.url));
     }

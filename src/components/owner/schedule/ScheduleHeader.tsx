@@ -1,10 +1,9 @@
 "use client";
 
-import { pad2 } from "@/lib/utils/utils";
-import { getCurrentWeekDates, WEEKDAYS } from "@/lib/utils/date";
+import { BusinessTime } from "@/lib/utils/date";
 
 export function ScheduleHeader() {
-  const dates = getCurrentWeekDates();
+  const week = BusinessTime.getCurrentBusinessWeek();
 
   return (
     <>
@@ -12,12 +11,12 @@ export function ScheduleHeader() {
       <div className='sticky left-0 bg-black z-20'></div>
 
       {/* weekday headers */}
-      {dates.map((d, index) => (
+      {week.map((d, index) => (
         <div
           key={index}
           className='text-center py-3 font-semibold text-primary-50 bg-black sticky top-0 z-10 text-xs sm:text-sm border-b border-theme-border'
         >
-          {WEEKDAYS[index]} - {pad2(d.getDate())}
+          {BusinessTime.formatWeekdayLabel(d.date)}
         </div>
       ))}
     </>

@@ -23,20 +23,18 @@ export class AdminServiceImpl implements AdminService {
   async generateDailyClasses(): Promise<ClassInstance[]> {
     this.logger.log("Starting generateDailyClasses()");
 
-    const businessTime = BusinessTime.now();
-
     try {
       const daysToGenerate = await preferenceService.getNumberPreferenceValue(
         "generateClassesForXDays"
       );
 
+      const businessTime = BusinessTime.now();
       const today = businessTime.date;
       const createdInstances: ClassInstance[] = [];
 
       for (let offset = 0; offset < daysToGenerate; offset++) {
         const date = BusinessTime.addDays(today, offset);
-        console.log(`Processing ${date}`);
-        const weekday = businessTime.weekday;
+        const weekday = BusinessTime.shiftWeekday(businessTime.weekday, offset);
 
         // 1. Get schedules for this weekday
         const schedules = await weeklyScheduleService.getWeeklyScheduleByFields(

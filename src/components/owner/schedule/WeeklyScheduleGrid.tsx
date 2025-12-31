@@ -16,11 +16,11 @@ import { ToastType } from "@/enums/ToastType";
 import { ScheduledClass } from "@/types/schedule/ScheduledClass";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { useScheduledClasses } from "@/lib/contexts/ScheduledClassesContext";
-import { HOURS, WEEKDAYS } from "@/lib/utils/date";
+import { Time } from "@/static/Time";
 
 export default function WeeklyScheduleGrid() {
   // grid columns: 70px for hour column, then 1fr per weekday (keeps flexible)
-  const gridCols = `70px repeat(${WEEKDAYS.length}, minmax(140px, 1fr))`;
+  const gridCols = `70px repeat(${Time.WEEKDAYS.length}, minmax(140px, 1fr))`;
   const { classes } = useClasses();
   const { scheduledClasses, setScheduledClasses } = useScheduledClasses();
   const [dayTime, setDayTime] = useState<{ weekday: number; hour: string }>({
@@ -174,12 +174,12 @@ export default function WeeklyScheduleGrid() {
             <ScheduleHeader />
 
             {/* rows: each hour is a row with first the hour cell, then weekday cells */}
-            {HOURS.map((hour) => (
+            {Time.HOURS.map((hour) => (
               // We intentionally render a sequence of grid items per hour:
               // first the HourCell (sticky left), then WEEKDAYS.length DayCell items.
               <React.Fragment key={hour}>
                 <HourCell hour={hour} />
-                {WEEKDAYS.map((d, index) => (
+                {Time.WEEKDAYS.map((d, index) => (
                   <DayCell
                     key={`${d}-${hour}`}
                     data={findClassInSchedule(index, hour)}
@@ -191,7 +191,7 @@ export default function WeeklyScheduleGrid() {
           </div>
         </div>
 
-        <p className='mt-3 text-xs text-textcolor-primary block sm:hidden text-center'>
+        <p className='mt-3 text-xs text-white block sm:hidden text-center'>
           👉 Swipe horizontally to view full week
         </p>
       </div>
