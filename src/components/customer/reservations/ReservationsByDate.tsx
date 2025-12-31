@@ -4,6 +4,7 @@ import { ClassReservation } from "@/types/reservations/ClassReservation";
 import ReservationCard from "./ReservationCard";
 import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 import { useTranslation } from "react-i18next";
+import DayjsUtils from "@/lib/utils/dayjs";
 
 type ReservationsByDateProps = {
   date: string;
@@ -11,21 +12,19 @@ type ReservationsByDateProps = {
   onCancel: (id: number) => void;
 };
 
-const formatDate = (date: string, locale?: string) =>
-  new Date(date).toLocaleDateString(locale, {
-    weekday: "long",
-    day: "2-digit",
-    month: "long",
-  });
+const formatDate = (date: string, locale: string, timezone: string) =>
+  DayjsUtils.formatDate(date, locale, timezone);
 
 export default function ReservationsByDate({
   date,
   reservations,
   onCancel,
 }: ReservationsByDateProps) {
-  const {t} = useTranslation();
-  const today = date.startsWith(DateUtils.toDateOnly(new Date()));
-  const {getPreferenceByName} = useAppPreferences();
+  const { t } = useTranslation();
+  const { getPreferenceByName } = useAppPreferences();
+  const timezone = getPreferenceByName<string>("timezone")!;
+  const language = getPreferenceByName<string>("language")!;
+  const today = date.startsWith(DayjsUtils.getToday(timezone).format("YYYY-MM-DD"));
 
   return (
     <section className="flex flex-col gap-3">
@@ -42,7 +41,7 @@ export default function ReservationsByDate({
             today ? "text-primary-900" : "text-primary-800"
           )}
         >
-          {formatDate(date, getPreferenceByName<string>("language"))}
+          {formatDate(date, language, timezone)}
           {today && (
             <span className="ml-2 text-sm font-medium text-primary-700">
               ({t("today")})

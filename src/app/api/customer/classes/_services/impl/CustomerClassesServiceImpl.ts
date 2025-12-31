@@ -2,43 +2,26 @@ import { DailyClass } from "@/types/classes/DailyClass";
 import { CustomerClassesService } from "../CustomerClassesService";
 import { ApiUtils } from "app/api/utils/ApiUtils";
 import { prisma } from "@/lib/prisma";
-import { DateUtils } from "@/lib/utils/date";
 import { preferenceService } from "app/api";
+import DayjsUtils from "@/lib/utils/dayjs";
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
   async getClassesList(): Promise<DailyClass[]> {
     const user = await ApiUtils.getSessionUser();
 
-    const daysToShow = await preferenceService.getNumberPreferenceValue(
-      "generateClassesForXDays"
+    const timezone = await preferenceService.getStringPreferenceValue(
+      "timezone"
     );
 
-    const now = new Date();
-    const today = DateUtils.startOfDay(now).toISOString();
-    const lastDay = DateUtils.addDays(now, daysToShow).toISOString();
-    const nextHour = DateUtils.addHours(
-      DateUtils.getCurrentHour(),
-      1
-    ).toString();
+    const today = DayjsUtils.getToday(timezone);
+    const nextHour = DayjsUtils.nextHour(today);
 
     const [classes, reservationCounts] = await Promise.all([
       prisma.classInstance.findMany({
         where: {
           date: {
-            gte: today,
-            lte: lastDay,
+            gte: today.format("YYYY-MM-DD"),
           },
-          OR: [
-            // Today → only future classes
-            {
-              date: today,
-              startTime: { gte: nextHour },
-            },
-            // Future days → all classes
-            {
-              date: { gt: today },
-            },
-          ],
         },
         include: {
           template: {
@@ -64,7 +47,11 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
       }),
     ]);
 
-    return classes.map((c) => {
+    const filteredByCurrentHour = classes.filter(
+      (c) => c.startTime >= nextHour
+    );
+
+    return filteredByCurrentHour.map((c) => {
       const availableSpots = c.template.capacity - c.reservations.length;
 
       return {

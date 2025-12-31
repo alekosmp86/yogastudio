@@ -85,7 +85,7 @@ export async function GET(req: NextRequest) {
   if (
     penalties &&
     penalties.blockedUntil &&
-    DayjsUtils.startOfDay(dayjs(), timezone) > dayjs(penalties.blockedUntil)
+    DayjsUtils.startOfDay(timezone) > dayjs(penalties.blockedUntil)
   ) {
     await userPenaltyService.unblockUser(penalties.userId);
   }

@@ -8,7 +8,6 @@ import {
 } from "app/api";
 import { ClassInstance } from "@prisma/client";
 import DayjsUtils from "@/lib/utils/dayjs";
-import dayjs from "dayjs";
 
 export class AdminServiceImpl implements AdminService {
   private logger = new ConsoleLogger(this.constructor.name);
@@ -32,7 +31,7 @@ export class AdminServiceImpl implements AdminService {
         "timezone"
       );
 
-      const today = DayjsUtils.startOfDay(dayjs(), timezone);
+      const today = DayjsUtils.startOfDay(timezone);
       const createdInstances: ClassInstance[] = [];
 
       for (let offset = 0; offset < daysToGenerate; offset++) {

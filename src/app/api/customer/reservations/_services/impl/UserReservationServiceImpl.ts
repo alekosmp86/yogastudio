@@ -12,12 +12,15 @@ import {
   waitingListService,
 } from "app/api";
 import { SessionUser } from "@/types/SessionUser";
-import { DateUtils } from "@/lib/utils/date";
+import DayjsUtils from "@/lib/utils/dayjs";
 
 export class UserReservationServiceImpl implements UserReservationService {
   async getReservations(userId: number): Promise<ClassReservation[]> {
-    const date = DateUtils.startOfDay(new Date()).toISOString();
-    const oneHourLater = DateUtils.addHours(DateUtils.getCurrentHour(), 1);
+    const timezone = await preferenceService.getStringPreferenceValue(
+      "timezone"
+    );
+    const date = DayjsUtils.getToday(timezone);
+    const oneHourLater = DayjsUtils.nextHour(date);
 
     return prisma.reservation.findMany({
       where: {
@@ -27,14 +30,14 @@ export class UserReservationServiceImpl implements UserReservationService {
           // Future days
           {
             class: {
-              date: { gt: date },
+              date: { gt: date.format("YYYY-MM-DD") },
             },
           },
 
           // Today, but only future hours
           {
             class: {
-              date,
+              date: date.format("YYYY-MM-DD"),
               startTime: { gte: oneHourLater },
             },
           },
@@ -160,7 +163,9 @@ export class UserReservationServiceImpl implements UserReservationService {
       throw new Error("Reservation not found");
     }
 
-    const isLateCancelation = await this.checkForLateCancelation(reservation.class);
+    const isLateCancelation = await this.checkForLateCancelation(
+      reservation.class
+    );
     if (isLateCancelation) {
       userPenaltyService.addPenalty(user.id);
     }
@@ -196,7 +201,9 @@ export class UserReservationServiceImpl implements UserReservationService {
     });
 
     if (existingReservations.length > 0) {
-      const isLateCancelation = await this.checkForLateCancelation(classInstance);
+      const isLateCancelation = await this.checkForLateCancelation(
+        classInstance
+      );
       console.log("isLateCancelation", isLateCancelation);
       if (isLateCancelation) {
         userPenaltyService.addPenalty(user.id);
@@ -212,9 +219,22 @@ export class UserReservationServiceImpl implements UserReservationService {
     }
   }
 
-  private async checkForLateCancelation(classInstance: ClassInstance & { template: ClassTemplate }) {
-    const lateCancelHours = await preferenceService.getNumberPreferenceValue("lateCancelHours");
-    return DateUtils.addHours(DateUtils.getCurrentHour(), lateCancelHours) >= classInstance.startTime;
+  private async checkForLateCancelation(
+    classInstance: ClassInstance & { template: ClassTemplate }
+  ) {
+    const lateCancelHours = await preferenceService.getNumberPreferenceValue(
+      "lateCancelHours"
+    );
+    const timezone = await preferenceService.getStringPreferenceValue(
+      "timezone"
+    );
+    return (
+      DayjsUtils.addHours(
+        DayjsUtils.getCurrentHour(timezone),
+        lateCancelHours,
+        timezone
+      ).format("HH:mm") >= classInstance.startTime
+    );
   }
 
   async rescheduleReservation(reservationId: number): Promise<void> {

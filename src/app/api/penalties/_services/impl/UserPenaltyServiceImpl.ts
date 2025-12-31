@@ -28,14 +28,14 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
       userPenalty = await this.update(
         userId,
         attended ? Math.max(userPenalty.noShowCount - 1, 0) : userPenalty.noShowCount + 1,
-        attended ? null : DayjsUtils.startOfDay(dayjs(), timezone).format("YYYY-MM-DD")
+        attended ? null : DayjsUtils.startOfDay(timezone).format("YYYY-MM-DD")
       );
     } else {
       userPenalty = await prisma.userPenalty.create({
         data: {
           userId: userId,
           noShowCount: attended ? 0 : 1,
-          lastNoShowAt: attended ? null : DayjsUtils.startOfDay(dayjs(), timezone).format("YYYY-MM-DD"),
+          lastNoShowAt: attended ? null : DayjsUtils.startOfDay(timezone).format("YYYY-MM-DD"),
         },
       });
     }
@@ -84,7 +84,7 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
         },
         data: {
           blockedUntil: DayjsUtils.addDays(dayjs(), penaltyBlockDuration, timezone).format("YYYY-MM-DD"),
-          lastNoShowAt: DayjsUtils.startOfDay(dayjs(), timezone).format("YYYY-MM-DD"),
+          lastNoShowAt: DayjsUtils.startOfDay(timezone).format("YYYY-MM-DD"),
         },
       });
       
