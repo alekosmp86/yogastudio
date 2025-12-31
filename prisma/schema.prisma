@@ -61,7 +61,7 @@ model ClassTemplate {
 
 model ClassInstance {
   id          Int      @id @default(autoincrement())
-  date        DateTime @db.Date
+  date        String
   startTime   String
   isCancelled Boolean  @default(false)
 
@@ -94,8 +94,8 @@ model UserPenalty {
   user   User @relation(fields: [userId], references: [id])
 
   noShowCount  Int       @default(0)
-  blockedUntil DateTime? @db.Date
-  lastNoShowAt DateTime? @db.Date
+  blockedUntil String?
+  lastNoShowAt String?
 }
 
 model WaitingList {

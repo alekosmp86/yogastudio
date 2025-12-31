@@ -4,7 +4,7 @@ export type ClassReservation = {
     id: number;
     class: {
         id: number;
-        date: Date;
+        date: string;
         startTime: string;
         template: GymClassBase;
     };

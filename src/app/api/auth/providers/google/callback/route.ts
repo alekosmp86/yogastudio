@@ -1,6 +1,7 @@
 import {
   accountService,
   googleUserMapper,
+  preferenceService,
   tokenService,
   userPenaltyService,
   userService,
@@ -9,7 +10,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInfo";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { User, UserPenalty } from "@prisma/client";
-import { DateUtils } from "@/lib/utils/date";
+import DayjsUtils from "@/lib/utils/dayjs";
+import dayjs from "dayjs";
 
 const logger = new ConsoleLogger("GoogleCallback");
 
@@ -77,10 +79,13 @@ export async function GET(req: NextRequest) {
   }
 
   //check if user should be unblocked
+  const timezone = await preferenceService.getStringPreferenceValue(
+    "timezone"
+  );
   if (
     penalties &&
     penalties.blockedUntil &&
-    DateUtils.startOfDay(new Date()) > penalties.blockedUntil
+    DayjsUtils.startOfDay(dayjs(), timezone) > dayjs(penalties.blockedUntil)
   ) {
     await userPenaltyService.unblockUser(penalties.userId);
   }

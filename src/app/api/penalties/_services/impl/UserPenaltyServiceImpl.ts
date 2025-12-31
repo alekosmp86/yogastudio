@@ -2,9 +2,10 @@ import { UserPenaltyService } from "../UserPenaltyService";
 import { UserPenalty } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { notificationService, preferenceService } from "app/api";
-import { DateUtils } from "@/lib/utils/date";
 import { NotificationType } from "app/api/notifications/_enums/NotificationTypes";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
+import DayjsUtils from "@/lib/utils/dayjs";
+import dayjs from "dayjs";
 
 export class UserPenaltyServiceImpl implements UserPenaltyService {
   private logger = new ConsoleLogger(this.constructor.name);
@@ -21,19 +22,20 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     userId: number,
     attended: boolean
   ): Promise<UserPenalty> {
+    const timezone = await preferenceService.getStringPreferenceValue("timezone");
     let userPenalty = await this.findByUserId(userId);
     if (userPenalty) {
       userPenalty = await this.update(
         userId,
         attended ? Math.max(userPenalty.noShowCount - 1, 0) : userPenalty.noShowCount + 1,
-        attended ? null : DateUtils.startOfDay(new Date())
+        attended ? null : DayjsUtils.startOfDay(dayjs(), timezone).format("YYYY-MM-DD")
       );
     } else {
       userPenalty = await prisma.userPenalty.create({
         data: {
           userId: userId,
           noShowCount: attended ? 0 : 1,
-          lastNoShowAt: attended ? null : DateUtils.startOfDay(new Date()),
+          lastNoShowAt: attended ? null : DayjsUtils.startOfDay(dayjs(), timezone).format("YYYY-MM-DD"),
         },
       });
     }
@@ -42,7 +44,7 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     return userPenalty;
   }
 
-  async update(userId: number, noShowCount: number, lastNoShowAt: Date | null): Promise<UserPenalty> {
+  async update(userId: number, noShowCount: number, lastNoShowAt: string | null): Promise<UserPenalty> {
     return await prisma.userPenalty.update({
       where: {
         userId: userId,
@@ -73,6 +75,7 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
       await preferenceService.getNumberPreferenceValue(
         "penaltyBlockDuration"
       );
+    const timezone = await preferenceService.getStringPreferenceValue("timezone");
 
     if (userPenalty.noShowCount >= penaltyMaxNoShowCount) {
       await prisma.userPenalty.update({
@@ -80,8 +83,8 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
           userId: userPenalty.userId,
         },
         data: {
-          blockedUntil: DateUtils.addDays(new Date(), penaltyBlockDuration),
-          lastNoShowAt: DateUtils.startOfDay(new Date()),
+          blockedUntil: DayjsUtils.addDays(dayjs(), penaltyBlockDuration, timezone).format("YYYY-MM-DD"),
+          lastNoShowAt: DayjsUtils.startOfDay(dayjs(), timezone).format("YYYY-MM-DD"),
         },
       });
       
@@ -90,7 +93,7 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
       const businessPhone = await preferenceService.getStringPreferenceValue("businessWhatsappNumber");
       await notificationService.sendNotification(userPenalty.userId, NotificationType.USER_BLOCKED, {
         userName: user.name,
-        untilDate: DateUtils.addDays(new Date(), penaltyBlockDuration),
+        untilDate: DayjsUtils.addDays(dayjs(), penaltyBlockDuration, timezone).toDate(),
         contactEmail: businessEmail,
         contactPhone: businessPhone,
       });

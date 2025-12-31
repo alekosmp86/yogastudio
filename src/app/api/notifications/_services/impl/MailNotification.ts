@@ -7,7 +7,6 @@ import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import * as templates from "app/api/notifications/_templates/mail";
 import { SessionUser } from "@/types/SessionUser";
 import { ClassInstance, ClassTemplate } from "@prisma/client";
-import { DateUtils } from "@/lib/utils/date";
 import { preferencesStore } from "@/lib/preferences";
 
 type MailTemplate = {
@@ -101,7 +100,7 @@ export class MailNotification implements NotificationService {
     const base = {
       userName: user.name,
       classTitle: classInstance.template.title,
-      classDate: DateUtils.toDateOnly(classInstance.date),
+      classDate: classInstance.date,
       classTime: classInstance.startTime,
       instructorName: classInstance.template.instructor,
     };

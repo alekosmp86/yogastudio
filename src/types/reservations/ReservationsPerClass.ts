@@ -3,7 +3,7 @@ import { User } from "../User";
 
 export type ReservationsPerClass = {
     id: number;
-    date: Date;
+    date: string;
     startTime: string;
     template: GymClassBase;
     reservations: {

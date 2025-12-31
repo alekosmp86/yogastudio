@@ -69,7 +69,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
 
       return {
         id: c.id,
-        date: DateUtils.toDateOnly(c.date),
+        date: c.date,
         startTime: c.startTime,
         title: c.template.title,
         description: c.template.description || "",

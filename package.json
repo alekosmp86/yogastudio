@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run lint && npx i18next-parser",
     "build": "npm run sync-preferences && next build",
     "start": "next start",
     "lint": "eslint",
@@ -14,6 +13,7 @@
     "@prisma/client": "6.19.0",
     "@vercel/analytics": "^1.6.1",
     "clsx": "2.1.1",
+    "dayjs": "^1.11.19",
     "i18next": "^25.7.3",
     "jose": "6.1.3",
     "lucide-react": "0.554.0",

@@ -7,7 +7,8 @@ import {
   weeklyScheduleService,
 } from "app/api";
 import { ClassInstance } from "@prisma/client";
-import { DateUtils } from "@/lib/utils/date";
+import DayjsUtils from "@/lib/utils/dayjs";
+import dayjs from "dayjs";
 
 export class AdminServiceImpl implements AdminService {
   private logger = new ConsoleLogger(this.constructor.name);
@@ -27,15 +28,17 @@ export class AdminServiceImpl implements AdminService {
       const daysToGenerate = await preferenceService.getNumberPreferenceValue(
         "generateClassesForXDays"
       );
+      const timezone = await preferenceService.getStringPreferenceValue(
+        "timezone"
+      );
 
-      const today = DateUtils.startOfDay(new Date());
+      const today = DayjsUtils.startOfDay(dayjs(), timezone);
       const createdInstances: ClassInstance[] = [];
 
       for (let offset = 0; offset < daysToGenerate; offset++) {
-        const date = DateUtils.addDays(today, offset);
-        console.log(`Processing ${date.toDateString()}`);
-        const weekday = DateUtils.getWeekday(date);
-        console.log(`Weekday: ${weekday}`);
+        const date = DayjsUtils.addDays(today, offset, timezone);
+        console.log(`Processing ${date.format("YYYY-MM-DD")}`);
+        const weekday = DayjsUtils.getWeekday(date);
 
         // 1. Get schedules for this weekday
         const schedules = await weeklyScheduleService.getWeeklyScheduleByFields(
@@ -50,7 +53,7 @@ export class AdminServiceImpl implements AdminService {
         }
 
         this.logger.log(
-          `Processing ${schedules.length} schedules for ${date.toDateString()}`
+          `Processing ${schedules.length} schedules for ${date.format("YYYY-MM-DD")}`
         );
 
         // 2. Create instances if missing
@@ -58,13 +61,13 @@ export class AdminServiceImpl implements AdminService {
           const existing = await classInstanceService.findFirstByFields({
             templateId: schedule.templateId,
             startTime: schedule.startTime,
-            date,
+            date: date.format("YYYY-MM-DD"),
           });
 
           if (existing) continue;
 
           const instance = await classInstanceService.create({
-            date,
+            date: date.format("YYYY-MM-DD"),
             startTime: schedule.startTime,
             templateId: schedule.templateId,
           });

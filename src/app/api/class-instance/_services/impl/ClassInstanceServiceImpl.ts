@@ -32,7 +32,7 @@ export class ClassInstanceServiceImpl implements ClassInstanceService {
   async create(data: {
     templateId: number;
     startTime: string;
-    date: Date;
+    date: string;
   }): Promise<ClassInstance> {
     return await prisma.classInstance.create({
       data: {
