@@ -54,5 +54,7 @@
   "home": "Home",
   "schedule": "Schedule",
   "users": "Users",
-  "preferences": "Preferences"
+  "preferences": "Preferences",
+  "logout": "Logout",
+  "manageYourBusiness": "Manage your business"
 }

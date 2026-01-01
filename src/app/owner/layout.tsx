@@ -1,6 +1,6 @@
 "use client";
 
-import OwnerHomePage from "@/components/owner/OwnerHomePage";
+import OwnerHomePage from "@/components/owner/homepage/OwnerHomePage";
 
 function OwnerLayout({ children }: { children: React.ReactNode }) {
   return <OwnerHomePage>{children}</OwnerHomePage>;

@@ -54,5 +54,7 @@
   "ownerDashboard": "Panel de control",
   "schedule": "Horario",
   "users": "Usuarios",
-  "preferences": "Preferencias"
+  "preferences": "Preferencias",
+  "manageYourBusiness": "Gestiona tu negocio",
+  "logout": "Cerrar sesión"
 }

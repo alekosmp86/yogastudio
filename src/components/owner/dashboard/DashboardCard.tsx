@@ -11,20 +11,31 @@ type DashboardCardProps = {
   icon: ReactNode;
 };
 
-export default function DashboardCard({ title, description, href, icon }: DashboardCardProps) {
+export default function DashboardCard({
+  title,
+  description,
+  href,
+  icon,
+}: DashboardCardProps) {
   const { t } = useTranslation();
+
   return (
     <Link
       href={href}
-      className="group rounded-md p-6 shadow-md shadow-white/50 bg-theme-bodybg hover:bg-secondary-50/80 transition-all cursor-pointer border border-black/50"
+      className="group block rounded-2xl bg-white/80 p-5 shadow-sm backdrop-blur transition hover:shadow-md active:scale-[0.98]"
     >
-      <div className="flex items-center gap-4">
-        <div className="text-primary-900 group-hover:scale-110 transition-transform">
+      <div className="flex items-start gap-4">
+        {/* ICON */}
+        <div
+          className="flex h-10 w-10 items-center justify-center text-custom-200 transition group-hover:scale-105"
+        >
           {icon}
         </div>
-        <div>
-          <h3 className="text-xl font-semibold text-primary-900">{t(title)}</h3>
-          <p className="text-sm text-primary-900">{t(description)}</p>
+
+        {/* TEXT */}
+        <div className="flex-1">
+          <h3 className="text-base font-semibold text-custom-400">{t(title)}</h3>
+          <p className="mt-1 text-sm text-custom-200">{t(description)}</p>
         </div>
       </div>
     </Link>
