@@ -18,7 +18,6 @@ import { Toolbar } from "@/types/Toolbar";
 import { TableField } from "@/types/TableField";
 import Container from "@/components/shared/Container";
 import { useTranslation } from "react-i18next";
-import Button from "@/components/shared/Button";
 
 const fields: TableField<GymClass>[] = [
   {

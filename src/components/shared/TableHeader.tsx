@@ -11,8 +11,8 @@ export default function TableHeader<T>({ fields }: TableHeaderProps<T>) {
   return (
     <>
       <colgroup>
-        {fields.map(() => (
-          <col />
+        {fields.map(({key}) => (
+          <col key={String(key)}/>
         ))}
         <col style={{ width: "20%" }} />
       </colgroup>

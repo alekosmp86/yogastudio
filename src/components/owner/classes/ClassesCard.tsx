@@ -2,7 +2,7 @@ import Button from "@/components/shared/Button";
 import { cn } from "@/lib/utils/utils";
 import { GymClass } from "@/types/classes/GymClass";
 import { Check, Pencil, Trash, X } from "lucide-react";
-import { Activity, useState } from "react";
+import { useState } from "react";
 
 type ClassesCardProps = {
   gymClass: GymClass;
