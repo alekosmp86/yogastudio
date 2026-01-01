@@ -12,8 +12,10 @@ import { Toolbar } from "@/types/Toolbar";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
 import Container from "@/components/shared/Container";
+import { useTranslation } from "react-i18next";
 
 export default function UserList() {
+  const {t} = useTranslation();
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -92,26 +94,35 @@ export default function UserList() {
 
   return (
     <Container>
-      <div className='w-full mt-6'>
-        <h2 className='text-xl font-semibold text-white mt-4 mb-4 rounded-md'>Users</h2>
+      <section className="mt-6 space-y-6">
+        {/* HEADER */}
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold text-white">{t("users")}</h2>
+        </div>
 
         {/* TABLE BOX (toolbar + table inside) */}
-        <div className='bg-transparent rounded-sm border border-white/50 overflow-hidden shadow'>
+        <div className="rounded-3xl bg-custom-50 shadow-sm">
           {/* TOOLBAR sitting as the table header */}
-          <TableToolbar toolbar={toolbar} search={search} setSearch={setSearch} />
+          <TableToolbar
+            toolbar={toolbar}
+            search={search}
+            setSearch={setSearch}
+          />
 
           {/* Desktop */}
-          <UserTable users={filteredUsers} onAction={handleAction} />
+          <div className="hidden md:block p-4 min-h-[calc(100vh-400px)]">
+            <UserTable users={filteredUsers} onAction={handleAction} />
+          </div>
 
           {/* Mobile */}
           <UserCardList users={filteredUsers} onAction={handleAction} />
           {users.length === 0 && (
-            <h1 className='pl-2 text-left bg-white py-2 text-primary-900'>
+            <h1 className="pl-2 text-left bg-white py-2 text-primary-900">
               {loading ? "Loading..." : "No users found"}
             </h1>
           )}
         </div>
-      </div>
+      </section>
     </Container>
   );
 }

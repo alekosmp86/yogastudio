@@ -1,5 +1,6 @@
 import Button from "@/components/shared/Button";
 import { OwnerActions } from "@/enums/OwnerActions";
+import { cn } from "@/lib/utils/utils";
 import { Check, X } from "lucide-react";
 
 type UserActionsProps = {
@@ -9,17 +10,29 @@ type UserActionsProps = {
   mobile?: boolean;
 };
 
-export default function UserActions({id, approved, onAction, mobile = false}: UserActionsProps) {
-  const base = "px-3 py-1.5 text-sm rounded-lg text-white";
-  const full = mobile ? "flex-1" : "";
-
+export default function UserActions({
+  id,
+  approved,
+  onAction,
+  mobile = false,
+}: UserActionsProps) {
   return (
-    <div className="flex gap-2">
-      <Button size="sm" 
-        variant={approved ? "negative" : "primary"} 
+    <div>
+      <Button
+        size="sm"
+        variant="ghost"
         Icon={approved ? X : Check}
-        className={`${base} ${full}`} 
-        onClick={() => onAction(id, approved ? OwnerActions.REJECT_USER : OwnerActions.APPROVE_USER)}>
+        className={cn(
+          mobile ? "flex-1" : "",
+          approved ? "text-red-500" : "text-green-500"
+        )}
+        onClick={() =>
+          onAction(
+            id,
+            approved ? OwnerActions.REJECT_USER : OwnerActions.APPROVE_USER
+          )
+        }
+      >
         {approved ? "Reject" : "Approve"}
       </Button>
     </div>

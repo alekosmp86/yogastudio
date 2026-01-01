@@ -9,7 +9,7 @@ type UserCardListProps = {
 
 export default function UserCardList({ users, onAction }: UserCardListProps) {
   return (
-    <div className='md:hidden flex flex-col gap-2 rounded-md shadow-sm'>
+    <div className="md:hidden flex flex-col gap-3 overflow-hidden overflow-y-auto max-h-[calc(100vh-350px)]">
       {users.map((user) => (
         <UserCard key={user.id} user={user} onAction={onAction} />
       ))}

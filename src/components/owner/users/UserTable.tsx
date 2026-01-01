@@ -9,24 +9,21 @@ type UserTableProps = {
   onAction: (id: number, action: OwnerActions) => void;
 };
 
-export default function UserTable({
-  users,
-  onAction,
-}: UserTableProps) {
+export default function UserTable({ users, onAction }: UserTableProps) {
   const fields: TableField<User>[] = [
     { key: "name", placeholder: "Name" },
     { key: "email", placeholder: "Email" },
     { key: "phone", placeholder: "Phone" },
-    { key: "approved", placeholder: "Approved" },
+    { key: "approved", placeholder: "Approved", style: "text-center" },
   ];
 
   return (
     <>
-      <div className='hidden md:block overflow-hidden rounded-sm border border-primary-900 shadow-sm'>
-        <table className='w-full text-center text-brand-200'>
+      <div className="overflow-hidden rounded-md shadow-sm ring-1 ring-custom-200 backdrop-blur">
+        <table className="w-full text-custom-500">
           <TableHeader fields={fields} />
 
-          <tbody className='divide-y'>
+          <tbody className="divide-y divide-primary-900">
             {users.map((user) => (
               <UserRow
                 key={user.id}

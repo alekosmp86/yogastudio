@@ -60,5 +60,9 @@
   "logout": "Cerrar sesión",
   "spots": "Lugares",
   "description": "Descripción",
-  "title": "Título"
+  "title": "Título",
+  "selectClass": "Selecciona una clase",
+  "remove": "Eliminar",
+  "close": "Cerrar",
+  "weeklySchedule": "Horario semanal"
 }

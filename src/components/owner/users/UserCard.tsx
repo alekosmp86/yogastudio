@@ -9,18 +9,31 @@ type UserCardProps = {
 
 export default function UserCard({ user, onAction }: UserCardProps) {
   return (
-    <div className="bg-white border border-white rounded-sm p-4 shadow-sm">
-      <div className="text-base text-primary-900 font-semibold">{user.name}</div>
-      <div className="text-sm font-medium text-primary-900">{user.email}</div>
-      <div className="text-sm font-medium text-primary-900 mb-3">{user.phone}</div>
+    <div className="bg-custom-50 border border-custom-100 rounded-xl p-4 shadow-sm">
+      {/* USER INFO */}
+      <div className="flex flex-col gap-0.5">
+        <span className="text-base font-semibold text-custom-400">
+          {user.name}
+        </span>
 
-      <div className="flex justify-end mt-2">
+        <span className="text-sm text-custom-300">
+          {user.email}
+        </span>
+
+        <span className="text-sm text-custom-300">
+          {user.phone}
+        </span>
+      </div>
+
+      {/* ACTIONS */}
+      <div className="mt-4 flex justify-end">
         <UserActions
           id={user.id}
           approved={user.approved}
           onAction={onAction}
+          mobile
         />
       </div>
     </div>
-  );
+  )
 }
