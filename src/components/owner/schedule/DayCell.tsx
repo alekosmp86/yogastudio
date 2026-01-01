@@ -11,24 +11,31 @@ export function DayCell({ data, onClick }: DayCellProps) {
   return (
     <div
       className={`
-        ${data ? "bg-info-700" : "bg-theme-cardbg"}
-        border border-theme-border        
+        group
         px-2 py-4 sm:px-3 sm:py-3
-        text-md sm:text-sm
-        rounded-sm
-        hover:bg-info-600
-        transition
+        rounded-md
+        border
+        transition-all duration-200
         cursor-pointer
-      `}
+        flex items-center
+      ${  
+        data
+          ? "bg-custom-300 border-custom-100 hover:bg-custom-400"
+          : "bg-custom-50 border-custom-100 hover:bg-custom-100"
+      }`}
       onClick={onClick}
     >
       {data ? (
-        <div className='flex flex-col'>
-          <span className="font-semibold text-white">{data.title}</span>
-          <span className="text-xs text-white">{data.instructor}</span>
+        <div className="flex flex-col gap-0.5">
+          <span className="text-sm font-semibold text-white group-hover:text-white transition-colors">
+            {data.title}
+          </span>
+          <span className="text-xs text-white group-hover:text-white transition-colors">
+            {data.instructor}
+          </span>
         </div>
       ) : (
-        ""
+        <span className="text-xs text-custom-300 opacity-40">+</span>
       )}
     </div>
   );

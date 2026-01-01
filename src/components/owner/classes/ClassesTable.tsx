@@ -28,7 +28,7 @@ export default function ClassesTable({
   const { t } = useTranslation();
 
   return (
-    <div className="hidden md:block overflow-hidden rounded-md bg-white/80 shadow-sm ring-1 ring-custom-200 backdrop-blur">
+    <div className="hidden md:block overflow-hidden rounded-md shadow-sm ring-1 ring-custom-200 backdrop-blur">
       <table className="w-full text-custom-500">
         <TableHeader fields={fields} />
 

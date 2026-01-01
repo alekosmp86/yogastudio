@@ -60,5 +60,12 @@
   "actions": "Actions",
   "spots": "Spots",
   "description": "Description",
-  "title": "Title"
+  "title": "Title",
+  "selectClass": "Select a class",
+  "remove": "Remove",
+  "close": "Close",
+  "weeklySchedule": "Weekly Schedule",
+  "name": "Name",
+  "phone": "Phone",
+  "approved": "Approved"
 }

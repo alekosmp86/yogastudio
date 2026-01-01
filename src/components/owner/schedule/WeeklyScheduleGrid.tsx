@@ -17,6 +17,7 @@ import { ScheduledClass } from "@/types/schedule/ScheduledClass";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { useScheduledClasses } from "@/lib/contexts/ScheduledClassesContext";
 import { Time } from "@/static/Time";
+import { useTranslation } from "react-i18next";
 
 export default function WeeklyScheduleGrid() {
   // grid columns: 70px for hour column, then 1fr per weekday (keeps flexible)
@@ -29,6 +30,7 @@ export default function WeeklyScheduleGrid() {
   });
   const [modalOpen, setModalOpen] = useState(false);
   const { showToast } = useToast();
+  const {t} = useTranslation();
 
   const scheduledClass = scheduledClasses.find(
     (scheduledClass) =>
@@ -140,61 +142,62 @@ export default function WeeklyScheduleGrid() {
         emptyCell={!scheduledClass}
         onClose={handleCloseModal}
         onRemove={handleRemoveClass}
-        title='Select a Class'
+        title={t("selectClass")}
       >
-        {classes.map((c) => (
-          <Card
-            key={c.id}
-            onClick={() => handleClassClick(c)}
-            className='cursor-pointer transition bg-white hover:bg-info-500'
-          >
-            <CardContent className='py-3 px-4'>
-              <div className='text-base text-primary-800 font-semibold'>
-                {c.title}
-              </div>
-              <div className='text-xs mt- text-primary-800'>{c.instructor}</div>
-            </CardContent>
-          </Card>
-        ))}
+        <div className="grid gap-3">
+          {classes.map((c) => (
+            <Card
+              key={c.id}
+              onClick={() => handleClassClick(c)}
+              className="cursor-pointer bg-custom-50 border border-custom-100 hover:bg-custom-200 hover:shadow-md transition"
+            >
+              <CardContent className="py-3 px-4">
+                <div className="text-base font-semibold text-custom-400">
+                  {c.title}
+                </div>
+                <div className="text-xs text-custom-300">{c.instructor}</div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </ClassSelectorModal>
 
-      <div className='w-full mt-4'>
-        <h2 className='text-lg sm:text-xl font-semibold text-white mb-4'>
-          Weekly Schedule
+      <section className="w-full mt-6">
+        <h2 className="text-lg sm:text-xl font-semibold text-custom-50 mb-3">
+          {t("weeklySchedule")}
         </h2>
 
-        <div className='overflow-x-auto max-h-[65vh] overflow-y-auto border border-theme-bodycolor'>
-          <div
-            className='grid min-w-max'
-            style={{
-              gridTemplateColumns: gridCols,
-            }}
-          >
-            {/* Header row */}
-            <ScheduleHeader />
+        {/* Schedule container */}
+        <div className="relative rounded-xl bg-custom-50 shadow-lg border border-custom-100 overflow-hidden">
+          <div className="overflow-x-auto max-h-[65vh] overflow-y-auto">
+            <div
+              className="grid min-w-max text-custom-400"
+              style={{ gridTemplateColumns: gridCols }}
+            >
+              {/* Header */}
+              <ScheduleHeader />
 
-            {/* rows: each hour is a row with first the hour cell, then weekday cells */}
-            {Time.HOURS.map((hour) => (
-              // We intentionally render a sequence of grid items per hour:
-              // first the HourCell (sticky left), then WEEKDAYS.length DayCell items.
-              <React.Fragment key={hour}>
-                <HourCell hour={hour} />
-                {Time.WEEKDAYS.map((d, index) => (
-                  <DayCell
-                    key={`${d}-${hour}`}
-                    data={findClassInSchedule(index, hour)}
-                    onClick={() => showClassSelectorModal(index, hour)}
-                  />
-                ))}
-              </React.Fragment>
-            ))}
+              {/* Rows */}
+              {Time.HOURS.map((hour) => (
+                <React.Fragment key={hour}>
+                  <HourCell hour={hour} />
+                  {Time.WEEKDAYS.map((d, index) => (
+                    <DayCell
+                      key={`${d}-${hour}`}
+                      data={findClassInSchedule(index, hour)}
+                      onClick={() => showClassSelectorModal(index, hour)}
+                    />
+                  ))}
+                </React.Fragment>
+              ))}
+            </div>
           </div>
         </div>
 
-        <p className='mt-3 text-xs text-white block sm:hidden text-center'>
-          👉 Swipe horizontally to view full week
+        <p className="mt-3 text-xs text-custom-100 sm:hidden text-center">
+          ← Swipe to explore the full week →
         </p>
-      </div>
+      </section>
     </>
   );
 }

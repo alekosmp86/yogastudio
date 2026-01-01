@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils/utils";
 import { TableField } from "@/types/TableField";
 import { useTranslation } from "react-i18next";
 
@@ -19,8 +20,8 @@ export default function TableHeader<T>({ fields }: TableHeaderProps<T>) {
 
       <thead>
         <tr className="text-left">
-          {fields.map(({ key, placeholder }) => (
-            <th key={String(key)} className="px-4 py-3">
+          {fields.map(({ key, placeholder, style }) => (
+            <th key={String(key)} className={cn("px-4 py-3", style)}>
               {t(placeholder)}
             </th>
           ))}
