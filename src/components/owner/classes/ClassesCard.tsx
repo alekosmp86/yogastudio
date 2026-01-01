@@ -1,11 +1,17 @@
 import Button from "@/components/shared/Button";
+import { cn } from "@/lib/utils/utils";
 import { GymClass } from "@/types/classes/GymClass";
 import { Check, Pencil, Trash, X } from "lucide-react";
 import { Activity, useState } from "react";
 
 type ClassesCardProps = {
   gymClass: GymClass;
-  fields: { key: keyof GymClass; placeholder: string; style?: string; mobileLabel?: string }[];
+  fields: {
+    key: keyof GymClass;
+    placeholder: string;
+    style?: string;
+    mobileLabel?: string;
+  }[];
   adding: boolean;
   busy: boolean;
   onSaveNew: (gymClass: GymClass) => void;
@@ -56,70 +62,90 @@ export default function ClassesCard({
   };
 
   return (
-    <div className='bg-white border border-black p-2 rounded-sm shadow-sm shadow-white/50'>
+    <div className="rounded-2xl bg-white/90 border border-custom-100 p-4 shadow-sm space-y-3">
       {fields.map(({ key, placeholder, style, mobileLabel }) => (
-        <div
-          key={key}
-          className={`px-2 text-primary-900 ${isEditing ? style : ""}`}
-        >
+        <div key={key} className={`text-custom-400 ${isEditing ? style : ""}`}>
           {isEditing ? (
-            <div className="mt-2 mb-2">
-              <label htmlFor={key} className="text-primary-900">{placeholder}</label>
+            <div className="space-y-1">
+              <label
+                htmlFor={key}
+                className="block text-xs font-medium uppercase tracking-wide text-custom-300"
+              >
+                {placeholder}
+              </label>
               <input
-                className='w-full px-2 py-2 rounded-md border border-primary-800 font-normal'
+                id={key}
+                className="
+                  w-full rounded-lg px-3 py-2 text-sm
+                  border border-custom-100
+                  focus:border-custom-200 focus:ring-2 focus:ring-custom-100
+                  outline-none transition
+                "
                 value={form[key] as string | number}
                 onChange={(e) => handleChange(key, e.target.value)}
                 placeholder={placeholder}
               />
             </div>
           ) : (
-            mobileLabel ? (
-              <div className="mt-2 mb-2 flex flex-row">
-                <p>{`${mobileLabel}: ${gymClass[key]}`}</p>
-              </div>
-            ) : (
-              gymClass[key]
-            )
+            <div className="flex justify-between gap-4">
+              {mobileLabel && (
+                <span className="text-xs tracking-wide text-custom-300">
+                  {mobileLabel}
+                </span>
+              )}
+              <span className={cn("text-sm text-custom-400 text-right truncate", style)}>
+                {gymClass[key]}
+              </span>
+            </div>
           )}
         </div>
       ))}
 
-      {isEditing ? (
-        <div className='flex items-center justify-end gap-2'>
-          <Button
-            size='md'
-            variant={isUnchanged ? "secondary" : "primary"}
-            className={isUnchanged ? "disabled:cursor-not-allowed disabled:pointer-events-none" : ""}
-            Icon={Check}
-            onClick={save}
-            disabled={isUnchanged}
-          />
-
-          <Button size='md' variant={busy ? "secondary" : "negative"} Icon={X} onClick={cancel} />
-        </div>
-      ) : (
-        <div className='flex items-center justify-end gap-2'>
-          <Button
-            size='md'
-            variant={busy ? "secondary" : "primary"}
-            className={busy ? "disabled:cursor-not-allowed disabled:pointer-events-none" : "text-white"}
-            Icon={Pencil}
-            onClick={() => setIsEditing(true)}
-            disabled={busy}
-          />
-
-          <Activity mode={onDelete ? "visible" : "hidden"}>
+      {/* ACTIONS */}
+      <div className="flex items-center justify-end gap-2 pt-2 border-t border-custom-100">
+        {isEditing ? (
+          <>
             <Button
-              size='md'
-              variant={busy ? "secondary" : "negative"}
-              className={busy ? "disabled:cursor-not-allowed disabled:pointer-events-none" : "text-white"}
-              Icon={Trash}
-              onClick={() => onDelete?.(gymClass.id)}
-              disabled={busy}
+              size="sm"
+              variant={isUnchanged ? "secondary" : "primary"}
+              Icon={Check}
+              onClick={save}
+              disabled={isUnchanged}
+              className="rounded-full"
             />
-          </Activity>
-        </div>
-      )}
+
+            <Button
+              size="sm"
+              variant="ghost"
+              Icon={X}
+              onClick={cancel}
+              className="rounded-full text-custom-300 hover:text-custom-400"
+            />
+          </>
+        ) : (
+          <>
+            <Button
+              size="sm"
+              variant="ghost"
+              Icon={Pencil}
+              onClick={() => setIsEditing(true)}
+              disabled={busy}
+              className="rounded-full text-custom-300 hover:text-custom-400"
+            />
+
+            {onDelete && (
+              <Button
+                size="sm"
+                variant="ghost"
+                Icon={Trash}
+                onClick={() => onDelete(gymClass.id)}
+                disabled={busy}
+                className="rounded-full text-red-400 hover:text-red-500"
+              />
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 }

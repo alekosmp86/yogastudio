@@ -1,14 +1,34 @@
 import { TableField } from "@/types/TableField";
+import { useTranslation } from "react-i18next";
 
-export default function TableHeader<T>({ fields }: { fields: TableField<T>[] }) {
-    return (
-        <thead className='bg-theme-headings/80 text-brand-400 sticky top-0 z-10'>
-            <tr>
-                {fields.map(({ key, placeholder }) => (
-                    <th key={String(key)} className='px-4 py-3'>{placeholder}</th>
-                ))}
-                <th className='px-4 py-3 text-center'>Actions</th>
-            </tr>
-        </thead>
-    );
+type TableHeaderProps<T> = {
+  fields: TableField<T>[];
+};
+
+export default function TableHeader<T>({ fields }: TableHeaderProps<T>) {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      <colgroup>
+        {fields.map(() => (
+          <col />
+        ))}
+        <col style={{ width: "20%" }} />
+      </colgroup>
+
+      <thead>
+        <tr className="text-left">
+          {fields.map(({ key, placeholder }) => (
+            <th key={String(key)} className="px-4 py-3">
+              {placeholder}
+            </th>
+          ))}
+          <th className="px-4 py-3 text-center font-semibold text-custom-400">
+            {t("actions")}
+          </th>
+        </tr>
+      </thead>
+    </>
+  );
 }

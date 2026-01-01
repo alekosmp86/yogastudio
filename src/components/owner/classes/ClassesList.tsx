@@ -18,6 +18,7 @@ import { Toolbar } from "@/types/Toolbar";
 import { TableField } from "@/types/TableField";
 import Container from "@/components/shared/Container";
 import { useTranslation } from "react-i18next";
+import Button from "@/components/shared/Button";
 
 const fields: TableField<GymClass>[] = [
   {
@@ -26,11 +27,11 @@ const fields: TableField<GymClass>[] = [
     placeholder: "Title",
     style: "font-semibold",
   },
-  { 
-    key: "instructor", 
-    required: true, 
-    placeholder: "Instructor", 
-    style: "font-semibold",
+  {
+    key: "instructor",
+    required: true,
+    placeholder: "Instructor",
+    style: "",
   },
   {
     key: "description",
@@ -48,7 +49,7 @@ const fields: TableField<GymClass>[] = [
 ];
 
 export default function ClassesList() {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const { classes, addClass, updateClass, removeClass } = useClasses();
   const [adding, setAdding] = useState(false);
   const [search, setSearch] = useState("");
@@ -59,7 +60,7 @@ export default function ClassesList() {
     () => ({
       items: [
         {
-          text: "Add",
+          text: "",
           icon: Plus,
           onClick: () => setAdding(true),
         },
@@ -105,7 +106,9 @@ export default function ClassesList() {
     const toastId = showWarningToast("Creating class...");
     try {
       setBusy(true);
-      const { message, data }: ApiResponse<GymClass> = await http.post<ApiResponse<GymClass>>("/owner/classes", ApiType.FRONTEND, gymClass);
+      const { message, data }: ApiResponse<GymClass> = await http.post<
+        ApiResponse<GymClass>
+      >("/owner/classes", ApiType.FRONTEND, gymClass);
       if (message === RequestStatus.ERROR) {
         showErrorToast("Error creating class");
         return;
@@ -127,7 +130,11 @@ export default function ClassesList() {
     const toastId = showWarningToast("Updating class...");
     try {
       setBusy(true);
-      const { message } = await http.put<ApiResponse<void>>(`/owner/classes/${id}`, ApiType.FRONTEND, updated);
+      const { message } = await http.put<ApiResponse<void>>(
+        `/owner/classes/${id}`,
+        ApiType.FRONTEND,
+        updated
+      );
 
       if (message === RequestStatus.ERROR) {
         showErrorToast("Error updating class");
@@ -149,7 +156,10 @@ export default function ClassesList() {
     const toastId = showWarningToast("Deleting class...");
     try {
       setBusy(true);
-      const { message, data } = await http.delete<ApiResponse<number>>(`/owner/classes/${id}`, ApiType.FRONTEND);
+      const { message, data } = await http.delete<ApiResponse<number>>(
+        `/owner/classes/${id}`,
+        ApiType.FRONTEND
+      );
       if (message === RequestStatus.ERROR) {
         showErrorToast("Error deleting class");
         return;
@@ -172,18 +182,23 @@ export default function ClassesList() {
 
   return (
     <Container>
-      <div className='w-full mt-6'>
-        <h2 className='text-xl font-semibold text-white mb-4'>
-          {t("yourClasses")}
-        </h2>
+      <section className="mt-6 space-y-6">
+        {/* HEADER */}
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold text-white">
+            {t("yourClasses")}
+          </h2>
+        </div>
 
-        {/* TABLE BOX (toolbar + table inside) */}
-        <div className='bg-theme-bodybg rounded-sm border border-theme-bodycolor overflow-hidden shadow'>
-          {/* TOOLBAR sitting as the table header */}
-          <TableToolbar toolbar={toolbar} search={search} setSearch={setSearch} />
+        {/* CONTENT */}
+        <div className="rounded-3xl bg-custom-50 shadow-sm">
+          <TableToolbar
+            toolbar={toolbar}
+            search={search}
+            setSearch={setSearch}
+          />
 
-          {/* TABLE (desktop) + CARDS (mobile) */}
-          <div className='overflow-x-auto max-h-[500px] overflow-y-auto'>
+          <div className="p-4 min-h-[calc(100vh-400px)]">
             <ClassesTable
               classes={filteredClasses}
               fields={fields}
@@ -207,7 +222,7 @@ export default function ClassesList() {
             />
           </div>
         </div>
-      </div>
+      </section>
     </Container>
   );
 }

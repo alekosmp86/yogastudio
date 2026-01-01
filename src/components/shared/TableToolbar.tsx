@@ -14,46 +14,56 @@ export default function TableToolbar({
   search,
   setSearch,
 }: TableToolbarProps) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const showToolbar = toolbar.items?.length > 0 || toolbar.searchInput.active;
 
-  return showToolbar ? (
-    <div className='px-4 py-3 border-b border-theme-bodycolor bg-black rounded-sm'>
-      <div className='w-full flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between'>
-        <div className='flex items-center gap-2'>
+  if (!showToolbar) return null;
+
+  return (
+    <div className="rounded-t-xl bg-custom-100 px-4 py-3">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        {/* ACTIONS */}
+        <div className="flex flex-wrap gap-2">
           {toolbar.items?.map((item, index) => (
             <Button
               key={index}
-              variant='primary'
+              variant="primary"
               Icon={item.icon}
               onClick={item.onClick}
+              className="rounded-full bg-custom-300 text-white hover:bg-custom-200"
             >
               {item.text}
             </Button>
           ))}
         </div>
 
+        {/* SEARCH */}
         {toolbar.searchInput.active && (
-          <div className='sm:w-64 w-full text-primary-900 flex items-center'>
+          <div className="relative w-full sm:w-64">
             <input
-              type='text'
+              type="text"
               placeholder={t("search")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className='w-full bg-white px-3 py-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-brand-600 transition'
+              className="
+                w-full rounded-full
+                bg-white/80 px-4 py-2 pr-10
+                text-custom-500
+                placeholder:text-custom-200
+                focus:outline-none focus:ring-2 focus:ring-custom-200
+              "
             />
             {search && (
-              <Button
+              <button
                 onClick={() => setSearch("")}
-                variant='ghost'
-                className='absolute right-11'
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-custom-300 hover:text-custom-400"
               >
-                <X />
-              </Button>
+                <X size={16} />
+              </button>
             )}
           </div>
         )}
       </div>
     </div>
-  ) : null;
+  );
 }

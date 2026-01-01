@@ -25,7 +25,7 @@ export default function EditableRow({
   onCancel,
   onDelete,
 }: EditableRowProps) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(adding);
   const [form, setForm] = useState(gymClass);
 
@@ -58,72 +58,83 @@ export default function EditableRow({
   };
 
   return (
-    <tr className='bg-white border-b border-brand-300'>
+    <tr className="bg-white/80 hover:bg-custom-50/60 transition-colors border-b border-custom-100">
       {fields.map(({ key, placeholder }) => (
-        <td key={key} className='px-4 py-3 text-theme-secondarytextcolor'>
+        <td
+          key={key}
+          className="px-4 py-3 text-sm text-custom-400 align-middle"
+        >
           {isEditing ? (
             <input
-              className='w-full px-3 py-2 rounded-md focus:ring-1 focus:ring-brand-600 outline outline-brand-600'
+              className="
+                w-full rounded-lg bg-white px-3 py-2 text-sm
+                border border-custom-100
+                focus:border-custom-200 focus:ring-2 focus:ring-custom-100
+                outline-none transition
+              "
               value={form[key] as string | number}
               onChange={(e) => handleChange(key, e.target.value)}
               placeholder={placeholder}
             />
           ) : (
-            gymClass[key]
+            <span className="block truncate">{gymClass[key]}</span>
           )}
         </td>
       ))}
 
-      <td className='flex items-center justify-center gap-2 px-2 py-3'>
-        {isEditing ? (
-          <>
-            <Button
-              size='md'
-              variant={isUnchanged ? "secondary" : "primary"}
-              className={isUnchanged ? "disabled:cursor-not-allowed disabled:pointer-events-none" : ""}
-              Icon={Check}
-              onClick={save}
-              disabled={isUnchanged}
-            >
-              {t("save")}
-            </Button>
-
-            <Button
-              size='md'
-              variant={busy ? "secondary" : "negative"}
-              Icon={X}
-              onClick={cancel}
-            >
-              {t("cancel")}
-            </Button>
-          </>
-        ) : (
-          <>
-            <Button
-              size='md'
-              variant={busy ? "secondary" : "primary"}
-              className={busy ? "disabled:cursor-not-allowed disabled:pointer-events-none" : ""}
-              Icon={Pencil}
-              onClick={() => setIsEditing(true)}
-              disabled={busy}
-            >
-              {t("edit")}
-            </Button>
-
-            {onDelete && (
+      <td className="px-3 py-3">
+        <div className="flex items-center justify-center gap-2">
+          {isEditing ? (
+            <>
               <Button
-                size='md'
-                variant={busy ? "secondary" : "negative"}
-                className={busy ? "disabled:cursor-not-allowed disabled:pointer-events-none" : ""}
-                Icon={Trash}
-                onClick={() => onDelete(gymClass.id)}
-                disabled={busy}
+                size="sm"
+                variant={isUnchanged ? "secondary" : "primary"}
+                Icon={Check}
+                onClick={save}
+                disabled={isUnchanged}
+                className="rounded-full"
               >
-                {t("delete")}
+                {t("save")}
               </Button>
-            )}
-          </>
-        )}
+
+              <Button
+                size="sm"
+                variant="ghost"
+                Icon={X}
+                onClick={cancel}
+                className="rounded-full text-custom-300 hover:text-custom-400"
+              >
+                {t("cancel")}
+              </Button>
+            </>
+          ) : (
+            <>
+              <Button
+                size="sm"
+                variant="ghost"
+                Icon={Pencil}
+                onClick={() => setIsEditing(true)}
+                disabled={busy}
+                className="rounded-full text-custom-300 hover:text-custom-400"
+              >
+                {t("edit")}
+              </Button>
+
+              {onDelete && (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  Icon={Trash}
+                  onClick={() => onDelete(gymClass.id)}
+                  disabled={busy}
+                  className="rounded-full text-red-400 hover:text-red-500"
+                >
+                  {t("delete")}
+                </Button>
+              )}
+            </>
+          )}
+        </div>
       </td>
     </tr>
   );
