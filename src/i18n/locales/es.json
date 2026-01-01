@@ -56,5 +56,9 @@
   "users": "Usuarios",
   "preferences": "Preferencias",
   "manageYourBusiness": "Gestiona tu negocio",
-  "logout": "Cerrar sesión"
+  "actions": "Acciones",
+  "logout": "Cerrar sesión",
+  "spots": "Lugares",
+  "description": "Descripción",
+  "title": "Título"
 }

@@ -23,26 +23,26 @@ const fields: TableField<GymClass>[] = [
   {
     key: "title",
     required: true,
-    placeholder: "Title",
+    placeholder: "title",
     style: "font-semibold",
   },
   {
     key: "instructor",
     required: true,
-    placeholder: "Instructor",
+    placeholder: "instructor",
     style: "",
   },
   {
     key: "description",
     required: false,
-    placeholder: "Description",
+    placeholder: "description",
     style: "font-semibold",
   },
   {
     key: "capacity",
     required: true,
-    placeholder: "Capacity",
-    mobileLabel: "Capacity",
+    placeholder: "spots",
+    mobileLabel: "spots",
     style: "font-semibold",
   },
 ];

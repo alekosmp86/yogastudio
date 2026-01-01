@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils/utils";
 import { GymClass } from "@/types/classes/GymClass";
 import { Check, Pencil, Trash, X } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 type ClassesCardProps = {
   gymClass: GymClass;
@@ -32,6 +33,7 @@ export default function ClassesCard({
 }: ClassesCardProps) {
   const [isEditing, setIsEditing] = useState(adding);
   const [form, setForm] = useState(gymClass);
+  const { t } = useTranslation();
 
   const isUnchanged =
     form.title === gymClass.title &&
@@ -71,7 +73,7 @@ export default function ClassesCard({
                 htmlFor={key}
                 className="block text-xs font-medium uppercase tracking-wide text-custom-300"
               >
-                {placeholder}
+                {t(placeholder)}
               </label>
               <input
                 id={key}
@@ -83,14 +85,14 @@ export default function ClassesCard({
                 "
                 value={form[key] as string | number}
                 onChange={(e) => handleChange(key, e.target.value)}
-                placeholder={placeholder}
+                placeholder={t(placeholder)}
               />
             </div>
           ) : (
             <div className="flex justify-between gap-4">
               {mobileLabel && (
                 <span className="text-xs tracking-wide text-custom-300">
-                  {mobileLabel}
+                  {t(mobileLabel)}
                 </span>
               )}
               <span className={cn("text-sm text-custom-400 text-right truncate", style)}>

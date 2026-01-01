@@ -74,7 +74,7 @@ export default function EditableRow({
               "
               value={form[key] as string | number}
               onChange={(e) => handleChange(key, e.target.value)}
-              placeholder={placeholder}
+              placeholder={t(placeholder)}
             />
           ) : (
             <span className="block truncate">{gymClass[key]}</span>

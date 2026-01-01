@@ -56,5 +56,9 @@
   "users": "Users",
   "preferences": "Preferences",
   "logout": "Logout",
-  "manageYourBusiness": "Manage your business"
+  "manageYourBusiness": "Manage your business",
+  "actions": "Actions",
+  "spots": "Spots",
+  "description": "Description",
+  "title": "Title"
 }

@@ -21,7 +21,7 @@ export default function TableHeader<T>({ fields }: TableHeaderProps<T>) {
         <tr className="text-left">
           {fields.map(({ key, placeholder }) => (
             <th key={String(key)} className="px-4 py-3">
-              {placeholder}
+              {t(placeholder)}
             </th>
           ))}
           <th className="px-4 py-3 text-center font-semibold text-custom-400">
