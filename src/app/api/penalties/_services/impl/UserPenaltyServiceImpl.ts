@@ -4,8 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { notificationService, preferenceService } from "app/api";
 import { NotificationType } from "app/api/notifications/_enums/NotificationTypes";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
-import DayjsUtils from "@/lib/utils/dayjs";
-import dayjs from "dayjs";
+import { BusinessTime } from "@/lib/utils/date";
 
 export class UserPenaltyServiceImpl implements UserPenaltyService {
   private logger = new ConsoleLogger(this.constructor.name);
@@ -23,19 +22,20 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     attended: boolean
   ): Promise<UserPenalty> {
     const timezone = await preferenceService.getStringPreferenceValue("timezone");
+    const businessTime = new BusinessTime(timezone);
     let userPenalty = await this.findByUserId(userId);
     if (userPenalty) {
       userPenalty = await this.update(
         userId,
         attended ? Math.max(userPenalty.noShowCount - 1, 0) : userPenalty.noShowCount + 1,
-        attended ? null : DayjsUtils.startOfDay(timezone).format("YYYY-MM-DD")
+        attended ? null : businessTime.now().date
       );
     } else {
       userPenalty = await prisma.userPenalty.create({
         data: {
           userId: userId,
           noShowCount: attended ? 0 : 1,
-          lastNoShowAt: attended ? null : DayjsUtils.startOfDay(timezone).format("YYYY-MM-DD"),
+          lastNoShowAt: attended ? null : businessTime.now().date,
         },
       });
     }
@@ -76,6 +76,7 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
         "penaltyBlockDuration"
       );
     const timezone = await preferenceService.getStringPreferenceValue("timezone");
+    const businessTime = new BusinessTime(timezone);
 
     if (userPenalty.noShowCount >= penaltyMaxNoShowCount) {
       await prisma.userPenalty.update({
@@ -83,8 +84,8 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
           userId: userPenalty.userId,
         },
         data: {
-          blockedUntil: DayjsUtils.addDays(dayjs(), penaltyBlockDuration, timezone).format("YYYY-MM-DD"),
-          lastNoShowAt: DayjsUtils.startOfDay(timezone).format("YYYY-MM-DD"),
+          blockedUntil: businessTime.addDays(businessTime.now().date, penaltyBlockDuration),
+          lastNoShowAt: businessTime.now().date,
         },
       });
       
@@ -93,7 +94,7 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
       const businessPhone = await preferenceService.getStringPreferenceValue("businessWhatsappNumber");
       await notificationService.sendNotification(userPenalty.userId, NotificationType.USER_BLOCKED, {
         userName: user.name,
-        untilDate: DayjsUtils.addDays(dayjs(), penaltyBlockDuration, timezone).toDate(),
+        untilDate: businessTime.addDays(businessTime.now().date, penaltyBlockDuration),
         contactEmail: businessEmail,
         contactPhone: businessPhone,
       });

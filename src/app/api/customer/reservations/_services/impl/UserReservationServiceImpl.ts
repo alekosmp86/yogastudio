@@ -12,15 +12,16 @@ import {
   waitingListService,
 } from "app/api";
 import { SessionUser } from "@/types/SessionUser";
-import DayjsUtils from "@/lib/utils/dayjs";
+import { BusinessTime } from "@/lib/utils/date";
 
 export class UserReservationServiceImpl implements UserReservationService {
   async getReservations(userId: number): Promise<ClassReservation[]> {
     const timezone = await preferenceService.getStringPreferenceValue(
       "timezone"
     );
-    const date = DayjsUtils.getToday(timezone);
-    const oneHourLater = DayjsUtils.nextHour(date);
+    const businessTime = new BusinessTime(timezone);
+    const date = businessTime.now().date;
+    const oneHourLater = businessTime.addHours(1);
 
     return prisma.reservation.findMany({
       where: {
@@ -30,14 +31,14 @@ export class UserReservationServiceImpl implements UserReservationService {
           // Future days
           {
             class: {
-              date: { gt: date.format("YYYY-MM-DD") },
+              date: { gt: date },
             },
           },
 
           // Today, but only future hours
           {
             class: {
-              date: date.format("YYYY-MM-DD"),
+              date,
               startTime: { gte: oneHourLater },
             },
           },
@@ -228,12 +229,9 @@ export class UserReservationServiceImpl implements UserReservationService {
     const timezone = await preferenceService.getStringPreferenceValue(
       "timezone"
     );
+    const businessTime = new BusinessTime(timezone);
     return (
-      DayjsUtils.addHours(
-        DayjsUtils.getCurrentHour(timezone),
-        lateCancelHours,
-        timezone
-      ).format("HH:mm") >= classInstance.startTime
+      businessTime.addHours(lateCancelHours) >= classInstance.startTime
     );
   }
 

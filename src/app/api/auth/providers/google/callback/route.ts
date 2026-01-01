@@ -10,8 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInfo";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { User, UserPenalty } from "@prisma/client";
-import DayjsUtils from "@/lib/utils/dayjs";
-import dayjs from "dayjs";
+import { BusinessTime } from "@/lib/utils/date";
 
 const logger = new ConsoleLogger("GoogleCallback");
 
@@ -82,10 +81,11 @@ export async function GET(req: NextRequest) {
   const timezone = await preferenceService.getStringPreferenceValue(
     "timezone"
   );
+  const businessTime = new BusinessTime(timezone);
   if (
     penalties &&
     penalties.blockedUntil &&
-    DayjsUtils.startOfDay(timezone) > dayjs(penalties.blockedUntil)
+    businessTime.now().date > penalties.blockedUntil
   ) {
     await userPenaltyService.unblockUser(penalties.userId);
   }

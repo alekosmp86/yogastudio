@@ -1,12 +1,16 @@
 import { OnwerReservationService } from "../OnwerReservationService";
 import { ReservationsPerClass } from "@/types/reservations/ReservationsPerClass";
 import { prisma } from "@/lib/prisma";
-import { userPenaltyService } from "app/api";
-import dayjs from "dayjs";
+import { preferenceService, userPenaltyService } from "app/api";
+import { BusinessTime } from "@/lib/utils/date";
 
 export class OnwerReservationServiceImpl implements OnwerReservationService {
   async getReservations(): Promise<ReservationsPerClass[]> {
-    const today = dayjs().startOf("day").format("YYYY-MM-DD");
+    const timezone = await preferenceService.getStringPreferenceValue(
+      "timezone"
+    );
+    const businessTime = new BusinessTime(timezone);
+    const today = businessTime.now().date;
     
     /**
      * @todo: este codigo queda comentado por la posibilidad de obtener todas las reservas

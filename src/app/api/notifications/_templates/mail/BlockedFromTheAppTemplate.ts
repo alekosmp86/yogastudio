@@ -3,13 +3,7 @@ import { NotificationTypePayload } from "../../_models/NotificationTypePayload";
 export function blockedFromTheAppTemplate(
   data: NotificationTypePayload["USER_BLOCKED"]
 ) {
-  const blockedUntilText = data.untilDate
-    ? new Intl.DateTimeFormat("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }).format(data.untilDate)
-    : "indefinitely";
+  const blockedUntilText = data.untilDate || "indefinitely";
 
   return {
     subject: "Account access suspended",

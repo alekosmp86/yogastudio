@@ -3,7 +3,6 @@ import { ClassReservation } from "@/types/reservations/ClassReservation";
 import ReservationCard from "./ReservationCard";
 import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 import { useTranslation } from "react-i18next";
-import DayjsUtils from "@/lib/utils/dayjs";
 import { BusinessTime } from "@/lib/utils/date";
 
 type ReservationsByDateProps = {
@@ -22,7 +21,7 @@ export default function ReservationsByDate({
   const timezone = getPreferenceByName<string>("timezone")!;
   const language = getPreferenceByName<string>("language")!;
   const businessTime = new BusinessTime(timezone);
-  const today = date.startsWith(DayjsUtils.getToday(timezone).format("YYYY-MM-DD"));
+  const today = date.startsWith(businessTime.now().date);
 
   return (
     <section className="flex flex-col gap-3">
