@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils/utils";
 import { Check, Info, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { UserActions as UserActionsEnum } from "@/enums/UserActions";
+import Link from "next/link";
 
 type UserActionsProps = {
   id: number;
@@ -20,19 +21,20 @@ export default function UserActions({
   const { t } = useTranslation();
 
   return (
-    <div className="flex gap-1">
+    <div className='flex gap-1'>
+      <Link href={`/owner/users/${id}`}>
+        <Button
+          size='sm'
+          variant='ghost'
+          className='text-custom-300'
+          Icon={Info}
+        >
+          {t("details")}
+        </Button>
+      </Link>
       <Button
-        size="sm"
-        variant="ghost"
-        className="text-custom-300"
-        onClick={() => onAction(id, UserActionsEnum.VIEW_USER_DETAILS)}
-        Icon={Info}
-      >
-        {t("details")}
-      </Button>
-      <Button
-        size="sm"
-        variant="ghost"
+        size='sm'
+        variant='ghost'
         Icon={approved ? X : Check}
         className={cn(
           mobile ? "flex-1" : "",

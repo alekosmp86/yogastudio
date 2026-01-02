@@ -92,5 +92,7 @@
   "accountPendingApproval": "Your account is pending approval. Please contact the admin.",
   "yes": "Yes",
   "no": "No",
-  "details": "Details"
+  "details": "Details",
+  "executingAction": "Executing action...",
+  "failedToExecuteAction": "Failed to execute action"
 }

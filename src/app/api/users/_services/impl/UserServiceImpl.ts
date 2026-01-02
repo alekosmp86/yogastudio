@@ -17,7 +17,11 @@ export class UserServiceImpl implements UserService {
   }
 
   async getAllUsers(): Promise<User[]> {
-    return prisma.user.findMany();
+    return prisma.user.findMany({
+      where: {
+        role: Roles.USER,
+      },
+    });
   }
 
   executeAction(id: number, action: string): Promise<User | null> {
@@ -31,7 +35,7 @@ export class UserServiceImpl implements UserService {
     }
   }
 
-  async approveUser(id: number): Promise<User | null> {
+  private async approveUser(id: number): Promise<User | null> {
     await prisma.user.update({
       where: { id },
       data: { approved: true },
@@ -39,7 +43,7 @@ export class UserServiceImpl implements UserService {
     return this.getUserById(id);
   }
 
-  async rejectUser(id: number): Promise<User | null> {
+  private async rejectUser(id: number): Promise<User | null> {
     await prisma.user.update({
       where: { id },
       data: { approved: false },

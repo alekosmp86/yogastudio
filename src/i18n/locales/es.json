@@ -92,5 +92,7 @@
   "accountPendingApproval": "Tu cuenta está pendiente de aprobación. Por favor, contacta al administrador.",
   "yes": "Sí",
   "no": "No",
-  "details": "Detalles"
+  "details": "Detalles",
+  "executingAction": "Ejecutando acción...",
+  "failedToExecuteAction": "Error al ejecutar la acción"
 }

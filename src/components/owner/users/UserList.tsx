@@ -58,33 +58,39 @@ export default function UserList() {
 
   const handleAction = async (id: number, action: UserActions) => {
     const toastId = showToast({
-      message: "Updating user...",
+      message: t('executingAction'),
       type: ToastType.WARNING,
     });
 
     try {
-      const { message, data } = await http.put<ApiResponse<User>>(
-        `/owner/users/${id}/${action}`,
-        ApiType.FRONTEND
-      );
-      if (message !== RequestStatus.SUCCESS) {
-        showToast({
-          message: "Failed to update user",
-          type: ToastType.ERROR,
-        });
-        return;
-      }
+      switch (action) {
+        case UserActions.APPROVE_USER:
+        case UserActions.BLOCK_USER: {
+          const { message, data } = await http.put<ApiResponse<User>>(
+            `/owner/users/${id}/${action}`,
+            ApiType.FRONTEND
+          );
+          if (message !== RequestStatus.SUCCESS) {
+            showToast({
+              message: "Failed to update user",
+              type: ToastType.ERROR,
+            });
+            return;
+          }
 
-      setUsers((prevUsers) =>
-        prevUsers.map((user) => (user.id === id ? data! : user))
-      );
-      showToast({
-        message: "User updated successfully",
-        type: ToastType.SUCCESS,
-      });
+          setUsers((prevUsers) =>
+            prevUsers.map((user) => (user.id === id ? data! : user))
+          );
+          showToast({
+            message: "User updated successfully",
+            type: ToastType.SUCCESS,
+          });
+          break;
+        }
+      }
     } catch {
       showToast({
-        message: "Failed to update user",
+        message: t("failedToExecuteAction"),
         type: ToastType.ERROR,
       });
     } finally {
