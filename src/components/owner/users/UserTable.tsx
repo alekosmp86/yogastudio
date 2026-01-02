@@ -1,12 +1,12 @@
 import { User } from "@/types/User";
 import UserRow from "./UserRow";
-import { OwnerActions } from "@/enums/OwnerActions";
+import { UserActions } from "@/enums/UserActions";
 import { TableField } from "@/types/TableField";
 import TableHeader from "../../shared/TableHeader";
 
 type UserTableProps = {
   users: User[];
-  onAction: (id: number, action: OwnerActions) => void;
+  onAction: (id: number, action: UserActions) => void;
 };
 
 export default function UserTable({ users, onAction }: UserTableProps) {

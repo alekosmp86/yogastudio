@@ -1,10 +1,10 @@
 import { User } from "@/types/User";
 import UserActions from "./UserActions";
-import { OwnerActions } from "@/enums/OwnerActions";
+import { UserActions as UserActionsEnum } from "@/enums/UserActions";
 
 type UserCardProps = {
   user: User;
-  onAction: (id: number, action: OwnerActions) => void;
+  onAction: (id: number, action: UserActionsEnum) => void;
 };
 
 export default function UserCard({ user, onAction }: UserCardProps) {

@@ -24,7 +24,7 @@ export class UserServiceImpl implements UserService {
     switch (action) {
       case UserActions.APPROVE_USER:
         return this.approveUser(id);
-      case UserActions.REJECT_USER:
+      case UserActions.BLOCK_USER:
         return this.rejectUser(id);
       default:
         throw new Error("Invalid action");

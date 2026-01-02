@@ -19,7 +19,7 @@ import { useScheduledClasses } from "@/lib/contexts/ScheduledClassesContext";
 import { Time } from "@/static/Time";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
-import { FileSymlink, LinkIcon } from "lucide-react";
+import { FileSymlink } from "lucide-react";
 import Button from "@/components/shared/Button";
 
 export default function WeeklyScheduleGrid() {

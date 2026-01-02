@@ -1,12 +1,13 @@
 import Button from "@/components/shared/Button";
-import { OwnerActions } from "@/enums/OwnerActions";
 import { cn } from "@/lib/utils/utils";
 import { Check, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { UserActions as UserActionsEnum } from "@/enums/UserActions";
 
 type UserActionsProps = {
   id: number;
   approved: boolean;
-  onAction: (id: number, action: OwnerActions) => void;
+  onAction: (id: number, action: UserActionsEnum) => void;
   mobile?: boolean;
 };
 
@@ -16,6 +17,8 @@ export default function UserActions({
   onAction,
   mobile = false,
 }: UserActionsProps) {
+  const { t } = useTranslation();
+
   return (
     <div>
       <Button
@@ -29,11 +32,11 @@ export default function UserActions({
         onClick={() =>
           onAction(
             id,
-            approved ? OwnerActions.REJECT_USER : OwnerActions.APPROVE_USER
+            approved ? UserActionsEnum.BLOCK_USER : UserActionsEnum.APPROVE_USER
           )
         }
       >
-        {approved ? "Reject" : "Approve"}
+        {approved ? t("block") : t("approve")}
       </Button>
     </div>
   );

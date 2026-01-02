@@ -1,6 +1,5 @@
 import { ApiType } from "@/enums/ApiTypes";
 import { RequestStatus } from "@/enums/RequestStatus";
-import { OwnerActions } from "@/enums/OwnerActions";
 import { http } from "@/lib/http";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { User } from "@/types/User";
@@ -13,6 +12,7 @@ import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
 import Container from "@/components/shared/Container";
 import { useTranslation } from "react-i18next";
+import { UserActions } from "@/enums/UserActions";
 
 export default function UserList() {
   const {t} = useTranslation();
@@ -56,7 +56,7 @@ export default function UserList() {
     getAllUsers();
   }, []);
 
-  const handleAction = async (id: number, action: OwnerActions) => {
+  const handleAction = async (id: number, action: UserActions) => {
     const toastId = showToast({
       message: "Updating user...",
       type: ToastType.WARNING,

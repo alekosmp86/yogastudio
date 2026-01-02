@@ -1,13 +1,13 @@
 import { User } from "@/types/User";
 import UserActions from "./UserActions";
-import { OwnerActions } from "@/enums/OwnerActions";
 import { cn } from "@/lib/utils/utils";
 import { TableField } from "@/types/TableField";
+import { UserActions as UserActionsEnum } from "@/enums/UserActions";
 
 type UserRowProps = {
   user: User;
   fields: TableField<User>[];
-  onAction: (id: number, action: OwnerActions) => void;
+  onAction: (id: number, action: UserActionsEnum) => void;
 };
 
 export default function UserRow({ user, fields, onAction }: UserRowProps) {
