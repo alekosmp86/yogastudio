@@ -83,5 +83,9 @@
   "background_tasks": "Background Tasks",
   "select": "Select",
   "createClassesFirst": "Create your first class here",
-  "goToClasses": "Go to classes"
+  "goToClasses": "Go to classes",
+  "booked": "Booked",
+  "attended": "Attended",
+  "approve": "Approve",
+  "block": "Block"
 }

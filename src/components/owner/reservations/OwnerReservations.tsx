@@ -105,10 +105,9 @@ export default function OwnerReservations() {
                       )}
                     />
                   }
-                  className="hover:bg-gray-800"
                 >
                   {reservations.length === 0 ? (
-                    <p className="text-white">{t("noReservationsFound")}</p>
+                    <p className="text-custom-400">{t("noReservationsFound")}</p>
                   ) : (
                     reservations.map((reservation) => (
                       <ReservationRow

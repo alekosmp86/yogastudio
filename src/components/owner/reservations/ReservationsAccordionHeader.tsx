@@ -1,4 +1,5 @@
 import { CapacityBar } from "@/components/shared/CapacityBar";
+import { useTranslation } from "react-i18next";
 
 type ReservationsAccordionHeaderProps = {
   title: string;
@@ -13,32 +14,44 @@ export default function ReservationsAccordionHeader({
   capacity,
   attendance,
 }: ReservationsAccordionHeaderProps) {
-  const percentage = Math.round((booked / capacity) * 100);
+  const { t } = useTranslation();
+  const percentageBooked = Math.round((booked / capacity) * 100);
+  const percentageAttendance = Math.round((attendance / booked) * 100);
 
-  const color =
-    percentage >= 100
-      ? "text-green-400"
-      : percentage >= 50
-      ? "text-yellow-400"
-      : "text-red-400";
+  const colorBooked =
+    percentageBooked >= 100
+      ? "text-green-700"
+      : percentageBooked >= 50
+      ? "text-custom-200"
+      : "text-red-500/80";
+
+  const colorAttendance =
+    percentageAttendance >= 100
+      ? "text-green-700"
+      : percentageAttendance >= 50
+      ? "text-custom-200"
+      : "text-red-500/80";
 
   return (
-    <div className="w-full">
-      {/* Row 1: Title */}
-      <div className="text-sm font-medium text-white truncate">{title}</div>
+    <div className="w-full space-y-3">
+      {/* Title */}
+      <div className="text-sm sm:text-base font-semibold text-custom-400 truncate">
+        {title}
+      </div>
 
-      {/* Row 2: Capacity info */}
-      <div className="flex flex-col justify-start gap-3 mt-2">
-        <CapacityBar reserved={booked} capacity={capacity} />
+      {/* Capacity bar */}
+      <CapacityBar reserved={booked} capacity={capacity} />
 
-        <span className="flex flex-row gap-2 items-center">
-          <span className={`text-xs font-semibold ${color}`}>
-            Booked: [ {booked} / {capacity} ]
-          </span>
-          <span className="text-xs font-semibold text-gray-400">|</span>
-          <span className={`text-xs font-semibold ${color}`}>
-            Assisted: [ {attendance} / {booked} ]
-          </span>
+      {/* Stats */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+        <span className={`font-semibold ${colorBooked}`}>
+          {t("booked")} <span className="opacity-70">·</span> [{booked}/{capacity}]
+        </span>
+
+        <span className="text-custom-200/60 hidden sm:inline">•</span>
+
+        <span className={`font-semibold ${colorAttendance}`}>
+          {t("attended")} <span className="opacity-70">·</span> [{attendance}/{booked}]
         </span>
       </div>
     </div>

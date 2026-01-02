@@ -16,25 +16,26 @@ export function ReservationRow({
   onToggleAttendance,
 }: ReservationRowProps) {
   return (
-    <div
-      className="
-    flex flex-col gap-3 py-3 border-b border-gray-700
-    md:flex-row md:items-center md:justify-between
-  "
-    >
+    <div className="flex flex-col gap-3 py-3 border-b border-gray-700 md:flex-row md:items-center md:justify-between">
       {/* User info */}
       <div className="flex flex-col">
-        <span className="text-white text-sm font-medium">
+        <span className="text-custom-400 text-md font-semibold">
           {reservation.user.name}
         </span>
-        <span className="text-xs text-gray-400">{reservation.user.email}</span>
+        <span className="text-xs text-custom-200">
+          <a href={`mailto:${reservation.user.email}`}>
+            {reservation.user.email}
+          </a>
+        </span>
       </div>
 
       {/* Attendance toggle */}
       <div className="self-end md:self-auto">
         <AttendanceToggle
           attended={reservation.attended}
-          onToggleAttendance={(attended: boolean) => onToggleAttendance(attended)}
+          onToggleAttendance={(attended: boolean) =>
+            onToggleAttendance(attended)
+          }
         />
       </div>
     </div>

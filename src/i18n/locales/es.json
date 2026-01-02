@@ -83,5 +83,9 @@
   "background_tasks": "Tareas en segundo plano",
   "select": "Seleccionar",
   "createClassesFirst": "Crea tu primera clase aquí",
-  "goToClasses": "Ir a Clases"
+  "goToClasses": "Ir a Clases",
+  "booked": "Reservadas",
+  "attended": "Asistencia",
+  "approve": "Aprobar",
+  "block": "Bloquear"
 }
