@@ -91,5 +91,6 @@
   "approval": "Aprobación",
   "accountPendingApproval": "Tu cuenta está pendiente de aprobación. Por favor, contacta al administrador.",
   "yes": "Sí",
-  "no": "No"
+  "no": "No",
+  "details": "Detalles"
 }

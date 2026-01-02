@@ -91,5 +91,6 @@
   "approval": "Approval",
   "accountPendingApproval": "Your account is pending approval. Please contact the admin.",
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "details": "Details"
 }

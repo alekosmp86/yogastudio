@@ -1,6 +1,6 @@
 import Button from "@/components/shared/Button";
 import { cn } from "@/lib/utils/utils";
-import { Check, X } from "lucide-react";
+import { Check, Info, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { UserActions as UserActionsEnum } from "@/enums/UserActions";
 
@@ -20,7 +20,16 @@ export default function UserActions({
   const { t } = useTranslation();
 
   return (
-    <div>
+    <div className="flex gap-1">
+      <Button
+        size="sm"
+        variant="ghost"
+        className="text-custom-300"
+        onClick={() => onAction(id, UserActionsEnum.VIEW_USER_DETAILS)}
+        Icon={Info}
+      >
+        {t("details")}
+      </Button>
       <Button
         size="sm"
         variant="ghost"
