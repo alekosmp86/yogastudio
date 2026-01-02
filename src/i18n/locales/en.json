@@ -67,5 +67,18 @@
   "weeklySchedule": "Weekly Schedule",
   "name": "Name",
   "phone": "Phone",
-  "approved": "Approved"
+  "approved": "Approved",
+  "businessName": "Business Name",
+  "businessWhatsappNumber": "WhatsApp Number",
+  "businessEmail": "Email",
+  "timezone": "Timezone",
+  "language": "Language",
+  "usersRequireApproval": "Users require approval",
+  "penaltyMaxNoShowCount": "Penalty max no-show count",
+  "penaltyBlockDuration": "Penalty block duration (days)",
+  "generateClassesForXDays": "Generate classes for X days",
+  "lateCancelHours": "Late cancel hours",
+  "business": "Business",
+  "rules": "Rules",
+  "background_tasks": "Background Tasks"
 }

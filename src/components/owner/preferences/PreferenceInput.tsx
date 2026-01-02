@@ -14,21 +14,37 @@ export default function PreferenceInput({
 
   if (preference.type === PreferenceTypes.BOOLEAN) {
     return (
+      <label className="inline-flex items-center gap-3 cursor-pointer">
+        <input
+          type="checkbox"
+          checked={value === true}
+          onChange={(e) => onChange({ ...preference, value: e.target.checked })}
+          className="h-5 w-5 rounded accent-custom-300 focus:ring-2 focus:ring-custom-200"
+        />
+        <span className="text-sm text-custom-400">
+          {value ? "Enabled" : "Disabled"}
+        </span>
+      </label>
+    );
+  }
+
+  if (preference.type === PreferenceTypes.NUMBER) {
+    return (
       <input
-        type='checkbox'
-        checked={value === true}
-        onChange={(e) => onChange({ ...preference, value: e.target.checked })}
-        className='h-5 w-5 cursor-pointer accent-primary-700'
+        type="number"
+        value={value as number}
+        onChange={(e) => onChange({ ...preference, value: e.target.valueAsNumber })}
+        className="w-full rounded-lg bg-white px-3 py-2 text-sm border border-custom-100 focus:border-custom-200 focus:ring-2 focus:ring-custom-100 outline-none transition"
       />
     );
   }
 
   return (
     <input
-      type='text'
+      type="text"
       value={value as string}
       onChange={(e) => onChange({ ...preference, value: e.target.value })}
-      className='w-full rounded-md border border-primary-900/40 bg-transparent px-3 py-1.5 text-black placeholder:text-brand-200/50 focus:outline-none focus:ring-2 focus:ring-primary-700'
+      className="w-full rounded-lg bg-white px-3 py-2 text-sm border border-custom-100 focus:border-custom-200 focus:ring-2 focus:ring-custom-100 outline-none transition"
     />
   );
 }

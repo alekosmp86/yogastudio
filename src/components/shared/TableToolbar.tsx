@@ -45,13 +45,7 @@ export default function TableToolbar({
               placeholder={t("search")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="
-                w-full rounded-full
-                bg-white/80 px-4 py-2 pr-10
-                text-custom-500
-                placeholder:text-custom-200
-                focus:outline-none focus:ring-2 focus:ring-custom-200
-              "
+              className="w-full rounded-full bg-white/80 px-4 py-2 pr-10 text-custom-500 placeholder:text-custom-200 focus:outline-none focus:ring-2 focus:ring-custom-200"
             />
             {search && (
               <button

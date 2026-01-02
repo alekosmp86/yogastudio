@@ -88,7 +88,7 @@ export default function OwnerReservations() {
               <CardSkeleton key={index} />
             ))
           ) : reservationsPerClass.length === 0 ? (
-            <p className="text-white">No reservations found</p>
+            <p className="text-white">{t("noReservationsFound")}</p>
           ) : (
             reservationsPerClass.map(
               ({ id, startTime, reservations, template }) => (
@@ -108,7 +108,7 @@ export default function OwnerReservations() {
                   className="hover:bg-gray-800"
                 >
                   {reservations.length === 0 ? (
-                    <p className="text-white">No reservations found</p>
+                    <p className="text-white">{t("noReservationsFound")}</p>
                   ) : (
                     reservations.map((reservation) => (
                       <ReservationRow

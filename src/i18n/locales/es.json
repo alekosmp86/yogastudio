@@ -67,5 +67,18 @@
   "weeklySchedule": "Horario semanal",
   "name": "Nombre",
   "phone": "Teléfono",
-  "approved": "Aprobado"
+  "approved": "Aprobado",
+  "businessName": "Nombre del negocio",
+  "businessWhatsappNumber": "Número de WhatsApp",
+  "businessEmail": "Email",
+  "timezone": "Zona horaria",
+  "language": "Idioma",
+  "usersRequireApproval": "Usuarios requieren aprobación",
+  "penaltyMaxNoShowCount": "Máximo de ausencias",
+  "penaltyBlockDuration": "Duración del bloqueo (días)",
+  "generateClassesForXDays": "Generar clases para X días",
+  "lateCancelHours": "Cancelación tardía (horas)",
+  "business": "Negocio",
+  "rules": "Reglas",
+  "background_tasks": "Tareas en segundo plano"
 }

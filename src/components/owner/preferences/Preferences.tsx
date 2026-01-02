@@ -33,7 +33,7 @@ export default function Preferences() {
     items: [
       {
         icon: SaveIcon,
-        text: "Save",
+        text: "",
         onClick: async () => {
           await handleSave();
         },

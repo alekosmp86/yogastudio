@@ -12,7 +12,7 @@ type UserRowProps = {
 
 export default function UserRow({ user, fields, onAction }: UserRowProps) {
   return (
-    <tr className="bg-white/80 transition-colors border-b border-custom-100">
+    <tr className="bg-white/80 border-b border-custom-100">
       {fields.map(({ key, style }) => (
         <td key={String(key)} className={cn("px-4 py-3 text-sm text-custom-400 align-middle", style)}>
           {typeof user[key] === "boolean"

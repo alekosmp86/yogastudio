@@ -66,12 +66,7 @@ export default function EditableRow({
         >
           {isEditing ? (
             <input
-              className="
-                w-full rounded-lg bg-white px-3 py-2 text-sm
-                border border-custom-100
-                focus:border-custom-200 focus:ring-2 focus:ring-custom-100
-                outline-none transition
-              "
+              className="w-full rounded-lg bg-white px-3 py-2 text-sm border border-custom-100 focus:border-custom-200 focus:ring-2 focus:ring-custom-100 outline-none transition"
               value={form[key] as string | number}
               onChange={(e) => handleChange(key, e.target.value)}
               placeholder={t(placeholder)}
