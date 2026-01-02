@@ -37,7 +37,7 @@ export default function ClassesTable({
             <tr>
               <td
                 colSpan={fields.length}
-                className="py-6 text-center text-sm text-custom-300"
+                className="px-6 py-6 text-left text-sm text-custom-300"
               >
                 {t("noClassesFound")}
               </td>
