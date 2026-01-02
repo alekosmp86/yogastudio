@@ -38,6 +38,7 @@ class PreferencesStore {
       ...p,
       type: p.type as PreferenceTypes,
       value: this.parseValue(p.value, p.type as PreferenceTypes),
+      options: p.options ? JSON.parse(p.options) : [],
       category: p.category as PreferenceCategory,
     }));
   }

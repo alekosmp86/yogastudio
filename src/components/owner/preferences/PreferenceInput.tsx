@@ -1,5 +1,6 @@
 import { AppPreference } from "@/types/preferences/AppPreference";
 import { PreferenceTypes } from "@/enums/PreferenceTypes";
+import { useTranslation } from "react-i18next";
 
 type PreferenceInputProps = {
   preference: AppPreference;
@@ -10,6 +11,7 @@ export default function PreferenceInput({
   preference,
   onChange,
 }: PreferenceInputProps) {
+  const {t} = useTranslation();
   const value = preference.value;
 
   if (preference.type === PreferenceTypes.BOOLEAN) {
@@ -36,6 +38,22 @@ export default function PreferenceInput({
         onChange={(e) => onChange({ ...preference, value: e.target.valueAsNumber })}
         className="w-full rounded-lg bg-white px-3 py-2 text-sm border border-custom-100 focus:border-custom-200 focus:ring-2 focus:ring-custom-100 outline-none transition"
       />
+    );
+  }
+
+  if (preference.type === PreferenceTypes.SELECT) {
+    return (
+      <select
+        value={value as string}
+        onChange={(e) => onChange({ ...preference, value: e.target.value })}
+        className="w-full rounded-lg bg-white px-3 py-2 text-sm border border-custom-100 focus:border-custom-200 focus:ring-2 focus:ring-custom-100 outline-none transition"
+      >
+        {preference.options?.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
     );
   }
 

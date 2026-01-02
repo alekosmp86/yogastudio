@@ -3,82 +3,89 @@ import { PreferenceTypes } from "@/enums/PreferenceTypes";
 import { PreferenceCategory } from "@/enums/PreferenceCategory";
 
 export const CorePreferences: AppPreference[] = [
-    {
-        id: 1,
-        name: "businessName",
-        label: "Business Name",
-        type: PreferenceTypes.TEXT,
-        value: "GymStudio",
-        category: PreferenceCategory.BUSINESS
-    },
-    {
-        id: 2,
-        name: "businessWhatsappNumber",
-        label: "Business Whatsapp Number",
-        type: PreferenceTypes.TEXT,
-        value: "94662337",
-        category: PreferenceCategory.BUSINESS
-    },
-    {
-        id: 3,
-        name: "businessEmail",
-        label: "Business Email",
-        type: PreferenceTypes.TEXT,
-        value: "alekosmp86@gmail.com",
-        category: PreferenceCategory.BUSINESS
-    },
-    {
-        id: 4,
-        name: "timezone",
-        label: "Timezone",
-        type: PreferenceTypes.TEXT,
-        value: "America/Montevideo",
-        category: PreferenceCategory.BUSINESS
-    },
-    {
-        id: 5,
-        name: "language",
-        label: "Default Language",
-        type: PreferenceTypes.TEXT,
-        value: "es",
-        category: PreferenceCategory.LANGUAGE
-    },
-    {
-        id: 6,
-        name: "usersRequireApproval",
-        label: "Users require approval",
-        type: PreferenceTypes.BOOLEAN,
-        value: "true",
-        category: PreferenceCategory.RULES
-    },
-    {
-        id: 7,
-        name: "penaltyMaxNoShowCount",
-        label: "Max No Show Count",
-        type: PreferenceTypes.NUMBER,
-        value: "2",
-        category: PreferenceCategory.RULES
-    },
-    {
-        id: 8,
-        name: "penaltyBlockDuration",
-        label: "Penalty Block Duration (days)",
-        type: PreferenceTypes.NUMBER,
-        value: "3",
-        category: PreferenceCategory.RULES
-    }, {
-        id: 9,
-        name: "generateClassesForXDays",
-        label: "Generate classes for X days",
-        type: PreferenceTypes.NUMBER,
-        value: "3",
-        category: PreferenceCategory.BACKGROUND_TASKS
-    }, {
-        id: 10,
-        name: "lateCancelHours",
-        label: "Late cancel hours",
-        type: PreferenceTypes.NUMBER,
-        value: "1",
-        category: PreferenceCategory.RULES
-    }
+  {
+    id: 1,
+    name: "businessName",
+    label: "Business Name",
+    type: PreferenceTypes.TEXT,
+    value: "GymStudio",
+    category: PreferenceCategory.BUSINESS,
+  },
+  {
+    id: 2,
+    name: "businessWhatsappNumber",
+    label: "Business Whatsapp Number",
+    type: PreferenceTypes.TEXT,
+    value: "94662337",
+    category: PreferenceCategory.BUSINESS,
+  },
+  {
+    id: 3,
+    name: "businessEmail",
+    label: "Business Email",
+    type: PreferenceTypes.TEXT,
+    value: "alekosmp86@gmail.com",
+    category: PreferenceCategory.BUSINESS,
+  },
+  {
+    id: 4,
+    name: "timezone",
+    label: "Timezone",
+    type: PreferenceTypes.SELECT,
+    value: "America/Montevideo",
+    options: [{ value: "America/Montevideo", label: "Montevideo/Uruguay" }],
+    category: PreferenceCategory.BUSINESS,
+  },
+  {
+    id: 5,
+    name: "language",
+    label: "Default Language",
+    type: PreferenceTypes.SELECT,
+    value: "es",
+    options: [
+      { value: "en", label: "English" },
+      { value: "es", label: "Español" },
+    ],
+    category: PreferenceCategory.LANGUAGE,
+  },
+  {
+    id: 6,
+    name: "usersRequireApproval",
+    label: "Users require approval",
+    type: PreferenceTypes.BOOLEAN,
+    value: "true",
+    category: PreferenceCategory.RULES,
+  },
+  {
+    id: 7,
+    name: "penaltyMaxNoShowCount",
+    label: "Max No Show Count",
+    type: PreferenceTypes.NUMBER,
+    value: "2",
+    category: PreferenceCategory.RULES,
+  },
+  {
+    id: 8,
+    name: "penaltyBlockDuration",
+    label: "Penalty Block Duration (days)",
+    type: PreferenceTypes.NUMBER,
+    value: "3",
+    category: PreferenceCategory.RULES,
+  },
+  {
+    id: 9,
+    name: "generateClassesForXDays",
+    label: "Generate classes for X days",
+    type: PreferenceTypes.NUMBER,
+    value: "3",
+    category: PreferenceCategory.BACKGROUND_TASKS,
+  },
+  {
+    id: 10,
+    name: "lateCancelHours",
+    label: "Late cancel hours",
+    type: PreferenceTypes.NUMBER,
+    value: "1",
+    category: PreferenceCategory.RULES,
+  },
 ];

@@ -80,5 +80,6 @@
   "lateCancelHours": "Cancelación tardía (horas)",
   "business": "Negocio",
   "rules": "Reglas",
-  "background_tasks": "Tareas en segundo plano"
+  "background_tasks": "Tareas en segundo plano",
+  "select": "Seleccionar"
 }

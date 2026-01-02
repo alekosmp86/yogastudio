@@ -80,5 +80,6 @@
   "lateCancelHours": "Late cancel hours",
   "business": "Business",
   "rules": "Rules",
-  "background_tasks": "Background Tasks"
+  "background_tasks": "Background Tasks",
+  "select": "Select"
 }
