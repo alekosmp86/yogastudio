@@ -1,4 +1,5 @@
 export enum UserActions {
     APPROVE_USER = "APPROVE_USER",
-    BLOCK_USER = "BLOCK_USER"
+    BLOCK_USER = "BLOCK_USER",
+    VIEW_USER_DETAILS = "VIEW_USER_DETAILS"
 }
