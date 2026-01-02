@@ -89,5 +89,7 @@
   "approve": "Approve",
   "block": "Block",
   "approval": "Approval",
-  "accountPendingApproval": "Your account is pending approval. Please contact the admin."
+  "accountPendingApproval": "Your account is pending approval. Please contact the admin.",
+  "yes": "Yes",
+  "no": "No"
 }

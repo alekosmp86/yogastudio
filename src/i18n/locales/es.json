@@ -89,5 +89,7 @@
   "approve": "Aprobar",
   "block": "Bloquear",
   "approval": "Aprobación",
-  "accountPendingApproval": "Tu cuenta está pendiente de aprobación. Por favor, contacta al administrador."
+  "accountPendingApproval": "Tu cuenta está pendiente de aprobación. Por favor, contacta al administrador.",
+  "yes": "Sí",
+  "no": "No"
 }

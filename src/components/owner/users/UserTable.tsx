@@ -23,7 +23,7 @@ export default function UserTable({ users, onAction }: UserTableProps) {
         <table className="w-full text-custom-500">
           <TableHeader fields={fields} />
 
-          <tbody className="divide-y divide-primary-900">
+          <tbody className="divide-y">
             {users.map((user) => (
               <UserRow
                 key={user.id}
