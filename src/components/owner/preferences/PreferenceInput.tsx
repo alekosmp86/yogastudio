@@ -24,7 +24,7 @@ export default function PreferenceInput({
           className="h-5 w-5 rounded accent-custom-300 focus:ring-2 focus:ring-custom-200"
         />
         <span className="text-sm text-custom-400">
-          {value ? "Enabled" : "Disabled"}
+          {value ? t("enabled") : t("disabled")}
         </span>
       </label>
     );

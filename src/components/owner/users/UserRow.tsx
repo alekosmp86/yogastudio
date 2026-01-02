@@ -1,4 +1,4 @@
-import { User } from "@/types/User";
+import { User } from "@/types/users/User";
 import UserActions from "./UserActions";
 import { cn } from "@/lib/utils/utils";
 import { TableField } from "@/types/TableField";
@@ -15,9 +15,15 @@ export default function UserRow({ user, fields, onAction }: UserRowProps) {
   const { t } = useTranslation();
 
   return (
-    <tr className="bg-white/80 hover:bg-custom-50/60 transition-colors border-b border-custom-100">
+    <tr className='bg-white/80 hover:bg-custom-50/60 transition-colors border-b border-custom-100'>
       {fields.map(({ key, style }) => (
-        <td key={String(key)} className={cn("px-4 py-3 text-sm text-custom-400 align-middle", style)}>
+        <td
+          key={String(key)}
+          className={cn(
+            "px-4 py-3 text-sm text-custom-400 align-middle",
+            style
+          )}
+        >
           {typeof user[key] === "boolean"
             ? user[key]
               ? t("yes")
@@ -25,7 +31,7 @@ export default function UserRow({ user, fields, onAction }: UserRowProps) {
             : user[key]}
         </td>
       ))}
-      <td className="px-4 py-3 gap-2 flex justify-center">
+      <td className='px-4 py-3 gap-2 flex justify-center'>
         <UserActions
           id={user.id}
           onAction={onAction}

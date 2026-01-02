@@ -5,5 +5,5 @@ export interface UserService {
     getAllUsers(): Promise<User[]>;
     getUserById(id: number): Promise<User | null>;
     findUniqueByFields(fields: Pick<User, "email">): Promise<User | null>;
-    executeAction(id: number, action: string): Promise<User | null>;
+    executeAction<T>(id: number, action: string): Promise<T | null>;
 }

@@ -94,5 +94,8 @@
   "no": "No",
   "details": "Detalles",
   "executingAction": "Ejecutando acción...",
-  "failedToExecuteAction": "Error al ejecutar la acción"
+  "failedToExecuteAction": "Error al ejecutar la acción",
+  "userDetails": "Detalles del usuario",
+  "enabled": "Habilitado",
+  "disabled": "Deshabilitado"
 }

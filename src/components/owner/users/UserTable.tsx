@@ -1,4 +1,4 @@
-import { User } from "@/types/User";
+import { User } from "@/types/users/User";
 import UserRow from "./UserRow";
 import { UserActions } from "@/enums/UserActions";
 import { TableField } from "@/types/TableField";
@@ -19,11 +19,11 @@ export default function UserTable({ users, onAction }: UserTableProps) {
 
   return (
     <>
-      <div className="overflow-hidden rounded-md shadow-sm ring-1 ring-custom-200 backdrop-blur">
-        <table className="w-full text-custom-500">
+      <div className='overflow-hidden rounded-md shadow-sm ring-1 ring-custom-200 backdrop-blur'>
+        <table className='w-full text-custom-500'>
           <TableHeader fields={fields} />
 
-          <tbody className="divide-y">
+          <tbody className='divide-y'>
             {users.map((user) => (
               <UserRow
                 key={user.id}

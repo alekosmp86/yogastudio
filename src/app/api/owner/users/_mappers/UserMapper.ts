@@ -1,6 +1,6 @@
-import { User } from "@/types/User";
+import { User } from "@/types/users/User";
 import { User as PrismaUser } from "@prisma/client";
 
 export interface UserMapper {
-    toUser(user: PrismaUser): User;
+  toUser(user: PrismaUser): User;
 }

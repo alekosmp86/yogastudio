@@ -2,7 +2,7 @@ import { ApiType } from "@/enums/ApiTypes";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { http } from "@/lib/http";
 import { ApiResponse } from "@/types/requests/ApiResponse";
-import { User } from "@/types/User";
+import { User } from "@/types/users/User";
 import { useEffect, useMemo, useState } from "react";
 import UserTable from "./UserTable";
 import UserCardList from "./UserCardList";
@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import { UserActions } from "@/enums/UserActions";
 
 export default function UserList() {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
@@ -58,7 +58,7 @@ export default function UserList() {
 
   const handleAction = async (id: number, action: UserActions) => {
     const toastId = showToast({
-      message: t('executingAction'),
+      message: t("executingAction"),
       type: ToastType.WARNING,
     });
 
@@ -100,14 +100,14 @@ export default function UserList() {
 
   return (
     <Container>
-      <section className="mt-6 space-y-6">
+      <section className='mt-6 space-y-6'>
         {/* HEADER */}
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-white">{t("users")}</h2>
+        <div className='flex items-center justify-between'>
+          <h2 className='text-2xl font-semibold text-white'>{t("users")}</h2>
         </div>
 
         {/* TABLE BOX (toolbar + table inside) */}
-        <div className="rounded-3xl bg-custom-50 shadow-sm">
+        <div className='rounded-3xl bg-custom-50 shadow-sm'>
           {/* TOOLBAR sitting as the table header */}
           <TableToolbar
             toolbar={toolbar}
@@ -116,14 +116,14 @@ export default function UserList() {
           />
 
           {/* Desktop */}
-          <div className="hidden md:block p-4 min-h-[calc(100vh-400px)]">
+          <div className='hidden md:block p-4 min-h-[calc(100vh-400px)]'>
             <UserTable users={filteredUsers} onAction={handleAction} />
           </div>
 
           {/* Mobile */}
           <UserCardList users={filteredUsers} onAction={handleAction} />
           {users.length === 0 && (
-            <h1 className="pl-2 text-left bg-white py-2 text-primary-900">
+            <h1 className='pl-2 text-left bg-white py-2 text-primary-900'>
               {loading ? "Loading..." : "No users found"}
             </h1>
           )}

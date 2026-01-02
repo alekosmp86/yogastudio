@@ -94,5 +94,8 @@
   "no": "No",
   "details": "Details",
   "executingAction": "Executing action...",
-  "failedToExecuteAction": "Failed to execute action"
+  "failedToExecuteAction": "Failed to execute action",
+  "userDetails": "User Details",
+  "enabled": "Enabled",
+  "disabled": "Disabled"
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { ApiType } from "@/enums/ApiTypes";
 import { http } from "@/lib/http";
 import { GymClass } from "@/types/classes/GymClass";
@@ -55,8 +55,7 @@ export default function ClassesList() {
   const [busy, setBusy] = useState(false);
   const { showToast, hideToast } = useToast();
 
-  const toolbar = useMemo<Toolbar>(
-    () => ({
+  const searchCallback = useCallback(() => ({
       items: [
         {
           text: "",
@@ -70,8 +69,11 @@ export default function ClassesList() {
         value: search,
         onChange: setSearch,
       },
-    }),
-    [search, setSearch]
+    }), [t, search]);
+
+  const toolbar = useMemo<Toolbar>(
+    () => searchCallback(),
+    [searchCallback]
   );
 
   const filteredClasses = classes.filter((c) =>
