@@ -87,5 +87,7 @@
   "booked": "Reservadas",
   "attended": "Asistencia",
   "approve": "Aprobar",
-  "block": "Bloquear"
+  "block": "Bloquear",
+  "approval": "Aprobación",
+  "accountPendingApproval": "Tu cuenta está pendiente de aprobación. Por favor, contacta al administrador."
 }

@@ -87,5 +87,7 @@
   "booked": "Booked",
   "attended": "Attended",
   "approve": "Approve",
-  "block": "Block"
+  "block": "Block",
+  "approval": "Approval",
+  "accountPendingApproval": "Your account is pending approval. Please contact the admin."
 }
