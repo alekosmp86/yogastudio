@@ -13,28 +13,13 @@ export function ScheduleHeader() {
   return (
     <>
       {/* top-left blank corner */}
-      <div
-        className="
-          sticky left-0 top-0 z-30
-          bg-custom-100
-          border-b border-r border-custom-100
-        "
-      />
+      <div className="sticky left-0 top-0 z-30 bg-custom-100 border-b border-r border-custom-100" />
 
       {/* weekday headers */}
       {week.map((d, index) => (
         <div
           key={index}
-          className="
-            sticky top-0 z-20
-            flex items-center justify-center
-            py-3
-            text-xs sm:text-sm
-            font-semibold
-            text-custom-300
-            bg-custom-100
-            border-b border-custom-100
-          "
+          className="sticky top-0 z-20 flex items-center justify-center py-3 text-xs sm:text-sm font-semibold text-custom-300 bg-custom-100 border-b border-custom-100"
         >
           {businessTime.formatWeekdayLabel(d.date)}
         </div>

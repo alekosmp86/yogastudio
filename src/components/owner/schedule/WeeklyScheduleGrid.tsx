@@ -18,6 +18,9 @@ import { ApiResponse } from "@/types/requests/ApiResponse";
 import { useScheduledClasses } from "@/lib/contexts/ScheduledClassesContext";
 import { Time } from "@/static/Time";
 import { useTranslation } from "react-i18next";
+import Link from "next/link";
+import { FileSymlink, LinkIcon } from "lucide-react";
+import Button from "@/components/shared/Button";
 
 export default function WeeklyScheduleGrid() {
   // grid columns: 70px for hour column, then 1fr per weekday (keeps flexible)
@@ -30,7 +33,7 @@ export default function WeeklyScheduleGrid() {
   });
   const [modalOpen, setModalOpen] = useState(false);
   const { showToast } = useToast();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   const scheduledClass = scheduledClasses.find(
     (scheduledClass) =>
@@ -137,6 +140,7 @@ export default function WeeklyScheduleGrid() {
 
   return (
     <>
+      {/* Modal that will be displayed when assigning a class to a schedule cell */}
       <ClassSelectorModal
         open={modalOpen}
         emptyCell={!scheduledClass}
@@ -145,20 +149,37 @@ export default function WeeklyScheduleGrid() {
         title={t("selectClass")}
       >
         <div className="grid gap-3">
-          {classes.map((c) => (
-            <Card
-              key={c.id}
-              onClick={() => handleClassClick(c)}
-              className="cursor-pointer bg-custom-50 border border-custom-100 hover:bg-custom-200 hover:shadow-md transition"
-            >
-              <CardContent className="py-3 px-4">
-                <div className="text-base font-semibold text-custom-400">
-                  {c.title}
-                </div>
-                <div className="text-xs text-custom-300">{c.instructor}</div>
-              </CardContent>
-            </Card>
-          ))}
+          {classes.length > 0 ? (
+            classes.map((c) => (
+              <Card
+                key={c.id}
+                onClick={() => handleClassClick(c)}
+                className="cursor-pointer bg-custom-50 border border-custom-100 hover:bg-custom-200 hover:shadow-md transition"
+              >
+                <CardContent className="py-3 px-4">
+                  <div className="text-base font-semibold text-custom-400">
+                    {c.title}
+                  </div>
+                  <div className="text-xs text-custom-300">{c.instructor}</div>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <p className="text-center">
+              {t("noClassesFound")}. {t("createClassesFirst")}{" "}
+              <Link href="/owner/classes">
+                {
+                  <Button
+                    variant="ghost"
+                    className="flex items-center gap-2 font-semibold text-custom-600 hover:text-custom-50 underline"
+                  >
+                    <FileSymlink className="w-4 h-4 inline" />
+                    {t("goToClasses")}
+                  </Button>
+                }
+              </Link>
+            </p>
+          )}
         </div>
       </ClassSelectorModal>
 

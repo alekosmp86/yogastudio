@@ -81,5 +81,7 @@
   "business": "Business",
   "rules": "Rules",
   "background_tasks": "Background Tasks",
-  "select": "Select"
+  "select": "Select",
+  "createClassesFirst": "Create your first class here",
+  "goToClasses": "Go to classes"
 }

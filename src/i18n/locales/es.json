@@ -81,5 +81,7 @@
   "business": "Negocio",
   "rules": "Reglas",
   "background_tasks": "Tareas en segundo plano",
-  "select": "Seleccionar"
+  "select": "Seleccionar",
+  "createClassesFirst": "Crea tu primera clase aquí",
+  "goToClasses": "Ir a Clases"
 }

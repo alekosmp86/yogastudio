@@ -3,7 +3,7 @@
 import React from "react";
 import cx from "clsx";
 
-type Variant = "primary" | "secondary" | "negative" | "ghost";
+type Variant = "primary" | "secondary" | "negative" | "ghost" | "outline";
 type Size = "sm" | "md" | "lg";
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -38,6 +38,8 @@ export default function Button({
       "bg-danger-800 text-white hover:bg-danger active:bg-danger",
     ghost:
       "bg-transparent text-brand-600 hover:bg-transparent active:bg-transparent",
+    outline:
+      "border border-brand-600 bg-transparent text-brand-600 hover:bg-transparent active:bg-transparent",
   };
 
   const sizes: Record<Size, string> = {
