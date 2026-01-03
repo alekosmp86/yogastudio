@@ -117,5 +117,12 @@
   "yourUpcomingClasses": "Your upcoming classes",
   "completeYourProfile": "Complete your profile",
   "needInformationToManageReservations": "We need this information to manage your reservations.",
-  "saveProfile": "Save profile"
+  "saveProfile": "Save profile",
+  "myProfile": "My profile",
+  "myProfileDescription": "Manage your profile information",
+  "personalInformation": "Personal information",
+  "totalReservations": "Total reservations",
+  "upcomingClasses": "Upcoming classes",
+  "memberSince": "Member since",
+  "notProvided": "Not provided"
 }

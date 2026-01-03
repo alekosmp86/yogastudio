@@ -117,5 +117,12 @@
   "yourUpcomingClasses": "Tus próximas clases",
   "completeYourProfile": "Completa tu perfil",
   "needInformationToManageReservations": "Necesitamos esta información para gestionar tus reservas.",
-  "saveProfile": "Guardar perfil"
+  "saveProfile": "Guardar perfil",
+  "myProfile": "Mi perfil",
+  "myProfileDescription": "Gestiona tu perfil",
+  "personalInformation": "Información personal",
+  "totalReservations": "Reservas totales",
+  "upcomingClasses": "Clases futuras",
+  "memberSince": "Miembro desde",
+  "notProvided": "No proporcionado"
 }
