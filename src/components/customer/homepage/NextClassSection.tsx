@@ -88,29 +88,33 @@ export default function NextClassSection() {
   };
 
   return (
-    <section className="mx-4 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 p-6 shadow-md">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <h1 className="text-2xl font-bold text-primary-800 flex items-center gap-2">
-          {t("nextClass")} <ArrowBigRightDash />
+    <section className="mx-4 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 p-5 shadow-md">
+      <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+        {/* Header */}
+        <h1 className="text-xl md:text-2xl font-bold text-primary-800 flex items-center justify-center md:justify-start gap-2">
+          {t("nextClass")}
+          <ArrowBigRightDash className="hidden md:inline-block" />
         </h1>
 
-        {/* Left: Class info */}
-        <div className="flex flex-col gap-1 text-center">
+        {/* Class info */}
+        <div className="flex flex-col gap-1 text-center md:text-left md:flex-1">
           <h2 className="text-lg font-semibold text-primary-800">
             {nextClass?.template.title}
           </h2>
 
-          <p className="text-sm text-primary-600">
-            {nextClass?.template.description}
-          </p>
+          {nextClass?.template.description && (
+            <p className="text-sm text-primary-600">
+              {nextClass.template.description}
+            </p>
+          )}
 
           <p className="text-sm text-primary-600 font-medium">
             {nextClass?.template.instructor}
           </p>
         </div>
 
-        {/* Right: Meta + CTA */}
-        <div className="flex flex-col items-start gap-3 md:items-end">
+        {/* Meta + CTA */}
+        <div className="flex flex-col items-center gap-3 md:items-end">
           <span className="text-sm font-semibold text-primary-700">
             {nextClass?.date} · {nextClass?.startTime}
           </span>
@@ -120,7 +124,7 @@ export default function NextClassSection() {
               Icon={NotebookPen}
               size="sm"
               variant={isBooked ? "secondary" : "primary"}
-              className="rounded-xl px-6 py-3"
+              className="rounded-xl px-6 py-2"
               onClick={handleBookNow}
               disabled={isBooked}
             >
