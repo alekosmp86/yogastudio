@@ -2,6 +2,7 @@ import { ClassReservation } from "@/types/reservations/ClassReservation";
 import { Card, CardContent } from "@/components/shared/Card";
 import Button from "@/components/shared/Button";
 import { X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type ReservationCardProps = {
   reservation: ClassReservation;
@@ -12,31 +13,50 @@ export default function ReservationCard({
   reservation,
   onCancel,
 }: ReservationCardProps) {
+  const { t } = useTranslation();
   const { id, class: c } = reservation;
 
   return (
-    <Card className="bg-white shadow-md hover:shadow-lg transition-shadow">
-      <CardContent className="p-4 flex flex-col gap-2">
-        <div className="flex justify-between items-start">
-          <h3 className="font-semibold text-primary-800">{c.template.title}</h3>
-          <span className="text-sm font-medium text-primary-700">
-            {c.startTime}
-          </span>
+    <Card className="bg-white/90 border border-custom-100 rounded-xl shadow-sm hover:shadow-md transition">
+      <CardContent className="p-4 flex flex-col gap-3">
+        {/* Top row */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex flex-col">
+            <h3 className="text-base font-semibold text-custom-400 leading-tight">
+              {c.template.title}
+            </h3>
+            <span className="text-xs text-custom-200">
+              {c.template.instructor}
+            </span>
+          </div>
+
+          <div className="flex flex-col items-end">
+            <span className="text-sm font-semibold text-custom-300">
+              {c.startTime}
+            </span>
+          </div>
         </div>
 
+        {/* Description */}
         {c.template.description && (
-          <p className="text-sm text-primary-800">{c.template.description}</p>
+          <p className="text-sm text-custom-300 leading-relaxed">
+            {c.template.description}
+          </p>
         )}
 
-        <p className="text-sm text-primary-700">
-          Instructor:{" "}
-          <span className="font-medium">{c.template.instructor}</span>
-        </p>
+        {/* Divider */}
+        <div className="h-px bg-custom-100/60" />
 
-        <div className="flex justify-end pt-2">
-          <Button size="sm" variant="negative" onClick={() => onCancel(id)}>
-            <X className="mr-2 h-4 w-4" />
-            Cancel
+        {/* Actions */}
+        <div className="flex justify-end">
+          <Button
+            size="sm"
+            variant="negative"
+            onClick={() => onCancel(id)}
+            className="rounded-full px-4"
+          >
+            <X className="mr-1 h-4 w-4" />
+            {t("cancel")}
           </Button>
         </div>
       </CardContent>

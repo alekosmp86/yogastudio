@@ -113,5 +113,6 @@
   "error": "Ha ocurrido un error.",
   "classAlreadyBooked": "Ya has reservado esta clase.",
   "classBookedSuccessfully": "Clase reservada correctamente.",
-  "chooseClassAndBook": "Elige una clase y reserva tu lugar"
+  "chooseClassAndBook": "Elige una clase y reserva tu lugar",
+  "yourUpcomingClasses": "Tus próximas clases"
 }

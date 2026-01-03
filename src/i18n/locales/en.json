@@ -113,5 +113,6 @@
   "error": "An error occurred.",
   "classAlreadyBooked": "You have already booked this class.",
   "classBookedSuccessfully": "Class booked successfully.",
-  "chooseClassAndBook": "Choose a class and book your spot"
+  "chooseClassAndBook": "Choose a class and book your spot",
+  "yourUpcomingClasses": "Your upcoming classes"
 }

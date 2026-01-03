@@ -17,8 +17,10 @@ import { BusinessTime } from "@/lib/utils/date";
 
 export default function CustomerReservations() {
   const { t } = useTranslation();
-  const {getPreferenceByName} = useAppPreferences();
-  const businessTime = new BusinessTime(getPreferenceByName<string>("timezone") || "UTC");
+  const { getPreferenceByName } = useAppPreferences();
+  const businessTime = new BusinessTime(
+    getPreferenceByName<string>("timezone") || "UTC"
+  );
   const [loading, setLoading] = useState(true);
   const [reservations, setReservations] = useState<ClassReservation[]>([]);
   const toast = useToast();
@@ -94,35 +96,51 @@ export default function CustomerReservations() {
     const reservation = reservations.find((r) => r.id === reservationId);
     if (!reservation) return false;
 
-    return businessTime.addHours(lateCancelHours) >= reservation.class.startTime;
+    if (businessTime.now().date !== reservation.class.date) return false;
+    return (
+      businessTime.addHours(lateCancelHours) >= reservation.class.startTime
+    );
   };
 
   return (
     <>
       {dialog}
-      <div className='p-4 flex flex-col gap-6 h-full'>
-        <h1 className='text-2xl font-bold text-primary-800'>
-          {t("reservations")}
-        </h1>
 
+      <div className="p-4 flex flex-col gap-6 h-full">
+        {/* Header */}
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-semibold text-custom-400">
+            {t("reservations")}
+          </h1>
+          <p className="text-sm text-custom-200">{t("yourUpcomingClasses")}</p>
+        </div>
+
+        {/* Content */}
         {loading ? (
-          <div className='flex flex-col gap-4'>
+          <div className="flex flex-col gap-4">
             {Array.from({ length: 3 }).map((_, i) => (
               <CardSkeleton key={i} />
             ))}
           </div>
         ) : reservations.length === 0 ? (
-          <p className='text-primary-800'>{t("noReservationsFound")}</p>
+          <div className="flex flex-col items-center justify-center py-12 text-center gap-2">
+            <p className="text-custom-300 font-medium">
+              {t("noReservationsFound")}
+            </p>
+            <p className="text-sm text-custom-200">{t("noReservationsHint")}</p>
+          </div>
         ) : (
-          <div className='flex flex-col gap-8 overflow-y-auto max-h-[65vh]'>
-            {dates.map((date) => (
-              <ReservationsByDate
-                key={date}
-                date={date}
-                reservations={grouped.get(date)!}
-                onCancel={cancelReservation}
-              />
-            ))}
+          <div className="flex-1 rounded-xl bg-custom-50 border border-custom-100 shadow-sm">
+            <div className="flex flex-col gap-6 m-4 overflow-y-auto max-h-[65vh] pr-1">
+              {dates.map((date) => (
+                <ReservationsByDate
+                  key={date}
+                  date={date}
+                  reservations={grouped.get(date)!}
+                  onCancel={cancelReservation}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>
