@@ -3,14 +3,10 @@
 import QuickActionCard from "./QuickActionCard";
 import Testimonials from "./Testimonials";
 import { Calendar, BookOpenCheck, User2 } from "lucide-react";
-import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { ToastType } from "@/enums/ToastType";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { redirect } from "next/navigation";
-import { SessionUser } from "@/types/SessionUser";
-import { readSession } from "@/lib/auth";
 import HeroSection from "./HeroSection";
 import NextClassSection from "./NextClassSection";
 
@@ -24,20 +20,7 @@ export default function HomePage({
   maxAllowedPenalties,
 }: HomePageProps) {
   const { t } = useTranslation();
-  const { getPreferenceByName } = useAppPreferences();
   const { showToast } = useToast();
-  const [user, setUser] = useState<SessionUser | null>(null);
-
-  useEffect(() => {
-    const getUserData = async () => {
-      const user = await readSession();
-      if (!user) {
-        redirect("/login");
-      }
-      setUser(user);
-    };
-    getUserData();
-  }, []);
 
   const showPenaltiesToast = useCallback(() => {
     if (penaltyCount > 0 && penaltyCount < maxAllowedPenalties) {

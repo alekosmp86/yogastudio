@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils/utils";
 import { DailyClass } from "@/types/classes/DailyClass";
 import ClassesTab from "./ClassesTab";
-import Button from "@/components/shared/Button";
 
 type ClassesBrowserProps = {
   dates: string[];

@@ -10,7 +10,7 @@ export async function GET() {
       { message: RequestStatus.SUCCESS, data: nextClass },
       { status: 200 }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { message: RequestStatus.ERROR, data: null },
       { status: 500 }
@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       { message: reservationMessage },
       { status: 200 }
     );
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { message: RequestStatus.ERROR },
       { status: 500 }
