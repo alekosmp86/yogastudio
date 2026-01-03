@@ -194,6 +194,7 @@ export default function ClassesList() {
   const checkForLateCancelation = (gymClass: DailyClass) => {
     const lateCancelHours = getPreferenceByName<number>("lateCancelHours");
     if (!lateCancelHours) return false;
+    if (businessTime.now().date !== gymClass.date) return false;
 
     return businessTime.addHours(lateCancelHours) >= gymClass.startTime;
   };

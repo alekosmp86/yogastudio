@@ -230,6 +230,7 @@ export class UserReservationServiceImpl implements UserReservationService {
       "timezone"
     );
     const businessTime = new BusinessTime(timezone);
+    if (businessTime.now().date !== classInstance.date) return false;
     return (
       businessTime.addHours(lateCancelHours) >= classInstance.startTime
     );
