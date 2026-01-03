@@ -22,7 +22,7 @@ export default function UserDetails({ id }: UserOverviewCardProps) {
   const { showToast } = useToast();
   const [user, setUser] = useState<UserDetail | null>(null);
   const { getPreferenceByName } = useAppPreferences();
-  const maxPenaltiesAllowed = getPreferenceByName<number>("penaltyMaxNoShowCount");
+  const maxPenaltiesAllowed = getPreferenceByName<number>("maxPenaltiesCount");
 
   const fetchUserDetails = useCallback(async () => {
     const { message, data } = await http.get<ApiResponse<UserDetail>>(

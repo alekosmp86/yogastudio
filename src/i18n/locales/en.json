@@ -74,7 +74,7 @@
   "timezone": "Timezone",
   "language": "Language",
   "usersRequireApproval": "Users require approval",
-  "penaltyMaxNoShowCount": "Penalty max no-show count",
+  "maxPenaltiesCount": "Max penalties count",
   "penaltyBlockDuration": "Penalty block duration (days)",
   "generateClassesForXDays": "Generate classes for X days",
   "lateCancelHours": "Late cancel hours",

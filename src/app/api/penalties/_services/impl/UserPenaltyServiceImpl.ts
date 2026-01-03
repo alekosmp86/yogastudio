@@ -67,9 +67,9 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
       return;
     }
 
-    const penaltyMaxNoShowCount =
+    const maxPenaltiesCount =
       await preferenceService.getNumberPreferenceValue(
-        "penaltyMaxNoShowCount"
+        "maxPenaltiesCount"
       );
     const penaltyBlockDuration =
       await preferenceService.getNumberPreferenceValue(
@@ -78,7 +78,7 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     const timezone = await preferenceService.getStringPreferenceValue("timezone");
     const businessTime = new BusinessTime(timezone);
 
-    if (userPenalty.noShowCount >= penaltyMaxNoShowCount) {
+    if (userPenalty.noShowCount >= maxPenaltiesCount) {
       await prisma.userPenalty.update({
         where: {
           userId: userPenalty.userId,

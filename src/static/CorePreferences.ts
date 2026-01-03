@@ -58,8 +58,8 @@ export const CorePreferences: AppPreference[] = [
   },
   {
     id: 7,
-    name: "penaltyMaxNoShowCount",
-    label: "Max No Show Count",
+    name: "maxPenaltiesCount",
+    label: "Max Penalties Count",
     type: PreferenceTypes.NUMBER,
     value: "2",
     category: PreferenceCategory.RULES,

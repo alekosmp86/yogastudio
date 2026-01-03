@@ -7,6 +7,6 @@ export default async function CustomerHomePage() {
   await preferencesStore.load();
 
   return (
-    <HomePage penaltyCount={session?.penalties?.noShowCount ?? 0} maxAllowedPenalties={preferencesStore.getByName<number>("penaltyMaxNoShowCount")} />
+    <HomePage penaltyCount={session?.penalties?.noShowCount ?? 0} maxAllowedPenalties={preferencesStore.getByName<number>("maxPenaltiesCount")} />
   );
 }

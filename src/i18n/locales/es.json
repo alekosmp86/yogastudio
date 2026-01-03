@@ -74,7 +74,7 @@
   "timezone": "Zona horaria",
   "language": "Idioma",
   "usersRequireApproval": "Usuarios requieren aprobación",
-  "penaltyMaxNoShowCount": "Máximo de ausencias",
+  "maxPenaltiesCount": "Máximo de penalizaciones",
   "penaltyBlockDuration": "Duración del bloqueo (días)",
   "generateClassesForXDays": "Generar clases para X días",
   "lateCancelHours": "Cancelación tardía (horas)",
