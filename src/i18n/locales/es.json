@@ -124,5 +124,8 @@
   "totalReservations": "Reservas totales",
   "upcomingClasses": "Clases futuras",
   "memberSince": "Miembro desde",
-  "notProvided": "No proporcionado"
+  "notProvided": "No proporcionado",
+  "alreadyBooked": "Reservada",
+  "noReservationsHint": "Para reservar una clase, por favor, ve a la página de Clases.",
+  "noClassesAvailable": "No hay clases disponibles para hoy"
 }

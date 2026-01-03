@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { useConfirmDialog } from "@/lib/hooks/useConfirmDialog";
 import { useAppPreferences } from "@/lib/contexts/AppPreferencesContext";
 import { BusinessTime } from "@/lib/utils/date";
+import Link from "next/link";
 
 export default function CustomerReservations() {
   const { t } = useTranslation();
@@ -127,7 +128,12 @@ export default function CustomerReservations() {
             <p className="text-custom-300 font-medium">
               {t("noReservationsFound")}
             </p>
-            <p className="text-sm text-custom-200">{t("noReservationsHint")}</p>
+            <p className="text-sm text-custom-200 flex flex-col gap-2">
+              {t("noReservationsHint")}
+              <Link href="/customer/classes" className="text-custom-400 hover:underline">
+                {t("goToClasses")}
+              </Link>
+            </p>
           </div>
         ) : (
           <div className="flex-1 rounded-xl bg-custom-50 border border-custom-100 shadow-sm">

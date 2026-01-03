@@ -5,6 +5,9 @@ import {
   ClassInstanceRelations,
   ClassInstanceWithRelations,
 } from "../../_types/ClassInstanceRelations";
+import { preferenceService } from "app/api";
+import { BusinessTime } from "@/lib/utils/date";
+import { NextClass } from "@/types/classes/NextClass";
 
 export class ClassInstanceServiceImpl implements ClassInstanceService {
   async findFirstByFields(
@@ -41,5 +44,68 @@ export class ClassInstanceServiceImpl implements ClassInstanceService {
         date: data.date,
       },
     });
+  }
+
+  async getNextClass(): Promise<NextClass | null> {
+    const timezone = await preferenceService.getStringPreferenceValue(
+      "timezone"
+    );
+    const businessTime = new BusinessTime(timezone);
+    const today = businessTime.now().date;
+    const nextHour = businessTime.addHours(1);
+
+    const nextClass = await prisma.classInstance.findFirst({
+      where: {
+        OR: [
+          // Future dates → any time is valid
+          {
+            date: {
+              gt: today,
+            },
+          },
+
+          // Today → only future times
+          {
+            date: today,
+            startTime: {
+              gte: nextHour,
+            },
+          },
+        ],
+      },
+      orderBy: [{ date: "asc" }, { startTime: "asc" }],
+      select: {
+        id: true,
+        template: {
+          select: {
+            title: true,
+            description: true,
+            instructor: true
+          },
+        },
+        reservations: {
+          select: {
+            id: true,
+            cancelled: true,
+          },
+        },
+        startTime: true,
+        date: true,
+      },
+    });
+
+    if (!nextClass) return null;
+
+    return {
+      id: nextClass.id,
+      template: {
+        title: nextClass.template.title,
+        description: nextClass.template.description ?? "",
+        instructor: nextClass.template.instructor,
+      },
+      reservations: nextClass.reservations,
+      startTime: nextClass.startTime,
+      date: nextClass.date,
+    };
   }
 }

@@ -240,7 +240,7 @@ export default function ClassesList() {
               mode={sortedClasses.size === 0 && !loading ? "visible" : "hidden"}
             >
               <div className="mt-10 text-center text-sm text-custom-300">
-                No classes available for today 🌿
+                {t("noClassesAvailable")}
               </div>
             </Activity>
           </div>

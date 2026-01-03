@@ -124,5 +124,8 @@
   "totalReservations": "Total reservations",
   "upcomingClasses": "Upcoming classes",
   "memberSince": "Member since",
-  "notProvided": "Not provided"
+  "notProvided": "Not provided",
+  "alreadyBooked": "Already booked",
+  "noReservationsHint": "To book a class, please go to the classes page.",
+  "noClassesAvailable": "No classes available for today"
 }
