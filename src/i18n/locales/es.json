@@ -114,5 +114,8 @@
   "classAlreadyBooked": "Ya has reservado esta clase.",
   "classBookedSuccessfully": "Clase reservada correctamente.",
   "chooseClassAndBook": "Elige una clase y reserva tu lugar",
-  "yourUpcomingClasses": "Tus próximas clases"
+  "yourUpcomingClasses": "Tus próximas clases",
+  "completeYourProfile": "Completa tu perfil",
+  "needInformationToManageReservations": "Necesitamos esta información para gestionar tus reservas.",
+  "saveProfile": "Guardar perfil"
 }
