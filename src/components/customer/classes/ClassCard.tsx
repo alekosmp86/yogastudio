@@ -28,60 +28,65 @@ export default function ClassCard({
   handleCancelation,
   canReserve,
 }: ClassCardProps) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const Icon = ICON_MAP.default;
   const percentage = (gymClass.reserved / gymClass.capacity) * 100;
 
   return (
-    <Card className='shadow-lg bg-white'>
-      <CardContent className='p-4 flex items-center gap-4'>
-        <Icon className='h-8 w-8 text-primary-800 flex-shrink-0' />
+    <Card className="bg-white rounded-xl border border-custom-100 shadow-sm hover:shadow-lg transition">
+      <CardContent className="p-4 flex items-center gap-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-custom-50">
+          <Icon className="h-5 w-5 text-custom-300" />
+        </div>
 
-        <div className='flex flex-col w-full'>
-          <div className='flex justify-between'>
-            <h2 className='font-semibold text-primary-800'>{gymClass.title}</h2>
-            <span className='text-sm text-primary-800 font-semibold'>
+        <div className="flex flex-col w-full">
+          <div className="flex justify-between">
+            <h2 className="font-semibold text-custom-400 leading-tight">
+              {gymClass.title}
+            </h2>
+            <span className="text-xs font-medium text-custom-300">
               {gymClass.startTime}
             </span>
           </div>
 
-          <p className='text-sm font-semibold text-primary-800'>
-            {gymClass.description}
+          <p className="text-sm text-custom-200 mt-1">{gymClass.description}</p>
+
+          <p className="text-xs text-custom-300">
+            {t("instructor")}:{" "}
+            <span className="font-medium text-custom-400">
+              {gymClass.instructor}
+            </span>
           </p>
 
-          <p className='text-sm text-primary-800'>
-            {t("instructor")}: {gymClass.instructor}
-          </p>
-
-          <div className='mt-2'>
-            <Progress value={percentage} className='h-2' />
-            <p className='text-xs text-primary-800 mt-1'>
+          <div className="flex flex-col gap-1">
+            <Progress value={percentage} className="h-1.5 bg-custom-50" />
+            <p className="text-xs text-custom-300">
               {gymClass.reserved}/{gymClass.capacity} {t("spotsFilled")}
             </p>
           </div>
 
           {/* Reserve Button */}
           {canReserve ? (
-            <div className='mt-3 flex justify-end'>
+            <div className="mt-3 flex justify-end">
               <Button
-                size='sm'
-                variant='primary'
+                size="sm"
+                variant="primary"
                 onClick={handleReserve}
-                className='w-full md:w-auto'
+                className="w-full md:w-auto"
               >
-                <ClockCheck className='mr-2 h-4 w-4' />
+                <ClockCheck className="mr-2 h-4 w-4" />
                 {t("book")}
               </Button>
             </div>
           ) : (
-            <div className='mt-3 flex justify-end'>
+            <div className="mt-3 flex justify-end">
               <Button
-                size='sm'
-                variant='negative'
+                size="sm"
+                variant="negative"
                 onClick={handleCancelation}
-                className='w-full md:w-auto'
+                className="w-full md:w-auto"
               >
-                <X className='mr-2 h-4 w-4' />
+                <X className="mr-2 h-4 w-4" />
                 {t("cancel")}
               </Button>
             </div>

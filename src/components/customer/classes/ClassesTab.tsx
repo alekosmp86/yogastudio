@@ -14,7 +14,7 @@ export default function ClassesTab({
   handleCancelation,
 }: ClassesTabProps) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-425px)]">
       {classes.map((gymClass) => (
         <ClassCard
           key={`${gymClass.date}-${gymClass.startTime}`}

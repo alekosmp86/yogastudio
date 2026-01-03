@@ -17,8 +17,10 @@ import { BusinessTime } from "@/lib/utils/date";
 
 export default function ClassesList() {
   const { t } = useTranslation();
-  const {getPreferenceByName} = useAppPreferences();
-  const businessTime = new BusinessTime(getPreferenceByName<string>("timezone") || "UTC");
+  const { getPreferenceByName } = useAppPreferences();
+  const businessTime = new BusinessTime(
+    getPreferenceByName<string>("timezone") || "UTC"
+  );
   const [sortedClasses, setSortedClasses] = useState<Map<string, DailyClass[]>>(
     new Map()
   );
@@ -104,36 +106,35 @@ export default function ClassesList() {
         });
         toast.showToast({
           type: ToastType.SUCCESS,
-          message: "Class reserved successfully.",
+          message: t("classBookedSuccessfully"),
           duration: 3000,
         });
         break;
       case RequestStatus.CLASS_ALREADY_RESERVED:
         toast.showToast({
           type: ToastType.INFO,
-          message: "You have already reserved this class.",
+          message: t("classAlreadyBooked"),
           duration: 3000,
         });
         break;
       case RequestStatus.CLASS_FULL:
         toast.showToast({
           type: ToastType.ERROR,
-          message:
-            "This class is full. You have been added to the waiting list.",
+          message: t("classFull"),
           duration: 3000,
         });
         break;
       case RequestStatus.ON_WAITING_LIST:
         toast.showToast({
           type: ToastType.INFO,
-          message: "You are on the waiting list.",
+          message: t("onWaitingList"),
           duration: 3000,
         });
         break;
       default:
         toast.showToast({
           type: ToastType.ERROR,
-          message: "An error occurred.",
+          message: t("error"),
           duration: 3000,
         });
         break;
@@ -202,37 +203,48 @@ export default function ClassesList() {
   return (
     <>
       {dialog}
-      <div className="p-4 flex flex-col gap-4 h-full">
-        <h1 className="text-2xl font-bold text-primary-800">
-          {t("availableClasses")}
-        </h1>
 
-        {/* Scroll area */}
-        <div className="overflow-y-auto max-h-[65vh] pr-2">
-          {loading ? (
-            <div className="flex flex-col gap-4 mb-2">
-              {Array.from({ length: 3 }).map((_, i) => (
-                <CardSkeleton key={i} />
-              ))}
-            </div>
-          ) : (
-            <ClassesBrowser
-              dates={dates}
-              activeDate={activeDate}
-              setActiveDate={setActiveDate}
-              sortedClasses={sortedClasses}
-              handleReserve={handleReserve}
-              handleCancelation={handleCancelation}
-            />
-          )}
+      <div className="flex flex-col h-full px-4 py-5 gap-5">
+        {/* Page title */}
+        <div className="flex flex-col gap-1">
+          <h1 className="text-2xl font-semibold tracking-tight text-custom-400">
+            {t("availableClasses")}
+          </h1>
+          <p className="text-sm text-custom-200">
+            {t("chooseClassAndBook")}
+          </p>
         </div>
 
-        {/* When there are NO classes */}
-        <Activity
-          mode={sortedClasses.size === 0 && !loading ? "visible" : "hidden"}
-        >
-          <p className="text-primary-800">No classes available for today.</p>
-        </Activity>
+        {/* Scrollable content */}
+        <div className="flex-1 rounded-xl bg-custom-50 border border-custom-100 shadow-sm">
+          <div className="h-full px-3 py-4">
+            {loading ? (
+              <div className="flex flex-col gap-4">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <CardSkeleton key={i} />
+                ))}
+              </div>
+            ) : (
+              <ClassesBrowser
+                dates={dates}
+                activeDate={activeDate}
+                setActiveDate={setActiveDate}
+                sortedClasses={sortedClasses}
+                handleReserve={handleReserve}
+                handleCancelation={handleCancelation}
+              />
+            )}
+
+            {/* Empty state */}
+            <Activity
+              mode={sortedClasses.size === 0 && !loading ? "visible" : "hidden"}
+            >
+              <div className="mt-10 text-center text-sm text-custom-300">
+                No classes available for today 🌿
+              </div>
+            </Activity>
+          </div>
+        </div>
       </div>
     </>
   );

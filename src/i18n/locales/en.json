@@ -107,5 +107,11 @@
   "bookNow": "Book now",
   "nextClass": "Next class",
   "whatOurStudentsSay": "What our students say",
-  "realExperiencesFromOurCommunity": "Real experiences from our community"
+  "realExperiencesFromOurCommunity": "Real experiences from our community",
+  "classFull": "This class is full. You have been added to the waiting list.",
+  "onWaitingList": "You are on the waiting list.",
+  "error": "An error occurred.",
+  "classAlreadyBooked": "You have already booked this class.",
+  "classBookedSuccessfully": "Class booked successfully.",
+  "chooseClassAndBook": "Choose a class and book your spot"
 }

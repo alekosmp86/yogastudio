@@ -21,24 +21,32 @@ export default function ClassesBrowser({
   handleCancelation,
 }: ClassesBrowserProps) {
   return (
-    <div className="w-full">
-      {/* Tabs */}
-      <div className="flex overflow-x-auto max-w-[calc(100%)] gap-1 border-b border-primary-900/30 mb-2">
-        {dates.map((date) => (
-          <Button
-            key={date}
-            onClick={() => setActiveDate(date)}
-            variant={activeDate === date ? "primary" : "secondary"}
-            className={cn(
-              "rounded-sm px-2 py-1 text-sm transition-colors",
-              activeDate === date
-                ? "border-b-2 border-primary-700 text-primary-900"
-                : "text-secondary-500 hover:text-primary-900"
-            )}
-          >
-            {date}
-          </Button>
-        ))}
+    <div className="w-full flex flex-col gap-4">
+      {/* Date selector */}
+      <div className="relative">
+        <div className="flex gap-2 overflow-x-auto pb-2 -mx-3 px-3 scrollbar-hide">
+          {dates.map((date) => {
+            const isActive = activeDate === date;
+
+            return (
+              <button
+                key={date}
+                onClick={() => setActiveDate(date)}
+                className={cn(
+                  "shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all",
+                  isActive
+                    ? "bg-custom-300 text-white shadow-sm"
+                    : "bg-custom-50 text-custom-400 border border-custom-100 hover:bg-custom-100"
+                )}
+              >
+                {date}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* subtle bottom divider */}
+        <div className="h-px bg-custom-100 mt-2" />
       </div>
 
       {/* Active day content */}

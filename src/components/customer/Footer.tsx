@@ -16,7 +16,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-gradient-to-b from-custom-400 to-custom-300 text-custom-50">
-      <div className="mx-auto max-w-5xl px-4 py-10 flex flex-col items-center gap-6">
+      <div className="mx-auto max-w-5xl px-4 py-6 flex flex-col items-center gap-4">
         {/* Brand / Copyright */}
         <div className="text-center space-y-1">
           <div className="text-base font-semibold tracking-wide">

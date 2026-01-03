@@ -107,5 +107,11 @@
   "nextClass": "Próxima clase",
   "bookNow": "Reservar ahora",
   "whatOurStudentsSay": "Qué dicen nuestros estudiantes",
-  "realExperiencesFromOurCommunity": "Experiencias reales de nuestra comunidad"
+  "realExperiencesFromOurCommunity": "Experiencias reales de nuestra comunidad",
+  "classFull": "Esta clase está llena. Has sido añadido a la lista de espera.",
+  "onWaitingList": "Ya estás en la lista de espera.",
+  "error": "Ha ocurrido un error.",
+  "classAlreadyBooked": "Ya has reservado esta clase.",
+  "classBookedSuccessfully": "Clase reservada correctamente.",
+  "chooseClassAndBook": "Elige una clase y reserva tu lugar"
 }
