@@ -72,11 +72,6 @@ export async function GET(req: NextRequest) {
         penalties,
       };
 
-  // Attach penalties (only makes sense for existing users)
-  if (penalties) {
-    await userPenaltyService.calculatePenalty(penalties);
-  }
-
   //check if user should be unblocked
   const timezone = await preferenceService.getStringPreferenceValue(
     "timezone"
