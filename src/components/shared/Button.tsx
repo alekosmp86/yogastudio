@@ -31,7 +31,7 @@ export default function Button({
     "inline-flex items-center justify-center font-medium rounded-md transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-300";
 
   const variants: Record<Variant, string> = {
-    primary: "bg-info-800 text-white hover:bg-info-700 active:bg-info-700",
+    primary: "bg-primary-500 text-white hover:bg-primary-300 active:bg-primary-300",
     secondary:
       "bg-secondary-600 text-white hover:bg-secondary active:bg-secondary",
     negative:

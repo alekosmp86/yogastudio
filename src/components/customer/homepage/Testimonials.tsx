@@ -1,8 +1,11 @@
 "use client";
 
 import TestimonialCard from "./TestimonialCard";
+import { useTranslation } from "react-i18next";
 
 export default function Testimonials() {
+  const { t } = useTranslation();
+
   const testimonials = [
     {
       id: 1,
@@ -22,14 +25,25 @@ export default function Testimonials() {
   ];
 
   return (
-    <section className="mt-10 space-y-6">
-      <h2 className="text-xl font-bold text-gray-800 text-center">
-        What our students say
-      </h2>
+    <section className="mt-14 space-y-6">
+      {/* Section header */}
+      <div className="text-center space-y-1">
+        <h2 className="text-xl font-semibold text-primary-800">
+          {t("whatOurStudentsSay")}
+        </h2>
+        <p className="text-sm text-gray-500">
+          {t("realExperiencesFromOurCommunity")}
+        </p>
+      </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {testimonials.map((t) => (
-          <TestimonialCard key={t.id} name={t.name} text={t.text} />
+      {/* Testimonials */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {testimonials.map((testimonial) => (
+          <TestimonialCard
+            key={testimonial.id}
+            name={testimonial.name}
+            text={testimonial.text}
+          />
         ))}
       </div>
     </section>

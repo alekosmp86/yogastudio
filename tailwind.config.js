@@ -59,38 +59,14 @@ module.exports = {
           inputbg: "#fff",
           inputborder: "#bec8d0",
         },
-        themedark: {
-          headings: "rgba(255, 255, 255, 0.8)",
-          bodycolor: "#bfbfbf",
-          bodybg: "#212224",
-          border: "#393b3f",
-          secondarytextcolor: "#748892",
-
-          sidebarbg: "#2b2c2f",
-          sidebarcolor: "#a9b7d0",
-          sidebarcaption: "#e8edf7",
-
-          lightsidebarcolor: "#a9b7d0",
-
-          headerbg: "rgba( 33, 34, 36, 0.7)",
-          headercolor: "#6f747f",
-          activebg: "#282a2c",
-
-          horizontalsubmenubg: "#393b3f",
-          horizontalsubmenucolor: "#bfbfbf",
-
-          cardbg: "#2b2c2f",
-          inputbg: "#393b3f",
-          inputborder: "#46484c",
-        },
         primary: {
           DEFAULT: "#04A9F5",
-          50: "#B3E6FE",
-          100: "#9FE0FD",
-          200: "#77D2FD",
-          300: "#4EC5FC",
-          400: "#26B8FB",
-          500: "#04A9F5",
+          50: "#EAF6F6",
+          100: "#CFEAEA",
+          200: "#9FD3D1",
+          300: "#6BBDB9",
+          400: "#3DA7A2",
+          500: "#2A8F8B",
           600: "#0383BE",
           700: "#025D87",
           800: "#01374F",
@@ -188,6 +164,16 @@ module.exports = {
           300: "#004346",
           400: "#172A3A",
           500: "#0f151b",
+        },
+        accent: {
+          100: "#FFF3D6",  // warm
+          300: "#FFD166",  // friendly energy
+          500: "#E6B85C",
+        },
+        stroke: {
+          primary: "#1E2A2F",
+          secondary: "#5F7378",
+          muted: "#8FA5AA",
         },
       },
       backgroundImage: {

@@ -16,7 +16,7 @@
   "penalties_many": "Tienes {{count}} penalizaciones de {{max}}.",
   "penalties_other": "Tienes {{count}} penalizaciones de {{max}}.",
   "hiUser": "Hola {{user}}",
-  "welcomeTo": "bienvenido a",
+  "welcomeTo": "Bienvenido a",
   "homePageIntro": "Reserva tus clases, gestiona tus reservas y mantenete conectado.",
   "classes": "Clases",
   "reservations": "Reservas",
@@ -103,5 +103,9 @@
   "noCancelledClasses": "No hay clases canceladas en este periodo.",
   "moreActivityInsightsComingSoon": "Más información de actividad en breve",
   "penalties": "Penalizaciones",
-  "cancelations": "Cancelaciones"
+  "cancelations": "Cancelaciones",
+  "nextClass": "Próxima clase",
+  "bookNow": "Reservar ahora",
+  "whatOurStudentsSay": "Qué dicen nuestros estudiantes",
+  "realExperiencesFromOurCommunity": "Experiencias reales de nuestra comunidad"
 }
