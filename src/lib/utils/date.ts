@@ -51,6 +51,7 @@ export class BusinessTime {
       hour,
       minute,
       second,
+      timezone: this.timezone,
 
       /** Monday = 0 ... Sunday = 6 */
       weekday: this.businessWeekday(dateStr),

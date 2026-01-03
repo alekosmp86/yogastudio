@@ -10,6 +10,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ApiType } from "@/enums/ApiTypes";
 import { ToastType } from "@/enums/ToastType";
 import { UserDetail } from "@/types/users/UserDetail";
+import CancelledClassesSection from "./CancelledClassesSection";
 
 type UserOverviewCardProps = {
   id: string;
@@ -92,9 +93,11 @@ export default function UserDetails({ id }: UserOverviewCardProps) {
           />
         </div>
 
+        <CancelledClassesSection cancelledClasses={user?.cancelledClasses ?? []} />
+
         {/* Future expansion hint */}
         <div className='text-xs text-custom-200 italic'>
-          More activity insights coming soon
+          {t("moreActivityInsightsComingSoon")}
         </div>
       </div>
     </>

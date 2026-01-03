@@ -97,5 +97,11 @@
   "failedToExecuteAction": "Failed to execute action",
   "userDetails": "User Details",
   "enabled": "Enabled",
-  "disabled": "Disabled"
+  "disabled": "Disabled",
+  "failedToFetchUser": "Failed to fetch user details",
+  "cancelledClasses": "Cancelled Classes",
+  "noCancelledClasses": "No cancelled classes in this period.",
+  "moreActivityInsightsComingSoon": "More activity insights coming soon",
+  "penalties": "Penalties",
+  "cancelations": "Cancelations"
 }

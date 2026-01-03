@@ -7,6 +7,7 @@ export type UserDetail = {
     cancelations: number;
   };
   cancelledClasses: {
+    id: number;
     title: string;
     date: string;
     startTime: string;

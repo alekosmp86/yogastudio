@@ -83,6 +83,7 @@ export class UserServiceImpl implements UserService {
             id: true,
             class: {
               select: {
+                id: true,
                 date: true,
                 startTime: true,
                 template: {
@@ -113,6 +114,7 @@ export class UserServiceImpl implements UserService {
         cancelations: user.reservations.length,
       },
       cancelledClasses: user.reservations.map((r) => ({
+        id: r.class.id,
         title: r.class.template.title,
         date: r.class.date,
         startTime: r.class.startTime,

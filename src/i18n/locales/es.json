@@ -97,5 +97,11 @@
   "failedToExecuteAction": "Error al ejecutar la acción",
   "userDetails": "Detalles del usuario",
   "enabled": "Habilitado",
-  "disabled": "Deshabilitado"
+  "disabled": "Deshabilitado",
+  "failedToFetchUser": "Error al obtener los detalles del usuario",
+  "cancelledClasses": "Clases canceladas",
+  "noCancelledClasses": "No hay clases canceladas en este periodo.",
+  "moreActivityInsightsComingSoon": "Más información de actividad en breve",
+  "penalties": "Penalizaciones",
+  "cancelations": "Cancelaciones"
 }
