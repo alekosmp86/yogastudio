@@ -3,8 +3,6 @@ import type { NextRequest } from "next/server";
 import { Roles } from "./enums/Roles";
 import { jwtVerify } from "jose";
 import { SessionUser } from "./types/SessionUser";
-import { APPCONFIG } from "app/config";
-import { BusinessTime } from "./lib/utils/date";
 
 const PUBLIC_PATHS = [
   "/",
@@ -56,21 +54,6 @@ export async function middleware(req: NextRequest) {
     const payload = await verifyJWT(token);
     if (!payload) {
       return NextResponse.redirect(new URL("/login", req.url));
-    }
-
-    if (APPCONFIG.USER.requiresApproval && !payload.user.approved) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-
-    //restrict access to users with penalties
-    /** @todo: use timezone from preferences */
-    const businessTime = new BusinessTime('America/Montevideo');
-    const currentDate = businessTime.now().date;
-    if (
-      payload.user.penalties?.blockedUntil &&
-      currentDate < businessTime.fromDate(new Date(payload.user.penalties.blockedUntil)).date
-    ) {
-      return NextResponse.redirect(new URL("/penalty", req.url));
     }
 
     // Optional: protect owner-only pages
