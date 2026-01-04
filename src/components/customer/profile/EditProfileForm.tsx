@@ -1,19 +1,16 @@
 import Button from "@/components/shared/Button";
 import Field from "@/components/shared/Field";
 import { useTranslation } from "react-i18next";
+import { ProfileData } from "@/types/profile/ProfileData";
 
 type EditProfileFormProps = {
-  user: {
-    name: string;
-    email: string;
-    phone?: string;
-  };
+  profile: ProfileData;
   onCancel: () => void;
   onSave: (data: { name: string; email: string; phone?: string }) => void;
 };
 
 export default function EditProfileForm({
-  user,
+  profile,
   onCancel,
   onSave,
 }: EditProfileFormProps) {
@@ -31,13 +28,13 @@ export default function EditProfileForm({
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <Field label={t("name")} name="name" defaultValue={user.name} required />
+      <Field label={t("name")} name="name" defaultValue={profile.name} required />
 
       <Field
         label={t("email")}
         name="email"
         type="email"
-        defaultValue={user.email}
+        defaultValue={profile.email}
         required
       />
 
@@ -45,7 +42,7 @@ export default function EditProfileForm({
         label={t("phone")}
         name="phone"
         type="tel"
-        defaultValue={user.phone}
+        defaultValue={profile.phone}
       />
 
       <div className="flex justify-end gap-3 pt-2">

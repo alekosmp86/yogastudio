@@ -1,22 +1,40 @@
 "use client";
 
+import { useEffect } from "react";
 import ProfileCard from "./ProfileCard";
 import ProfileInsights from "./ProfileInsights";
 import { useTranslation } from "react-i18next";
+import { http } from "@/lib/http";
+import { ApiResponse } from "@/types/requests/ApiResponse";
+import { ProfileData } from "@/types/profile/ProfileData";
+import { ApiType } from "@/enums/ApiTypes";
+import { useState } from "react";
+import { RequestStatus } from "@/enums/RequestStatus";
 
 export default function CustomerProfile() {
   const { t } = useTranslation();
-  const reservationsCount = 10;
-  const upcomingReservations = 5;
-  const user = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "123456789",
-    createdAt: new Date().toISOString(),
-  };
+  const [profile, setProfile] = useState<ProfileData | null>(null);
 
-  const onSaveProfile = (data: { name: string; phone?: string }) => {
-    console.log("Profile saved:", data);
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      const {message, data} = await http.get<ApiResponse<ProfileData>>("/customer/profile", ApiType.FRONTEND);
+      if(message === RequestStatus.SUCCESS) {
+        setProfile(data!);
+      }
+    }
+    fetchUserProfile();
+  }, []);
+
+  const onSaveProfile = async (userBaseInfo: { name: string; email: string; phone?: string }) => {
+    const {message} = await http.put<ApiResponse<ProfileData>>("/customer/profile", ApiType.FRONTEND, userBaseInfo);
+    if(message === RequestStatus.SUCCESS) {
+      setProfile(prevData => ({
+        ...prevData!,
+        name: userBaseInfo.name,
+        email: userBaseInfo.email,
+        phone: userBaseInfo.phone ?? prevData!.phone
+      }));
+    }
   };
 
   return (
@@ -30,12 +48,13 @@ export default function CustomerProfile() {
 
       {/* Insights */}
       <ProfileInsights
-        reservationsCount={reservationsCount}
-        upcomingReservations={upcomingReservations}
+        reservationsCount={profile?.reservations.total || 0}
+        upcomingReservations={profile?.reservations.upcoming || 0}
+        penalties={profile?.penalties.count || 0}
       />
 
       {/* Profile info */}
-      <ProfileCard user={user} onSave={onSaveProfile} />
+      {profile && <ProfileCard profile={profile} onSave={onSaveProfile} />}
     </div>
   );
 }

@@ -4,19 +4,15 @@ import { useState } from "react";
 import ProfileReadOnly from "./ProfileReadOnly";
 import EditProfileForm from "./EditProfileForm";
 import { useTranslation } from "react-i18next";
+import { ProfileData } from "@/types/profile/ProfileData";
 
 type ProfileCardProps = {
-  user: {
-    name: string;
-    email: string;
-    phone?: string;
-    createdAt: string;
-  };
+  profile: ProfileData;
   onSave: (data: { name: string; email: string; phone?: string }) => void;
 };
 
 export default function ProfileCard({
-  user,
+  profile,
   onSave,
 }: ProfileCardProps) {
   const { t } = useTranslation();
@@ -43,7 +39,7 @@ export default function ProfileCard({
 
         {editing ? (
           <EditProfileForm
-            user={user}
+            profile={profile}
             onCancel={() => setEditing(false)}
             onSave={(data) => {
               onSave(data);
@@ -51,7 +47,7 @@ export default function ProfileCard({
             }}
           />
         ) : (
-          <ProfileReadOnly user={user} />
+          <ProfileReadOnly profile={profile} />
         )}
       </CardContent>
     </Card>
