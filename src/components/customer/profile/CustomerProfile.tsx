@@ -10,6 +10,7 @@ import { ProfileData } from "@/types/profile/ProfileData";
 import { ApiType } from "@/enums/ApiTypes";
 import { useState } from "react";
 import { RequestStatus } from "@/enums/RequestStatus";
+import CustomerTestimonialSection from "./CustomerTestimonialSection";
 
 export default function CustomerProfile() {
   const { t } = useTranslation();
@@ -55,6 +56,9 @@ export default function CustomerProfile() {
 
       {/* Profile info */}
       {profile && <ProfileCard profile={profile} onSave={onSaveProfile} />}
+
+      {/* Testimonials */}
+      {profile && <CustomerTestimonialSection />}
     </div>
   );
 }

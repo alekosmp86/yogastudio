@@ -127,5 +127,9 @@
   "notProvided": "No proporcionado",
   "alreadyBooked": "Reservada",
   "noReservationsHint": "Para reservar una clase, por favor, ve a la página de Clases.",
-  "noClassesAvailable": "No hay clases disponibles para hoy"
+  "noClassesAvailable": "No hay clases disponibles para hoy",
+  "testimonialSectionTitle": "¿Cómo fue tu experiencia?",
+  "testimonialSectionHelperText": "Toca una estrella para calificar tu experiencia",
+  "testimonialSectionPlaceholder": "Contános lo que te gustó, o lo que podríamos mejorar...",
+  "testimonialSectionButton": "Compartir feedback"
 }
