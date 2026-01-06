@@ -21,7 +21,7 @@ export default function PreferenceInput({
           type="checkbox"
           checked={value === true}
           onChange={(e) => onChange({ ...preference, value: e.target.checked })}
-          className="h-5 w-5 text-white rounded accent-custom-300 focus:ring-2 focus:ring-custom-200"
+          className="h-5 w-5 bg-custom-300 rounded accent-white focus:ring-2 focus:ring-custom-200"
         />
         <span className="text-sm text-custom-400">
           {value ? t("enabled") : t("disabled")}
