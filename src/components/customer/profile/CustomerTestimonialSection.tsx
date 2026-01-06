@@ -29,12 +29,27 @@ export default function CustomerTestimonialSection() {
   }, []);
 
   const onSubmit = async (data: TestimonialData) => {
+    if(data.rating === 0 || !data.message) {
+      showToast({
+        type: ToastType.WARNING,
+        message: t("testimonialSectionWarningDescription"),
+        duration: 3000,
+      });
+      return;
+    }
+
     const {message} = await http.post<ApiResponse<void>>("/customer/testimonials", ApiType.FRONTEND, data);
 
     if(message === RequestStatus.SUCCESS) {
       showToast({
         type: ToastType.SUCCESS,
         message: t("testimonialSectionSuccessDescription"),
+        duration: 3000,
+      });
+    } else {
+      showToast({
+        type: ToastType.ERROR,
+        message: t("testimonialSectionErrorDescription"),
         duration: 3000,
       });
     }
@@ -111,7 +126,8 @@ export default function CustomerTestimonialSection() {
         onChange={(e) => setMessage(e.target.value)}
         placeholder={t("testimonialSectionPlaceholder")}
         rows={4}
-        className="w-full rounded-xl border border-primary-900/30 px-3 py-2 text-sm text-primary-900 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+        className="w-full rounded-xl border border-primary-900/30 px-3 py-2 text-sm text-primary-900 
+                  focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none bg-white"
       />
 
       {/* Action */}

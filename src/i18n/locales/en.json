@@ -132,5 +132,8 @@
   "testimonialSectionHelperText": "Tap a star to rate your experience",
   "testimonialSectionPlaceholder": "Tell us what you liked, or what we could improve...",
   "testimonialSectionButton": "Share feedback",
+  "testimonialSectionSuccessDescription": "Thank you for your feedback!",
+  "testimonialSectionErrorDescription": "Failed to submit feedback",
+  "testimonialSectionWarningDescription": "Please rate your experience and leave a message",
   "noTestimonials": "No testimonials yet"
 }

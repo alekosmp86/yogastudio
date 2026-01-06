@@ -132,5 +132,8 @@
   "testimonialSectionHelperText": "Toca una estrella para calificar tu experiencia",
   "testimonialSectionPlaceholder": "Contános lo que te gustó, o lo que podríamos mejorar...",
   "testimonialSectionButton": "Compartir feedback",
+  "testimonialSectionSuccessDescription": "Gracias por tu feedback!",
+  "testimonialSectionErrorDescription": "Error al enviar el feedback",
+  "testimonialSectionWarningDescription": "Por favor, califica tu experiencia y deja un mensaje",
   "noTestimonials": "No hay testimonios aún"
 }

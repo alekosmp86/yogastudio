@@ -15,8 +15,29 @@ export default function Testimonials() {
   const { t } = useTranslation();
   const [testimonials, setTestimonials] = useState<TestimonialHomePage[]>([]);
   const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(3);
 
-  const PAGE_SIZE = 3;
+  useEffect(() => {
+    const updatePageSize = () => {
+      if (window.innerWidth < 640) {
+        setPageSize(1); // mobile
+      } else {
+        setPageSize(3); // desktop
+      }
+    };
+
+    updatePageSize();
+    window.addEventListener("resize", updatePageSize);
+
+    return () => window.removeEventListener("resize", updatePageSize);
+  }, []);
+
+  useEffect(() => {
+    const updateOnPageSize = () => {
+      setPage(0);
+    };
+    updateOnPageSize();
+  }, [pageSize]);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -33,11 +54,11 @@ export default function Testimonials() {
     fetchTestimonials();
   }, []);
 
-  const totalPages = Math.ceil(testimonials.length / PAGE_SIZE);
+  const totalPages = Math.ceil(testimonials.length / pageSize);
 
   const visibleTestimonials = testimonials.slice(
-    page * PAGE_SIZE,
-    page * PAGE_SIZE + PAGE_SIZE
+    page * pageSize,
+    page * pageSize + pageSize
   );
 
   const canGoPrev = page > 0;
@@ -56,19 +77,19 @@ export default function Testimonials() {
   };
 
   return (
-    <section className="mt-14 space-y-6">
+    <section className='mt-14 space-y-6'>
       {/* Section header */}
-      <div className="text-center space-y-1">
-        <h2 className="text-xl font-semibold text-primary-800">
+      <div className='text-center space-y-1'>
+        <h2 className='text-xl font-semibold text-primary-800'>
           {t("whatOurStudentsSay")}
         </h2>
-        <p className="text-sm text-gray-500">
+        <p className='text-sm text-gray-500'>
           {t("realExperiencesFromOurCommunity")}
         </p>
       </div>
 
       {/* Carousel */}
-      <div className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-4">
+      <div className='w-full grid grid-cols-[auto_1fr_auto] items-center gap-4'>
         {/* Left */}
         <ChevronLeft
           onClick={goPrev}
@@ -81,7 +102,7 @@ export default function Testimonials() {
         />
 
         {/* Content */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
           {visibleTestimonials.map((testimonial) => (
             <TestimonialCard key={testimonial.id} testimonial={testimonial} />
           ))}
@@ -100,7 +121,7 @@ export default function Testimonials() {
       </div>
 
       {testimonials.length === 0 && (
-        <p className="text-center text-primary-800">{t("noTestimonials")}</p>
+        <p className='text-center text-primary-800'>{t("noTestimonials")}</p>
       )}
     </section>
   );
