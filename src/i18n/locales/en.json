@@ -122,7 +122,7 @@
   "myProfileDescription": "Manage your profile information",
   "personalInformation": "Personal information",
   "totalReservations": "Total reservations",
-  "upcomingClasses": "Upcoming classes",
+  "activeReservations": "Active reservations",
   "memberSince": "Member since",
   "notProvided": "Not provided",
   "alreadyBooked": "Already booked",
@@ -131,5 +131,6 @@
   "testimonialSectionTitle": "How was your experience?",
   "testimonialSectionHelperText": "Tap a star to rate your experience",
   "testimonialSectionPlaceholder": "Tell us what you liked, or what we could improve...",
-  "testimonialSectionButton": "Share feedback"
+  "testimonialSectionButton": "Share feedback",
+  "noTestimonials": "No testimonials yet"
 }

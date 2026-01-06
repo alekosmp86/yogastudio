@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { TestimonialService } from "../TestimonialService";
 import { TestimonialData } from "@/types/testimonials/TestimonialData";
+import { TestimonialHomePage } from "@/types/testimonials/TestimonialHomePage";
 
 export class TestimonialServiceImpl implements TestimonialService {
   async createTestimonial(
@@ -36,5 +37,33 @@ export class TestimonialServiceImpl implements TestimonialService {
       rating: testimonial.rate,
       message: testimonial.message,
     };
+  }
+
+  async getTestimonialsHomePage(): Promise<TestimonialHomePage[] | null> {
+    const testimonialsHomePage = await prisma.testimonials.findMany({
+      select: {
+        id: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        message: true,
+        rate: true,
+      },
+      orderBy: {
+        rate: "desc",
+      },
+      take: 10,
+    });
+    if (!testimonialsHomePage) {
+      return null;
+    }
+    return testimonialsHomePage.map((testimonial) => ({
+      id: testimonial.id,
+      userName: testimonial.user.name,
+      message: testimonial.message,
+      rating: testimonial.rate,
+    }));
   }
 }

@@ -17,7 +17,7 @@ export default function ProfileInsights({
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <ProfileInsightCard label={t("totalReservations")} value={reservationsCount} />
-      <ProfileInsightCard label={t("upcomingClasses")} value={upcomingReservations} />
+      <ProfileInsightCard label={t("activeReservations")} value={upcomingReservations} />
       <ProfileInsightCard label={t("penalties")} value={penalties} />
     </div>
   );

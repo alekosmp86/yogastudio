@@ -25,9 +25,9 @@ export default function NextClassSection() {
         ApiType.FRONTEND
       );
 
-      if (message === RequestStatus.SUCCESS) {
-        setNextClass(data!);
-        setIsBooked(data!.reservations.some((r) => !r.cancelled));
+      if (message === RequestStatus.SUCCESS && data) {
+        setNextClass(data);
+        setIsBooked(data.reservations?.some((r) => !r.cancelled) ?? false);
       }
     };
     fetchNextClass();
@@ -39,7 +39,7 @@ export default function NextClassSection() {
       "/customer/classes/next",
       ApiType.FRONTEND,
       {
-        id: nextClass!.id,
+        id: nextClass.id,
       }
     );
 
@@ -94,44 +94,50 @@ export default function NextClassSection() {
         <h1 className="text-xl md:text-2xl font-bold text-primary-800 flex items-center justify-center md:justify-start gap-2">
           {t("nextClass")}
           <ArrowBigRightDash className="hidden md:inline-block" />
+          {!nextClass && (
+            <p className="text-center text-primary-800 text-sm">
+              {t("noClassesFound")}
+            </p>
+          )}
         </h1>
 
         {/* Class info */}
-        <div className="flex flex-col gap-1 text-center md:text-left md:flex-1">
-          <h2 className="text-lg font-semibold text-primary-800">
-            {nextClass?.template.title}
-          </h2>
+        {nextClass && (
+          <>
+            <div className="flex flex-col gap-1 text-center md:text-left md:flex-1">
+              <h2 className="text-lg font-semibold text-primary-800">
+                {nextClass?.template.title}
+              </h2>
 
-          {nextClass?.template.description && (
-            <p className="text-sm text-primary-600">
-              {nextClass.template.description}
-            </p>
-          )}
+              {nextClass?.template.description && (
+                <p className="text-sm text-primary-600">
+                  {nextClass.template.description}
+                </p>
+              )}
 
-          <p className="text-sm text-primary-600 font-medium">
-            {nextClass?.template.instructor}
-          </p>
-        </div>
+              <p className="text-sm text-primary-600 font-medium">
+                {nextClass?.template.instructor}
+              </p>
+            </div>
 
-        {/* Meta + CTA */}
-        <div className="flex flex-col items-center gap-3 md:items-end">
-          <span className="text-sm font-semibold text-primary-700">
-            {nextClass?.date} · {nextClass?.startTime}
-          </span>
+            <div className="flex flex-col items-center gap-3 md:items-end">
+              <span className="text-sm font-semibold text-primary-700">
+                {nextClass?.date} · {nextClass?.startTime}
+              </span>
 
-          {nextClass && (
-            <Button
-              Icon={NotebookPen}
-              size="sm"
-              variant={isBooked ? "secondary" : "primary"}
-              className="rounded-xl px-6 py-2"
-              onClick={handleBookNow}
-              disabled={isBooked}
-            >
-              {isBooked ? t("alreadyBooked") : t("bookNow")}
-            </Button>
-          )}
-        </div>
+              <Button
+                Icon={NotebookPen}
+                size="sm"
+                variant={isBooked ? "secondary" : "primary"}
+                className="rounded-xl px-6 py-2"
+                onClick={handleBookNow}
+                disabled={isBooked}
+              >
+                {isBooked ? t("alreadyBooked") : t("bookNow")}
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
