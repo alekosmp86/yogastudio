@@ -22,7 +22,6 @@ export async function GET() {
   try {
     const user = await ApiUtils.getSessionUser();
     const profile = await profileService.getProfile(user.id);
-    console.log("Profile data:", profile);
     return NextResponse.json(
       { message: RequestStatus.SUCCESS, data: profile },
       { status: 200 }

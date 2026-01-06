@@ -2,8 +2,6 @@
 
 import React, { useState } from "react";
 import { ScheduleHeader } from "./ScheduleHeader";
-import { HourCell } from "./HourCell";
-import { DayCell } from "./DayCell";
 import { ClassSelectorModal } from "./ClassSelectorModal";
 import { useClasses } from "@/lib/contexts/ClassesContext";
 import { Card, CardContent } from "@/components/shared/Card";
@@ -21,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import Link from "next/link";
 import { FileSymlink } from "lucide-react";
 import Button from "@/components/shared/Button";
+import ScheduleRows from "./ScheduleRows";
 
 export default function WeeklyScheduleGrid() {
   // grid columns: 70px for hour column, then 1fr per weekday (keeps flexible)
@@ -199,18 +198,10 @@ export default function WeeklyScheduleGrid() {
               <ScheduleHeader />
 
               {/* Rows */}
-              {Time.HOURS.map((hour) => (
-                <React.Fragment key={hour}>
-                  <HourCell hour={hour} />
-                  {Time.WEEKDAYS.map((d, index) => (
-                    <DayCell
-                      key={`${d}-${hour}`}
-                      data={findClassInSchedule(index, hour)}
-                      onClick={() => showClassSelectorModal(index, hour)}
-                    />
-                  ))}
-                </React.Fragment>
-              ))}
+              <ScheduleRows
+                findClassInSchedule={findClassInSchedule}
+                showClassSelectorModal={showClassSelectorModal}
+              />
             </div>
           </div>
         </div>
