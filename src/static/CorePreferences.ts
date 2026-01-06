@@ -88,4 +88,12 @@ export const CorePreferences: AppPreference[] = [
     value: "1",
     category: PreferenceCategory.RULES,
   },
+  {
+    id: 11,
+    name: "classDurationMinutes",
+    label: "Class Duration (minutes)",
+    type: PreferenceTypes.NUMBER,
+    value: "60",
+    category: PreferenceCategory.MEMBERSHIP,
+  },
 ];
