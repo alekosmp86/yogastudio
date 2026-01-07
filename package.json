@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run sync-preferences && next build",
+    "build": "npm run sync-preferences && npm run run-tasks && next build",
     "start": "next start",
     "lint": "eslint",
-    "sync-preferences": "tsx src/scripts/sync-preferences.ts"
+    "sync-preferences": "tsx src/tasks/sync-preferences.ts",
+    "run-tasks": "tsx src/tasks/run-task.ts"
   },
   "dependencies": {
     "@prisma/client": "6.19.0",
