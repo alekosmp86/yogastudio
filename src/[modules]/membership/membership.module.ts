@@ -1,4 +1,4 @@
-import { hookRegistry, uiRegistry } from "@/lib/hooks";
+import { hookRegistry, routeRegistry, uiRegistry } from "@/lib/hooks";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { AppModule } from "@/modules/[core]/AppModule";
 import { fetchClassesByMembershipPostHook } from "./backend/hooks/FetchClassesByMembershipPostHook";
@@ -27,6 +27,15 @@ export const MembershipModule: AppModule = {
     uiRegistry.registerUI(
       CoreUiSlots.OwnerDashboardCards,
       MembershipDashboardCard
+    );
+  },
+
+  initRoutes() {
+    console.log("MembershipModule.initRoutes");
+    routeRegistry.registerPage(
+      this.name,
+      "/manager",
+      () => import("./frontend/components/owner/MembershipManager")
     );
   }
 };
