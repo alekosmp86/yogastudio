@@ -13,13 +13,13 @@ import { User, UserPenalty } from "@prisma/client";
 import { BusinessTime } from "@/lib/utils/date";
 import { hookRegistry } from "@/lib/hooks";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
-import { bootstrap } from "@/modules/[core]/ModulesBootstrap";
+import { bootstrapHooks } from "@/modules/[core]/bootstrap/core";
 
 const logger = new ConsoleLogger("GoogleCallback");
 
 export async function GET(req: NextRequest) {
   // enable modules' hooks
-  bootstrap();
+  bootstrapHooks();
 
   const url = new URL(req.url);
   const code = url.searchParams.get("code");

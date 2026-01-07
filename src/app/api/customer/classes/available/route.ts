@@ -4,13 +4,13 @@ import { NextResponse } from "next/server";
 import { customerClassesService } from "../../..";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { hookRegistry } from "@/lib/hooks";
-import { bootstrap } from "@/modules/[core]/ModulesBootstrap";
+import { bootstrapHooks } from "@/modules/[core]/bootstrap/core";
 
 const logger = new ConsoleLogger("CustomerController");
 
 export async function GET() {
   // enable modules' hooks
-  bootstrap();
+  bootstrapHooks();
 
   try {
     await hookRegistry.runHooks(
