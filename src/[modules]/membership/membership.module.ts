@@ -1,11 +1,13 @@
-import { hookRegistry } from "@/lib/hooks";
+import { hookRegistry, uiRegistry } from "@/lib/hooks";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
-import { AppModule } from "AppModule";
+import { AppModule } from "@/modules/[core]/AppModule";
 import { fetchClassesByMembershipPostHook } from "./backend/hooks/FetchClassesByMembershipPostHook";
 import { userCreatedGoogleOauthPostHook } from "./backend/hooks/UserCreatedGoogleOauthPostHook";
+import { CoreUiSlots } from "../[core]/CoreUiSlots";
+import MembershipDashboardCard from "./frontend/components/owner/MembershipDashboardCard";
 
 export const MembershipModule: AppModule = {
-  init() {
+  initCore() {
     hookRegistry.registerHook(
       CoreHooks.afterFetchAllAvailableClasses,
       "after",
@@ -15,6 +17,13 @@ export const MembershipModule: AppModule = {
       CoreHooks.afterUserCreated,
       "after",
       userCreatedGoogleOauthPostHook
+    );
+  },
+
+  initUI() {
+    uiRegistry.registerUI(
+      CoreUiSlots.OwnerDashboardCards,
+      MembershipDashboardCard
     );
   },
 };
