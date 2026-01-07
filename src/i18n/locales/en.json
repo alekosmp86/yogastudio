@@ -136,6 +136,7 @@
   "testimonialSectionErrorDescription": "Failed to submit feedback",
   "testimonialSectionWarningDescription": "Please rate your experience and leave a message",
   "noTestimonials": "No testimonials yet",
+  "noModulesRegistered": "No modules registered",
   "main": "Main",
   "modules": "Modules",
   "membership": "Membership",

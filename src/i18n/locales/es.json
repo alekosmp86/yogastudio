@@ -139,5 +139,6 @@
   "main": "Principal",
   "modules": "Módulos",
   "membership": "Planes/Membresías",
-  "manageMemberships": "Gestiona tus planes/membresías"
+  "manageMemberships": "Gestiona tus planes/membresías",
+  "noModulesRegistered": "No hay módulos registrados"
 }

@@ -8,7 +8,7 @@ export function bootstrap() {
   console.log("Bootstrapping modules...");
   bootstrapped = true;
 
-  for (const module of MODULES) {
-    module.initTasks?.();
+  for (const mod of MODULES) {
+    mod.initTasks?.();
   }
 }
