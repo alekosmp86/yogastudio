@@ -2,7 +2,7 @@ import { ConsoleLogger } from "../../../logger/_services/impl/ConsoleLogger";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
 import { customerClassesService } from "../../..";
-import { CoreHooks } from "@/enums/CoreHooks";
+import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { hookRegistry } from "@/lib/hooks";
 import { bootstrap } from "@/modules/[core]/ModulesBootstrap";
 
@@ -13,9 +13,19 @@ export async function GET() {
   bootstrap();
 
   try {
+    await hookRegistry.runHooks(
+      CoreHooks.beforeFetchAllAvailableClasses,
+      "before",
+      null
+    );
+
     const classesList = await customerClassesService.getClassesList();
 
-    const result = await hookRegistry.runHooks(CoreHooks.postFetchAllAvailableClasses, classesList);
+    const result = await hookRegistry.runHooks(
+      CoreHooks.afterFetchAllAvailableClasses,
+      "after",
+      classesList
+    );
 
     return NextResponse.json({
       message: RequestStatus.SUCCESS,

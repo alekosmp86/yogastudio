@@ -12,7 +12,7 @@ import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { User, UserPenalty } from "@prisma/client";
 import { BusinessTime } from "@/lib/utils/date";
 import { hookRegistry } from "@/lib/hooks";
-import { CoreHooks } from "@/enums/CoreHooks";
+import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { bootstrap } from "@/modules/[core]/ModulesBootstrap";
 
 const logger = new ConsoleLogger("GoogleCallback");
@@ -58,12 +58,17 @@ export async function GET(req: NextRequest) {
   if (!profile.email)
     return NextResponse.json({ error: "Missing email" }, { status: 400 });
 
+  // 2.1 run hooks
+  await hookRegistry.runHooks(CoreHooks.beforeUserCreated, "before", profile);
+
   // 3. Find or create User + Account
   const existingUser = await userService.findUniqueByFields({
     email: profile.email,
   });
 
-  const user = existingUser || await userService.create(googleUserMapper.toUser(profile))
+  const user =
+    existingUser ||
+    (await userService.create(googleUserMapper.toUser(profile)));
 
   /** @todo this should be done in a hook | penalties should be moved to a separate module */
   const penalties = existingUser
@@ -81,9 +86,7 @@ export async function GET(req: NextRequest) {
       };
 
   //check if user should be unblocked
-  const timezone = await preferenceService.getStringPreferenceValue(
-    "timezone"
-  );
+  const timezone = await preferenceService.getStringPreferenceValue("timezone");
   const businessTime = new BusinessTime(timezone);
   if (
     penalties &&
@@ -113,7 +116,7 @@ export async function GET(req: NextRequest) {
     const response = NextResponse.redirect(url.origin + "/");
     await tokenService.createSession(response, sessionUser);
 
-    await hookRegistry.runHooks(CoreHooks.postUserCreatedGoogleOauth, user);
+    await hookRegistry.runHooks(CoreHooks.afterUserCreated, "after", user);
 
     return response;
   } catch (error) {
