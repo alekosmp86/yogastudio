@@ -7,6 +7,18 @@ import { MembershipStatus } from "../../enums/MembershipStatus";
 export const userCreatedGoogleOauthPostHook = async (user: User | null) => {
   if (!user) return user;
 
+  // check if user has an active membership
+  const userMembership = await prisma.userMembership.findFirst({
+    where: {
+      AND: [
+        { userId: user.id },
+        { status: MembershipStatus.ACTIVE },
+      ],
+    },
+  });
+
+  if (userMembership) return user;
+
   // get the system access membership
   const systemAccessMembership = await prisma.membershipPlan.findUnique({
     where: {
