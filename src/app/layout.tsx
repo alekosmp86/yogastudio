@@ -4,8 +4,10 @@ import { APPCONFIG } from "./config";
 import { ToastProvider } from "@/lib/contexts/ToastContext";
 import I18nProvider from "@/components/shared/I18nProvider";
 import { bootstrapUI } from "@/modules/[core]/bootstrap/ui";
+import { bootstrapPages } from "@/modules/[core]/bootstrap/pages";
 
 bootstrapUI();
+bootstrapPages();
 
 export default function RootLayout({
   children,
