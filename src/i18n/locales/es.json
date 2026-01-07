@@ -135,5 +135,9 @@
   "testimonialSectionSuccessDescription": "Gracias por tu feedback!",
   "testimonialSectionErrorDescription": "Error al enviar el feedback",
   "testimonialSectionWarningDescription": "Por favor, califica tu experiencia y deja un mensaje",
-  "noTestimonials": "No hay testimonios aún"
+  "noTestimonials": "No hay testimonios aún",
+  "main": "Principal",
+  "modules": "Módulos",
+  "membership": "Planes/Membresías",
+  "manageMemberships": "Gestiona tus planes/membresías"
 }

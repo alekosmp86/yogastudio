@@ -135,5 +135,9 @@
   "testimonialSectionSuccessDescription": "Thank you for your feedback!",
   "testimonialSectionErrorDescription": "Failed to submit feedback",
   "testimonialSectionWarningDescription": "Please rate your experience and leave a message",
-  "noTestimonials": "No testimonials yet"
+  "noTestimonials": "No testimonials yet",
+  "main": "Main",
+  "modules": "Modules",
+  "membership": "Membership",
+  "manageMemberships": "Manage your memberships"
 }

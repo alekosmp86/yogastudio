@@ -21,6 +21,7 @@ export const MembershipModule: AppModule = {
   },
 
   initUI() {
+    console.log("MembershipModule.initUI");
     uiRegistry.registerUI(
       CoreUiSlots.OwnerDashboardCards,
       MembershipDashboardCard
