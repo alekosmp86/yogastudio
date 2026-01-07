@@ -11,12 +11,17 @@ import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInf
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { User, UserPenalty } from "@prisma/client";
 import { BusinessTime } from "@/lib/utils/date";
+import { hookRegistry } from "@/lib/hooks";
+import { CoreHooks } from "@/enums/CoreHooks";
+import { bootstrap } from "@/modules/[core]/ModulesBootstrap";
 
 const logger = new ConsoleLogger("GoogleCallback");
 
 export async function GET(req: NextRequest) {
-  const url = new URL(req.url);
+  // enable modules' hooks
+  bootstrap();
 
+  const url = new URL(req.url);
   const code = url.searchParams.get("code");
   if (!code)
     return NextResponse.json({ error: "Missing code" }, { status: 400 });
@@ -58,6 +63,9 @@ export async function GET(req: NextRequest) {
     email: profile.email,
   });
 
+  const user = existingUser || await userService.create(googleUserMapper.toUser(profile))
+
+  /** @todo this should be done in a hook | penalties should be moved to a separate module */
   const penalties = existingUser
     ? await userPenaltyService.findByUserId(existingUser.id)
     : null;
@@ -68,7 +76,7 @@ export async function GET(req: NextRequest) {
         penalties,
       }
     : {
-        ...(await userService.create(googleUserMapper.toUser(profile))),
+        ...user,
         penalties,
       };
 
@@ -84,6 +92,7 @@ export async function GET(req: NextRequest) {
   ) {
     await userPenaltyService.unblockUser(penalties.userId);
   }
+  /** end of @todo */
 
   try {
     const accountToCreate = {
@@ -103,6 +112,8 @@ export async function GET(req: NextRequest) {
     // 4. Create response to set the session cookie
     const response = NextResponse.redirect(url.origin + "/");
     await tokenService.createSession(response, sessionUser);
+
+    await hookRegistry.runHooks(CoreHooks.postUserCreatedGoogleOauth, user);
 
     return response;
   } catch (error) {

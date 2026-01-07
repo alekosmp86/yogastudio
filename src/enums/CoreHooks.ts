@@ -1,3 +1,4 @@
 export enum CoreHooks {
-    postFetchAllAvailableClasses = 'fetchAllAvailableClasses_postHook'
+    postFetchAllAvailableClasses = 'fetchAllAvailableClasses_postHook',
+    postUserCreatedGoogleOauth = 'userCreatedGoogleOauth_postHook',
 }

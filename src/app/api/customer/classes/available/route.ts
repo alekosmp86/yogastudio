@@ -3,15 +3,19 @@ import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
 import { customerClassesService } from "../../..";
 import { CoreHooks } from "@/enums/CoreHooks";
-import { runHooks } from "@/lib/hooks/hookRegistry";
+import { hookRegistry } from "@/lib/hooks";
+import { bootstrap } from "@/modules/[core]/ModulesBootstrap";
 
 const logger = new ConsoleLogger("CustomerController");
 
 export async function GET() {
+  // enable modules' hooks
+  bootstrap();
+
   try {
     const classesList = await customerClassesService.getClassesList();
 
-    const result = await runHooks(CoreHooks.postFetchAllAvailableClasses, classesList);
+    const result = await hookRegistry.runHooks(CoreHooks.postFetchAllAvailableClasses, classesList);
 
     return NextResponse.json({
       message: RequestStatus.SUCCESS,
