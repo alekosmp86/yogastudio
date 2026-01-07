@@ -15,7 +15,7 @@ export default async function Page({ params }: PageProps) {
 
   console.log(`[Page] Navigating to module: ${module}, path: ${path}`);
 
-  bootstrapRoutes();
+  bootstrapRoutes(module);
 
   const loader = routeRegistry.getPage(module, path);
   console.log(`[Page] Loader found: ${!!loader}`);

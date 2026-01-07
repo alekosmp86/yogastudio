@@ -23,7 +23,6 @@ export const MembershipModule: AppModule = {
   },
 
   initUI() {
-    console.log("MembershipModule.initUI");
     uiRegistry.registerUI(
       CoreUiSlots.OwnerDashboardCards,
       MembershipDashboardCard
@@ -31,10 +30,9 @@ export const MembershipModule: AppModule = {
   },
 
   initRoutes() {
-    console.log("MembershipModule.initRoutes");
     routeRegistry.registerPage(
       this.name,
-      "/manager",
+      "",
       () => import("./frontend/components/owner/MembershipManager")
     );
   }

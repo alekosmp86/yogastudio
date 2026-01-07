@@ -138,7 +138,7 @@
   "noTestimonials": "No hay testimonios aún",
   "main": "Principal",
   "modules": "Módulos",
-  "membership": "Planes/Membresías",
-  "manageMemberships": "Gestiona tus planes/membresías",
+  "membership": "Planes",
+  "manageMemberships": "Gestiona tus planes",
   "noModulesRegistered": "No hay módulos registrados"
 }

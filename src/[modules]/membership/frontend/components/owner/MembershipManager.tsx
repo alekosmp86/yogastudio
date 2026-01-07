@@ -1,3 +1,3 @@
 export default function MembershipManager() {
-    return <div>MembershipManager</div>;
+  return <div>MembershipManager</div>;
 }

@@ -2,13 +2,14 @@ import { MODULES } from "./modules";
 
 let bootstrapped = false;
 
-export function bootstrapRoutes() {
+export function bootstrapRoutes(module?: string) {
   if (bootstrapped) return;
 
   console.log("Bootstrapping modules' routes...");
   bootstrapped = true;
 
-  for (const mod of MODULES) {
+  MODULES.forEach((mod) => {
+    if (module && mod.name !== module) return;
     mod.initRoutes?.();
-  }
+  });
 }

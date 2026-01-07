@@ -8,7 +8,7 @@ export default function MembershipDashboardCard() {
     <DashboardCard
       title="membership"
       description="manageMemberships"
-      href="/membership/manager"
+      href="/owner/membership"
       icon={<Command size={40} />}
     />
   );
