@@ -1,10 +1,10 @@
-import { registerTask } from "@/tasks/TaskRunner";
+import { AppTask } from "@/tasks/TaskType";
 import { PrismaClient } from "@prisma/client";
 import { MembershipTypes } from "../enums/MembershipTypes";
 import { BusinessTime } from "@/lib/utils/date";
 import { MembershipStatus } from "../enums/MembershipStatus";
 
-registerTask({
+export const AssignSystemAccessTask: AppTask = {
   name: "membership:assign-system-access-to-users-without-membership",
 
   async run({ db }: { db: PrismaClient }) {
@@ -43,7 +43,10 @@ registerTask({
 
     const businessTime = new BusinessTime(timezone?.value || "UTC");
     const startDate = businessTime.now().date;
-    const endDate = businessTime.addDays(startDate, fullAccessPlan.durationDays);
+    const endDate = businessTime.addDays(
+      startDate,
+      fullAccessPlan.durationDays
+    );
 
     // 3. Assign SYSTEM_ACCESS memberships
     await db.userMembership.createMany({
@@ -61,4 +64,4 @@ registerTask({
       `[membership] SYSTEM_ACCESS assigned to ${usersWithoutActiveMembership.length} users`
     );
   },
-});
+};

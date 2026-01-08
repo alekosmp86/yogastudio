@@ -1,1 +1,1 @@
-import "./tasks/MembershipTasks";
+export * from "./membership.module";

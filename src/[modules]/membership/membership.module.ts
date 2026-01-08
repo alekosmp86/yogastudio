@@ -1,13 +1,23 @@
-import { hookRegistry, routeRegistry, uiRegistry } from "@/lib/registry";
+import {
+  hookRegistry,
+  routeRegistry,
+  taskRegistry,
+  uiRegistry,
+} from "@/lib/registry";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { AppModule } from "@/modules/[core]/AppModule";
 import { fetchClassesByMembershipPostHook } from "./backend/hooks/FetchClassesByMembershipPostHook";
 import { userCreatedGoogleOauthPostHook } from "./backend/hooks/UserCreatedGoogleOauthPostHook";
 import { CoreUiSlots } from "../[core]/CoreUiSlots";
 import MembershipDashboardCard from "./frontend/components/owner/dashboard/MembershipDashboardCard";
+import { AssignSystemAccessTask } from "./tasks/MembershipTasks";
 
 export const MembershipModule: AppModule = {
   name: "membership",
+
+  initTasks() {
+    taskRegistry.registerTask(AssignSystemAccessTask);
+  },
 
   initCore() {
     hookRegistry.registerHook(
@@ -43,19 +53,13 @@ export const MembershipModule: AppModule = {
     routeRegistry.registerPage(
       this.name,
       "create",
-      () =>
-        import(
-          "./frontend/components/owner/forms/MembershipCreateEditForm"
-        )
+      () => import("./frontend/components/owner/forms/MembershipCreateEditForm")
     );
 
     routeRegistry.registerPage(
       this.name,
       "edit/:id",
-      () =>
-        import(
-          "./frontend/components/owner/forms/MembershipCreateEditForm"
-        )
+      () => import("./frontend/components/owner/forms/MembershipCreateEditForm")
     );
 
     /** Routing for API endpoints */
