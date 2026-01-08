@@ -30,6 +30,7 @@ export const MembershipModule: AppModule = {
   },
 
   initRoutes() {
+    /** Routing for pages/navigation */
     routeRegistry.registerPage(
       this.name,
       "",
@@ -37,6 +38,37 @@ export const MembershipModule: AppModule = {
         import(
           "./frontend/components/owner/membership-manager/MembershipManager"
         )
+    );
+
+    routeRegistry.registerPage(
+      this.name,
+      "create",
+      () =>
+        import(
+          "./frontend/components/owner/forms/MembershipCreateEditForm"
+        )
+    );
+
+    routeRegistry.registerPage(
+      this.name,
+      "edit/:id",
+      () =>
+        import(
+          "./frontend/components/owner/forms/MembershipCreateEditForm"
+        )
+    );
+
+    /** Routing for API endpoints */
+    routeRegistry.registerApi(
+      this.name,
+      "create",
+      () => import("./backend/api/handlers/CreateMembershipHandler")
+    );
+
+    routeRegistry.registerApi(
+      this.name,
+      "plans",
+      () => import("./backend/api/handlers/FetchMembershipPlansHandler")
     );
   },
 };

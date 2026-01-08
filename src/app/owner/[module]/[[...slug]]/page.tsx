@@ -13,21 +13,16 @@ export default async function Page({ params }: PageProps) {
   const { module, slug } = await params;
   const path = slug?.join("/") ?? "";
 
-  console.log(`[Page] Navigating to module: ${module}, path: ${path}`);
-
   bootstrapRoutes(module);
 
-  const loader = routeRegistry.getPage(module, path);
-  console.log(`[Page] Loader found: ${!!loader}`);
+  const match = routeRegistry.getPage(module, path);
 
-  if (!loader) {
-    console.log("[Page] Loader not found, returning 404");
+  if (!match) {
     notFound();
   }
 
-  console.log("[Page] Executing loader...");
+  const { loader } = match;
   const moduleExports = await loader();
-  console.log("[Page] Loader result keys:", Object.keys(moduleExports));
   const { default: Component } = moduleExports;
 
   if (!Component) {
