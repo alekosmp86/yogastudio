@@ -1,0 +1,178 @@
+"use client";
+
+import Button from "@/components/shared/Button";
+import { Card, CardContent } from "@/components/shared/Card";
+import Container from "@/components/shared/Container";
+import PageSectionWithHeader from "@/components/shared/PageSectionWithHeader";
+import { ApiType } from "@/enums/ApiTypes";
+import { RequestStatus } from "@/enums/RequestStatus";
+import { ToastType } from "@/enums/ToastType";
+import { useToast } from "@/lib/contexts/ToastContext";
+import { http } from "@/lib/http";
+import { Membership } from "@/modules/membership/backend/api/models/Membership";
+import { ApiResponse } from "@/types/requests/ApiResponse";
+import Link from "next/link";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
+export default function MembershipPlanCreateForm() {
+  const { t } = useTranslation();
+  const { showToast } = useToast();
+
+  const [durationDays, setDurationDays] = useState(30);
+  const [name, setName] = useState("");
+  const [unlimited, setUnlimited] = useState(false);
+  const [maxActivities, setMaxActivities] = useState(1);
+  const [isActive, setIsActive] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (durationDays <= 0) {
+      setError(t("durationMustBeGreaterThanZero"));
+      return;
+    }
+
+    if (!unlimited && maxActivities <= 0) {
+      setError(t("maxActivitiesMustBeGreaterThanZero"));
+      return;
+    }
+
+    const payload = {
+      name,
+      durationDays,
+      maxActivities: unlimited ? -1 : maxActivities,
+      isActive,
+    };
+
+    const { message } = await http.post<ApiResponse<Membership>>(
+      "/owner/membership/create",
+      ApiType.FRONTEND,
+      payload
+    );
+
+    if (message === RequestStatus.SUCCESS) {
+      showToast({
+        type: ToastType.SUCCESS,
+        message: t("membershipPlanCreatedSuccessfully"),
+        duration: 3000,
+      });
+    }
+  };
+
+  return (
+    <Container>
+      <PageSectionWithHeader
+        title={t("createMembershipPlan")}
+        description={t("defineMembershipDetails")}
+      >
+        <Card className="max-w-xl mx-auto bg-white shadow-md rounded-2xl">
+          <CardContent className="p-6 sm:p-8">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+              {/* Name */}
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-custom-300">
+                  {t("name")}
+                </label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-custom-200"
+                  required
+                />
+              </div>
+
+              {/* Duration */}
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium text-custom-300">
+                  {t("durationDays")}
+                </label>
+                <input
+                  type="number"
+                  min={1}
+                  value={durationDays}
+                  onChange={(e) => setDurationDays(Number(e.target.value))}
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-custom-200"
+                  required
+                />
+              </div>
+
+              {/* Unlimited */}
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  id="unlimited"
+                  checked={unlimited}
+                  onChange={(e) => setUnlimited(e.target.checked)}
+                  className="h-4 w-4 accent-custom-300"
+                />
+                <label
+                  htmlFor="unlimited"
+                  className="text-sm text-custom-300 cursor-pointer"
+                >
+                  {t("unlimitedActivities")}
+                </label>
+              </div>
+
+              {/* Max activities (only if not unlimited) */}
+              {!unlimited && (
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-custom-300">
+                    {t("maxActivities")}
+                  </label>
+                  <input
+                    type="number"
+                    min={1}
+                    value={maxActivities}
+                    onChange={(e) => setMaxActivities(Number(e.target.value))}
+                    className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-custom-200"
+                    required
+                  />
+                </div>
+              )}
+
+              {/* Active */}
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  id="active"
+                  checked={isActive}
+                  onChange={(e) => setIsActive(e.target.checked)}
+                  className="h-4 w-4 accent-custom-300"
+                />
+                <label
+                  htmlFor="active"
+                  className="text-sm text-custom-300 cursor-pointer"
+                >
+                  {t("planIsActive")}
+                </label>
+              </div>
+
+              {/* Error */}
+              {error && (
+                <p className="text-sm text-red-500 bg-red-50 p-2 rounded-md">
+                  {error}
+                </p>
+              )}
+
+              {/* Actions */}
+              <div className="flex justify-end mt-4 gap-2">
+                <Link href="/owner/membership">
+                  <Button size="sm" variant="secondary">
+                    {t("cancel")}
+                  </Button>
+                </Link>
+                <Button type="submit" size="sm" variant="primary">
+                  {t("createPlan")}
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </PageSectionWithHeader>
+    </Container>
+  );
+}

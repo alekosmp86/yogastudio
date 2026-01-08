@@ -2,22 +2,31 @@
 
 import Container from "@/components/shared/Container";
 import { useTranslation } from "react-i18next";
-import { MembershipPlan } from "@prisma/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MembershipManagerCard from "./MembershipManagerCard";
 import MembershipAddCard from "./MembershipAddCard";
+import { http } from "@/lib/http";
+import { ApiResponse } from "@/types/requests/ApiResponse";
+import { Membership } from "@/modules/membership/backend/api/models/Membership";
+import { ApiType } from "@/enums/ApiTypes";
+import { RequestStatus } from "@/enums/RequestStatus";
 
 export default function MembershipManager() {
   const { t } = useTranslation();
-  const [plans, setPlans] = useState<MembershipPlan[]>([
-    {
-      id: 1,
-      name: "Basic",
-      maxActivities: 1,
-      durationDays: 7,
-      isActive: true,
-    },
-  ]);
+  const [plans, setPlans] = useState<Membership[]>([]);
+
+  useEffect(() => {
+    const fetchPlans = async () => {
+      const { message, data } = await http.get<ApiResponse<Membership[]>>(
+        "/owner/membership/plans",
+        ApiType.FRONTEND
+      );
+      if (message === RequestStatus.SUCCESS && data) {
+        setPlans(data);
+      }
+    };
+    fetchPlans();
+  }, []);
 
   return (
     <Container>
