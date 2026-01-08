@@ -1,4 +1,4 @@
-import { hookRegistry, routeRegistry, uiRegistry } from "@/lib/hooks";
+import { hookRegistry, routeRegistry, uiRegistry } from "@/lib/registry";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { AppModule } from "@/modules/[core]/AppModule";
 import { fetchClassesByMembershipPostHook } from "./backend/hooks/FetchClassesByMembershipPostHook";
@@ -35,5 +35,5 @@ export const MembershipModule: AppModule = {
       "",
       () => import("./frontend/components/owner/MembershipManager")
     );
-  }
+  },
 };

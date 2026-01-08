@@ -3,7 +3,7 @@ import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
 import { customerClassesService } from "../../..";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
-import { hookRegistry } from "@/lib/hooks";
+import { hookRegistry } from "@/lib/registry";
 import { bootstrapHooks } from "@/modules/[core]/bootstrap/core";
 
 const logger = new ConsoleLogger("CustomerController");

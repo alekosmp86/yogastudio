@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { routeRegistry } from "@/lib/hooks";
+import { routeRegistry } from "@/lib/registry";
 import { bootstrapRoutes } from "@/modules/[core]/bootstrap/routes";
 
 interface PageProps {

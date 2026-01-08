@@ -11,7 +11,7 @@ import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInf
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { User, UserPenalty } from "@prisma/client";
 import { BusinessTime } from "@/lib/utils/date";
-import { hookRegistry } from "@/lib/hooks";
+import { hookRegistry } from "@/lib/registry";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { bootstrapHooks } from "@/modules/[core]/bootstrap/core";
 
