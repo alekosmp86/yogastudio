@@ -30,19 +30,24 @@ export default function MembershipManager() {
 
   return (
     <Container>
-      <section className="mt-6 space-y-6">
+      <section className='mt-6 space-y-6'>
         {/* HEADER */}
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-white">
+        <div className='flex items-center justify-between'>
+          <h2 className='text-2xl font-semibold text-white'>
             {t("membership")}
           </h2>
         </div>
 
-        <div className="rounded-xl p-4 bg-custom-50/80 shadow-lg overflow-y-auto max-h-[65vh]">
+        <div className='rounded-xl p-4 bg-custom-100 shadow-lg overflow-y-auto max-h-[65vh]'>
           {plans.length === 0 ? (
-            <p className="text-custom-300">{t("noMembershipPlansFound")}</p>
+            <>
+              <p className='text-custom-300 mb-4'>{t("noMembershipPlansFound")}</p>
+              <div className='grid grid-cols-1 gap-4 sm:grid-cols-3 auto-rows-fr'>
+                <MembershipAddCard />
+              </div>
+            </>
           ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 auto-rows-fr">
+            <div className='grid grid-cols-1 gap-4 sm:grid-cols-3 auto-rows-fr'>
               <MembershipAddCard />
               {plans.map((plan) => (
                 <MembershipManagerCard key={plan.id} plan={plan} />

@@ -3,7 +3,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { APPCONFIG } from "./config";
 import { ToastProvider } from "@/lib/contexts/ToastContext";
 import I18nProvider from "@/components/shared/I18nProvider";
-import { ModuleUIBootstrap } from "@/modules/[core]/bootstrap/moduleUiBootstrap";
+import { ModuleUIBootstrap } from "@/modules/[core]/bootstrap/ui";
 
 export default function RootLayout({
   children,
