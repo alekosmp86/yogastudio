@@ -140,5 +140,9 @@
   "modules": "Módulos",
   "membership": "Planes",
   "manageMemberships": "Gestiona tus planes",
-  "noModulesRegistered": "No hay módulos registrados"
+  "noMembershipPlansFound": "No se encontraron planes",
+  "noModulesRegistered": "No hay módulos registrados",
+  "duration": "Duración",
+  "maxActivities": "Max actividades",
+  "days": "días"
 }

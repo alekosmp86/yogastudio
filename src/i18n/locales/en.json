@@ -140,5 +140,9 @@
   "main": "Main",
   "modules": "Modules",
   "membership": "Membership",
-  "manageMemberships": "Manage your memberships"
+  "manageMemberships": "Manage your memberships",
+  "noMembershipPlansFound": "No membership plans found",
+  "duration": "Duration",
+  "maxActivities": "Max activities",
+  "days": "days"
 }

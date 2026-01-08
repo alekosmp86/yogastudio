@@ -10,8 +10,8 @@ export default function OwnerHomePage({
 }) {
   return (
     <AppProviders>
-      <div className="min-h-screen bg-custom-100 text-custom-400">
-        <Container className="flex flex-col min-h-screen">
+      <div className="bg-custom-100 text-custom-400">
+        <Container className="flex flex-col flex-1 min-h-screen">
           <OwnerHomePageHeader />
 
           {/* CONTENT */} 
