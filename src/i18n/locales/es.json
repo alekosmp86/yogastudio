@@ -144,5 +144,9 @@
   "noModulesRegistered": "No hay módulos registrados",
   "duration": "Duración",
   "maxActivities": "Max actividades",
-  "days": "días"
+  "days": "días",
+  "create": "Crear",
+  "createNewMembershipPlan": "Crear nuevo plan de membresía",
+  "createNewMembershipPlanDescription": "Añade un nuevo plan de membresía a tu studio",
+  "membershipPlanCreatedSuccessfully": "Plan de membresía creado correctamente"
 }

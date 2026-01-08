@@ -144,5 +144,9 @@
   "noMembershipPlansFound": "No membership plans found",
   "duration": "Duration",
   "maxActivities": "Max activities",
-  "days": "days"
+  "days": "days",
+  "create": "Create",
+  "createNewMembershipPlan": "Create new membership plan",
+  "createNewMembershipPlanDescription": "Add a new membership plan to your studio",
+  "membershipPlanCreatedSuccessfully": "Membership plan created successfully"
 }
