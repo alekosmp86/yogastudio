@@ -15,7 +15,7 @@ export default function Dashboard() {
     <>
       <p className="text-white text-xl mt-6 mb-6">{t("welcomeOwner")}</p>
 
-      <SectionSeparator label={t("main")} />
+      <SectionSeparator label={t("main")} color="custom-50" />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {DashboardItems.map((item) => (
@@ -28,7 +28,7 @@ export default function Dashboard() {
           />
         ))}
 
-        <SectionSeparator label={t("modules")} />
+        <SectionSeparator label={t("modules")} color="custom-50" />
 
         {components.length > 0 ? (
           <>
