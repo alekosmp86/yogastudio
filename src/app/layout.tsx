@@ -14,10 +14,11 @@ export default function RootLayout({
     <I18nProvider>
       <ToastProvider>
         <Analytics />
-        <ModuleUIBootstrap />
-        <html lang="en">
+        <html lang='en'>
           <title>{APPCONFIG.BUSINESS.name}</title>
-          <body className="h-full min-h-screen flex flex-col">{children}</body>
+          <body className='h-full min-h-screen flex flex-col'>
+            <ModuleUIBootstrap>{children}</ModuleUIBootstrap>
+          </body>
         </html>
       </ToastProvider>
     </I18nProvider>
