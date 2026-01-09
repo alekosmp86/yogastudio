@@ -159,5 +159,8 @@
   "membershipPlanUpdatedSuccessfully": "Plan de membresía actualizado correctamente",
   "membershipPlanDeletedSuccessfully": "Plan de membresía eliminado correctamente",
   "update": "Actualizar",
-  "membershipModuleDescription": "Este módulo te permite gestionar tus planes de membresía."
+  "membershipModuleDescription": "Este módulo te permite gestionar tus planes de membresía.",
+  "failedToUpdateUser": "Error al actualizar el usuario",
+  "userUpdatedSuccessfully": "Usuario actualizado correctamente",
+  "noUsersFound": "No se encontraron usuarios"
 }

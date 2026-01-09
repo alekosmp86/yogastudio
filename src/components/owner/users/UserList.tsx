@@ -3,7 +3,7 @@ import { RequestStatus } from "@/enums/RequestStatus";
 import { http } from "@/lib/http";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import { User } from "@/types/users/User";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import UserTable from "./UserTable";
 import UserCardList from "./UserCardList";
 import TableToolbar from "@/components/shared/TableToolbar";
@@ -13,12 +13,13 @@ import { ToastType } from "@/enums/ToastType";
 import Container from "@/components/shared/Container";
 import { useTranslation } from "react-i18next";
 import { UserActions } from "@/enums/UserActions";
+import { Loader } from "lucide-react";
 
 export default function UserList() {
   const { t } = useTranslation();
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { showToast, hideToast } = useToast();
 
   const filteredUsers = users.filter(
@@ -27,18 +28,20 @@ export default function UserList() {
       user.email.toLowerCase().includes(search.toLowerCase())
   );
 
-  const toolbar = useMemo<Toolbar>(
+  const searchCallback = useCallback(
     () => ({
       items: [],
       searchInput: {
         active: true,
-        placeholder: "Search users...",
+        placeholder: t("searchUsers"),
         value: search,
         onChange: setSearch,
       },
     }),
-    [search, setSearch]
+    [search, t]
   );
+
+  const toolbar = useMemo<Toolbar>(() => searchCallback(), [searchCallback]);
 
   useEffect(() => {
     const getAllUsers = async () => {
@@ -72,7 +75,7 @@ export default function UserList() {
           );
           if (message !== RequestStatus.SUCCESS) {
             showToast({
-              message: "Failed to update user",
+              message: t("failedToUpdateUser"),
               type: ToastType.ERROR,
             });
             return;
@@ -82,7 +85,7 @@ export default function UserList() {
             prevUsers.map((user) => (user.id === id ? data! : user))
           );
           showToast({
-            message: "User updated successfully",
+            message: t("userUpdatedSuccessfully"),
             type: ToastType.SUCCESS,
           });
           break;
@@ -107,27 +110,34 @@ export default function UserList() {
         </div>
 
         {/* TABLE BOX (toolbar + table inside) */}
-        <div className='rounded-3xl bg-custom-50 shadow-sm'>
-          {/* TOOLBAR sitting as the table header */}
-          <TableToolbar
-            toolbar={toolbar}
-            search={search}
-            setSearch={setSearch}
-          />
+        {users.length > 0 ? (
+          <div className='rounded-3xl bg-custom-50 shadow-sm'>
+            {/* TOOLBAR sitting as the table header */}
+            <TableToolbar
+              toolbar={toolbar}
+              search={search}
+              setSearch={setSearch}
+            />
 
-          {/* Desktop */}
-          <div className='hidden md:block p-4 min-h-[calc(100vh-400px)]'>
-            <UserTable users={filteredUsers} onAction={handleAction} />
+            {/* Desktop */}
+            <div className='hidden md:block p-4 min-h-[calc(100vh-400px)]'>
+              <UserTable users={filteredUsers} onAction={handleAction} />
+            </div>
+
+            {/* Mobile */}
+            <UserCardList users={filteredUsers} onAction={handleAction} />
           </div>
-
-          {/* Mobile */}
-          <UserCardList users={filteredUsers} onAction={handleAction} />
-          {users.length === 0 && (
-            <h1 className='pl-2 text-left bg-white py-2 text-primary-900'>
-              {loading ? "Loading..." : "No users found"}
-            </h1>
-          )}
-        </div>
+        ) : (
+          <h1 className='flex flex-row pl-2 text-left py-2 text-white'>
+            {loading ? (
+              <>
+                <Loader className='mr-2 h-6 w-6 animate-spin' /> {t("loading")}
+              </>
+            ) : (
+              t("noUsersFound")
+            )}
+          </h1>
+        )}
       </section>
     </Container>
   );

@@ -159,5 +159,8 @@
   "membershipPlanUpdatedSuccessfully": "Membership plan updated successfully",
   "membershipPlanDeletedSuccessfully": "Membership plan deleted successfully",
   "update": "Update",
-  "membershipModuleDescription": "This module allows you to manage your memberships"
+  "membershipModuleDescription": "This module allows you to manage your memberships",
+  "failedToUpdateUser": "Failed to update user",
+  "userUpdatedSuccessfully": "User updated successfully",
+  "noUsersFound": "No users found"
 }
