@@ -19,7 +19,7 @@ async function handler(req: NextRequest, props: RouteProps) {
   );
 
   // 1. Bootstrap routes (ensure module routes are registered)
-  bootstrapRoutes(module);
+  await bootstrapRoutes(module);
 
   // 2. Resolve API handler
   const match = routeRegistry.getApi(module, path);

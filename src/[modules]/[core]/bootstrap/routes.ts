@@ -29,7 +29,7 @@ export async function bootstrapRoutes(module?: string) {
 
     const mod = MODULES.find((m) => m.name === module);
     if (mod) {
-      await mod.initRoutes?.();
+      mod.initRoutes?.();
       bootstrappedModules.add(module);
     }
   } else {
@@ -41,7 +41,7 @@ export async function bootstrapRoutes(module?: string) {
     for (const mod of MODULES) {
       const isActive = activeModules.some((m) => m.name === mod.name);
       if (isActive && !bootstrappedModules.has(mod.name)) {
-        await mod.initRoutes?.();
+        mod.initRoutes?.();
         bootstrappedModules.add(mod.name);
       }
     }
