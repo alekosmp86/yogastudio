@@ -148,5 +148,8 @@
   "create": "Create",
   "createNewMembershipPlan": "Create new membership plan",
   "createNewMembershipPlanDescription": "Add a new membership plan to your studio",
-  "membershipPlanCreatedSuccessfully": "Membership plan created successfully"
+  "membershipPlanCreatedSuccessfully": "Membership plan created successfully",
+  "loading": "Loading...",
+  "unlimitedActivities": "Unlimited activities",
+  "active": "Active"
 }

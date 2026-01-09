@@ -10,13 +10,16 @@ import { ApiResponse } from "@/types/requests/ApiResponse";
 import { Membership } from "@/modules/membership/backend/api/models/Membership";
 import { ApiType } from "@/enums/ApiTypes";
 import { RequestStatus } from "@/enums/RequestStatus";
+import { Loader } from "lucide-react";
 
 export default function MembershipManager() {
   const { t } = useTranslation();
+  const [loading, setLoading] = useState(true);
   const [plans, setPlans] = useState<Membership[]>([]);
 
   useEffect(() => {
     const fetchPlans = async () => {
+      setLoading(true);
       const { message, data } = await http.get<ApiResponse<Membership[]>>(
         "/owner/membership/plans",
         ApiType.FRONTEND
@@ -24,6 +27,7 @@ export default function MembershipManager() {
       if (message === RequestStatus.SUCCESS && data) {
         setPlans(data);
       }
+      setLoading(false);
     };
     fetchPlans();
   }, []);
@@ -39,9 +43,13 @@ export default function MembershipManager() {
         </div>
 
         <div className='rounded-xl p-4 bg-custom-100 shadow-lg overflow-y-auto max-h-[65vh]'>
-          {plans.length === 0 ? (
+          {loading ? (
+            <div className='flex items-center justify-center h-full gap-2 text-white font-semibold text-lg'>
+              <Loader className="animate-spin h-10 w-10"/> {t("loading")}
+            </div>
+          ) : plans.length === 0 ? (
             <>
-              <p className='text-custom-300 mb-4'>{t("noMembershipPlansFound")}</p>
+              <p className='text-white mb-4'>{t("noMembershipPlansFound")}</p>
               <div className='grid grid-cols-1 gap-4 sm:grid-cols-3 auto-rows-fr'>
                 <MembershipAddCard />
               </div>

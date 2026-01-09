@@ -88,7 +88,7 @@ export default function MembershipPlanCreateForm() {
               {/* Duration */}
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium text-custom-300">
-                  {t("durationDays")}
+                  {t("duration")}
                 </label>
                 <input
                   type="number"
@@ -147,7 +147,7 @@ export default function MembershipPlanCreateForm() {
                   htmlFor="active"
                   className="text-sm text-custom-300 cursor-pointer"
                 >
-                  {t("planIsActive")}
+                  {t("active")}
                 </label>
               </div>
 
@@ -166,7 +166,7 @@ export default function MembershipPlanCreateForm() {
                   </Button>
                 </Link>
                 <Button type="submit" size="sm" variant="primary">
-                  {t("createPlan")}
+                  {t("create")}
                 </Button>
               </div>
             </form>
