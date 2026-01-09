@@ -4,6 +4,11 @@ export type UISlotMap = {
   [CoreUiSlots.OwnerDashboardCards]: {
     props: void;
   };
+  [CoreUiSlots.OwnerUsersDetails]: {
+    props: {
+      id: string;
+    };
+  };
 };
 
 type NormalizeProps<T> = T extends void ? object : T;
