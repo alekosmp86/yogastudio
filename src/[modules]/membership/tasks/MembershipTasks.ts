@@ -3,6 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { MembershipTypes } from "../enums/MembershipTypes";
 import { BusinessTime } from "@/lib/utils/date";
 import { MembershipStatus } from "../enums/MembershipStatus";
+import { MembershipModule } from "../membership.module";
 
 export const AssignSystemAccessTask: AppTask = {
   name: "membership:assign-system-access-to-users-without-membership",
@@ -63,5 +64,21 @@ export const AssignSystemAccessTask: AppTask = {
     console.log(
       `[membership] SYSTEM_ACCESS assigned to ${usersWithoutActiveMembership.length} users`
     );
+  },
+};
+
+export const RegisterModuleTask: AppTask = {
+  name: "membership:register-module",
+
+  async run({ db }: { db: PrismaClient }) {
+    await db.modules.upsert({
+      where: { name: MembershipModule.name },
+      update: {},
+      create: {
+        name: MembershipModule.name,
+        description: "membershipModuleDescription",
+        isActive: true,
+      },
+    });
   },
 };

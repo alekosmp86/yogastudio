@@ -10,6 +10,7 @@ export const CorePreferences: AppPreference[] = [
     type: PreferenceTypes.TEXT,
     value: "GymStudio",
     category: PreferenceCategory.BUSINESS,
+    moduleId: 1,
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ export const CorePreferences: AppPreference[] = [
     type: PreferenceTypes.TEXT,
     value: "94662337",
     category: PreferenceCategory.BUSINESS,
+    moduleId: 1,
   },
   {
     id: 3,
@@ -26,6 +28,7 @@ export const CorePreferences: AppPreference[] = [
     type: PreferenceTypes.TEXT,
     value: "alekosmp86@gmail.com",
     category: PreferenceCategory.BUSINESS,
+    moduleId: 1,
   },
   {
     id: 4,
@@ -35,6 +38,7 @@ export const CorePreferences: AppPreference[] = [
     value: "America/Montevideo",
     options: [{ value: "America/Montevideo", label: "Montevideo/Uruguay" }],
     category: PreferenceCategory.BUSINESS,
+    moduleId: 1,
   },
   {
     id: 5,
@@ -47,6 +51,7 @@ export const CorePreferences: AppPreference[] = [
       { value: "es", label: "Español" },
     ],
     category: PreferenceCategory.LANGUAGE,
+    moduleId: 1,
   },
   {
     id: 6,
@@ -55,6 +60,7 @@ export const CorePreferences: AppPreference[] = [
     type: PreferenceTypes.BOOLEAN,
     value: "true",
     category: PreferenceCategory.RULES,
+    moduleId: 1,
   },
   {
     id: 7,
@@ -63,6 +69,7 @@ export const CorePreferences: AppPreference[] = [
     type: PreferenceTypes.NUMBER,
     value: "2",
     category: PreferenceCategory.RULES,
+    moduleId: 1,
   },
   {
     id: 8,
@@ -71,6 +78,7 @@ export const CorePreferences: AppPreference[] = [
     type: PreferenceTypes.NUMBER,
     value: "3",
     category: PreferenceCategory.RULES,
+    moduleId: 1,
   },
   {
     id: 9,
@@ -79,6 +87,7 @@ export const CorePreferences: AppPreference[] = [
     type: PreferenceTypes.NUMBER,
     value: "3",
     category: PreferenceCategory.BACKGROUND_TASKS,
+    moduleId: 1,
   },
   {
     id: 10,
@@ -87,6 +96,7 @@ export const CorePreferences: AppPreference[] = [
     type: PreferenceTypes.NUMBER,
     value: "1",
     category: PreferenceCategory.RULES,
+    moduleId: 1,
   },
   {
     id: 11,
@@ -94,6 +104,7 @@ export const CorePreferences: AppPreference[] = [
     label: "Class Duration (minutes)",
     type: PreferenceTypes.NUMBER,
     value: "60",
-    category: PreferenceCategory.MEMBERSHIP,
+    category: PreferenceCategory.BUSINESS,
+    moduleId: 1,
   },
 ];

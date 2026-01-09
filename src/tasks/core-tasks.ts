@@ -19,8 +19,21 @@ async function syncPreferences() {
   }
 }
 
+async function addCoreModule() {
+  await prisma.modules.upsert({
+    where: { name: "org.alekosoft.gymstudio.core" },
+    update: {},
+    create: {
+      name: "org.alekosoft.gymstudio.core",
+      description: "Core module",
+      isActive: true,
+    },
+  });
+}
+
 (async () => {
   try {
+    await addCoreModule();
     await syncPreferences();
     console.log("Preferences synced");
   } catch (e) {

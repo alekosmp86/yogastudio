@@ -10,12 +10,13 @@ import { fetchClassesByMembershipPostHook } from "./backend/hooks/FetchClassesBy
 import { userCreatedGoogleOauthPostHook } from "./backend/hooks/UserCreatedGoogleOauthPostHook";
 import { CoreUiSlots } from "../[core]/CoreUiSlots";
 import MembershipDashboardCard from "./frontend/components/owner/dashboard/MembershipDashboardCard";
-import { AssignSystemAccessTask } from "./tasks/MembershipTasks";
+import { AssignSystemAccessTask, RegisterModuleTask } from "./tasks/MembershipTasks";
 
 export const MembershipModule: AppModule = {
-  name: "membership",
+  name: "org.alekosoft.gymstudio.membership",
 
   initTasks() {
+    taskRegistry.registerTask(RegisterModuleTask);
     taskRegistry.registerTask(AssignSystemAccessTask);
   },
 
