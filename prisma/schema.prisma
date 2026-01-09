@@ -137,6 +137,9 @@ model AppPreferences {
   value    String
   options  String?
   category String  @default("Business")
+  moduleId Int
+
+  module Modules @relation(fields: [moduleId], references: [id])
 }
 
 model Testimonials {
@@ -187,4 +190,13 @@ model UserSelectedTemplate {
   template       ClassTemplate  @relation(fields: [templateId], references: [id])
 
   @@unique([userMembershipId, templateId])
+}
+
+model Modules {
+  id Int @id @default(autoincrement())
+
+  name           String           @unique
+  description    String?
+  isActive       Boolean          @default(true)
+  AppPreferences AppPreferences[]
 }
