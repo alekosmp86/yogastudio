@@ -21,10 +21,10 @@ async function syncPreferences() {
 
 async function addCoreModule() {
   await prisma.modules.upsert({
-    where: { name: "org.alekosoft.gymstudio.core" },
+    where: { name: "core" },
     update: {},
     create: {
-      name: "org.alekosoft.gymstudio.core",
+      name: "core",
       description: "Core module",
       isActive: true,
     },

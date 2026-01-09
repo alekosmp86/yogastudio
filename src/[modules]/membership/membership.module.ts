@@ -13,7 +13,7 @@ import MembershipDashboardCard from "./frontend/components/owner/dashboard/Membe
 import { AssignSystemAccessTask, RegisterModuleTask } from "./tasks/MembershipTasks";
 
 export const MembershipModule: AppModule = {
-  name: "org.alekosoft.gymstudio.membership",
+  name: "membership",
 
   initTasks() {
     taskRegistry.registerTask(RegisterModuleTask);
