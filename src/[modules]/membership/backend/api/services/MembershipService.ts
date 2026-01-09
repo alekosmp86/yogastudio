@@ -5,4 +5,5 @@ export interface MembershipService {
   getMembershipPlans(): Promise<Membership[]>;
   getMembershipPlanById(id: number): Promise<Membership | null>;
   updateMembershipPlan(id: number, data: Partial<Membership>): Promise<Membership>;
+  deleteMembershipPlan(id: number): Promise<Membership>;
 }

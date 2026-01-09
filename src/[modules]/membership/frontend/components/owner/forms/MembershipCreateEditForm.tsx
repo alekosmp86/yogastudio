@@ -136,7 +136,7 @@ export default function MembershipPlanCreateForm({
       );
     } else {
       result = await http.post<ApiResponse<Membership>>(
-        "/owner/membership/create",
+        "/owner/membership/plans",
         ApiType.FRONTEND,
         payload
       );

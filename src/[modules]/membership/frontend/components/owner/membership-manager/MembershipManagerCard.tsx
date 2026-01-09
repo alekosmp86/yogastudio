@@ -8,10 +8,12 @@ import { useTranslation } from "react-i18next";
 
 type MembershipManagerCardProps = {
   plan: MembershipPlan;
+  onDelete: (id: number) => void;
 };
 
 export default function MembershipManagerCard({
   plan,
+  onDelete,
 }: MembershipManagerCardProps) {
   const { t } = useTranslation();
 
@@ -67,6 +69,7 @@ export default function MembershipManagerCard({
               size='sm'
               Icon={Trash}
               className='w-full'
+              onClick={() => onDelete(plan.id)}
             >
               {t("delete")}
             </Button>

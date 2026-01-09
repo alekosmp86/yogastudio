@@ -68,4 +68,17 @@ export class MembershipServiceImpl implements MembershipService {
       isActive: updatedPlan.isActive,
     };
   }
+
+  async deleteMembershipPlan(id: number): Promise<Membership> {
+    const deletedPlan = await prisma.membershipPlan.delete({
+      where: { id },
+    });
+    return {
+      id: deletedPlan.id,
+      name: deletedPlan.name,
+      durationDays: deletedPlan.durationDays,
+      maxActivities: deletedPlan.maxActivities,
+      isActive: deletedPlan.isActive,
+    };
+  }
 }

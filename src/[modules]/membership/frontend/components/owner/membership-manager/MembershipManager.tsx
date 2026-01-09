@@ -11,9 +11,12 @@ import { Membership } from "@/modules/membership/backend/api/models/Membership";
 import { ApiType } from "@/enums/ApiTypes";
 import { RequestStatus } from "@/enums/RequestStatus";
 import { Loader } from "lucide-react";
+import { useToast } from "@/lib/contexts/ToastContext";
+import { ToastType } from "@/enums/ToastType";
 
 export default function MembershipManager() {
   const { t } = useTranslation();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(true);
   const [plans, setPlans] = useState<Membership[]>([]);
 
@@ -32,6 +35,20 @@ export default function MembershipManager() {
     fetchPlans();
   }, []);
 
+  const handleDeletePlan = async (id: number) => {
+    const { message, data } = await http.delete<ApiResponse<Membership>>(
+      `/owner/membership/plans/${id}`,
+      ApiType.FRONTEND
+    );
+    if (message === RequestStatus.SUCCESS && data) {
+      setPlans((prevPlans) => prevPlans.filter((plan) => plan.id !== id));
+      showToast({
+        type: ToastType.SUCCESS,
+        message: t("membershipPlanDeletedSuccessfully"),
+      });
+    }
+  };
+
   return (
     <Container>
       <section className='mt-6 space-y-6'>
@@ -45,7 +62,7 @@ export default function MembershipManager() {
         <div className='rounded-xl p-4 bg-custom-100 shadow-lg overflow-y-auto max-h-[65vh]'>
           {loading ? (
             <div className='flex items-center justify-center h-full gap-2 text-white font-semibold text-lg'>
-              <Loader className="animate-spin h-10 w-10"/> {t("loading")}
+              <Loader className='animate-spin h-10 w-10' /> {t("loading")}
             </div>
           ) : plans.length === 0 ? (
             <>
@@ -58,7 +75,11 @@ export default function MembershipManager() {
             <div className='grid grid-cols-1 gap-4 sm:grid-cols-3 auto-rows-fr'>
               <MembershipAddCard />
               {plans.map((plan) => (
-                <MembershipManagerCard key={plan.id} plan={plan} />
+                <MembershipManagerCard
+                  key={plan.id}
+                  plan={plan}
+                  onDelete={handleDeletePlan}
+                />
               ))}
             </div>
           )}

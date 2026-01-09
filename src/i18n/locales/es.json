@@ -153,5 +153,10 @@
   "unlimitedActivities": "Actividades ilimitadas",
   "active": "Activo",
   "durationMustBeGreaterThanZero": "La duración debe ser mayor que cero",
-  "maxActivitiesMustBeGreaterThanZero": "El máximo de actividades debe ser mayor que cero"
+  "maxActivitiesMustBeGreaterThanZero": "El máximo de actividades debe ser mayor que cero",
+  "editMembershipPlan": "Editar plan de membresía",
+  "editMembershipDetails": "Editar detalles del plan de membresía",
+  "membershipPlanUpdatedSuccessfully": "Plan de membresía actualizado correctamente",
+  "membershipPlanDeletedSuccessfully": "Plan de membresía eliminado correctamente",
+  "update": "Actualizar"
 }

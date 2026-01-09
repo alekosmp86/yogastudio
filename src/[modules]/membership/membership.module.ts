@@ -65,20 +65,15 @@ export const MembershipModule: AppModule = {
     /** Routing for API endpoints */
     routeRegistry.registerApi(
       this.name,
-      "create",
-      () => import("./backend/api/handlers/CreateMembershipHandler")
-    );
-
-    routeRegistry.registerApi(
-      this.name,
       "plans",
-      () => import("./backend/api/handlers/FetchMembershipPlansHandler")
+      () => import("./backend/api/handlers/FetchPostHandler")
     );
 
     routeRegistry.registerApi(
       this.name,
       "plans/:id",
-      () => import("./backend/api/handlers/FetchUpdateMembershipPlanByIdHandler")
+      () =>
+        import("./backend/api/handlers/FetchUpdateDeleteByIdHandler")
     );
   },
 };

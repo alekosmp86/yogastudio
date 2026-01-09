@@ -51,3 +51,19 @@ export const PUT = async (req: NextRequest, params?: Record<string, string>) => 
     return NextResponse.json({ message: RequestStatus.ERROR }, { status: 500 });
   }
 };
+
+export const DELETE = async (req: NextRequest, params?: Record<string, string>) => {
+  try {
+    const id = params?.id;
+    if (!id) throw new Error("ID is required");
+    const membershipService = new MembershipServiceImpl();
+    const deletedPlan = await membershipService.deleteMembershipPlan(Number(id));
+    return NextResponse.json(
+      { message: RequestStatus.SUCCESS, data: deletedPlan },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json({ message: RequestStatus.ERROR }, { status: 500 });
+  }
+};
