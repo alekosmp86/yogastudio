@@ -17,7 +17,7 @@ export default function Dashboard() {
 
       <SectionSeparator label={t("main")} color='custom-50' />
 
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+      <div className='m-6 grid grid-cols-1 md:grid-cols-2 gap-6'>
         {DashboardItems.map((item) => (
           <DashboardCard
             key={item.title}
@@ -27,9 +27,11 @@ export default function Dashboard() {
             icon={<item.icon size={40} />}
           />
         ))}
+      </div>
 
-        <SectionSeparator label={t("modules")} color='custom-50' />
+      <SectionSeparator label={t("modules")} color='custom-50' />
 
+      <div className='m-6 grid grid-cols-1 md:grid-cols-2 gap-6'>
         {components.length > 0 ? (
           <>
             {components.map((Component, i) => (

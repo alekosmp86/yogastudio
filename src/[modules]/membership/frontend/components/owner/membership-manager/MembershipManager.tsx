@@ -62,7 +62,7 @@ export default function MembershipManager() {
         <div className='rounded-xl p-4 bg-custom-100 shadow-lg overflow-y-auto max-h-[65vh]'>
           {loading ? (
             <div className='flex items-center justify-center h-full gap-2 text-white font-semibold text-lg'>
-              <Loader className='animate-spin h-10 w-10' /> {t("loading")}
+              <Loader className='animate-spin h-6 w-6' /> {t("loading")}
             </div>
           ) : plans.length === 0 ? (
             <>
