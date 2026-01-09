@@ -22,6 +22,7 @@ import { WaitingListServiceImpl } from "./customer/waiting-list/_services/impl/W
 import { PublicPreferenceServiceImpl } from "./public/preferences/_services/impl/PublicPreferenceServiceImpl";
 import { UserPenaltyServiceImpl } from "./penalties/_services/impl/UserPenaltyServiceImpl";
 import { TestimonialServiceImpl } from "./customer/testimonials/_services/impl/TestimonialServiceImpl";
+import { ModuleServiceImpl } from "./modules/_services/impl/ModuleServiceImpl";
 
 export const userLinkService = new UserLinkServiceImpl();
 export const userService = new UserServiceImpl();
@@ -42,6 +43,7 @@ export const waitingListService = new WaitingListServiceImpl();
 export const publicPreferenceService = new PublicPreferenceServiceImpl();
 export const userPenaltyService = new UserPenaltyServiceImpl();
 export const testimonialService = new TestimonialServiceImpl();
+export const moduleService = new ModuleServiceImpl();
 
 export const classesMapper = new ClassesMapperImpl();
 export const scheduleMapper = new ScheduleMapperImpl();
