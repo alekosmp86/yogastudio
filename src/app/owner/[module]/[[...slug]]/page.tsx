@@ -13,7 +13,7 @@ export default async function Page({ params }: PageProps) {
   const { module, slug } = await params;
   const path = slug?.join("/") ?? "";
 
-  bootstrapRoutes(module);
+  await bootstrapRoutes(module);
 
   const match = routeRegistry.getPage(module, path);
 
