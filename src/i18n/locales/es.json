@@ -158,5 +158,6 @@
   "editMembershipDetails": "Editar detalles del plan de membresía",
   "membershipPlanUpdatedSuccessfully": "Plan de membresía actualizado correctamente",
   "membershipPlanDeletedSuccessfully": "Plan de membresía eliminado correctamente",
-  "update": "Actualizar"
+  "update": "Actualizar",
+  "membershipModuleDescription": "Este módulo te permite gestionar tus planes de membresía."
 }

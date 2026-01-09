@@ -14,6 +14,7 @@ export class PreferenceMapperImpl implements PreferenceMapper {
       value: preference.value,
       options: preference.options ? JSON.parse(preference.options) : [],
       category: preference.category as PreferenceCategory,
+      moduleId: preference.moduleId,
     };
   }
 
@@ -30,6 +31,7 @@ export class PreferenceMapperImpl implements PreferenceMapper {
       value: preference.value.toString(),
       options: preference.options ? JSON.stringify(preference.options) : "",
       category: preference.category,
+      moduleId: preference.moduleId,
     };
   }
 }

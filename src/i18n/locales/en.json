@@ -158,5 +158,6 @@
   "editMembershipDetails": "Edit membership details",
   "membershipPlanUpdatedSuccessfully": "Membership plan updated successfully",
   "membershipPlanDeletedSuccessfully": "Membership plan deleted successfully",
-  "update": "Update"
+  "update": "Update",
+  "membershipModuleDescription": "This module allows you to manage your memberships"
 }
