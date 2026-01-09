@@ -37,9 +37,7 @@ async function initializeModules() {
 
 export function ModuleUIBootstrap({ children }: { children: ReactNode }) {
   const pathname = usePathname();
-  const isPublicRoute = PUBLIC_PATHS.some((path) =>
-    pathname.startsWith(path)
-  );
+  const isPublicRoute = PUBLIC_PATHS.some((path) => path.startsWith(pathname));
 
   const [isReady, setIsReady] = useState(modulesInitialized || isPublicRoute);
 
