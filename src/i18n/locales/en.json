@@ -151,5 +151,7 @@
   "membershipPlanCreatedSuccessfully": "Membership plan created successfully",
   "loading": "Loading...",
   "unlimitedActivities": "Unlimited activities",
-  "active": "Active"
+  "active": "Active",
+  "durationMustBeGreaterThanZero": "Duration must be greater than zero",
+  "maxActivitiesMustBeGreaterThanZero": "Max activities must be greater than zero"
 }

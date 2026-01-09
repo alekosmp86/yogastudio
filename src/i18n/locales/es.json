@@ -143,7 +143,7 @@
   "noMembershipPlansFound": "No se encontraron planes",
   "noModulesRegistered": "No hay módulos registrados",
   "duration": "Duración",
-  "maxActivities": "Max actividades",
+  "maxActivities": "Máx actividades",
   "days": "días",
   "create": "Crear",
   "createNewMembershipPlan": "Crear nuevo plan de membresía",
@@ -151,5 +151,7 @@
   "membershipPlanCreatedSuccessfully": "Plan de membresía creado correctamente",
   "loading": "Cargando...",
   "unlimitedActivities": "Actividades ilimitadas",
-  "active": "Activo"
+  "active": "Activo",
+  "durationMustBeGreaterThanZero": "La duración debe ser mayor que cero",
+  "maxActivitiesMustBeGreaterThanZero": "El máximo de actividades debe ser mayor que cero"
 }

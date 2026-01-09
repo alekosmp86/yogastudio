@@ -12,39 +12,74 @@ import { http } from "@/lib/http";
 import { Membership } from "@/modules/membership/backend/api/models/Membership";
 import { ApiResponse } from "@/types/requests/ApiResponse";
 import Link from "next/link";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { useTranslation } from "react-i18next";
+
+type FormState = {
+  name: string,
+  durationDays: number,
+  unlimited: boolean,
+  maxActivities: number,
+  isActive: boolean,
+}
+
+enum FormActionType {
+  SET_NAME,
+  SET_DURATION_DAYS,
+  SET_UNLIMITED,
+  SET_MAX_ACTIVITIES,
+  SET_IS_ACTIVE,
+}
+
+const reducer = (state: FormState, action: { type: FormActionType, payload: string | number | boolean }) => {
+  switch (action.type) {
+    case FormActionType.SET_NAME:
+      return { ...state, name: action.payload as string };
+    case FormActionType.SET_DURATION_DAYS:
+      return { ...state, durationDays: action.payload as number };
+    case FormActionType.SET_UNLIMITED:
+      return { ...state, unlimited: action.payload as boolean };
+    case FormActionType.SET_MAX_ACTIVITIES:
+      return { ...state, maxActivities: action.payload as number };
+    case FormActionType.SET_IS_ACTIVE:
+      return { ...state, isActive: action.payload as boolean };
+    default:
+      return state;
+  }
+}
 
 export default function MembershipPlanCreateForm() {
   const { t } = useTranslation();
   const { showToast } = useToast();
+  const [formState, setFormState] = useReducer(reducer, {
+    name: "",
+    durationDays: 30,
+    unlimited: false,
+    maxActivities: 1,
+    isActive: true,
+  });
 
-  const [durationDays, setDurationDays] = useState(30);
-  const [name, setName] = useState("");
-  const [unlimited, setUnlimited] = useState(false);
-  const [maxActivities, setMaxActivities] = useState(1);
-  const [isActive, setIsActive] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    if (durationDays <= 0) {
+    if (formState.durationDays <= 0) {
       setError(t("durationMustBeGreaterThanZero"));
       return;
     }
 
-    if (!unlimited && maxActivities <= 0) {
+    if (!formState.unlimited && formState.maxActivities <= 0) {
       setError(t("maxActivitiesMustBeGreaterThanZero"));
       return;
     }
 
     const payload = {
-      name,
-      durationDays,
-      maxActivities: unlimited ? -1 : maxActivities,
-      isActive,
+      name: formState.name,
+      durationDays: formState.durationDays,
+      maxActivities: formState.unlimited ? -1 : formState.maxActivities,
+      isActive: formState.isActive,
     };
 
     const { message } = await http.post<ApiResponse<Membership>>(
@@ -78,8 +113,8 @@ export default function MembershipPlanCreateForm() {
                 </label>
                 <input
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={formState.name}
+                  onChange={(e) => setFormState({ type: FormActionType.SET_NAME, payload: e.target.value })}
                   className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-custom-200"
                   required
                 />
@@ -93,8 +128,8 @@ export default function MembershipPlanCreateForm() {
                 <input
                   type="number"
                   min={1}
-                  value={durationDays}
-                  onChange={(e) => setDurationDays(Number(e.target.value))}
+                  value={formState.durationDays}
+                  onChange={(e) => setFormState({ type: FormActionType.SET_DURATION_DAYS, payload: Number(e.target.value) })}
                   className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-custom-200"
                   required
                 />
@@ -105,8 +140,8 @@ export default function MembershipPlanCreateForm() {
                 <input
                   type="checkbox"
                   id="unlimited"
-                  checked={unlimited}
-                  onChange={(e) => setUnlimited(e.target.checked)}
+                  checked={formState.unlimited}
+                  onChange={(e) => setFormState({ type: FormActionType.SET_UNLIMITED, payload: e.target.checked })}
                   className="h-4 w-4 accent-custom-300"
                 />
                 <label
@@ -118,7 +153,7 @@ export default function MembershipPlanCreateForm() {
               </div>
 
               {/* Max activities (only if not unlimited) */}
-              {!unlimited && (
+              {!formState.unlimited && (
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-custom-300">
                     {t("maxActivities")}
@@ -126,8 +161,8 @@ export default function MembershipPlanCreateForm() {
                   <input
                     type="number"
                     min={1}
-                    value={maxActivities}
-                    onChange={(e) => setMaxActivities(Number(e.target.value))}
+                    value={formState.maxActivities}
+                    onChange={(e) => setFormState({ type: FormActionType.SET_MAX_ACTIVITIES, payload: Number(e.target.value) })}
                     className="w-full rounded-md border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-custom-200"
                     required
                   />
@@ -139,8 +174,8 @@ export default function MembershipPlanCreateForm() {
                 <input
                   type="checkbox"
                   id="active"
-                  checked={isActive}
-                  onChange={(e) => setIsActive(e.target.checked)}
+                  checked={formState.isActive}
+                  onChange={(e) => setFormState({ type: FormActionType.SET_IS_ACTIVE, payload: e.target.checked })}
                   className="h-4 w-4 accent-custom-300"
                 />
                 <label

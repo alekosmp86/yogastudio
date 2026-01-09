@@ -43,7 +43,7 @@ export default function MembershipManagerCard({
               <ListOrdered className='w-4 h-4 opacity-80' />
               <span className='text-sm font-medium'>{t("maxActivities")}:</span>
               <span className='text-sm text-gray-600'>
-                {plan.maxActivities}
+                {plan.maxActivities === -1 ? '-' : plan.maxActivities}
               </span>
             </div>
           </div>
