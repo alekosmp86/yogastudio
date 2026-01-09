@@ -162,5 +162,6 @@
   "membershipModuleDescription": "This module allows you to manage your memberships",
   "failedToUpdateUser": "Failed to update user",
   "userUpdatedSuccessfully": "User updated successfully",
-  "noUsersFound": "No users found"
+  "noUsersFound": "No users found",
+  "current": "Current"
 }

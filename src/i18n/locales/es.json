@@ -162,5 +162,6 @@
   "membershipModuleDescription": "Este módulo te permite gestionar tus planes de membresía.",
   "failedToUpdateUser": "Error al actualizar el usuario",
   "userUpdatedSuccessfully": "Usuario actualizado correctamente",
-  "noUsersFound": "No se encontraron usuarios"
+  "noUsersFound": "No se encontraron usuarios",
+  "current": "Actual"
 }

@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { RequestStatus } from "@/enums/RequestStatus";
-import { MembershipServiceImpl } from "../services/impl/MembershipServiceImpl";
+import { membershipService } from "../..";
 
 export const GET = async () => {
   try {
-    const membershipService = new MembershipServiceImpl();
     const membershipPlans = await membershipService.getMembershipPlans();
     return NextResponse.json(
       { message: RequestStatus.SUCCESS, data: membershipPlans },
@@ -20,7 +19,6 @@ export const POST = async (req: NextRequest) => {
   const body = await req.json();
 
   try {
-    const membershipService = new MembershipServiceImpl();
     const createdMembership = await membershipService.createMembership(body);
     return NextResponse.json(
       { message: RequestStatus.SUCCESS, data: createdMembership },

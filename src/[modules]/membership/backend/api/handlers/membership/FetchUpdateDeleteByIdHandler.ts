@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { RequestStatus } from "@/enums/RequestStatus";
-import { MembershipServiceImpl } from "../services/impl/MembershipServiceImpl";
-import { Membership } from "../models/Membership";
+import { membershipService } from "../..";
+import { Membership } from "../../models/Membership";
 
 export const GET = async (
   _req: NextRequest,
@@ -10,7 +10,6 @@ export const GET = async (
   try {
     const id = params?.id;
     if (!id) throw new Error("ID not provided");
-    const membershipService = new MembershipServiceImpl();
     const membershipPlan = await membershipService.getMembershipPlanById(
       Number(id)
     );
@@ -37,7 +36,6 @@ export const PUT = async (req: NextRequest, params?: Record<string, string>) => 
     const id = params?.id;
     if (!id) throw new Error("ID is required");
     const body = (await req.json()) as Partial<Membership>;
-    const membershipService = new MembershipServiceImpl();
     const updatedPlan = await membershipService.updateMembershipPlan(
       Number(id),
       body
@@ -56,7 +54,6 @@ export const DELETE = async (req: NextRequest, params?: Record<string, string>) 
   try {
     const id = params?.id;
     if (!id) throw new Error("ID is required");
-    const membershipService = new MembershipServiceImpl();
     const deletedPlan = await membershipService.deleteMembershipPlan(Number(id));
     return NextResponse.json(
       { message: RequestStatus.SUCCESS, data: deletedPlan },

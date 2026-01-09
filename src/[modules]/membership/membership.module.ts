@@ -11,6 +11,7 @@ import { userCreatedGoogleOauthPostHook } from "./backend/hooks/UserCreatedGoogl
 import { CoreUiSlots } from "../[core]/CoreUiSlots";
 import MembershipDashboardCard from "./frontend/components/owner/dashboard/MembershipDashboardCard";
 import { AssignSystemAccessTask, RegisterModuleTask } from "./tasks/MembershipTasks";
+import { UserMembershipSection } from "./frontend/components/owner/users/UserMembershipSection";
 
 export const MembershipModule: AppModule = {
   name: "membership",
@@ -37,6 +38,11 @@ export const MembershipModule: AppModule = {
     uiRegistry.registerUI(
       CoreUiSlots.OwnerDashboardCards,
       MembershipDashboardCard
+    );
+
+    uiRegistry.registerUI(
+      CoreUiSlots.OwnerUsersDetails,
+      UserMembershipSection
     );
   },
 
@@ -67,14 +73,20 @@ export const MembershipModule: AppModule = {
     routeRegistry.registerApi(
       this.name,
       "plans",
-      () => import("./backend/api/handlers/FetchPostHandler")
+      () => import("./backend/api/handlers/membership/FetchPostHandler")
     );
 
     routeRegistry.registerApi(
       this.name,
       "plans/:id",
       () =>
-        import("./backend/api/handlers/FetchUpdateDeleteByIdHandler")
+        import("./backend/api/handlers/membership/FetchUpdateDeleteByIdHandler")
+    );
+
+    routeRegistry.registerApi(
+      this.name,
+      "plans/user/:id",
+      () => import("./backend/api/handlers/user-membership/FetchHandler")
     );
   },
 };
