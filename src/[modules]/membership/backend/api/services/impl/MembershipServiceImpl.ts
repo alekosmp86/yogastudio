@@ -33,4 +33,39 @@ export class MembershipServiceImpl implements MembershipService {
       isActive: plan.isActive,
     }));
   }
+  async getMembershipPlanById(id: number): Promise<Membership | null> {
+    const plan = await prisma.membershipPlan.findUnique({
+      where: { id },
+    });
+
+    if (!plan) return null;
+
+    return {
+      id: plan.id,
+      name: plan.name,
+      durationDays: plan.durationDays,
+      maxActivities: plan.maxActivities,
+      isActive: plan.isActive,
+    };
+  }
+
+  async updateMembershipPlan(id: number, data: Partial<Membership>): Promise<Membership> {
+    const updatedPlan = await prisma.membershipPlan.update({
+      where: { id },
+      data: {
+        name: data.name,
+        durationDays: data.durationDays,
+        maxActivities: data.maxActivities,
+        isActive: data.isActive,
+      },
+    });
+
+    return {
+      id: updatedPlan.id,
+      name: updatedPlan.name,
+      durationDays: updatedPlan.durationDays,
+      maxActivities: updatedPlan.maxActivities,
+      isActive: updatedPlan.isActive,
+    };
+  }
 }

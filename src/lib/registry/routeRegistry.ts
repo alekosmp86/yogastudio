@@ -1,7 +1,10 @@
 import React from "react";
 import { NextRequest, NextResponse } from "next/server";
 
-export type PageComponent = React.ComponentType<unknown>;
+// Define PageComponent to accept params prop, avoiding 'any'
+export type PageComponent = React.ComponentType<{
+  params?: Record<string, string | string[] | undefined>;
+}>;
 export type PageLoader = () => Promise<{ default: PageComponent }>;
 
 export type ApiHandler = (

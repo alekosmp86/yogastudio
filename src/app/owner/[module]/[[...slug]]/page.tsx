@@ -21,7 +21,7 @@ export default async function Page({ params }: PageProps) {
     notFound();
   }
 
-  const { loader } = match;
+  const { loader, params: routeParams } = match;
   const moduleExports = await loader();
   const { default: Component } = moduleExports;
 
@@ -29,5 +29,6 @@ export default async function Page({ params }: PageProps) {
     console.log("[Page] No default export found in module!");
   }
 
-  return <Component />;
+  // Pass params to the component
+  return <Component params={routeParams} />;
 }

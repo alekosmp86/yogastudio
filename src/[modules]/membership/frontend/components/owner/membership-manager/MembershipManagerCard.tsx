@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/shared/Card";
 import { SectionSeparator } from "@/components/shared/SectionSeparator";
 import { MembershipPlan } from "@prisma/client";
 import { Clock, Edit, ListOrdered, Trash } from "lucide-react";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
 type MembershipManagerCardProps = {
@@ -43,21 +44,23 @@ export default function MembershipManagerCard({
               <ListOrdered className='w-4 h-4 opacity-80' />
               <span className='text-sm font-medium'>{t("maxActivities")}:</span>
               <span className='text-sm text-gray-600'>
-                {plan.maxActivities === -1 ? '-' : plan.maxActivities}
+                {plan.maxActivities === -1 ? "-" : plan.maxActivities}
               </span>
             </div>
           </div>
 
           {/* Actions */}
           <div className='flex flex-col gap-1 sm:min-w-[80px]'>
-            <Button
-              variant='primary'
-              size='sm'
-              Icon={Edit}
-              className='w-full'
-            >
-              {t("edit")}
-            </Button>
+            <Link href={`/owner/membership/edit/${plan.id}`} className='w-full'>
+              <Button
+                variant='primary'
+                size='sm'
+                Icon={Edit}
+                className='w-full'
+              >
+                {t("edit")}
+              </Button>
+            </Link>
 
             <Button
               variant='negative'
