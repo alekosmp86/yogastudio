@@ -4,7 +4,7 @@ import { Roles } from "./enums/Roles";
 import { jwtVerify } from "jose";
 import { SessionUser } from "./types/SessionUser";
 
-const PUBLIC_PATHS = [
+export const PUBLIC_PATHS = [
   "/",
   "/login",
   "/register",
