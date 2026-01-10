@@ -7,8 +7,10 @@ module.exports = {
   ],
   safelist: [
     // Safelist all custom color variants to ensure they're always available
+    // Safelist all primary, secondary, and utility color variants
     {
-      pattern: /^(bg|text|border|from|to|via)-custom-(50|100|200|300|400|500)$/,
+      pattern:
+        /^(bg|text|border|from|to|via)-(primary|secondary|success|danger|warning|info|dark|accent|custom)-(50|100|200|300|400|500|600|700|800|900|950)$/,
     },
   ],
   theme: {
