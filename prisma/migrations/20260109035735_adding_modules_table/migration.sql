@@ -1,5 +1,5 @@
 -- AlterTable
-ALTER TABLE "public"."AppPreferences" ADD COLUMN     "moduleId" INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE "public"."AppPreferences" ADD COLUMN     "moduleId" INTEGER NOT NULL;
 
 -- CreateTable
 CREATE TABLE "public"."Modules" (
