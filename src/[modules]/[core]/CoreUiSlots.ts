@@ -1,4 +1,5 @@
 export enum CoreUiSlots {
     OwnerDashboardCards = "owner.dashboard.cards",
-    OwnerUsersDetails = "owner.users.details"
+    OwnerUsersDetails = "owner.users.details",
+    CustomerProfileCompletion = "customer.profile.completion"
 }

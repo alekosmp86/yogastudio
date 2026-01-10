@@ -9,6 +9,11 @@ export type UISlotMap = {
       id: string;
     };
   };
+  [CoreUiSlots.CustomerProfileCompletion]: {
+    props: {
+      id: number | undefined;
+    };
+  };
 };
 
 type NormalizeProps<T> = T extends void ? object : T;
