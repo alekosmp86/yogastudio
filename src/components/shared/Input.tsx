@@ -16,7 +16,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label
             htmlFor={`input${label}`}
-            className="mb-1 text-sm font-medium text-brand-500"
+            className="mb-1 text-sm font-medium text-custom-300"
           >
             {label}
           </label>
@@ -25,18 +25,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <div
           id={label ? `input${label}` : undefined}
           className={clsx(
-            "flex items-center rounded-lg border px-3 py-2 bg-brand-600 transition",
+            "flex items-center rounded-lg border px-3 py-2 bg-white transition",
             error
               ? "border-red-500"
-              : "border-brand-600 focus-within:border-brand-500",
+              : "border-custom-300 focus-within:border-custom-500",
             className
           )}
         >
-          {icon && <span className="mr-2 text-brand-500">{icon}</span>}
+          {icon && <span className="mr-2 text-custom-300">{icon}</span>}
 
           <input
             ref={ref}
-            className="w-full bg-transparent outline-none text-brand-500"
+            className="w-full bg-white outline-none text-custom-300"
             {...props}
           />
         </div>

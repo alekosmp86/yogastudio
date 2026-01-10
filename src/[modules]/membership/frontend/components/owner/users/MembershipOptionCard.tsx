@@ -1,4 +1,5 @@
 import { Membership } from "@/modules/membership/backend/api/models/Membership";
+import { Check } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 type MembershipOptionCardProps = {
@@ -13,7 +14,7 @@ export function MembershipOptionCard({
   onSelect,
 }: MembershipOptionCardProps) {
   const { t } = useTranslation();
-  
+
   return (
     <button
       onClick={() => onSelect(membership.id)}
@@ -26,22 +27,23 @@ export function MembershipOptionCard({
         }
       `}
     >
-      <div className='flex justify-between items-center'>
-        <h4 className='text-custom-300 font-semibold'>{membership.name}</h4>
+      <div className="flex justify-between items-center">
+        <h4 className="text-custom-300 font-semibold">{membership.name}</h4>
         {selected && (
-          <span className='text-xs px-2 py-1 rounded bg-custom-300 text-white'>
-            Selected
+          <span className="flex items-center gap-1 text-xs px-2 py-1 rounded bg-custom-300 text-white">
+            <Check className="w-4 h-4" />
+            <span className="hidden sm:inline">{t("selected")}</span>
           </span>
         )}
       </div>
 
-      <div className='mt-2 text-xs text-custom-300 space-y-1'>
-        <p>{t("duration")}: {membership.durationDays} days</p>
+      <div className="mt-2 text-xs text-custom-300 space-y-1">
+        <p>
+          {t("duration")}: {membership.durationDays} days
+        </p>
         <p>
           {t("maxActivities")}:{" "}
-          {membership.maxActivities === -1
-            ? "-"
-            : membership.maxActivities}
+          {membership.maxActivities === -1 ? "-" : membership.maxActivities}
         </p>
       </div>
     </button>

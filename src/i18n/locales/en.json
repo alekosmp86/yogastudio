@@ -163,5 +163,10 @@
   "failedToUpdateUser": "Failed to update user",
   "userUpdatedSuccessfully": "User updated successfully",
   "noUsersFound": "No users found",
-  "current": "Current"
+  "current": "Current",
+  "createMembershipPlan": "Create membership plan",
+  "defineMembershipDetails": "Define membership details",
+  "errorCreatingMembershipPlan": "Error creating membership plan",
+  "back": "Back",
+  "selected": "Selected"
 }

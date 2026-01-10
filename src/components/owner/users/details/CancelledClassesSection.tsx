@@ -10,7 +10,7 @@ export default function CancelledClassesSection({
 }: CancelledClassesSectionProps) {
   const { t } = useTranslation();
   return (
-    <section className="bg-custom-50 border border-gray-500 rounded-lg p-4">
+    <section className="bg-white rounded-lg p-4 shadow-md">
       <h3 className="text-lg font-semibold text-custom-400 mb-3">
         {t("cancelledClasses")}
       </h3>

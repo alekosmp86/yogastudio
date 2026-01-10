@@ -163,5 +163,10 @@
   "failedToUpdateUser": "Error al actualizar el usuario",
   "userUpdatedSuccessfully": "Usuario actualizado correctamente",
   "noUsersFound": "No se encontraron usuarios",
-  "current": "Actual"
+  "current": "Actual",
+  "createMembershipPlan": "Crear plan de membresía",
+  "defineMembershipDetails": "Defina los detalles del plan de membresía",
+  "errorCreatingMembershipPlan": "Error al crear el plan de membresía",
+  "back": "Atrás",
+  "selected": "Seleccionado"
 }

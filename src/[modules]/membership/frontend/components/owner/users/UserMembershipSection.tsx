@@ -100,20 +100,22 @@ export function UserMembershipSection({ id }: UserMembershipSectionProps) {
   };
 
   return (
-    <div className='space-y-2 bg-white p-4 sm:p-6 rounded-xl shadow-md text-custom-300'>
-      <h2 className='text-lg font-semibold'>Membership</h2>
+    <div className="space-y-2 bg-white p-4 sm:p-6 rounded-xl shadow-md text-custom-300">
+      <h2 className="text-lg font-semibold">{t("membership")}</h2>
 
-      <div className='flex flex-col gap-6 lg:flex-row lg:items-start'>
-        {availableMemberships.length > 0 &&
-          currentMembership &&
-          availableMemberships.map((membership) => (
-            <MembershipOptionCard
-              key={membership.id}
-              membership={membership}
-              selected={currentMembership.membershipPlanId === membership.id}
-              onSelect={(e: number) => handleMembershipChange(e)}
-            />
-          ))}
+      <div className="overflow-y-auto max-h-[65vh]">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 auto-rows-fr">
+          {availableMemberships.length > 0 &&
+            currentMembership &&
+            availableMemberships.map((membership) => (
+              <MembershipOptionCard
+                key={membership.id}
+                membership={membership}
+                selected={currentMembership.membershipPlanId === membership.id}
+                onSelect={(e: number) => handleMembershipChange(e)}
+              />
+            ))}
+        </div>
       </div>
     </div>
   );
