@@ -86,7 +86,7 @@ export const MembershipModule: AppModule = {
     routeRegistry.registerApi(
       this.name,
       "plans/user/:id",
-      () => import("./backend/api/handlers/user-membership/FetchHandler")
+      () => import("./backend/api/handlers/user-membership/FetchUpdateHandler")
     );
   },
 };
