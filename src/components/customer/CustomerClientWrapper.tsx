@@ -3,13 +3,9 @@
 import { readSession, refreshSession } from "@/lib/auth";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { useEffect, useState } from "react";
-import { ProfileCompletionForm } from "./ProfileCompletionForm";
 import { SessionUser } from "@/types/SessionUser";
-import { http } from "@/lib/http";
-import { ApiType } from "@/enums/ApiTypes";
-import { RequestStatus } from "@/enums/RequestStatus";
-import { ApiResponse } from "@/types/requests/ApiResponse";
-import { ToastType } from "@/enums/ToastType";
+import { useUISlot } from "@/lib/hooks/useUISlot";
+import { CoreUiSlots } from "@/modules/[core]/CoreUiSlots";
 
 export default function CustomerClientWrapper({
   children,
@@ -17,8 +13,10 @@ export default function CustomerClientWrapper({
   children: React.ReactNode;
 }) {
   const toast = useToast();
-  const [profileFormVisible, setProfileFormVisible] = useState(false);
+  //const [profileFormVisible, setProfileFormVisible] = useState(false);
   const [user, setUser] = useState<SessionUser | null>(null);
+
+  const moduleComponents = useUISlot(CoreUiSlots.CustomerProfileCompletion);
 
   useEffect(() => {
     const handleProfileCompletion = async () => {
@@ -28,14 +26,16 @@ export default function CustomerClientWrapper({
 
       setUser(loggedUser);
       if (!loggedUser.phone) {
-        setProfileFormVisible(true);
+        //setProfileFormVisible(true);
       }
     };
 
     handleProfileCompletion();
   }, []);
 
-  const handleProfileCompletionSubmit = async (data: Pick<SessionUser, "name" | "phone">) => {
+  /*const handleProfileCompletionSubmit = async (
+    data: Pick<SessionUser, "name" | "phone">
+  ) => {
     setProfileFormVisible(false);
     const { message } = await http.put<ApiResponse<void>>(
       "/customer/profile",
@@ -43,14 +43,14 @@ export default function CustomerClientWrapper({
       data
     );
 
-    if(message === RequestStatus.SUCCESS) {
+    if (message === RequestStatus.SUCCESS) {
       toast.showToast({
         message: "Profile updated successfully",
         type: ToastType.SUCCESS,
         duration: 3000,
       });
-      
-      const updatedUser = {...user!, ...data};
+
+      const updatedUser = { ...user!, ...data };
       await refreshSession(updatedUser);
     } else {
       toast.showToast({
@@ -60,16 +60,21 @@ export default function CustomerClientWrapper({
       });
       setProfileFormVisible(true);
     }
-  };
+  };*/
 
   return (
     <>
       {children}
-      <ProfileCompletionForm
-        userData={user}
-        isOpen={profileFormVisible}
-        onSubmit={(data) => handleProfileCompletionSubmit(data)}
-      />
+      {/** Uncomment this when using the user's phone
+        <ProfileCompletionForm
+          userData={user}
+          isOpen={profileFormVisible}
+          onSubmit={(data) => handleProfileCompletionSubmit(data)}
+        />
+         */}
+      {moduleComponents.map((Component, index) => (
+        <Component key={index} id={user?.id} />
+      ))}
     </>
   );
 }

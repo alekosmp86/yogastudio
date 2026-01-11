@@ -12,6 +12,7 @@ import { CoreUiSlots } from "../[core]/CoreUiSlots";
 import MembershipDashboardCard from "./frontend/components/owner/dashboard/MembershipDashboardCard";
 import { AssignSystemAccessTask, RegisterModuleTask } from "./tasks/MembershipTasks";
 import { UserMembershipSection } from "./frontend/components/owner/users/UserMembershipSection";
+import ActivitiesSelectionForm from "./frontend/components/customer/profile/ActivitiesSelectionForm";
 
 export const MembershipModule: AppModule = {
   name: "membership",
@@ -43,6 +44,11 @@ export const MembershipModule: AppModule = {
     uiRegistry.registerUI(
       CoreUiSlots.OwnerUsersDetails,
       UserMembershipSection
+    );
+
+    uiRegistry.registerUI(
+      CoreUiSlots.CustomerProfileCompletion,
+      ActivitiesSelectionForm
     );
   },
 
@@ -87,6 +93,12 @@ export const MembershipModule: AppModule = {
       this.name,
       "plans/user/:id",
       () => import("./backend/api/handlers/user-membership/FetchUpdateHandler")
+    );
+
+    routeRegistry.registerApi(
+      this.name,
+      "plans/user/:id/activities",
+      () => import("./backend/api/handlers/activities/FetchPostActivitiesByIdHandler")
     );
   },
 };
