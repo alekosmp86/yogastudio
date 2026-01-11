@@ -6,38 +6,54 @@ import {
 } from "@/lib/registry";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { AppModule } from "@/modules/[core]/AppModule";
-import { fetchClassesByMembershipPostHook } from "./backend/hooks/FetchClassesByMembershipPostHook";
-import { userCreatedGoogleOauthPostHook } from "./backend/hooks/UserCreatedGoogleOauthPostHook";
 import { CoreUiSlots } from "../[core]/CoreUiSlots";
 import MembershipDashboardCard from "./frontend/components/owner/dashboard/MembershipDashboardCard";
-import { AssignSystemAccessTask, RegisterModuleTask } from "./tasks/MembershipTasks";
 import { UserMembershipSection } from "./frontend/components/owner/users/UserMembershipSection";
 import ActivitiesSelectionForm from "./frontend/components/customer/profile/ActivitiesSelectionForm";
-import { membershipStatusValidationHook } from "./backend/hooks/MembershipStatusValidationHook";
 
 export const MembershipModule: AppModule = {
   name: "membership",
 
   initTasks() {
-    taskRegistry.registerTask(RegisterModuleTask);
-    taskRegistry.registerTask(AssignSystemAccessTask);
+    taskRegistry.registerTask({
+      name: "membership:register-module",
+      run: async (ctx) => {
+        const { RegisterModuleTask } = await import("./tasks/MembershipTasks");
+        return RegisterModuleTask.run(ctx);
+      },
+    });
+    taskRegistry.registerTask({
+      name: "membership:assign-system-access-to-users-without-membership",
+      run: async (ctx) => {
+        const { AssignSystemAccessTask } = await import(
+          "./tasks/MembershipTasks"
+        );
+        return AssignSystemAccessTask.run(ctx);
+      },
+    });
   },
 
   initCore() {
     hookRegistry.registerHook(
       CoreHooks.afterFetchAllAvailableClasses,
       "after",
-      fetchClassesByMembershipPostHook
+      (payload) =>
+        import("./backend/hooks/FetchClassesByMembershipPostHook").then((m) =>
+          m.fetchClassesByMembershipPostHook(payload)
+        )
     );
-    hookRegistry.registerHook(
-      CoreHooks.afterUserCreated,
-      "after",
-      userCreatedGoogleOauthPostHook
+    hookRegistry.registerHook(CoreHooks.afterUserCreated, "after", (payload) =>
+      import("./backend/hooks/UserCreatedGoogleOauthPostHook").then((m) =>
+        m.userCreatedGoogleOauthPostHook(payload)
+      )
     );
     hookRegistry.registerHook(
       CoreHooks.beforeSessionCreated,
       "before",
-      membershipStatusValidationHook
+      (payload) =>
+        import("./backend/hooks/MembershipStatusValidationHook").then((m) =>
+          m.membershipStatusValidationHook(payload)
+        )
     );
   },
 

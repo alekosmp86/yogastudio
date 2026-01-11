@@ -81,4 +81,11 @@ export class UserMembershipServiceImpl implements UserMembershipService {
       membershipPlan: updatedUserMembership.membershipPlan,
     };
   }
+
+  async expireMembership(userMembershipId: number): Promise<void> {
+    await prisma.userMembership.update({
+      where: { id: userMembershipId },
+      data: { status: MembershipStatus.EXPIRED },
+    });
+  }
 }

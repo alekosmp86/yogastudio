@@ -1,7 +1,12 @@
 import { User } from "@prisma/client";
 import { BusinessTime } from "@/lib/utils/date";
-import { prisma } from "@/lib/prisma";
-import { MembershipStatus } from "../../enums/MembershipStatus";
+import { userMembershipService } from "../api";
+import { PreferenceServiceImpl } from "app/api/owner/preferences/_services/impl/PreferenceServiceImpl";
+import { UserServiceImpl } from "app/api/users/_services/impl/UserServiceImpl";
+import { UserActions } from "@/enums/UserActions";
+
+const preferenceService = new PreferenceServiceImpl();
+const userService = new UserServiceImpl();
 
 export const membershipStatusValidationHook = async (payload: User) => {
   const { id } = payload;
@@ -9,24 +14,14 @@ export const membershipStatusValidationHook = async (payload: User) => {
     return payload;
   }
 
-  const timezone = await prisma.appPreferences.findFirst({
-    where: { name: "timezone" },
-    select: { value: true },
-  });
-
-  const businessTime = new BusinessTime((timezone?.value as string) || "UTC");
+  const timezone = await preferenceService.getStringPreferenceValue("timezone");
+  const businessTime = new BusinessTime(timezone);
   const today = businessTime.now().date;
-  const userMembership = await prisma.userMembership.findFirst({
-    where: { userId: id, status: MembershipStatus.ACTIVE },
-    select: { endDate: true },
-  });
+  const userMembership = await userMembershipService.getUserMembership(id);
 
   if (userMembership && userMembership.endDate < today) {
-    const updatedUser = await prisma.user.update({
-      where: { id },
-      data: { approved: false },
-    });
-    return updatedUser;
+    await userService.executeAction<User>(id, UserActions.BLOCK_USER);
+    await userMembershipService.expireMembership(userMembership.id);
   }
 
   return payload;
