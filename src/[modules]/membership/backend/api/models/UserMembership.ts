@@ -6,4 +6,6 @@ export type UserMembership = {
     membershipPlanId: number;
     status: string;
     membershipPlan: Membership;
+    startDate: string;
+    endDate: string;
 }

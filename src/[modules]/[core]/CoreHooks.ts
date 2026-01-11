@@ -3,4 +3,6 @@ export enum CoreHooks {
     afterFetchAllAvailableClasses = 'fetchAllAvailableClasses:after',
     beforeUserCreated = 'userCreated:before',
     afterUserCreated = 'userCreated:after',
+    beforeSessionCreated = 'sessionCreated:before',
+    afterSessionCreated = 'sessionCreated:after'
 }

@@ -112,11 +112,15 @@ export async function GET(req: NextRequest) {
 
     await accountService.upsert(accountToCreate);
 
+    const sessionUserHook = await hookRegistry.runHooks(
+      CoreHooks.beforeSessionCreated,
+      "before",
+      user
+    );
+
     // 4. Create response to set the session cookie
     const response = NextResponse.redirect(url.origin + "/");
-    await tokenService.createSession(response, sessionUser);
-
-    await hookRegistry.runHooks(CoreHooks.afterUserCreated, "after", user);
+    await tokenService.createSession(response, sessionUserHook);
 
     return response;
   } catch (error) {

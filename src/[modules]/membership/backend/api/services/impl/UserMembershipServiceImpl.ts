@@ -19,6 +19,8 @@ export class UserMembershipServiceImpl implements UserMembershipService {
       userId: userMembership.userId,
       membershipPlanId: userMembership.membershipPlanId,
       status: userMembership.status,
+      startDate: userMembership.startDate,
+      endDate: userMembership.endDate,
       membershipPlan: userMembership.membershipPlan,
     };
   }
@@ -74,6 +76,8 @@ export class UserMembershipServiceImpl implements UserMembershipService {
       userId: updatedUserMembership.userId,
       membershipPlanId: updatedUserMembership.membershipPlanId,
       status: updatedUserMembership.status,
+      startDate: updatedUserMembership.startDate,
+      endDate: updatedUserMembership.endDate,
       membershipPlan: updatedUserMembership.membershipPlan,
     };
   }

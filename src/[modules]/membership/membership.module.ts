@@ -13,6 +13,7 @@ import MembershipDashboardCard from "./frontend/components/owner/dashboard/Membe
 import { AssignSystemAccessTask, RegisterModuleTask } from "./tasks/MembershipTasks";
 import { UserMembershipSection } from "./frontend/components/owner/users/UserMembershipSection";
 import ActivitiesSelectionForm from "./frontend/components/customer/profile/ActivitiesSelectionForm";
+import { membershipStatusValidationHook } from "./backend/hooks/MembershipStatusValidationHook";
 
 export const MembershipModule: AppModule = {
   name: "membership",
@@ -33,6 +34,11 @@ export const MembershipModule: AppModule = {
       "after",
       userCreatedGoogleOauthPostHook
     );
+    hookRegistry.registerHook(
+      CoreHooks.beforeSessionCreated,
+      "before",
+      membershipStatusValidationHook
+    );
   },
 
   initUI() {
@@ -41,10 +47,7 @@ export const MembershipModule: AppModule = {
       MembershipDashboardCard
     );
 
-    uiRegistry.registerUI(
-      CoreUiSlots.OwnerUsersDetails,
-      UserMembershipSection
-    );
+    uiRegistry.registerUI(CoreUiSlots.OwnerUsersDetails, UserMembershipSection);
 
     uiRegistry.registerUI(
       CoreUiSlots.CustomerProfileCompletion,
@@ -98,7 +101,10 @@ export const MembershipModule: AppModule = {
     routeRegistry.registerApi(
       this.name,
       "plans/user/:id/activities",
-      () => import("./backend/api/handlers/activities/FetchPostActivitiesByIdHandler")
+      () =>
+        import(
+          "./backend/api/handlers/activities/FetchPostActivitiesByIdHandler"
+        )
     );
   },
 };

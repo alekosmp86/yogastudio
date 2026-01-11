@@ -10,6 +10,7 @@ type HookPayloads = {
   [CoreHooks.afterFetchAllAvailableClasses]: DailyClass[];
   [CoreHooks.beforeUserCreated]: GoogleUserInfo;
   [CoreHooks.afterUserCreated]: User | null;
+  [CoreHooks.beforeSessionCreated]: User;
 };
 
 type HookName = keyof HookPayloads;
