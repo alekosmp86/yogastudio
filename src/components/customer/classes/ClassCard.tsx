@@ -30,7 +30,7 @@ export default function ClassCard({
 }: ClassCardProps) {
   const { t } = useTranslation();
   const Icon = ICON_MAP.default;
-  const percentage = (gymClass.reserved / gymClass.capacity) * 100;
+  const percentage = (gymClass.reserved / gymClass.activity.capacity) * 100;
 
   return (
     <Card className="bg-white rounded-xl border border-custom-100 shadow-sm hover:shadow-lg transition">
@@ -42,26 +42,26 @@ export default function ClassCard({
         <div className="flex flex-col w-full">
           <div className="flex justify-between">
             <h2 className="font-semibold text-custom-400 leading-tight">
-              {gymClass.title}
+              {gymClass.activity.title}
             </h2>
             <span className="text-xs font-medium text-custom-300">
               {gymClass.startTime}
             </span>
           </div>
 
-          <p className="text-sm text-custom-200 mt-1">{gymClass.description}</p>
+          <p className="text-sm text-custom-200 mt-1">{gymClass.activity.description}</p>
 
           <p className="text-xs text-custom-300">
             {t("instructor")}:{" "}
             <span className="font-medium text-custom-400">
-              {gymClass.instructor}
+              {gymClass.activity.instructor}
             </span>
           </p>
 
           <div className="flex flex-col gap-1">
             <Progress value={percentage} className="h-1.5 bg-custom-50" />
             <p className="text-xs text-custom-300">
-              {gymClass.reserved}/{gymClass.capacity} {t("spotsFilled")}
+              {gymClass.reserved}/{gymClass.activity.capacity} {t("spotsFilled")}
             </p>
           </div>
 

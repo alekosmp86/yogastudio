@@ -39,6 +39,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
         include: {
           template: {
             select: {
+              id: true,
               title: true,
               instructor: true,
               capacity: true,
@@ -67,10 +68,13 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
         id: c.id,
         date: c.date,
         startTime: c.startTime,
-        title: c.template.title,
-        description: c.template.description || "",
-        instructor: c.template.instructor,
-        capacity: c.template.capacity,
+        activity: {
+            id: c.template.id,
+            title: c.template.title,
+            instructor: c.template.instructor,
+            description: c.template.description || "",
+            capacity: c.template.capacity,
+        },
         reserved:
           reservationCounts.find((r) => r.classId === c.id)?._count ?? 0,
         available:

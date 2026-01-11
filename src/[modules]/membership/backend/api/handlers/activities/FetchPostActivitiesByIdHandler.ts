@@ -18,6 +18,7 @@ export const GET = async (
       data: userActivities,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ message: RequestStatus.ERROR, data: null });
   }
 };
@@ -41,6 +42,7 @@ export const POST = async (
       data: userActivities,
     });
   } catch (error) {
+    console.log(error);
     return NextResponse.json({ message: RequestStatus.ERROR, data: null });
   }
 };

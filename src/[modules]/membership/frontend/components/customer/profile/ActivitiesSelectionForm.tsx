@@ -7,10 +7,9 @@ import { RequestStatus } from "@/enums/RequestStatus";
 import { ToastType } from "@/enums/ToastType";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { http } from "@/lib/http";
-import { Membership } from "@/modules/membership/backend/api/models/Membership";
 import { UserActivity } from "@/modules/membership/backend/api/models/UserActivity";
 import { ApiResponse } from "@/types/requests/ApiResponse";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type ActivitiesSelectionFormProps = {

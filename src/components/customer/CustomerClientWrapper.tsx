@@ -1,7 +1,6 @@
 "use client";
 
-import { readSession, refreshSession } from "@/lib/auth";
-import { useToast } from "@/lib/contexts/ToastContext";
+import { readSession } from "@/lib/auth";
 import { useEffect, useState } from "react";
 import { SessionUser } from "@/types/SessionUser";
 import { useUISlot } from "@/lib/hooks/useUISlot";
@@ -12,7 +11,7 @@ export default function CustomerClientWrapper({
 }: {
   children: React.ReactNode;
 }) {
-  const toast = useToast();
+  //const toast = useToast();
   //const [profileFormVisible, setProfileFormVisible] = useState(false);
   const [user, setUser] = useState<SessionUser | null>(null);
 
