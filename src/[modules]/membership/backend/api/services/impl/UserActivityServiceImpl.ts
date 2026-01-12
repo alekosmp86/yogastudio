@@ -2,7 +2,6 @@ import { prisma } from "@/lib/prisma";
 import { UserActivity } from "../../models/UserActivity";
 import { UserActivityService } from "../UserActivityService";
 import { MembershipStatus } from "@/modules/membership/enums/MembershipStatus";
-import { MembershipTypes } from "@/modules/membership/enums/MembershipTypes";
 import { userMembershipService } from "../..";
 
 export class UserActivityServiceImpl implements UserActivityService {

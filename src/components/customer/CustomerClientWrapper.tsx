@@ -72,7 +72,7 @@ export default function CustomerClientWrapper({
         />
          */}
       {moduleComponents.map((Component, index) => (
-        <Component key={index} id={user?.id} />
+        <Component key={index} userId={user?.id} />
       ))}
     </>
   );

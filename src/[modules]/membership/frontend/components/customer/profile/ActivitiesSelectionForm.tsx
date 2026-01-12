@@ -14,11 +14,11 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type ActivitiesSelectionFormProps = {
-  id: number | undefined;
+  userId: number | undefined;
 };
 
 export default function ActivitiesSelectionForm({
-  id,
+  userId,
 }: ActivitiesSelectionFormProps) {
   const { t } = useTranslation();
   const { showToast } = useToast();
@@ -27,10 +27,10 @@ export default function ActivitiesSelectionForm({
   const [selectedActivities, setSelectedActivities] = useState<number[]>([]);
 
   useEffect(() => {
-    if (!id) return;
+    if (!userId) return;
     const fetchPlans = async () => {
       const { message, data } = await http.get<ApiResponse<UserActivity>>(
-        `/customer/membership/plans/user/${id}/activities`,
+        `/customer/membership/plans/user/${userId}/activities`,
         ApiType.FRONTEND
       );
 
@@ -45,13 +45,13 @@ export default function ActivitiesSelectionForm({
       }
     };
     fetchPlans();
-  }, [id]);
+  }, [userId]);
 
-  if (!id) return null;
+  if (!userId) return null;
 
   const handleSave = async () => {
     const { message } = await http.post<ApiResponse<void>>(
-      `/customer/membership/plans/user/${id}/activities`,
+      `/customer/membership/plans/user/${userId}/activities`,
       ApiType.FRONTEND,
       { activitiesIds: selectedActivities }
     );

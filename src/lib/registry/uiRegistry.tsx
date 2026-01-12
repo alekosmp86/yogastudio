@@ -11,7 +11,12 @@ export type UISlotMap = {
   };
   [CoreUiSlots.CustomerProfileCompletion]: {
     props: {
-      id: number | undefined;
+      userId: number | undefined;
+    };
+  };
+  [CoreUiSlots.CustomerProfile]: {
+    props: {
+      userId: number | undefined;
     };
   };
 };

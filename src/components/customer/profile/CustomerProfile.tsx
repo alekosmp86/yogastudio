@@ -11,10 +11,13 @@ import { ApiType } from "@/enums/ApiTypes";
 import { useState } from "react";
 import { RequestStatus } from "@/enums/RequestStatus";
 import CustomerTestimonialSection from "./CustomerTestimonialSection";
+import { useUISlot } from "@/lib/hooks/useUISlot";
+import { CoreUiSlots } from "@/modules/[core]/CoreUiSlots";
 
 export default function CustomerProfile() {
   const { t } = useTranslation();
   const [profile, setProfile] = useState<ProfileData | null>(null);
+  const moduleComponents = useUISlot(CoreUiSlots.CustomerProfile);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -56,6 +59,10 @@ export default function CustomerProfile() {
 
       {/* Profile info */}
       {profile && <ProfileCard profile={profile} onSave={onSaveProfile} />}
+
+      {moduleComponents.map((Component, index) => (
+        <Component key={index} userId={profile?.id} />
+      ))}
 
       {/* Testimonials */}
       {profile && <CustomerTestimonialSection />}
