@@ -50,10 +50,8 @@ export class UserMembershipServiceImpl implements UserMembershipService {
     // This ensures data consistency and reduces DB calls from 2 to 1
     const updatedUserMembership = await prisma.$transaction(async (tx) => {
       // Get userId from the existing membership and expire it
-      const oldMembership = await tx.userMembership.update({
+      const oldMembership = await tx.userMembership.delete({
         where: { id: userMembershipId },
-        data: { status: MembershipStatus.EXPIRED },
-        select: { userId: true },
       });
 
       // Create new active membership
@@ -83,9 +81,8 @@ export class UserMembershipServiceImpl implements UserMembershipService {
   }
 
   async expireMembership(userMembershipId: number): Promise<void> {
-    await prisma.userMembership.update({
+    await prisma.userMembership.delete({
       where: { id: userMembershipId },
-      data: { status: MembershipStatus.EXPIRED },
     });
   }
 }

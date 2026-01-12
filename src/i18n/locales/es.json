@@ -170,5 +170,6 @@
   "back": "Atrás",
   "selected": "Seleccionado",
   "selectYourActivities": "Selecciona tus actividades",
-  "classDurationMinutes": "Duración de la clase en minutos"
+  "classDurationMinutes": "Duración de la clase en minutos",
+  "membershipUpdatedSuccessfully": "Plan actualizado correctamente"
 }

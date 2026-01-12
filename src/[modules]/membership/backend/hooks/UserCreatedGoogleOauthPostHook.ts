@@ -4,7 +4,7 @@ import { MembershipTypes } from "../../enums/MembershipTypes";
 import { BusinessTime } from "@/lib/utils/date";
 import { MembershipStatus } from "../../enums/MembershipStatus";
 
-export const userCreatedGoogleOauthPostHook = async (user: User | null) => {
+export const userCreatedGoogleOauthPostHook = async (user: User) => {
   if (!user) return user;
 
   // check if user has an active membership

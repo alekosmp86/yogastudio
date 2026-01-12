@@ -70,6 +70,12 @@ export async function GET(req: NextRequest) {
     existingUser ||
     (await userService.create(googleUserMapper.toUser(profile)));
 
+  const userAfterHook = await hookRegistry.runHooks(
+    CoreHooks.afterUserCreated,
+    "after",
+    user
+  );
+
   /** @todo this should be done in a hook | penalties should be moved to a separate module */
   const penalties = existingUser
     ? await userPenaltyService.findByUserId(existingUser.id)
@@ -81,7 +87,7 @@ export async function GET(req: NextRequest) {
         penalties,
       }
     : {
-        ...user,
+        ...userAfterHook,
         penalties,
       };
 
@@ -115,7 +121,7 @@ export async function GET(req: NextRequest) {
     const sessionUserHook = await hookRegistry.runHooks(
       CoreHooks.beforeSessionCreated,
       "before",
-      user
+      userAfterHook
     );
 
     // 4. Create response to set the session cookie
