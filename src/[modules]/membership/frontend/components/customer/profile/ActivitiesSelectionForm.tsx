@@ -10,7 +10,7 @@ import { http } from "@/lib/http";
 import { UserActivity } from "@/modules/membership/backend/api/models/UserActivity";
 import { MembershipTypes } from "@/modules/membership/enums/MembershipTypes";
 import { ApiResponse } from "@/types/requests/ApiResponse";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type ActivitiesSelectionFormProps = {
@@ -26,6 +26,16 @@ export default function ActivitiesSelectionForm({
   const [userData, setUserData] = useState<UserActivity | null>(null);
   const [selectedActivities, setSelectedActivities] = useState<number[]>([]);
 
+  const validateVisibility = useCallback((data: UserActivity) => {
+    if (!data) return false;
+    return (
+      data.userActivities?.templates.length === 0 &&
+      data.userActivities?.membershipPlan.name !==
+        MembershipTypes.SYSTEM_ACCESS &&
+      data.userActivities?.membershipPlan.maxActivities !== -1
+    );
+  }, []);
+
   useEffect(() => {
     if (!userId) return;
     const fetchPlans = async () => {
@@ -36,16 +46,11 @@ export default function ActivitiesSelectionForm({
 
       if (message === RequestStatus.SUCCESS && data) {
         setUserData(data);
-        setVisible(
-          !data.userActivities ||
-            (data.userActivities.templates.length === 0 &&
-              data.userActivities.membershipPlan.name !==
-                MembershipTypes.SYSTEM_ACCESS)
-        );
+        setVisible(validateVisibility(data));
       }
     };
     fetchPlans();
-  }, [userId]);
+  }, [userId, validateVisibility]);
 
   if (!userId) return null;
 
@@ -75,21 +80,21 @@ export default function ActivitiesSelectionForm({
   return (
     <>
       {visible && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className='fixed inset-0 z-50 flex items-center justify-center p-4'>
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/60" aria-hidden />
+          <div className='absolute inset-0 bg-black/60' aria-hidden />
 
           {/* Modal */}
           <div
-            role="dialog"
-            aria-modal="true"
-            className="relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
+            role='dialog'
+            aria-modal='true'
+            className='relative z-10 w-full max-w-md rounded-xl bg-white p-6 shadow-xl'
           >
-            <h2 className="mb-1 text-xl font-semibold text-primary-800">
+            <h2 className='mb-1 text-xl font-semibold text-primary-800'>
               {t("selectYourActivities")}
             </h2>
 
-            <p className="mb-4 text-sm text-primary-600">
+            <p className='mb-4 text-sm text-primary-600'>
               {t("needInformationToManageReservations")}
             </p>
 
@@ -107,8 +112,8 @@ export default function ActivitiesSelectionForm({
               onChange={setSelectedActivities}
             />
 
-            <div className="flex justify-end pt-4">
-              <Button variant="primary" onClick={handleSave}>
+            <div className='flex justify-end pt-4'>
+              <Button variant='primary' onClick={handleSave}>
                 {t("save")}
               </Button>
             </div>
