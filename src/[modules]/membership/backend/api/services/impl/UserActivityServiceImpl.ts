@@ -11,10 +11,7 @@ export class UserActivityServiceImpl implements UserActivityService {
       prisma.userMembership.findFirst({
         where: {
           userId,
-          status: MembershipStatus.ACTIVE,
-          membershipPlan: {
-            NOT: { name: MembershipTypes.SYSTEM_ACCESS },
-          },
+          status: MembershipStatus.ACTIVE
         },
         include: {
           templates: true,

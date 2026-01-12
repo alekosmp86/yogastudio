@@ -169,5 +169,6 @@
   "errorCreatingMembershipPlan": "Error creating membership plan",
   "back": "Back",
   "selected": "Selected",
-  "selectYourActivities": "Select your activities"
+  "selectYourActivities": "Select your activities",
+  "classDurationMinutes": "Class duration in minutes"
 }

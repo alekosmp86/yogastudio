@@ -30,13 +30,17 @@ export const AssignSystemAccessTask: AppTask = {
           },
         },
       },
-      select: { id: true },
+      select: { id: true, memberships: true },
     });
 
     if (usersWithoutActiveMembership.length === 0) {
       console.log("[membership] No users without active membership found");
       return;
     }
+
+    const usersWithoutMembership = usersWithoutActiveMembership.filter(
+      (user) => user.memberships.length === 0
+    );
 
     const timezone = await db.appPreferences.findUnique({
       where: { name: "timezone" },
@@ -51,7 +55,7 @@ export const AssignSystemAccessTask: AppTask = {
 
     // 3. Assign SYSTEM_ACCESS memberships
     await db.userMembership.createMany({
-      data: usersWithoutActiveMembership.map((user) => ({
+      data: usersWithoutMembership.map((user) => ({
         userId: user.id,
         membershipPlanId: fullAccessPlan.id,
         startDate,
@@ -62,7 +66,7 @@ export const AssignSystemAccessTask: AppTask = {
     });
 
     console.log(
-      `[membership] SYSTEM_ACCESS assigned to ${usersWithoutActiveMembership.length} users`
+      `[membership] SYSTEM_ACCESS assigned to ${usersWithoutMembership.length} users`
     );
   },
 };
