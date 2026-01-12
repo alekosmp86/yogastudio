@@ -9,6 +9,7 @@ export function ScheduleHeader() {
     getPreferenceByName<string>("timezone") || "UTC"
   );
   const week = businessTime.getCurrentBusinessWeek();
+  const language = getPreferenceByName<string>("language") || "en";
 
   return (
     <>
@@ -21,7 +22,7 @@ export function ScheduleHeader() {
           key={index}
           className="sticky top-0 z-20 flex items-center justify-center py-3 text-xs sm:text-sm font-semibold text-custom-300 bg-custom-100 border-b border-custom-100"
         >
-          {businessTime.formatWeekdayLabel(d.date)}
+          {businessTime.formatWeekdayLabel(d.date, language)}
         </div>
       ))}
     </>

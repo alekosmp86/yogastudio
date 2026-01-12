@@ -171,5 +171,11 @@
   "selected": "Selected",
   "selectYourActivities": "Select your activities",
   "classDurationMinutes": "Class duration in minutes",
-  "membershipUpdatedSuccessfully": "Membership updated successfully"
+  "membershipUpdatedSuccessfully": "Membership updated successfully",
+  "classAddedToScheduleSuccessfully": "Class added to schedule successfully",
+  "errorAddingClassToSchedule": "Error adding class to schedule",
+  "classRemovedFromScheduleSuccessfully": "Class removed from schedule successfully",
+  "errorRemovingClassFromSchedule": "Error removing class from schedule",
+  "swipeToExploreTheFullWeek": "Swipe to explore the full week",
+  "generate": "Generate"
 }

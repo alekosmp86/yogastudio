@@ -10,14 +10,7 @@ type DayCellProps = {
 export function DayCell({ data, onClick }: DayCellProps) {
   return (
     <div
-      className={`
-        group
-        px-2 py-4 sm:px-3 sm:py-3
-        rounded-md
-        border
-        transition-all duration-200
-        cursor-pointer
-        flex items-center
+      className={`group px-2 py-4 sm:px-3 sm:py-3 rounded-md border transition-all duration-200 cursor-pointer flex items-center
       ${  
         data
           ? "bg-custom-300 border-custom-100 hover:bg-custom-400"

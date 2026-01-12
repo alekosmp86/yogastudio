@@ -1,3 +1,3 @@
 export const Time = {
-  WEEKDAYS: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+  WEEKDAYS: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"]
 };

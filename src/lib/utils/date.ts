@@ -91,12 +91,12 @@ export class BusinessTime {
     }));
   }
 
-  formatWeekdayLabel(dateStr: string): string {
+  formatWeekdayLabel(dateStr: string, locale: string): string {
     const [y, m, d] = dateStr.split("-").map(Number);
 
     const safeDate = new Date(Date.UTC(y, m - 1, d, 12));
 
-    const parts = new Intl.DateTimeFormat("en-US", {
+    const parts = new Intl.DateTimeFormat(locale, {
       timeZone: this.timezone,
       weekday: "short",
       day: "2-digit",
@@ -105,7 +105,7 @@ export class BusinessTime {
     const weekday = parts.find((p) => p.type === "weekday")!.value;
     const day = parts.find((p) => p.type === "day")!.value;
 
-    return `${weekday} ${day}`;
+    return `${weekday.toUpperCase()} ${day}`;
   }
 
   /** Adds days to a YYYY-MM-DD string (SAFE) */
