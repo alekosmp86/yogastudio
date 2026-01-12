@@ -20,8 +20,12 @@ export const membershipStatusValidationHook = async (payload: User) => {
   const userMembership = await userMembershipService.getUserMembership(id);
 
   if (userMembership && userMembership.endDate < today) {
-    await userService.executeAction<User>(id, UserActions.BLOCK_USER);
+    const updatedUser = await userService.executeAction<User>(
+      id,
+      UserActions.BLOCK_USER
+    );
     await userMembershipService.expireMembership(userMembership.id);
+    return updatedUser;
   }
 
   return payload;
