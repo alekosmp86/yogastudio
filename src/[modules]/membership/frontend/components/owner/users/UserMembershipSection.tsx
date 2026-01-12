@@ -56,34 +56,14 @@ export function UserMembershipSection({ id }: UserMembershipSectionProps) {
   }, []);
 
   const handleMembershipChange = (membershipId: number) => {
-    if (!currentMembership) return;
-
-    updateUserMembershipPlan(currentMembership.id, membershipId);
-    setCurrentMembership((prev) => {
-      if (!prev) {
-        return null;
-      }
-      const newAssignedMembership = availableMemberships.find(
-        (m) => m.id === membershipId
-      );
-      if (!newAssignedMembership) {
-        return prev;
-      }
-
-      const assignedMembership = {
-        ...prev,
-        membershipPlanId: membershipId,
-        membershipPlan: newAssignedMembership,
-      };
-
-      return assignedMembership;
-    });
+    updateUserMembershipPlan(currentMembership?.id || 0, membershipId);
   };
 
   const updateUserMembershipPlan = async (
     userMembershipId: number,
     newMembershipId: number
   ) => {
+    if (currentMembership?.membershipPlanId === newMembershipId) return;
     const { message, data } = await http.put<ApiResponse<UserMembership>>(
       `/owner/membership/plans/user/${id}`,
       ApiType.FRONTEND,
@@ -100,18 +80,17 @@ export function UserMembershipSection({ id }: UserMembershipSectionProps) {
   };
 
   return (
-    <div className="space-y-2 bg-white p-4 sm:p-6 rounded-xl shadow-md text-custom-300">
-      <h2 className="text-lg font-semibold">{t("membership")}</h2>
+    <div className='space-y-2 bg-white p-4 sm:p-6 rounded-xl shadow-md text-custom-300'>
+      <h2 className='text-lg font-semibold'>{t("membership")}</h2>
 
-      <div className="overflow-y-auto max-h-[65vh]">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 auto-rows-fr">
+      <div className='overflow-y-auto max-h-[65vh]'>
+        <div className='grid grid-cols-1 gap-4 sm:grid-cols-3 auto-rows-fr'>
           {availableMemberships.length > 0 &&
-            currentMembership &&
             availableMemberships.map((membership) => (
               <MembershipOptionCard
                 key={membership.id}
                 membership={membership}
-                selected={currentMembership.membershipPlanId === membership.id}
+                selected={currentMembership?.membershipPlanId === membership.id}
                 onSelect={(e: number) => handleMembershipChange(e)}
               />
             ))}

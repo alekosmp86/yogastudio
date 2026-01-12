@@ -26,6 +26,7 @@ export class UserMembershipServiceImpl implements UserMembershipService {
   }
 
   async updateById(
+    userId: number,
     userMembershipId: number,
     newMembershipPlanId: number
   ): Promise<UserMembership | null> {
@@ -49,24 +50,26 @@ export class UserMembershipServiceImpl implements UserMembershipService {
     // Use a transaction to update old membership and create new one atomically
     // This ensures data consistency and reduces DB calls from 2 to 1
     const updatedUserMembership = await prisma.$transaction(async (tx) => {
-      // Get userId from the existing membership and expire it
-      const oldMembership = await tx.userMembership.delete({
-        where: { id: userMembershipId },
-      });
-
-      // Create new active membership
-      return tx.userMembership.create({
-        data: {
-          userId: oldMembership.userId,
-          membershipPlanId: newMembershipPlanId,
-          status: MembershipStatus.ACTIVE,
-          startDate: today,
-          endDate: businessTime.addDays(today, membership.durationDays),
-        },
-        include: {
-          membershipPlan: true,
-        },
-      });
+      try {
+        // Get userId from the existing membership and expire it
+        await tx.userMembership.delete({
+          where: { id: userMembershipId },
+        });
+      } finally {
+        // Create new active membership
+        return tx.userMembership.create({
+          data: {
+            userId: userId,
+            membershipPlanId: newMembershipPlanId,
+            status: MembershipStatus.ACTIVE,
+            startDate: today,
+            endDate: businessTime.addDays(today, membership.durationDays),
+          },
+          include: {
+            membershipPlan: true,
+          },
+        });
+      }
     });
 
     return {
