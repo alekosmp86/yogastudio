@@ -24,8 +24,9 @@ export const membershipStatusValidationHook = async (payload: User) => {
       id,
       UserActions.BLOCK_USER
     );
+
     await userMembershipService.expireMembership(userMembership.id);
-    return updatedUser;
+    return updatedUser || payload;
   }
 
   return payload;
