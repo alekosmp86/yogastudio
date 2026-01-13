@@ -177,5 +177,6 @@
   "classRemovedFromScheduleSuccessfully": "Class removed from schedule successfully",
   "errorRemovingClassFromSchedule": "Error removing class from schedule",
   "swipeToExploreTheFullWeek": "Swipe to explore the full week",
-  "generate": "Generate"
+  "generate": "Generate",
+  "activitiesGeneratedSuccessfully": "Activities generated successfully"
 }

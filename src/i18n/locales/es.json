@@ -177,5 +177,6 @@
   "classRemovedFromScheduleSuccessfully": "Clase eliminada del horario correctamente",
   "errorRemovingClassFromSchedule": "Error al eliminar la clase del horario",
   "swipeToExploreTheFullWeek": "Desliza para explorar la semana completa",
-  "generate": "Generar"
+  "generate": "Generar",
+  "activitiesGeneratedSuccessfully": "Actividades generadas correctamente"
 }

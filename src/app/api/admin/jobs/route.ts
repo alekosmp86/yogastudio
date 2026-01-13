@@ -3,8 +3,6 @@ import { adminService } from "..";
 import { RequestStatus } from "@/enums/RequestStatus";
 
 export async function GET(request: Request) {
-  console.log("Running scheduled tasks");
-
   try {
     const authHeader = request.headers.get("authorization");
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {

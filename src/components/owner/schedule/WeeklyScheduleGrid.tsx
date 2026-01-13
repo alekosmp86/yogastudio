@@ -137,6 +137,25 @@ export default function WeeklyScheduleGrid() {
     setDayTime({ weekday: 0, hour: "" });
   };
 
+  const generateActivities = async () => {
+    const {message} = await http.post<ApiResponse<void>>(
+      "/owner/schedule/generate",
+      ApiType.FRONTEND
+    );
+
+    if (message === RequestStatus.SUCCESS) {
+      showToast({
+        message: t("activitiesGeneratedSuccessfully"),
+        type: ToastType.SUCCESS,
+      });
+    } else {
+      showToast({
+        message: t("errorGeneratingActivities"),
+        type: ToastType.ERROR,
+      });
+    }
+  }
+
   return (
     <>
       {/* Modal that will be displayed when assigning a class to a schedule cell */}
@@ -215,6 +234,7 @@ export default function WeeklyScheduleGrid() {
         <Button
           variant='primary'
           className='flex justify-self-end items-center gap-2 font-semibold'
+          onClick={generateActivities}
         >
           <ListRestart className='w-4 h-4 inline' />
           {t("generate")}
