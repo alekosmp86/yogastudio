@@ -11,6 +11,7 @@ import { MembershipOptionCard } from "./MembershipOptionCard";
 import { useToast } from "@/lib/contexts/ToastContext";
 import { useTranslation } from "react-i18next";
 import { ToastType } from "@/enums/ToastType";
+import { CardSkeleton } from "@/components/shared/CardSkeleton";
 
 type UserMembershipSectionProps = {
   id: string;
@@ -19,6 +20,7 @@ type UserMembershipSectionProps = {
 export function UserMembershipSection({ id }: UserMembershipSectionProps) {
   const { t } = useTranslation();
   const { showToast } = useToast();
+  const [loading, setLoading] = useState(false);
   const [availableMemberships, setAvailableMemberships] = useState<
     Membership[]
   >([]);
@@ -42,6 +44,7 @@ export function UserMembershipSection({ id }: UserMembershipSectionProps) {
 
   useEffect(() => {
     const fetchMemberships = async () => {
+      setLoading(true);
       const { message, data } = await http.get<ApiResponse<Membership[]>>(
         `/owner/membership/plans`,
         ApiType.FRONTEND
@@ -50,6 +53,7 @@ export function UserMembershipSection({ id }: UserMembershipSectionProps) {
       if (message === RequestStatus.SUCCESS && data) {
         setAvailableMemberships(data);
       }
+      setLoading(false);
     };
 
     fetchMemberships();
@@ -80,22 +84,30 @@ export function UserMembershipSection({ id }: UserMembershipSectionProps) {
   };
 
   return (
-    <div className='space-y-2 bg-white p-4 sm:p-6 rounded-xl shadow-md text-custom-300'>
-      <h2 className='text-lg font-semibold'>{t("membership")}</h2>
+    <>
+      <div className='space-y-2 bg-white p-4 sm:p-6 rounded-xl shadow-md text-custom-300'>
+        <h2 className='text-lg font-semibold'>{t("membership")}</h2>
 
-      <div className='overflow-y-auto max-h-[65vh]'>
-        <div className='grid grid-cols-1 gap-4 sm:grid-cols-3 auto-rows-fr'>
-          {availableMemberships.length > 0 &&
-            availableMemberships.map((membership) => (
-              <MembershipOptionCard
-                key={membership.id}
-                membership={membership}
-                selected={currentMembership?.membershipPlanId === membership.id}
-                onSelect={(e: number) => handleMembershipChange(e)}
-              />
-            ))}
-        </div>
+        {loading ? (
+          <CardSkeleton />
+        ) : (
+          <div className='overflow-y-auto max-h-[65vh]'>
+            <div className='grid grid-cols-1 gap-4 sm:grid-cols-3 auto-rows-fr'>
+              {availableMemberships.length > 0 &&
+                availableMemberships.map((membership) => (
+                  <MembershipOptionCard
+                    key={membership.id}
+                    membership={membership}
+                    selected={
+                      currentMembership?.membershipPlanId === membership.id
+                    }
+                    onSelect={(e: number) => handleMembershipChange(e)}
+                  />
+                ))}
+            </div>
+          </div>
+        )}
       </div>
-    </div>
+    </>
   );
 }

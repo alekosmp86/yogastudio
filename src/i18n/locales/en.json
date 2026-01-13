@@ -15,6 +15,7 @@
   "penalties_one": "You have {{count}} penalty out of {{max}}.",
   "penalties_other": "You have {{count}} penalties out of {{max}}.",
   "hiUser": "Hi {{user}}",
+  "welcome": "Welcome",
   "welcomeTo": "Welcome to",
   "homePageIntro": "Book your classes, manage reservations, and stay connected.",
   "classes": "Classes",
@@ -178,5 +179,8 @@
   "errorRemovingClassFromSchedule": "Error removing class from schedule",
   "swipeToExploreTheFullWeek": "Swipe to explore the full week",
   "generate": "Generate",
-  "activitiesGeneratedSuccessfully": "Activities generated successfully"
+  "activitiesGeneratedSuccessfully": "Activities generated successfully",
+  "signInToManageYourClassesAndMemberships": "Sign in to manage your classes and memberships",
+  "secureLoginPoweredByGoogle": "Secure login powered by Google",
+  "noPasswordsToRemember": "No passwords to remember"
 }
