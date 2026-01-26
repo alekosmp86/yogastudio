@@ -1,6 +1,11 @@
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { DailyClass } from "@/types/classes/DailyClass";
-import { User } from "@prisma/client";
+import {
+  ClassInstance,
+  ClassTemplate,
+  Reservation,
+  User,
+} from "@prisma/client";
 import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInfo";
 
 /* -------------------- Types -------------------- */
@@ -11,6 +16,10 @@ type HookPayloads = {
   [CoreHooks.beforeUserCreated]: GoogleUserInfo;
   [CoreHooks.afterUserCreated]: User;
   [CoreHooks.beforeSessionCreated]: User;
+  [CoreHooks.afterReservationCancelled]: Reservation & {
+    class: ClassInstance & { template: ClassTemplate };
+  };
+  [CoreHooks.afterAttendanceUpdated]: { userId: number; attended: boolean };
 };
 
 type HookName = keyof HookPayloads;

@@ -1,16 +1,12 @@
 import {
   accountService,
   googleUserMapper,
-  preferenceService,
   tokenService,
-  userPenaltyService,
   userService,
 } from "app/api";
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInfo";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
-import { User, UserPenalty } from "@prisma/client";
-import { BusinessTime } from "@/lib/utils/date";
 import { hookRegistry } from "@/lib/registry";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { bootstrapHooks } from "@/modules/[core]/bootstrap/core";
@@ -76,36 +72,9 @@ export async function GET(req: NextRequest) {
     user
   );
 
-  /** @todo this should be done in a hook | penalties should be moved to a separate module */
-  const penalties = existingUser
-    ? await userPenaltyService.findByUserId(existingUser.id)
-    : null;
-
-  const sessionUser: User & { penalties: UserPenalty | null } = existingUser
-    ? {
-        ...existingUser,
-        penalties,
-      }
-    : {
-        ...userAfterHook,
-        penalties,
-      };
-
-  //check if user should be unblocked
-  const timezone = await preferenceService.getStringPreferenceValue("timezone");
-  const businessTime = new BusinessTime(timezone);
-  if (
-    penalties &&
-    penalties.blockedUntil &&
-    businessTime.now().date > penalties.blockedUntil
-  ) {
-    await userPenaltyService.unblockUser(penalties.userId);
-  }
-  /** end of @todo */
-
   try {
     const accountToCreate = {
-      userId: sessionUser.id,
+      userId: userAfterHook.id,
       provider: "google",
       providerAccountId: profile.id,
       type: "oauth",

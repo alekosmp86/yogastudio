@@ -19,7 +19,7 @@ export async function bootstrapHooks() {
   const modulesToInitialize = MODULES.filter((mod) =>
     activeModules.some((module: Modules) => module.name === mod.name)
   );
-  
+
   for (const mod of modulesToInitialize) {
     mod.initCore?.();
   }

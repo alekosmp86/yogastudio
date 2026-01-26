@@ -1,8 +1,6 @@
 import { UserPenaltyService } from "../UserPenaltyService";
 import { UserPenalty } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { notificationService, preferenceService } from "app/api";
-import { NotificationType } from "app/api/notifications/_enums/NotificationTypes";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { BusinessTime } from "@/lib/utils/date";
 
@@ -21,13 +19,19 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     userId: number,
     attended: boolean
   ): Promise<UserPenalty> {
-    const timezone = await preferenceService.getStringPreferenceValue("timezone");
+    const timezonePreference = await prisma.appPreferences.findUnique({
+      where: { name: "timezone" },
+    });
+    const timezone = timezonePreference?.value || "UTC";
     const businessTime = new BusinessTime(timezone);
+
     let userPenalty = await this.findByUserId(userId);
     if (userPenalty) {
       userPenalty = await this.update(
         userId,
-        attended ? Math.max(userPenalty.noShowCount - 1, 0) : userPenalty.noShowCount + 1,
+        attended
+          ? Math.max(userPenalty.noShowCount - 1, 0)
+          : userPenalty.noShowCount + 1,
         attended ? null : businessTime.now().date
       );
     } else {
@@ -40,11 +44,14 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
       });
     }
 
-    await this.calculatePenalty(userPenalty);
-    return userPenalty;
+    return await this.calculatePenalty(userPenalty);
   }
 
-  async update(userId: number, noShowCount: number, lastNoShowAt: string | null): Promise<UserPenalty> {
+  async update(
+    userId: number,
+    noShowCount: number,
+    lastNoShowAt: string | null
+  ): Promise<UserPenalty> {
     return await prisma.userPenalty.update({
       where: {
         userId: userId,
@@ -56,7 +63,7 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     });
   }
 
-  async calculatePenalty(userPenalty: UserPenalty): Promise<void> {
+  async calculatePenalty(userPenalty: UserPenalty): Promise<UserPenalty> {
     const user = await prisma.user.findUnique({
       where: {
         id: userPenalty.userId,
@@ -64,42 +71,23 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     });
     if (!user) {
       this.logger.error(`User ${userPenalty.userId} not found`);
-      return;
+      throw new Error(`User ${userPenalty.userId} not found`);
     }
 
-    const maxPenaltiesCount =
-      await preferenceService.getNumberPreferenceValue(
-        "maxPenaltiesCount"
-      );
-    const penaltyBlockDuration =
-      await preferenceService.getNumberPreferenceValue(
-        "penaltyBlockDuration"
-      );
-    const timezone = await preferenceService.getStringPreferenceValue("timezone");
-    const businessTime = new BusinessTime(timezone);
+    const maxPenaltiesCountPref = await prisma.appPreferences.findUnique({
+      where: { name: "maxPenaltiesCount" },
+    });
+    const penaltyBlockDurationPref = await prisma.appPreferences.findUnique({
+      where: { name: "penaltyBlockDuration" },
+    });
+    
+    const maxPenaltiesCount = Number(maxPenaltiesCountPref?.value || 0);
+    const penaltyBlockDuration = Number(penaltyBlockDurationPref?.value || 0);
 
     if (userPenalty.noShowCount >= maxPenaltiesCount) {
-      await prisma.userPenalty.update({
-        where: {
-          userId: userPenalty.userId,
-        },
-        data: {
-          blockedUntil: businessTime.addDays(businessTime.now().date, penaltyBlockDuration),
-          lastNoShowAt: businessTime.now().date,
-        },
-      });
-      
-      // notify user about being blocked
-      const businessEmail = await preferenceService.getStringPreferenceValue("businessEmail");
-      const businessPhone = await preferenceService.getStringPreferenceValue("businessWhatsappNumber");
-      await notificationService.sendNotification(userPenalty.userId, NotificationType.USER_BLOCKED, {
-        userName: user.name,
-        untilDate: businessTime.addDays(businessTime.now().date, penaltyBlockDuration),
-        contactEmail: businessEmail,
-        contactPhone: businessPhone,
-      });
+      return await this.blockUser(userPenalty, penaltyBlockDuration);
     } else {
-      await prisma.userPenalty.update({
+      return await prisma.userPenalty.update({
         where: {
           userId: userPenalty.userId,
         },
@@ -108,6 +96,27 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
         },
       });
     }
+  }
+
+  private async blockUser(userPenalty: UserPenalty, penaltyBlockDuration: number) {
+    const timezonePref = await prisma.appPreferences.findUnique({
+      where: { name: "timezone" },
+    });
+    const timezone = timezonePref?.value || "UTC";
+    const businessTime = new BusinessTime(timezone);
+    
+    return await prisma.userPenalty.update({
+      where: {
+        userId: userPenalty.userId,
+      },
+      data: {
+        blockedUntil: businessTime.addDays(
+          businessTime.now().date,
+          penaltyBlockDuration
+        ),
+        lastNoShowAt: businessTime.now().date,
+      },
+    });
   }
 
   async unblockUser(userId: number): Promise<void> {
@@ -123,8 +132,8 @@ export class UserPenaltyServiceImpl implements UserPenaltyService {
     });
   }
 
-  async addPenalty(userId: number): Promise<void> {
-    this.updateOrInsert(userId, false);
+  async addPenalty(userId: number): Promise<UserPenalty> {
+    return await this.updateOrInsert(userId, false);
   }
 
   async getPenaltyCount(userId: number): Promise<number> {

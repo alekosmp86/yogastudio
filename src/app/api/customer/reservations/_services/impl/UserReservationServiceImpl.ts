@@ -8,11 +8,12 @@ import {
   classInstanceService,
   notificationService,
   preferenceService,
-  userPenaltyService,
   waitingListService,
 } from "app/api";
 import { SessionUser } from "@/types/SessionUser";
 import { BusinessTime } from "@/lib/utils/date";
+import { hookRegistry } from "@/lib/registry";
+import { CoreHooks } from "@/modules/[core]/CoreHooks";
 
 export class UserReservationServiceImpl implements UserReservationService {
   async getReservations(userId: number): Promise<ClassReservation[]> {
@@ -112,7 +113,7 @@ export class UserReservationServiceImpl implements UserReservationService {
         notificationService.sendNotification(
           user.id,
           NotificationType.ADDED_TO_WAITING_LIST,
-          notificationService.buildNotificationPayload(
+          await notificationService.buildNotificationPayload(
             NotificationType.ADDED_TO_WAITING_LIST,
             user,
             classInstance
@@ -135,7 +136,7 @@ export class UserReservationServiceImpl implements UserReservationService {
     notificationService.sendNotification(
       user.id,
       NotificationType.CLASS_BOOKED,
-      notificationService.buildNotificationPayload(
+      await notificationService.buildNotificationPayload(
         NotificationType.CLASS_BOOKED,
         user,
         classInstance
@@ -164,19 +165,25 @@ export class UserReservationServiceImpl implements UserReservationService {
       throw new Error("Reservation not found");
     }
 
-    const isLateCancelation = await this.checkForLateCancelation(
-      reservation.class
-    );
-    if (isLateCancelation) {
-      userPenaltyService.addPenalty(user.id);
-    }
-
-    await prisma.reservation.update({
+    const updatedReservation = await prisma.reservation.update({
       where: { id: reservationId },
       data: {
         cancelled: true,
       },
+      include: {
+        class: {
+          include: {
+            template: true,
+          },
+        },
+      },
     });
+
+    await hookRegistry.runHooks(
+      CoreHooks.afterReservationCancelled,
+      "after",
+      updatedReservation
+    );
 
     this.notifyUserAboutReservationCancellation(reservation.class, user);
     this.notifyUsersInWaitingList(reservation.class, user);
@@ -197,43 +204,39 @@ export class UserReservationServiceImpl implements UserReservationService {
       throw new Error("Class not found");
     }
 
-    const existingReservations = await prisma.reservation.findMany({
-      where: { classId, userId: user.id },
+    const existingReservation = await prisma.reservation.findUnique({
+      where: {
+        userId_classId: {
+          userId: user.id,
+          classId: classId,
+        },
+      },
     });
 
-    if (existingReservations.length > 0) {
-      const isLateCancelation = await this.checkForLateCancelation(
-        classInstance
-      );
-      console.log("isLateCancelation", isLateCancelation);
-      if (isLateCancelation) {
-        userPenaltyService.addPenalty(user.id);
-      }
-
-      await prisma.reservation.updateMany({
-        where: { classId, userId: user.id },
+    if (existingReservation) {
+      const updatedReservation = await prisma.reservation.update({
+        where: { id: existingReservation.id },
         data: {
           cancelled: true,
         },
+        include: {
+          class: {
+            include: {
+              template: true,
+            },
+          },
+        },
       });
-      this.notifyUserAboutReservationCancellation(classInstance, user);
-    }
-  }
 
-  private async checkForLateCancelation(
-    classInstance: ClassInstance & { template: ClassTemplate }
-  ) {
-    const lateCancelHours = await preferenceService.getNumberPreferenceValue(
-      "lateCancelHours"
-    );
-    const timezone = await preferenceService.getStringPreferenceValue(
-      "timezone"
-    );
-    const businessTime = new BusinessTime(timezone);
-    if (businessTime.now().date !== classInstance.date) return false;
-    return (
-      businessTime.addHours(lateCancelHours) >= classInstance.startTime
-    );
+      await hookRegistry.runHooks(
+        CoreHooks.afterReservationCancelled,
+        "after",
+        updatedReservation
+      );
+
+      this.notifyUserAboutReservationCancellation(classInstance, user);
+      this.notifyUsersInWaitingList(classInstance, user);
+    }
   }
 
   async rescheduleReservation(reservationId: number): Promise<void> {
@@ -245,14 +248,14 @@ export class UserReservationServiceImpl implements UserReservationService {
     });
   }
 
-  notifyUserAboutReservationCancellation(
+  async notifyUserAboutReservationCancellation(
     classInstance: ClassInstance & { template: ClassTemplate },
     user: SessionUser
-  ): void {
+  ): Promise<void> {
     notificationService.sendNotification(
       user.id,
       NotificationType.CLASS_CANCELLED,
-      notificationService.buildNotificationPayload(
+      await notificationService.buildNotificationPayload(
         NotificationType.CLASS_CANCELLED,
         user,
         classInstance
@@ -276,16 +279,16 @@ export class UserReservationServiceImpl implements UserReservationService {
       },
     });
 
-    waitingList.forEach((waitingListUser) => {
+    for (const waitingListUser of waitingList) {
       notificationService.sendNotification(
         waitingListUser.userId,
         NotificationType.CLASS_SPOT_OPENED,
-        notificationService.buildNotificationPayload(
+        await notificationService.buildNotificationPayload(
           NotificationType.CLASS_SPOT_OPENED,
           user,
           classInstance
         )
       );
-    });
+    }
   }
 }

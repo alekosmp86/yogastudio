@@ -15,5 +15,5 @@ export interface NotificationService {
     notificationType: K,
     user: SessionUser,
     classInstance: ClassInstance & { template: ClassTemplate }
-  ): NotificationTypePayload[K];
+  ): Promise<NotificationTypePayload[K]>;
 }

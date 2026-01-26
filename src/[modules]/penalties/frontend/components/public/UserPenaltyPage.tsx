@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "../shared/Button";
+import Button from "@/components/shared/Button";
 import { useTranslation } from "react-i18next";
 
 export default function UserPenaltyPage() {

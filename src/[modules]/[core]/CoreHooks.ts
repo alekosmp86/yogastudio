@@ -4,5 +4,7 @@ export enum CoreHooks {
     beforeUserCreated = 'userCreated:before',
     afterUserCreated = 'userCreated:after',
     beforeSessionCreated = 'sessionCreated:before',
-    afterSessionCreated = 'sessionCreated:after'
+    afterSessionCreated = 'sessionCreated:after',
+    afterReservationCancelled = 'reservationCancelled:after',
+    afterAttendanceUpdated = 'attendanceUpdated:after',
 }

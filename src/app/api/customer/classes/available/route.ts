@@ -5,6 +5,7 @@ import { customerClassesService } from "../../..";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { hookRegistry } from "@/lib/registry";
 import { bootstrapHooks } from "@/modules/[core]/bootstrap/core";
+import { ApiUtils } from "app/api/utils/ApiUtils";
 
 const logger = new ConsoleLogger("CustomerController");
 
@@ -19,7 +20,9 @@ export async function GET() {
       null
     );
 
-    const classesList = await customerClassesService.getClassesList();
+    const user = await ApiUtils.getSessionUser();
+
+    const classesList = await customerClassesService.getClassesList(user.id);
 
     const result = await hookRegistry.runHooks(
       CoreHooks.afterFetchAllAvailableClasses,
