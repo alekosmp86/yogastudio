@@ -34,7 +34,8 @@ type HookPhase = "before" | "after";
 
 type HookHandler<T> = (payload: T) => T | Promise<T>;
 
-/* -------------------- Registry -------------------- */
+const registryId = Math.random().toString(36).substring(7);
+console.log(`[HookRegistry] Initialized with ID: ${registryId}`);
 
 class HookRegistry {
   private hooks: {
@@ -49,6 +50,9 @@ class HookRegistry {
     phase: HookPhase,
     handler: HookHandler<HookPayloads[K]>
   ) {
+    console.log(
+      `[HookRegistry ${registryId}] Registering hook: ${name} (${phase})`,
+    );
     this.hooks[name] ??= { before: [], after: [] };
     this.hooks[name]![phase].push(handler);
   }
@@ -61,6 +65,9 @@ class HookRegistry {
     let result = payload;
 
     const handlers = this.hooks[name]?.[phase] ?? [];
+    console.log(
+      `[HookRegistry ${registryId}] Running ${handlers.length} hooks for: ${name} (${phase})`,
+    );
 
     for (const handler of handlers) {
       console.log("Running hook:", name);
@@ -71,4 +78,14 @@ class HookRegistry {
   }
 }
 
-export const hookRegistry = new HookRegistry();
+/* -------------------- Global Singleton -------------------- */
+
+declare global {
+  var __hookRegistry: HookRegistry | undefined;
+}
+
+export const hookRegistry = globalThis.__hookRegistry || new HookRegistry();
+
+if (process.env.NODE_ENV !== "production") {
+  globalThis.__hookRegistry = hookRegistry;
+}
