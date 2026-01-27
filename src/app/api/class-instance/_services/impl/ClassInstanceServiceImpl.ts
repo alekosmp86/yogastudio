@@ -78,6 +78,7 @@ export class ClassInstanceServiceImpl implements ClassInstanceService {
         id: true,
         template: {
           select: {
+            id: true,
             title: true,
             description: true,
             instructor: true
@@ -99,6 +100,7 @@ export class ClassInstanceServiceImpl implements ClassInstanceService {
     return {
       id: nextClass.id,
       template: {
+        id: nextClass.template.id,
         title: nextClass.template.title,
         description: nextClass.template.description ?? "",
         instructor: nextClass.template.instructor,

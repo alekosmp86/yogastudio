@@ -1,5 +1,7 @@
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { DailyClass } from "@/types/classes/DailyClass";
+import { NextClass } from "@/types/classes/NextClass";
+import { SessionUser } from "@/types/SessionUser";
 import {
   ClassInstance,
   ClassTemplate,
@@ -20,6 +22,10 @@ type HookPayloads = {
     class: ClassInstance & { template: ClassTemplate };
   };
   [CoreHooks.afterAttendanceUpdated]: { userId: number; attended: boolean };
+  [CoreHooks.afterNextClassFetched]: {
+    user: SessionUser;
+    nextClass: NextClass | null;
+  };
 };
 
 type HookName = keyof HookPayloads;

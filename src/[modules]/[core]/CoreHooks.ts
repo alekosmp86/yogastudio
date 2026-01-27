@@ -7,4 +7,5 @@ export enum CoreHooks {
     afterSessionCreated = 'sessionCreated:after',
     afterReservationCancelled = 'reservationCancelled:after',
     afterAttendanceUpdated = 'attendanceUpdated:after',
+    afterNextClassFetched = 'nextClassFetched:after',
 }

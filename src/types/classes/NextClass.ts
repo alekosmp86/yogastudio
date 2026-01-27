@@ -1,6 +1,7 @@
 export type NextClass = {
     id: number;
     template: {
+        id: number;
         title: string;
         description: string;
         instructor: string;
