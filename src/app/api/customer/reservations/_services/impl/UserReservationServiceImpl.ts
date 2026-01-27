@@ -4,12 +4,7 @@ import { RequestStatus } from "@/enums/RequestStatus";
 import { prisma } from "@/lib/prisma";
 import { ClassReservation } from "@/types/reservations/ClassReservation";
 import { ClassInstance, ClassTemplate, WaitingList } from "@prisma/client";
-import {
-  classInstanceService,
-  notificationService,
-  preferenceService,
-  waitingListService,
-} from "app/api";
+import { notificationService, preferenceService } from "app/api";
 import { SessionUser } from "@/types/SessionUser";
 import { BusinessTime } from "@/lib/utils/date";
 import { hookRegistry } from "@/lib/registry";
@@ -17,9 +12,8 @@ import { CoreHooks } from "@/modules/[core]/CoreHooks";
 
 export class UserReservationServiceImpl implements UserReservationService {
   async getReservations(userId: number): Promise<ClassReservation[]> {
-    const timezone = await preferenceService.getStringPreferenceValue(
-      "timezone"
-    );
+    const timezone =
+      await preferenceService.getStringPreferenceValue("timezone");
     const businessTime = new BusinessTime(timezone);
     const date = businessTime.now().date;
     const oneHourLater = businessTime.addHours(1);
@@ -68,82 +62,105 @@ export class UserReservationServiceImpl implements UserReservationService {
   }
 
   async createReservation(classId: number, user: SessionUser): Promise<string> {
-    // 1 — Load class + reservations + capacity
-    const classInstance =
-      await classInstanceService.findUniqueByIdIncludingData(classId, {
-        template: true,
-        reservations: true,
-        waitingList: true,
+    return await prisma.$transaction(async (tx) => {
+      // 1 — Lock the class instance to prevent race conditions
+      // This ensures that only one user can book for this class at a time
+      await tx.$executeRaw`SELECT id FROM "ClassInstance" WHERE id = ${classId} FOR UPDATE`;
+
+      const classInstance = await tx.classInstance.findUnique({
+        where: { id: classId },
+        include: {
+          template: true,
+          reservations: {
+            where: { cancelled: false },
+          },
+          waitingList: true,
+        },
       });
 
-    if (!classInstance) {
-      return RequestStatus.NOT_FOUND;
-    }
-
-    // 2 — Check if user already reserved
-    const alreadyReserved = classInstance.reservations.find(
-      (r) => r.userId === user.id
-    );
-
-    if (alreadyReserved) {
-      if (alreadyReserved.cancelled) {
-        this.rescheduleReservation(alreadyReserved.id);
-        return RequestStatus.SUCCESS;
-      } else {
-        return RequestStatus.CLASS_ALREADY_RESERVED;
+      if (!classInstance) {
+        return RequestStatus.NOT_FOUND;
       }
-    }
 
-    // 3 — Check if class is full
-    const isFull =
-      classInstance.reservations.length >= classInstance.template.capacity;
+      // 2 — Check if user already reserved (active or cancelled)
+      const existingReservation = await tx.reservation.findUnique({
+        where: {
+          userId_classId: {
+            userId: user.id,
+            classId,
+          },
+        },
+      });
 
-    if (isFull) {
-      const isOnWaitingList = classInstance.waitingList.some(
-        (waitingList: WaitingList) => waitingList.userId === user.id
+      if (existingReservation) {
+        if (existingReservation.cancelled) {
+          // Re-activate cancelled reservation
+          await tx.reservation.update({
+            where: { id: existingReservation.id },
+            data: { cancelled: false },
+          });
+          return RequestStatus.SUCCESS;
+        } else {
+          return RequestStatus.CLASS_ALREADY_RESERVED;
+        }
+      }
+
+      // 3 — Check if class is full
+      const isFull =
+        classInstance.reservations.length >= classInstance.template.capacity;
+
+      if (isFull) {
+        const isOnWaitingList = classInstance.waitingList.some(
+          (waitingList: WaitingList) => waitingList.userId === user.id,
+        );
+
+        if (isOnWaitingList) {
+          return RequestStatus.ON_WAITING_LIST;
+        } else {
+          // Add to waiting list using transaction client
+          await tx.waitingList.create({
+            data: {
+              userId: user.id,
+              classId,
+            },
+          });
+
+          // Notify user (outside transaction or as side effect)
+          notificationService.sendNotification(
+            user.id,
+            NotificationType.ADDED_TO_WAITING_LIST,
+            await notificationService.buildNotificationPayload(
+              NotificationType.ADDED_TO_WAITING_LIST,
+              user,
+              classInstance,
+            ),
+          );
+        }
+
+        return RequestStatus.CLASS_FULL;
+      }
+
+      // 4 — Create reservation
+      await tx.reservation.create({
+        data: {
+          userId: user.id,
+          classId,
+        },
+      });
+
+      // Notify user
+      notificationService.sendNotification(
+        user.id,
+        NotificationType.CLASS_BOOKED,
+        await notificationService.buildNotificationPayload(
+          NotificationType.CLASS_BOOKED,
+          user,
+          classInstance,
+        ),
       );
 
-      if (isOnWaitingList) {
-        return RequestStatus.ON_WAITING_LIST;
-      } else {
-        //add to waiting list
-        await waitingListService.addToWaitingList(user.id, classId);
-
-        //notify user
-        notificationService.sendNotification(
-          user.id,
-          NotificationType.ADDED_TO_WAITING_LIST,
-          await notificationService.buildNotificationPayload(
-            NotificationType.ADDED_TO_WAITING_LIST,
-            user,
-            classInstance
-          )
-        );
-      }
-
-      return RequestStatus.CLASS_FULL;
-    }
-
-    // 4 — Create reservation
-    await prisma.reservation.create({
-      data: {
-        userId: user.id,
-        classId,
-      },
+      return RequestStatus.SUCCESS;
     });
-
-    //notify user
-    notificationService.sendNotification(
-      user.id,
-      NotificationType.CLASS_BOOKED,
-      await notificationService.buildNotificationPayload(
-        NotificationType.CLASS_BOOKED,
-        user,
-        classInstance
-      )
-    );
-
-    return RequestStatus.SUCCESS;
   }
 
   async cancelReservation(
