@@ -137,11 +137,43 @@ taskRegistry.registerTask({
 });
 ```
 
+### 5. Database Models
+
+Modules can define their own database tables or add fields to existing ones using Prisma. This is handled by a build script that merges individual schemas.
+
+**File**: `models.prisma` (placed at the root of the module folder)
+
+**Usage**:
+
+- **New Model**: Define a completely new Prisma model.
+- **Extension**: Add custom fields to an existing model (e.g., `User`) by redefining it with only the extra fields.
+
+```prisma
+// src/[modules]/loyalty/models.prisma
+
+// Add new table
+model LoyaltyPoints {
+  id     Int @id @default(autoincrement())
+  points Int @default(0)
+  userId Int @unique
+}
+
+// Extend core model
+model User {
+  points LoyaltyPoints?
+}
+```
+
+> [!IMPORTANT]
+> After adding or modifying a `models.prisma` file, you **must** run the schema generation task:
+> `npm run prisma-generate`
+
 ## Step-by-Step: Creating a New Plugin
 
 1.  **Create Directory**: Create a new folder in `src/[modules]/` with your module name (e.g., `loyalty`).
 2.  **Scaffold Structure**: Create subfolders `backend`, `frontend`, `tasks` as needed.
-3.  **Create Module Definition**: Create `loyalty.module.ts`:
+3.  **Define Models**: (Optional) Create a `models.prisma` file if your module needs database storage or extends core models.
+4.  **Create Module Definition**: Create `loyalty.module.ts`:
 
     ```typescript
     import { AppModule } from "@/modules/[core]/AppModule";
@@ -160,8 +192,8 @@ taskRegistry.registerTask({
     };
     ```
 
-4.  **Register Capabilities**: Implement the `init*` methods using the registries as shown above.
-5.  **Register Module in Bootstrap**: Add your module to the `MODULES` list in `src/[modules]/[core]/bootstrap/modules.ts`.
+5.  **Register Capabilities**: Implement the `init*` methods using the registries as shown above.
+6.  **Register Module in Bootstrap**: Add your module to the `MODULES` list in `src/[modules]/[core]/bootstrap/modules.ts`.
 
     ```typescript
     import { LoyaltyModule } from "@/modules/loyalty/loyalty.module";
@@ -172,7 +204,7 @@ taskRegistry.registerTask({
     ];
     ```
 
-6.  **Verify**: Start the server. Your module's hooks and routes will be automatically registered during bootstrap.
+7.  **Verify**: Start the server. Your module's hooks and routes will be automatically registered during bootstrap.
 
 ## Best Practices
 
