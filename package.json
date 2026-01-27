@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "core-tasks": "tsx src/tasks/core-tasks.ts",
-    "module-tasks": "tsx src/tasks/module-tasks.ts"
+    "module-tasks": "tsx src/tasks/module-tasks.ts",
+    "prisma-generate": "tsx src/tasks/generate-prisma.ts"
   },
   "dependencies": {
     "@prisma/client": "6.19.0",

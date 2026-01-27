@@ -23,8 +23,6 @@ model User {
   reservations Reservation[]
   waitingList  WaitingList[]
   testimonials Testimonials[]
-  memberships  UserMembership[]
-  UserPenalty  UserPenalty?
 }
 
 model Account {
@@ -59,7 +57,6 @@ model ClassTemplate {
 
   schedule             WeeklySchedule[]
   instances            ClassInstance[]
-  UserSelectedTemplate UserSelectedTemplate[]
 }
 
 model ClassInstance {
@@ -151,52 +148,4 @@ model Modules {
   description    String?
   isActive       Boolean          @default(true)
   AppPreferences AppPreferences[]
-}
-
-model MembershipPlan {
-  id            Int     @id @default(autoincrement())
-  name          String  @unique
-  maxActivities Int
-  durationDays  Int     @default(30)
-  isActive      Boolean @default(true)
-
-  memberships UserMembership[]
-}
-
-model UserMembership {
-  id               Int @id @default(autoincrement())
-  userId           Int
-  membershipPlanId Int
-
-  startDate String // YYYY-MM-DD
-  endDate   String // YYYY-MM-DD
-  status    String @default("ACTIVE") // ACTIVE | EXPIRED | CANCELLED
-
-  user           User           @relation(fields: [userId], references: [id])
-  membershipPlan MembershipPlan @relation(fields: [membershipPlanId], references: [id])
-
-  templates UserSelectedTemplate[]
-
-  @@index([userId])
-}
-
-model UserSelectedTemplate {
-  id               Int @id @default(autoincrement())
-  userMembershipId Int
-  templateId       Int
-
-  userMembership UserMembership @relation(fields: [userMembershipId], references: [id], onDelete: Cascade)
-  template       ClassTemplate  @relation(fields: [templateId], references: [id])
-
-  @@unique([userMembershipId, templateId])
-}
-
-model UserPenalty {
-  id     Int  @id @default(autoincrement())
-  userId Int  @unique
-  user   User @relation(fields: [userId], references: [id])
-
-  noShowCount  Int     @default(0)
-  blockedUntil String?
-  lastNoShowAt String?
 }
