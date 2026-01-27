@@ -11,7 +11,7 @@ model User {
   id            Int      @id @default(autoincrement())
   email         String   @unique
   name          String
-  role          String   @default("CLIENT")
+  role          String   @default("USER")
   phone         String?
   approved      Boolean  @default(false)
   emailVerified Boolean  @default(false)
