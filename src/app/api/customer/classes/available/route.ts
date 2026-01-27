@@ -4,20 +4,16 @@ import { NextResponse } from "next/server";
 import { customerClassesService } from "../../..";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 import { hookRegistry } from "@/lib/registry";
-import { bootstrapHooks } from "@/modules/[core]/bootstrap/core";
 import { ApiUtils } from "app/api/utils/ApiUtils";
 
 const logger = new ConsoleLogger("CustomerController");
 
 export async function GET() {
-  // enable modules' hooks
-  bootstrapHooks();
-
   try {
     await hookRegistry.runHooks(
       CoreHooks.beforeFetchAllAvailableClasses,
       "before",
-      null
+      null,
     );
 
     const user = await ApiUtils.getSessionUser();
@@ -27,7 +23,7 @@ export async function GET() {
     const result = await hookRegistry.runHooks(
       CoreHooks.afterFetchAllAvailableClasses,
       "after",
-      classesList
+      classesList,
     );
 
     return NextResponse.json({

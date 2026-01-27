@@ -2,25 +2,28 @@ import { Modules } from "@prisma/client";
 import { MODULES } from "./modules";
 import { prisma } from "@/lib/prisma";
 
-let bootstrapped = false;
+let bootstrapPromise: Promise<void> | null = null;
 
 export async function bootstrapHooks() {
-  if (bootstrapped) return;
+  if (bootstrapPromise) return bootstrapPromise;
 
-  console.log("Bootstrapping modules' hooks...");
-  bootstrapped = true;
+  bootstrapPromise = (async () => {
+    console.log("Bootstrapping modules' hooks...");
 
-  const activeModules = await prisma.modules.findMany({
-    where: {
-      isActive: true
+    const activeModules = await prisma.modules.findMany({
+      where: {
+        isActive: true,
+      },
+    });
+
+    const modulesToInitialize = MODULES.filter((mod) =>
+      activeModules.some((module: Modules) => module.name === mod.name),
+    );
+
+    for (const mod of modulesToInitialize) {
+      mod.initCore?.();
     }
-  });
+  })();
 
-  const modulesToInitialize = MODULES.filter((mod) =>
-    activeModules.some((module: Modules) => module.name === mod.name)
-  );
-
-  for (const mod of modulesToInitialize) {
-    mod.initCore?.();
-  }
+  return bootstrapPromise;
 }

@@ -2,13 +2,10 @@ import { RequestStatus } from "@/enums/RequestStatus";
 import { NextResponse } from "next/server";
 import { classInstanceService, userReservationService } from "app/api";
 import { ApiUtils } from "app/api/utils/ApiUtils";
-import { bootstrapHooks } from "@/modules/[core]/bootstrap/core";
 import { hookRegistry } from "@/lib/registry";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
 
 export async function GET() {
-  bootstrapHooks();
-
   try {
     const user = await ApiUtils.getSessionUser();
     const nextClass = await classInstanceService.getNextClass();

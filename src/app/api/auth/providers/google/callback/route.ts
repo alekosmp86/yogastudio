@@ -9,14 +9,10 @@ import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInf
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import { hookRegistry } from "@/lib/registry";
 import { CoreHooks } from "@/modules/[core]/CoreHooks";
-import { bootstrapHooks } from "@/modules/[core]/bootstrap/core";
 
 const logger = new ConsoleLogger("GoogleCallback");
 
 export async function GET(req: NextRequest) {
-  // enable modules' hooks
-  bootstrapHooks();
-
   const url = new URL(req.url);
   const code = url.searchParams.get("code");
   if (!code)
@@ -39,7 +35,7 @@ export async function GET(req: NextRequest) {
   if (!tokenRes.access_token)
     return NextResponse.json(
       { error: "Missing access token" },
-      { status: 400 }
+      { status: 400 },
     );
 
   const accessToken = tokenRes.access_token;
@@ -48,7 +44,7 @@ export async function GET(req: NextRequest) {
     "https://www.googleapis.com/oauth2/v2/userinfo",
     {
       headers: { Authorization: `Bearer ${accessToken}` },
-    }
+    },
   ).then((r) => r.json());
 
   if (!profile.email)
@@ -69,7 +65,7 @@ export async function GET(req: NextRequest) {
   const userAfterHook = await hookRegistry.runHooks(
     CoreHooks.afterUserCreated,
     "after",
-    user
+    user,
   );
 
   try {
@@ -90,7 +86,7 @@ export async function GET(req: NextRequest) {
     const sessionUserHook = await hookRegistry.runHooks(
       CoreHooks.beforeSessionCreated,
       "before",
-      userAfterHook
+      userAfterHook,
     );
 
     // 4. Create response to set the session cookie
@@ -102,7 +98,7 @@ export async function GET(req: NextRequest) {
     logger.error("Error creating account:", error);
     return NextResponse.json(
       { error: "Failed to create account" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
