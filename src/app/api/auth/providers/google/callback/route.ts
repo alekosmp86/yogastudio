@@ -1,22 +1,19 @@
 import {
   accountService,
   googleUserMapper,
-  preferenceService,
   tokenService,
-  userPenaltyService,
   userService,
 } from "app/api";
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleUserInfo } from "app/api/auth/providers/google/_dto/GoogleUserInfo";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
-import { User, UserPenalty } from "@prisma/client";
-import { BusinessTime } from "@/lib/utils/date";
+import { hookRegistry } from "@/lib/registry";
+import { CoreHooks } from "@/modules/[core]/CoreHooks";
 
 const logger = new ConsoleLogger("GoogleCallback");
 
 export async function GET(req: NextRequest) {
   const url = new URL(req.url);
-
   const code = url.searchParams.get("code");
   if (!code)
     return NextResponse.json({ error: "Missing code" }, { status: 400 });
@@ -38,7 +35,7 @@ export async function GET(req: NextRequest) {
   if (!tokenRes.access_token)
     return NextResponse.json(
       { error: "Missing access token" },
-      { status: 400 }
+      { status: 400 },
     );
 
   const accessToken = tokenRes.access_token;
@@ -47,47 +44,33 @@ export async function GET(req: NextRequest) {
     "https://www.googleapis.com/oauth2/v2/userinfo",
     {
       headers: { Authorization: `Bearer ${accessToken}` },
-    }
+    },
   ).then((r) => r.json());
 
   if (!profile.email)
     return NextResponse.json({ error: "Missing email" }, { status: 400 });
+
+  // 2.1 run hooks
+  await hookRegistry.runHooks(CoreHooks.beforeUserCreated, "before", profile);
 
   // 3. Find or create User + Account
   const existingUser = await userService.findUniqueByFields({
     email: profile.email,
   });
 
-  const penalties = existingUser
-    ? await userPenaltyService.findByUserId(existingUser.id)
-    : null;
+  const user =
+    existingUser ||
+    (await userService.create(googleUserMapper.toUser(profile)));
 
-  const sessionUser: User & { penalties: UserPenalty | null } = existingUser
-    ? {
-        ...existingUser,
-        penalties,
-      }
-    : {
-        ...(await userService.create(googleUserMapper.toUser(profile))),
-        penalties,
-      };
-
-  //check if user should be unblocked
-  const timezone = await preferenceService.getStringPreferenceValue(
-    "timezone"
+  const userAfterHook = await hookRegistry.runHooks(
+    CoreHooks.afterUserCreated,
+    "after",
+    user,
   );
-  const businessTime = new BusinessTime(timezone);
-  if (
-    penalties &&
-    penalties.blockedUntil &&
-    businessTime.now().date > penalties.blockedUntil
-  ) {
-    await userPenaltyService.unblockUser(penalties.userId);
-  }
 
   try {
     const accountToCreate = {
-      userId: sessionUser.id,
+      userId: userAfterHook.id,
       provider: "google",
       providerAccountId: profile.id,
       type: "oauth",
@@ -100,16 +83,22 @@ export async function GET(req: NextRequest) {
 
     await accountService.upsert(accountToCreate);
 
+    const sessionUserHook = await hookRegistry.runHooks(
+      CoreHooks.beforeSessionCreated,
+      "before",
+      userAfterHook,
+    );
+
     // 4. Create response to set the session cookie
     const response = NextResponse.redirect(url.origin + "/");
-    await tokenService.createSession(response, sessionUser);
+    await tokenService.createSession(response, sessionUserHook);
 
     return response;
   } catch (error) {
     logger.error("Error creating account:", error);
     return NextResponse.json(
       { error: "Failed to create account" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

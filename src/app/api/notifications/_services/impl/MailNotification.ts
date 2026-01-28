@@ -2,12 +2,11 @@ import { NotificationService } from "../NotificationService";
 import { NotificationType } from "app/api/notifications/_enums/NotificationTypes";
 import { NotificationTypePayload } from "app/api/notifications/_models/NotificationTypePayload";
 import { prisma } from "@/lib/prisma";
-import { mailService } from "app/api";
+import { mailService, preferenceService } from "app/api";
 import { ConsoleLogger } from "app/api/logger/_services/impl/ConsoleLogger";
 import * as templates from "app/api/notifications/_templates/mail";
 import { SessionUser } from "@/types/SessionUser";
 import { ClassInstance, ClassTemplate } from "@prisma/client";
-import { preferencesStore } from "@/lib/preferences";
 
 type MailTemplate = {
   subject: string;
@@ -16,14 +15,6 @@ type MailTemplate = {
 
 export class MailNotification implements NotificationService {
   private logger = new ConsoleLogger(this.constructor.name);
-
-  constructor() {
-    this.init();
-  }
-
-  async init() {
-    await preferencesStore.load();
-  }
 
   async sendNotification<K extends NotificationType>(
     userId: number,
@@ -92,11 +83,11 @@ export class MailNotification implements NotificationService {
     }
   }
 
-  buildNotificationPayload<K extends NotificationType>(
+  async buildNotificationPayload<K extends NotificationType>(
     notificationType: K,
     user: SessionUser,
     classInstance: ClassInstance & { template: ClassTemplate }
-  ): NotificationTypePayload[K] {
+  ): Promise<NotificationTypePayload[K]> {
     const base = {
       userName: user.name,
       classTitle: classInstance.template.title,
@@ -104,6 +95,11 @@ export class MailNotification implements NotificationService {
       classTime: classInstance.startTime,
       instructorName: classInstance.template.instructor,
     };
+
+    const [businessEmail, businessPhone] = await Promise.all([
+      preferenceService.getStringPreferenceValue("businessEmail"),
+      preferenceService.getStringPreferenceValue("businessWhatsappNumber"),
+    ]);
 
     switch (notificationType) {
       case NotificationType.ADDED_TO_WAITING_LIST:
@@ -118,10 +114,8 @@ export class MailNotification implements NotificationService {
       case NotificationType.CLASS_CANCELLED:
         return {
           ...base,
-          contactEmail: preferencesStore.getByName<string>("businessEmail"),
-          contactPhone: preferencesStore.getByName<string>(
-            "businessWhatsappNumber"
-          ),
+          contactEmail: businessEmail,
+          contactPhone: businessPhone,
           rescheduleBookingUrl: `${process.env.NEXT_PUBLIC_APP_URL}/customer/classes`,
         } as NotificationTypePayload[K];
 
@@ -134,10 +128,8 @@ export class MailNotification implements NotificationService {
       case NotificationType.USER_BLOCKED:
         return {
           userName: user.name,
-          contactEmail: preferencesStore.getByName<string>("businessEmail"),
-          contactPhone: preferencesStore.getByName<string>(
-            "businessWhatsappNumber"
-          ),
+          contactEmail: businessEmail,
+          contactPhone: businessPhone,
         } as NotificationTypePayload[K];
     }
   }

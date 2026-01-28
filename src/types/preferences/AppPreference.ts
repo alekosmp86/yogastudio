@@ -9,4 +9,5 @@ export type AppPreference = {
     value: string | number | boolean;
     options?: { value: string; label: string }[];
     category: PreferenceCategory;
+    moduleId: number;
 };

@@ -1,8 +1,10 @@
 import { OnwerReservationService } from "../OnwerReservationService";
 import { ReservationsPerClass } from "@/types/reservations/ReservationsPerClass";
 import { prisma } from "@/lib/prisma";
-import { preferenceService, userPenaltyService } from "app/api";
+import { preferenceService } from "app/api";
 import { BusinessTime } from "@/lib/utils/date";
+import { hookRegistry } from "@/lib/registry";
+import { CoreHooks } from "@/modules/[core]/CoreHooks";
 
 export class OnwerReservationServiceImpl implements OnwerReservationService {
   async getReservations(): Promise<ReservationsPerClass[]> {
@@ -11,7 +13,7 @@ export class OnwerReservationServiceImpl implements OnwerReservationService {
     );
     const businessTime = new BusinessTime(timezone);
     const today = businessTime.now().date;
-    
+
     /**
      * @todo: este codigo queda comentado por la posibilidad de obtener todas las reservas
      *        y mostrarlas al owner en una tabla
@@ -94,6 +96,9 @@ export class OnwerReservationServiceImpl implements OnwerReservationService {
       },
     });
 
-    await userPenaltyService.updateOrInsert(userId, attended);
+    await hookRegistry.runHooks(CoreHooks.afterAttendanceUpdated, "after", {
+      userId,
+      attended,
+    });
   }
 }

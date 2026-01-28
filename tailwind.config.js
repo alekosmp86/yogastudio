@@ -3,6 +3,15 @@ module.exports = {
   content: [
     "./src/app/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
+    "./src/[modules]/**/*.{js,ts,jsx,tsx}",
+  ],
+  safelist: [
+    // Safelist all custom color variants to ensure they're always available
+    // Safelist all primary, secondary, and utility color variants
+    {
+      pattern:
+        /^(bg|text|border|from|to|via)-(primary|secondary|success|danger|warning|info|dark|accent|custom)-(50|100|200|300|400|500|600|700|800|900|950)$/,
+    },
   ],
   theme: {
     extend: {
@@ -166,8 +175,8 @@ module.exports = {
           500: "#0f151b",
         },
         accent: {
-          100: "#FFF3D6",  // warm
-          300: "#FFD166",  // friendly energy
+          100: "#FFF3D6", // warm
+          300: "#FFD166", // friendly energy
           500: "#E6B85C",
         },
         stroke: {

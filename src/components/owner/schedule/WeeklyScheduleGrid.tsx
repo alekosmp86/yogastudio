@@ -17,7 +17,7 @@ import { useScheduledClasses } from "@/lib/contexts/ScheduledClassesContext";
 import { Time } from "@/static/Time";
 import { useTranslation } from "react-i18next";
 import Link from "next/link";
-import { FileSymlink } from "lucide-react";
+import { FileSymlink, ListRestart } from "lucide-react";
 import Button from "@/components/shared/Button";
 import ScheduleRows from "./ScheduleRows";
 
@@ -71,7 +71,7 @@ export default function WeeklyScheduleGrid() {
 
     if (message === RequestStatus.SUCCESS) {
       showToast({
-        message: "Class added to schedule successfully",
+        message: t("classAddedToScheduleSuccessfully"),
         type: ToastType.SUCCESS,
       });
       setScheduledClasses(
@@ -87,7 +87,7 @@ export default function WeeklyScheduleGrid() {
       );
     } else {
       showToast({
-        message: "Error adding class to schedule",
+        message: t("errorAddingClassToSchedule"),
         type: ToastType.ERROR,
       });
     }
@@ -116,7 +116,7 @@ export default function WeeklyScheduleGrid() {
 
     if (message === RequestStatus.SUCCESS) {
       showToast({
-        message: "Class removed from schedule successfully",
+        message: t("classRemovedFromScheduleSuccessfully"),
         type: ToastType.SUCCESS,
       });
       setScheduledClasses(
@@ -124,7 +124,7 @@ export default function WeeklyScheduleGrid() {
       );
     } else {
       showToast({
-        message: "Error removing class from schedule",
+        message: t("errorRemovingClassFromSchedule"),
         type: ToastType.ERROR,
       });
     }
@@ -137,6 +137,25 @@ export default function WeeklyScheduleGrid() {
     setDayTime({ weekday: 0, hour: "" });
   };
 
+  const generateActivities = async () => {
+    const {message} = await http.post<ApiResponse<void>>(
+      "/owner/schedule/generate",
+      ApiType.FRONTEND
+    );
+
+    if (message === RequestStatus.SUCCESS) {
+      showToast({
+        message: t("activitiesGeneratedSuccessfully"),
+        type: ToastType.SUCCESS,
+      });
+    } else {
+      showToast({
+        message: t("errorGeneratingActivities"),
+        type: ToastType.ERROR,
+      });
+    }
+  }
+
   return (
     <>
       {/* Modal that will be displayed when assigning a class to a schedule cell */}
@@ -147,32 +166,32 @@ export default function WeeklyScheduleGrid() {
         onRemove={handleRemoveClass}
         title={t("selectClass")}
       >
-        <div className="grid gap-3">
+        <div className='grid gap-3'>
           {classes.length > 0 ? (
             classes.map((c) => (
               <Card
                 key={c.id}
                 onClick={() => handleClassClick(c)}
-                className="cursor-pointer bg-custom-50 border border-custom-100 hover:bg-custom-200 hover:shadow-md transition"
+                className='cursor-pointer bg-custom-50 border border-custom-100 hover:bg-custom-200 hover:shadow-md transition'
               >
-                <CardContent className="py-3 px-4">
-                  <div className="text-base font-semibold text-custom-400">
+                <CardContent className='py-3 px-4'>
+                  <div className='text-base font-semibold text-custom-400'>
                     {c.title}
                   </div>
-                  <div className="text-xs text-custom-300">{c.instructor}</div>
+                  <div className='text-xs text-custom-300'>{c.instructor}</div>
                 </CardContent>
               </Card>
             ))
           ) : (
-            <p className="text-center">
+            <p className='text-center'>
               {t("noClassesFound")}. {t("createClassesFirst")}{" "}
-              <Link href="/owner/classes">
+              <Link href='/owner/classes'>
                 {
                   <Button
-                    variant="ghost"
-                    className="flex items-center gap-2 font-semibold text-custom-600 hover:text-custom-50 underline"
+                    variant='ghost'
+                    className='flex items-center gap-2 font-semibold text-custom-600 hover:text-custom-50 underline'
                   >
-                    <FileSymlink className="w-4 h-4 inline" />
+                    <FileSymlink className='w-4 h-4 inline' />
                     {t("goToClasses")}
                   </Button>
                 }
@@ -182,16 +201,16 @@ export default function WeeklyScheduleGrid() {
         </div>
       </ClassSelectorModal>
 
-      <section className="w-full mt-6">
-        <h2 className="text-lg sm:text-xl font-semibold text-custom-50 mb-3">
+      <section className='w-full mt-6'>
+        <h2 className='text-lg sm:text-xl font-semibold text-custom-50 mb-3'>
           {t("weeklySchedule")}
         </h2>
 
         {/* Schedule container */}
-        <div className="relative rounded-xl bg-custom-50 shadow-lg border border-custom-100 overflow-hidden">
-          <div className="overflow-x-auto max-h-[65vh] overflow-y-auto">
+        <div className='relative rounded-xl bg-custom-50 shadow-lg border border-custom-100 overflow-hidden'>
+          <div className='overflow-x-auto max-h-[65vh] overflow-y-auto'>
             <div
-              className="grid min-w-max text-custom-400"
+              className='grid min-w-max text-custom-400'
               style={{ gridTemplateColumns: gridCols }}
             >
               {/* Header */}
@@ -206,10 +225,21 @@ export default function WeeklyScheduleGrid() {
           </div>
         </div>
 
-        <p className="mt-3 text-xs text-custom-100 sm:hidden text-center">
-          ← Swipe to explore the full week →
+        <p className='mt-3 text-xs text-custom-100 sm:hidden text-center'>
+          ← {t("swipeToExploreTheFullWeek")} →
         </p>
       </section>
+
+      <div className='flex justify-end mt-4'>
+        <Button
+          variant='primary'
+          className='flex justify-self-end items-center gap-2 font-semibold'
+          onClick={generateActivities}
+        >
+          <ListRestart className='w-4 h-4 inline' />
+          {t("generate")}
+        </Button>
+      </div>
     </>
   );
 }

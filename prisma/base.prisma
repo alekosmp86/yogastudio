@@ -1,0 +1,151 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int      @id @default(autoincrement())
+  email         String   @unique
+  name          String
+  role          String   @default("USER")
+  phone         String?
+  approved      Boolean  @default(false)
+  emailVerified Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  magicLinks   MagicLink[]
+  accounts     Account[]
+  reservations Reservation[]
+  waitingList  WaitingList[]
+  testimonials Testimonials[]
+}
+
+model Account {
+  id                Int    @id @default(autoincrement())
+  userId            Int
+  provider          String
+  providerAccountId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model MagicLink {
+  id    Int    @id @default(autoincrement())
+  token String @unique
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int
+
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model ClassTemplate {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String?
+  instructor  String
+  capacity    Int
+
+  schedule             WeeklySchedule[]
+  instances            ClassInstance[]
+}
+
+model ClassInstance {
+  id          Int     @id @default(autoincrement())
+  date        String
+  startTime   String
+  isCancelled Boolean @default(false)
+
+  template   ClassTemplate @relation(fields: [templateId], references: [id])
+  templateId Int
+
+  reservations Reservation[]
+  waitingList  WaitingList[]
+}
+
+model Reservation {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  class   ClassInstance @relation(fields: [classId], references: [id])
+  classId Int
+
+  cancelled Boolean  @default(false)
+  attended  Boolean? // null = not marked yet, true/false = attendance result
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, classId])
+}
+
+model WaitingList {
+  id     Int  @id @default(autoincrement())
+  user   User @relation(fields: [userId], references: [id])
+  userId Int
+
+  class   ClassInstance @relation(fields: [classId], references: [id])
+  classId Int
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, classId]) // no duplicates
+  @@index([classId])
+}
+
+model WeeklySchedule {
+  id Int @id @default(autoincrement())
+
+  template   ClassTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  templateId Int
+
+  weekday   Int
+  startTime String
+  isActive  Boolean @default(true)
+
+  @@unique([templateId, weekday, startTime])
+}
+
+model AppPreferences {
+  id Int @id @default(autoincrement())
+
+  name     String  @unique
+  label    String
+  type     String  @default("text")
+  value    String
+  options  String?
+  category String  @default("Business")
+  moduleId Int
+
+  module Modules @relation(fields: [moduleId], references: [id])
+}
+
+model Testimonials {
+  id Int @id @default(autoincrement())
+
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  message   String
+  rate      Int      @default(5)
+  createdAt DateTime @default(now())
+
+  @@unique([userId])
+}
+
+model Modules {
+  id Int @id @default(autoincrement())
+
+  name           String           @unique
+  description    String?
+  isActive       Boolean          @default(true)
+  AppPreferences AppPreferences[]
+}

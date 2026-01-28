@@ -28,6 +28,8 @@
       "@/types/*": ["types/*"],
       "@/static/*": ["static/*"],
       "@/i18n/*": ["i18n/*"],
+      "@/modules/*": ["[modules]/*"],
+      "@/tasks/*": ["tasks/*"],
     },
     "baseUrl": "src/"
   },

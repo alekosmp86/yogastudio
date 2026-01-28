@@ -1,0 +1,13 @@
+model UserPenalty {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  noShowCount  Int     @default(0)
+  blockedUntil String?
+  lastNoShowAt String?
+}
+
+model User {
+  UserPenalty  UserPenalty?
+}

@@ -1,5 +1,5 @@
 import { DailyClass } from "@/types/classes/DailyClass";
 
 export interface CustomerClassesService {
-    getClassesList(): Promise<DailyClass[]>;
+    getClassesList(userId: number): Promise<DailyClass[]>;
 }

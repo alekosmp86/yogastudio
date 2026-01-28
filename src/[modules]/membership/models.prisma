@@ -1,0 +1,45 @@
+model MembershipPlan {
+  id            Int     @id @default(autoincrement())
+  name          String  @unique
+  maxActivities Int
+  durationDays  Int     @default(30)
+  isActive      Boolean @default(true)
+
+  memberships UserMembership[]
+}
+
+model UserMembership {
+  id               Int @id @default(autoincrement())
+  userId           Int
+  membershipPlanId Int
+
+  startDate String // YYYY-MM-DD
+  endDate   String // YYYY-MM-DD
+  status    String @default("ACTIVE") // ACTIVE | EXPIRED | CANCELLED
+
+  user           User           @relation(fields: [userId], references: [id])
+  membershipPlan MembershipPlan @relation(fields: [membershipPlanId], references: [id])
+
+  templates UserSelectedTemplate[]
+
+  @@index([userId])
+}
+
+model UserSelectedTemplate {
+  id               Int @id @default(autoincrement())
+  userMembershipId Int
+  templateId       Int
+
+  userMembership UserMembership @relation(fields: [userMembershipId], references: [id], onDelete: Cascade)
+  template       ClassTemplate  @relation(fields: [templateId], references: [id])
+
+  @@unique([userMembershipId, templateId])
+}
+
+model ClassTemplate {
+  UserSelectedTemplate UserSelectedTemplate[]
+}
+
+model User {
+  memberships  UserMembership[]
+}

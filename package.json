@@ -4,10 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run sync-preferences && next build",
+    "build": "npm run core-tasks && npm run module-tasks && next build",
     "start": "next start",
     "lint": "eslint",
-    "sync-preferences": "tsx src/scripts/sync-preferences.ts"
+    "core-tasks": "tsx src/tasks/core-tasks.ts",
+    "module-tasks": "tsx src/tasks/module-tasks.ts",
+    "prisma-generate": "tsx src/tasks/generate-prisma.ts"
   },
   "dependencies": {
     "@prisma/client": "6.19.0",
@@ -31,6 +33,7 @@
     "@types/react-dom": "19",
     "autoprefixer": "10.4.22",
     "babel-plugin-react-compiler": "1.0.0",
+    "baseline-browser-mapping": "^2.9.18",
     "eslint": "9",
     "eslint-config-next": "16.0.3",
     "i18next-parser": "^9.0.2",

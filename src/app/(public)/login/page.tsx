@@ -1,7 +1,7 @@
 "use client";
 
-import LoginPage from "@/components/public/LoginPage";
+import LoginPageOAuth from "@/components/public/LoginPageOAuth";
 
 export default function Login() {
-  return <LoginPage/>
+  return <LoginPageOAuth />;
 }

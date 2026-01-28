@@ -1,13 +1,11 @@
 import { DailyClass } from "@/types/classes/DailyClass";
 import { CustomerClassesService } from "../CustomerClassesService";
-import { ApiUtils } from "app/api/utils/ApiUtils";
 import { prisma } from "@/lib/prisma";
 import { BusinessTime } from "@/lib/utils/date";
 import { preferenceService } from "app/api";
 
 export class CustomerClassesServiceImpl implements CustomerClassesService {
-  async getClassesList(): Promise<DailyClass[]> {
-    const user = await ApiUtils.getSessionUser();
+  async getClassesList(userId: number): Promise<DailyClass[]> {
     const timezone = await preferenceService.getStringPreferenceValue(
       "timezone"
     );
@@ -39,6 +37,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
         include: {
           template: {
             select: {
+              id: true,
               title: true,
               instructor: true,
               capacity: true,
@@ -46,7 +45,7 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
             },
           },
           reservations: {
-            where: { userId: user.id },
+            where: { userId },
             select: { id: true, userId: true, cancelled: true },
           },
         },
@@ -67,16 +66,19 @@ export class CustomerClassesServiceImpl implements CustomerClassesService {
         id: c.id,
         date: c.date,
         startTime: c.startTime,
-        title: c.template.title,
-        description: c.template.description || "",
-        instructor: c.template.instructor,
-        capacity: c.template.capacity,
+        activity: {
+            id: c.template.id,
+            title: c.template.title,
+            instructor: c.template.instructor,
+            description: c.template.description || "",
+            capacity: c.template.capacity,
+        },
         reserved:
           reservationCounts.find((r) => r.classId === c.id)?._count ?? 0,
         available:
           availableSpots > 0 &&
           !c.reservations.some(
-            (r) => r.userId === user.id && r.cancelled === false
+            (r) => r.userId === userId && r.cancelled === false
           ),
       };
     });

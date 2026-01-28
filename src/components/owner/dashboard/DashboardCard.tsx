@@ -22,7 +22,7 @@ export default function DashboardCard({
   return (
     <Link
       href={href}
-      className="group block rounded-2xl bg-white/80 p-5 shadow-sm backdrop-blur transition hover:shadow-md active:scale-[0.98]"
+      className="group block rounded-xl bg-white p-5 shadow-sm backdrop-blur transition hover:shadow-md active:scale-[0.98]"
     >
       <div className="flex items-start gap-4">
         {/* ICON */}
