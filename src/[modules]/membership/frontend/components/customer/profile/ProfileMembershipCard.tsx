@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslation } from "react-i18next";
-import { Calendar, CheckCircle, AlertCircle } from "lucide-react";
+import { Calendar, CheckCircle, Dumbbell } from "lucide-react";
 import { useEffect, useState } from "react";
 import { http } from "@/lib/http";
 import { RequestStatus } from "@/enums/RequestStatus";
@@ -43,31 +43,27 @@ export default function ProfileMembershipCard({
             <div className="flex flex-col gap-2">
               {/* Header */}
               <div>
-                <h2 className="text-lg font-semibold text-custom-300">
-                  {membershipDetails?.membershipPlan.name}
+                <h2 className="text-lg font-semibold text-custom-300 flex gap-2 items-center">
+                  {membershipDetails?.membershipPlan.name}{" "}
+                  <CheckCircle className="h-4 w-4 text-green-600" />
                 </h2>
-
-                <div className="mt-1 flex items-center gap-2 text-sm">
-                  {true ? (
-                    <>
-                      <CheckCircle className="h-4 w-4 text-green-600" />
-                      <span className="text-green-600">Active</span>
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="h-4 w-4 text-red-600" />
-                      <span className="text-red-600">Expired</span>
-                    </>
-                  )}
-                </div>
               </div>
 
               {/* Meta */}
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <Calendar className="h-4 w-4" />
-                <span>{t("validUntil")}</span>
-                <span className="font-medium text-custom-300">
-                  {membershipDetails?.endDate}
+              <div className="flex flex-col gap-2 text-sm text-gray-600">
+                <span className="flex gap-2 items-center">
+                  <Calendar className="h-4 w-4" />
+                  <span>{t("validUntil")}</span>
+                  <span className="font-medium text-custom-300">
+                    {membershipDetails?.endDate}
+                  </span>
+                </span>
+                <span className="flex gap-2 items-center">
+                  <Dumbbell className="h-4 w-4" />
+                  <span>{t("maxActivities")}</span>
+                  <span className="font-medium text-custom-300">
+                    {membershipDetails?.membershipPlan.maxActivities}
+                  </span>
                 </span>
               </div>
             </div>
