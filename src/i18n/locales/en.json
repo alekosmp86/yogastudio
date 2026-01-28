@@ -172,6 +172,8 @@
   "selected": "Selected",
   "selectYourActivities": "Select your activities",
   "classDurationMinutes": "Class duration in minutes",
+  "validUntil": "Valid until",
+  "yourActivities": "Your activities",
   "membershipUpdatedSuccessfully": "Membership updated successfully",
   "classAddedToScheduleSuccessfully": "Class added to schedule successfully",
   "errorAddingClassToSchedule": "Error adding class to schedule",
@@ -182,5 +184,6 @@
   "activitiesGeneratedSuccessfully": "Activities generated successfully",
   "signInToManageYourClassesAndMemberships": "Sign in to manage your classes and memberships",
   "secureLoginPoweredByGoogle": "Secure login powered by Google",
-  "noPasswordsToRemember": "No passwords to remember"
+  "noPasswordsToRemember": "No passwords to remember",
+  "membershipCardActivitiesNote": "Once the plan is renewed, you will be able to access other activities"
 }

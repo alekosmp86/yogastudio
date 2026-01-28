@@ -10,6 +10,7 @@ import { CoreUiSlots } from "../[core]/CoreUiSlots";
 import MembershipDashboardCard from "./frontend/components/owner/dashboard/MembershipDashboardCard";
 import { UserMembershipSection } from "./frontend/components/owner/users/UserMembershipSection";
 import ActivitiesSelectionForm from "./frontend/components/customer/profile/ActivitiesSelectionForm";
+import ProfileMembershipCard from "./frontend/components/customer/profile/ProfileMembershipCard";
 
 export const MembershipModule: AppModule = {
   name: "membership",
@@ -76,6 +77,11 @@ export const MembershipModule: AppModule = {
       CoreUiSlots.CustomerProfileCompletion,
       ActivitiesSelectionForm,
     );
+
+    uiRegistry.registerUI(
+      CoreUiSlots.CustomerProfile,
+      ProfileMembershipCard,
+    );
   },
 
   initRoutes() {
@@ -126,6 +132,13 @@ export const MembershipModule: AppModule = {
       "plans/user/:id/activities",
       () =>
         import("./backend/api/handlers/activities/FetchPostActivitiesByIdHandler"),
+    );
+
+    routeRegistry.registerApi(
+      this.name,
+      "plans/user/:id/details",
+      () =>
+        import("./backend/api/handlers/membership/details/FetchHandler"),
     );
   },
 };

@@ -172,6 +172,8 @@
   "selected": "Seleccionado",
   "selectYourActivities": "Selecciona tus actividades",
   "classDurationMinutes": "Duración de la clase en minutos",
+  "validUntil": "Válido hasta",
+  "yourActivities": "Tus actividades",
   "membershipUpdatedSuccessfully": "Plan actualizado correctamente",
   "classAddedToScheduleSuccessfully": "Clase añadida al horario correctamente",
   "errorAddingClassToSchedule": "Error al añadir la clase al horario",
@@ -182,5 +184,6 @@
   "activitiesGeneratedSuccessfully": "Actividades generadas correctamente",
   "signInToManageYourClassesAndMemberships": "Inicia sesión para gestionar tus clases y membresías",
   "secureLoginPoweredByGoogle": "Inicia sesión segura con Google",
-  "noPasswordsToRemember": "No tienes que recordar contraseñas"
+  "noPasswordsToRemember": "No tienes que recordar contraseñas",
+  "membershipCardActivitiesNote": "Una vez renovado el plan, podrás acceder a otras actividades"
 }

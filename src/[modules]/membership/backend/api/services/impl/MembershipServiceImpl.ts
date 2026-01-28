@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { Membership } from "../../models/Membership";
 import { MembershipService } from "../MembershipService";
 import { MembershipTypes } from "@/modules/membership/enums/MembershipTypes";
+import { MembershipDetails } from "../../models/MembershipDetails";
+import { MembershipStatus } from "@/modules/membership/enums/MembershipStatus";
 
 export class MembershipServiceImpl implements MembershipService {
   async createMembership(payload: Membership): Promise<Membership> {
@@ -49,7 +51,10 @@ export class MembershipServiceImpl implements MembershipService {
     };
   }
 
-  async updateMembershipPlan(id: number, data: Partial<Membership>): Promise<Membership> {
+  async updateMembershipPlan(
+    id: number,
+    data: Partial<Membership>,
+  ): Promise<Membership> {
     const updatedPlan = await prisma.membershipPlan.update({
       where: { id },
       data: {
@@ -79,6 +84,40 @@ export class MembershipServiceImpl implements MembershipService {
       durationDays: deletedPlan.durationDays,
       maxActivities: deletedPlan.maxActivities,
       isActive: deletedPlan.isActive,
+    };
+  }
+
+  async getMembershipDetails(
+    userId: number,
+  ): Promise<MembershipDetails | null> {
+    const membership = await prisma.userMembership.findFirst({
+      where: {
+        userId,
+        status: MembershipStatus.ACTIVE,
+      },
+      include: {
+        membershipPlan: true,
+        templates: {
+          include: {
+            template: true,
+          },
+        },
+      },
+    });
+
+    if (!membership) {
+      return null;
+    }
+
+    return {
+      id: membership.id,
+      userId: membership.userId,
+      membershipPlanId: membership.membershipPlanId,
+      startDate: membership.startDate,
+      endDate: membership.endDate,
+      status: membership.status,
+      membershipPlan: membership.membershipPlan,
+      activities: membership.templates.map((t) => t.template),
     };
   }
 }

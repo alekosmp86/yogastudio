@@ -1,5 +1,5 @@
 export type Membership = {
-    id: number,
+    id: number;
     name: string;
     durationDays: number;
     maxActivities: number;
