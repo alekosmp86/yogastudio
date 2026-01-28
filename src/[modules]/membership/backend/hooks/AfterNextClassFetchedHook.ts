@@ -87,7 +87,7 @@ async function getNextAllowedClass(
       template: {
         id: {
           in: userMembershipActivities?.templates.map(
-            (template) => template.id,
+            (template) => template.templateId,
           ),
         },
       },
